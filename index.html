@@ -402,16 +402,20 @@
       </div>
     </div>
 
-    <!-- TAB 2: PERMITS -->
+    <!-- TAB 2: PERMITS (Updated with ID Document Upload for Official Validation) -->
     <div id="permits-tab" class="tab-content">
       <div class="form-card">
+        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 10px; border-radius: 8px; margin-bottom: 14px; font-size: 11px; color: #93c5fd; line-height: 1.4;">
+          <i class="fa-solid fa-circle-info"></i> <strong>Official Verification Notice:</strong> Upload a clear photo of your valid Government ID (Voter ID, Passport, or Driving License). Our authorized desk will use these documents to secure your state-stamped permit.
+        </div>
+
         <div id="form-status"></div>
         <form id="permitForm" onsubmit="submitForm(event)">
           <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
-          <input type="hidden" name="subject" value="New GoSikkim Permit Request">
+          <input type="hidden" name="subject" value="New GoSikkim Verified Permit & Document Request">
 
           <div class="form-group">
-            <label>Full Name (ID Proof)</label>
+            <label>Full Name (As per ID Proof)</label>
             <input type="text" name="Full Name" class="form-control" placeholder="e.g. Rahul Sharma" required>
           </div>
           <div class="form-group">
@@ -430,12 +434,16 @@
             <label>Travel Date</label>
             <input type="date" name="Travel Date" class="form-control" required>
           </div>
-          <button type="submit" id="submitBtn" class="btn-submit">Apply For Permit</button>
+          <div class="form-group">
+            <label>Upload Valid ID Proof / Passport Image</label>
+            <input type="file" name="ID Document" class="form-control" accept="image/*,.pdf" required style="padding: 8px;">
+          </div>
+          <button type="submit" id="submitBtn" class="btn-submit">Submit Document for Official Permit</button>
         </form>
       </div>
     </div>
 
-    <!-- TAB 3: COST ESTIMATOR (UPDATED FORM LINKED TO GMAIL & WHATSAPP FEEDBACK) -->
+    <!-- TAB 3: COST ESTIMATOR -->
     <div id="calculator-tab" class="tab-content">
       <div class="form-card">
         <h3 style="font-size:16px; margin-bottom: 12px; color:#34d399;"><i class="fa-solid fa-calculator"></i> Instant Trip Cost Estimator</h3>
@@ -477,14 +485,11 @@
 
     <!-- TAB 4: HOMESTAYS -->
     <div id="homestays-tab" class="tab-content">
-      
-      <!-- Notice Message Banner -->
       <div class="notice-card">
         <i class="fa-solid fa-clock-rotate-left"></i>
         <p>Please wait patiently, we will soon get you the available best VIP to the cheapest homestays.</p>
       </div>
 
-      <!-- Section Tags Switcher -->
       <div class="stay-tag-container">
         <button class="tag-btn active-vip" id="tagVipBtn" onclick="switchStaySection('vip')">
           <i class="fa-solid fa-crown"></i> VIP Stays
@@ -494,7 +499,6 @@
         </button>
       </div>
 
-      <!-- VIP Section Content -->
       <div id="vip-stays-section">
         <div class="listing-card">
           <div class="listing-info">
@@ -512,7 +516,6 @@
         </div>
       </div>
 
-      <!-- Cheap Section Content -->
       <div id="cheap-stays-section" style="display: none;">
         <div class="listing-card">
           <div class="listing-info">
@@ -529,7 +532,6 @@
           </a>
         </div>
       </div>
-
     </div>
 
     <!-- TAB 5: CABS -->
@@ -557,7 +559,7 @@
       </div>
     </div>
 
-    <!-- TAB 6: SOS EMERGENCY HELPLINE -->
+    <!-- TAB 6: SOS -->
     <div id="sos-tab" class="tab-content">
       <div class="sos-card">
         <div>
@@ -610,7 +612,6 @@
   </div>
 
   <script>
-    /* Signal strength simulator */
     function cycleSignalBars() {
       const b4 = document.getElementById('b4');
       const b5 = document.getElementById('b5');
@@ -641,7 +642,6 @@
       }
     }
 
-    /* Switch between VIP and Cheap homestay sections */
     function switchStaySection(type) {
       const vipSec = document.getElementById('vip-stays-section');
       const cheapSec = document.getElementById('cheap-stays-section');
@@ -682,7 +682,7 @@
       const statusBox = document.getElementById('form-status');
 
       submitBtn.disabled = true;
-      submitBtn.innerText = "Processing...";
+      submitBtn.innerText = "Uploading & Processing...";
 
       const formData = new FormData(form);
 
@@ -696,7 +696,7 @@
 
         if (data.success) {
           statusBox.className = "status-success";
-          statusBox.innerText = "Application Received! Our Gangtok Desk will WhatsApp you shortly.";
+          statusBox.innerText = "Documents received! Our desk is processing your official state permit and will send it via WhatsApp.";
           statusBox.style.display = "block";
           form.reset();
         } else {
@@ -704,15 +704,14 @@
         }
       } catch (error) {
         statusBox.className = "status-error";
-        statusBox.innerText = "Error sending application. Please try again.";
+        statusBox.innerText = "Error uploading document. Please try again.";
         statusBox.style.display = "block";
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = "Apply For Permit";
+        submitBtn.innerText = "Submit Document for Official Permit";
       }
     }
 
-    /* Estimator Form submission handler sending data to email and showing confirmation text */
     async function submitEstimatorForm(event) {
       event.preventDefault();
       const form = document.getElementById('estimatorForm');

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoSikkim - Official Travel & Permit Portal</title>
+  <style>
+    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
+    body { background-color: #f1f5f9; padding: 16px; color: #0f172a; padding-bottom: 40px; }
+    
+    header { text-align: center; padding: 12px 0 16px 0; }
+    header h1 { color: #047857; font-size: 26px; font-weight: 800; }
+    header p { color: #64748b; font-size: 13px; margin-top: 4px; }
+    
+    .search-bar { width: 100%; margin-bottom: 16px; }
+    .search-bar input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 15px; outline: none; background: #fff; }
+    
+    .section-title { font-size: 16px; font-weight: 700; margin: 16px 0 10px 0; color: #1e293b; }
+    
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card { background: white; border-radius: 12px; padding: 14px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
+    .card h3 { font-size: 15px; color: #0f172a; margin-bottom: 4px; }
+    .card p { font-size: 11px; color: #64748b; margin-bottom: 12px; height: 32px; line-height: 1.3; }
+    .card button { background: #047857; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 12px; width: 100%; font-weight: 600; cursor: pointer; }
+    
+    .form-container { background: white; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 10px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; }
+    .form-btn { background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; width: 100%; font-weight: 700; cursor: pointer; }
+    
+    .alert-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; border-radius: 6px; margin-top: 20px; }
+    .alert-box h4 { font-size: 13px; color: #991b1b; }
+    .alert-box p { font-size: 12px; color: #b91c1c; margin-top: 2px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>GoSikkim</h1>
+    <p>Permits • Homestays • Local Transport</p>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search Gangtok, Pelling, Lachen..." onkeyup="filterZones()">
+  </div>
+
+  <div class="section-title">Explore Sikkim Zones</div>
+  <div class="grid" id="zoneGrid">
+    <div class="card" data-keywords="gangtok tsomgo nathula east">
+      <h3>East Sikkim</h3>
+      <p>Gangtok, Tsomgo Lake & Permits</p>
+      <button onclick="bookZone('East Sikkim')">Explore East</button>
+    </div>
+    <div class="card" data-keywords="lachen lachung gurudongmar yumthang north">
+      <h3>North Sikkim</h3>
+      <p>Lachen, Lachung & Gurudongmar</p>
+      <button onclick="bookZone('North Sikkim')">Explore North</button>
+    </div>
+    <div class="card" data-keywords="pelling yuksom dzongri west">
+      <h3>West Sikkim</h3>
+      <p>Pelling, Yuksom & Treks</p>
+      <button onclick="bookZone('West Sikkim')">Explore West</button>
+    </div>
+    <div class="card" data-keywords="namchi ravangla temi tea south">
+      <h3>South Sikkim</h3>
+      <p>Namchi, Ravangla & Tea Gardens</p>
+      <button onclick="bookZone('South Sikkim')">Explore South</button>
+    </div>
+  </div>
+
+  <div class="section-title">Apply for Travel Permit (PAP/ILP)</div>
+  <div class="form-container">
+    <form onsubmit="handlePermitSubmit(event)">
+      <div class="form-group">
+        <label>Full Name (As on ID)</label>
+        <input type="text" id="fullName" placeholder="e.g. Rahul Sharma" required>
+      </div>
+      <div class="form-group">
+        <label>Select Destination Zone</label>
+        <select id="destination">
+          <option value="Nathula Pass (East)">Nathula Pass (East Sikkim)</option>
+          <option value="Gurudongmar Lake (North)">Gurudongmar Lake (North Sikkim)</option>
+          <option value="Yumthang Valley (North)">Yumthang Valley (North Sikkim)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Travel Date</label>
+        <input type="date" id="travelDate" required>
+      </div>
+      <button type="submit" class="form-btn">Submit Permit Request</button>
+    </form>
+  </div>
+
+  <div class="alert-box">
+    <h4>⚠️ Live Road Update</h4>
+    <p>North Sikkim Axis: Clear for local transport. Weather clear in Gangtok.</p>
+  </div>
+
+  <script>
+    function filterZones() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
+      
+      cards.forEach(card => {
+        const keywords = card.getAttribute('data-keywords') + " " + card.querySelector('h3').innerText.toLowerCase();
+        if (keywords.includes(input)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    }
+
+    function bookZone(zoneName) {
+      alert("Loading available verified homestays and registered driver listings for " + zoneName + "...");
+    }
+
+    function handlePermitSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('fullName').value;
+      const dest = document.getElementById('destination').value;
+      const date = document.getElementById('travelDate').value;
+      
+      alert("Permit Request Submitted Successfully!\n\nName: " + name + "\nDestination: " + dest + "\nDate: " + date + "\n\nOur local team in Gangtok will verify your ID document.");
+    }
+  </script>
+
+</body>
+</html>

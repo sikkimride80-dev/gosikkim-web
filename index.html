@@ -20,35 +20,177 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
     body { background-color: var(--bg); color: var(--text-main); padding-bottom: 90px; }
 
-    /* Header & Hero Section */
+    /* Header & Hero Section with Dynamic Continuous Left-to-Right Pan */
     .hero {
-      background: linear-gradient(180deg, rgba(5, 150, 105, 0.2) 0%, rgba(15, 23, 42, 1) 100%),
-                  url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=80') center/cover;
+      position: relative;
+      overflow: hidden;
       padding: 32px 20px 24px 20px;
       text-align: center;
       border-bottom: 1px solid var(--border);
     }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 180%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1600&q=80') repeat-x center/cover;
+      animation: heroPan 25s linear infinite;
+      z-index: 1;
+      opacity: 0.65;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(5, 150, 105, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%);
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    @keyframes heroPan {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-40%); }
+    }
+
     .brand-title { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; }
     .brand-title span { color: #34d399; }
-    .brand-tagline { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .brand-tagline { font-size: 13px; color: #cbd5e1; margin-top: 4px; }
     
     .status-pill {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981;
+      background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981;
       padding: 4px 12px; border-radius: 20px; font-size: 11px; color: #34d399;
       margin-top: 12px; font-weight: 600;
+      backdrop-filter: blur(4px);
     }
-    .status-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; }
+    .status-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; box-shadow: 0 0 8px #34d399; }
 
-    /* Search Bar */
+    /* Search Bar Layout & Live Satellite Server Indicator */
     .search-container { padding: 16px 20px; }
-    .search-wrapper { position: relative; }
+    .search-flex-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .search-wrapper { position: relative; flex: 1; }
     .search-wrapper i { position: absolute; left: 14px; top: 16px; color: var(--text-muted); }
     .search-input {
       width: 100%; padding: 14px 14px 14px 42px; border-radius: 12px;
       border: 1px solid var(--border); background: var(--card-bg);
       color: var(--text-main); font-size: 14px; outline: none;
     }
+
+    /* Live Satellite Signal Badge (Blue Box Area) */
+    .sat-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border-radius: 12px;
+      height: 48px;
+      white-space: nowrap;
+    }
+
+    .sat-icon-wrapper {
+      position: relative;
+      color: #38bdf8;
+      font-size: 14px;
+    }
+    .sat-icon-wrapper::after {
+      content: '';
+      position: absolute;
+      top: -2px; right: -2px;
+      width: 6px; height: 6px;
+      background: #38bdf8;
+      border-radius: 50%;
+      animation: pulseSat 1.5s infinite;
+    }
+
+    @keyframes pulseSat {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    .sat-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .sat-title {
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* Dynamic Cycling Wifi Signal Bars */
+    .signal-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+      margin-top: 2px;
+      animation: dynamicSignal 9s infinite step-start;
+    }
+
+    .bar {
+      width: 3px;
+      border-radius: 1px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .bar:nth-child(1) { height: 2px; }
+    .bar:nth-child(2) { height: 4px; }
+    .bar:nth-child(3) { height: 6px; }
+    .bar:nth-child(4) { height: 8px; }
+    .bar:nth-child(5) { height: 10px; }
+    .bar:nth-child(6) { height: 12px; }
+
+    /* Infinite state cycle: Green (6) -> Yellow (4) -> Red (3) */
+    @keyframes dynamicSignal {
+      /* Green State - 6 Bars */
+      0%, 33% {
+        --sig-color: #10b981;
+      }
+      /* Yellow State - 4 Bars */
+      34%, 66% {
+        --sig-color: #f59e0b;
+      }
+      /* Red State - 3 Bars */
+      67%, 100% {
+        --sig-color: #ef4444;
+      }
+    }
+
+    /* Bar activations based on animation timing */
+    .signal-bars { animation: cycleSignalColor 9s infinite; }
+
+    @keyframes cycleSignalColor {
+      /* GREEN STATE: All 6 lines active */
+      0%, 33% {
+        color: #10b981;
+      }
+      /* YELLOW STATE: 4 lines active */
+      34%, 66% {
+        color: #f59e0b;
+      }
+      /* RED STATE: 3 lines active */
+      67%, 100% {
+        color: #ef4444;
+      }
+    }
+
+    /* Apply active color dynamically */
+    .bar.active { background: currentColor; }
 
     /* Container & Tab Controls */
     .main-container { padding: 0 20px; }
@@ -80,24 +222,15 @@
     }
     .zone-img {
       height: 100%; width: 100%; object-fit: cover;
-      /* Continuous dynamic pan/zoom animation */
       animation: aliveAnimation 8s ease-in-out infinite alternate;
     }
     
-    /* Continuous Keyframes animation for living motion */
     @keyframes aliveAnimation {
-      0% {
-        transform: scale(1) translate(0, 0);
-      }
-      50% {
-        transform: scale(1.18) translate(-4px, -3px);
-      }
-      100% {
-        transform: scale(1.3) translate(4px, 3px);
-      }
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.18) translate(-4px, -3px); }
+      100% { transform: scale(1.3) translate(4px, 3px); }
     }
 
-    /* Offset animations across cards so they move independently */
     .zone-card:nth-child(2) .zone-img { animation-delay: -2s; }
     .zone-card:nth-child(3) .zone-img { animation-delay: -4s; }
     .zone-card:nth-child(4) .zone-img { animation-delay: -6s; }
@@ -160,20 +293,44 @@
 </head>
 <body>
 
-  <!-- Hero Banner -->
+  <!-- Animated Hero Banner -->
   <div class="hero">
-    <div class="brand-title">Go<span>Sikkim</span></div>
-    <div class="brand-tagline">Permits • Homestays • Local Shared Cabs</div>
-    <div class="status-pill">
-      <span class="status-dot"></span> Official District Tourism Portal
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="brand-title">Go<span>Sikkim</span></div>
+      <div class="brand-tagline">Permits • Homestays • Local Shared Cabs</div>
+      <div class="status-pill">
+        <span class="status-dot"></span> Official District Tourism Portal
+      </div>
     </div>
   </div>
 
-  <!-- Search Bar -->
+  <!-- Search Bar & Live Satellite Link -->
   <div class="search-container">
-    <div class="search-wrapper">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input type="text" id="searchInput" class="search-input" placeholder="Search Gangtok, Pelling, Lachen..." onkeyup="filterZones()">
+    <div class="search-flex-row">
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Gangtok, Pelling, Lachen..." onkeyup="filterZones()">
+      </div>
+      
+      <!-- Live Satellite Server Connection Badge -->
+      <div class="sat-status-badge">
+        <div class="sat-icon-wrapper">
+          <i class="fa-solid fa-satellite-dish"></i>
+        </div>
+        <div class="sat-details">
+          <span class="sat-title">SAT-LINK: LIVE</span>
+          <div class="signal-bars" id="signalBars">
+            <span class="bar active"></span>
+            <span class="bar active"></span>
+            <span class="bar active"></span>
+            <span class="bar active" id="b4"></span>
+            <span class="bar active" id="b5"></span>
+            <span class="bar active" id="b6"></span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -340,6 +497,36 @@
   </div>
 
   <script>
+    /* JavaScript to dynamic manage signal line visibility alongside CSS color states */
+    function cycleSignalBars() {
+      const b4 = document.getElementById('b4');
+      const b5 = document.getElementById('b5');
+      const b6 = document.getElementById('b6');
+
+      let state = 0; // 0: Green (6 bars), 1: Yellow (4 bars), 2: Red (3 bars)
+
+      setInterval(() => {
+        state = (state + 1) % 3;
+        if (state === 0) {
+          /* Green State - 6 Lines Active */
+          b4.style.opacity = '1';
+          b5.style.opacity = '1';
+          b6.style.opacity = '1';
+        } else if (state === 1) {
+          /* Yellow State - 4 Lines Active */
+          b4.style.opacity = '1';
+          b5.style.opacity = '0.15';
+          b6.style.opacity = '0.15';
+        } else {
+          /* Red State - 3 Lines Active */
+          b4.style.opacity = '0.15';
+          b5.style.opacity = '0.15';
+          b6.style.opacity = '0.15';
+        }
+      }, 3000);
+    }
+    cycleSignalBars();
+
     function switchTab(tabId, element) {
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));

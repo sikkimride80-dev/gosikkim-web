@@ -20,7 +20,7 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
     body { background-color: var(--bg); color: var(--text-main); padding-bottom: 90px; }
 
-    /* Header & Hero Section with Dynamic Continuous Left-to-Right Pan */
+    /* Header & Hero Section */
     .hero {
       position: relative;
       overflow: hidden;
@@ -31,27 +31,20 @@
 
     .hero-bg {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 180%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 180%; height: 100%;
       background: url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1600&q=80') repeat-x center/cover;
       animation: heroPan 25s linear infinite;
-      z-index: 1;
-      opacity: 0.65;
+      z-index: 1; opacity: 0.65;
     }
 
     .hero-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       background: linear-gradient(180deg, rgba(5, 150, 105, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%);
       z-index: 2;
     }
 
-    .hero-content {
-      position: relative;
-      z-index: 3;
-    }
+    .hero-content { position: relative; z-index: 3; }
 
     @keyframes heroPan {
       0% { transform: translateX(0); }
@@ -66,18 +59,21 @@
       display: inline-flex; align-items: center; gap: 6px;
       background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981;
       padding: 4px 12px; border-radius: 20px; font-size: 11px; color: #34d399;
-      margin-top: 12px; font-weight: 600;
-      backdrop-filter: blur(4px);
+      margin-top: 12px; font-weight: 600; backdrop-filter: blur(4px);
     }
     .status-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; box-shadow: 0 0 8px #34d399; }
 
+    /* Weather & Live Feed Ticker */
+    .weather-bar {
+      background: rgba(30, 41, 59, 0.8); border-bottom: 1px solid var(--border);
+      padding: 8px 20px; display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; color: #cbd5e1;
+    }
+    .weather-item { display: flex; align-items: center; gap: 6px; }
+
     /* Search Bar Layout & Live Satellite Server Indicator */
     .search-container { padding: 16px 20px; }
-    .search-flex-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .search-flex-row { display: flex; align-items: center; gap: 10px; }
     .search-wrapper { position: relative; flex: 1; }
     .search-wrapper i { position: absolute; left: 14px; top: 16px; color: var(--text-muted); }
     .search-input {
@@ -86,31 +82,17 @@
       color: var(--text-main); font-size: 14px; outline: none;
     }
 
-    /* Live Satellite Signal Badge (Blue Box Area) */
+    /* Live Satellite Signal Badge */
     .sat-status-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      padding: 10px 12px;
-      border-radius: 12px;
-      height: 48px;
-      white-space: nowrap;
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      padding: 10px 12px; border-radius: 12px; height: 48px; white-space: nowrap;
     }
 
-    .sat-icon-wrapper {
-      position: relative;
-      color: #38bdf8;
-      font-size: 14px;
-    }
+    .sat-icon-wrapper { position: relative; color: #38bdf8; font-size: 14px; }
     .sat-icon-wrapper::after {
-      content: '';
-      position: absolute;
-      top: -2px; right: -2px;
-      width: 6px; height: 6px;
-      background: #38bdf8;
-      border-radius: 50%;
+      content: ''; position: absolute; top: -2px; right: -2px;
+      width: 6px; height: 6px; background: #38bdf8; border-radius: 50%;
       animation: pulseSat 1.5s infinite;
     }
 
@@ -119,35 +101,14 @@
       100% { transform: scale(2.5); opacity: 0; }
     }
 
-    .sat-details {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+    .sat-details { display: flex; flex-direction: column; justify-content: center; }
+    .sat-title { font-size: 9px; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px; }
 
-    .sat-title {
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
-    }
-
-    /* Dynamic Cycling Wifi Signal Bars */
     .signal-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: 2px;
-      height: 12px;
-      margin-top: 2px;
-      animation: dynamicSignal 9s infinite step-start;
+      display: flex; align-items: flex-end; gap: 2px; height: 12px; margin-top: 2px;
+      animation: cycleSignalColor 9s infinite;
     }
-
-    .bar {
-      width: 3px;
-      border-radius: 1px;
-      background: var(--border);
-      transition: background 0.3s;
-    }
+    .bar { width: 3px; border-radius: 1px; background: var(--border); transition: background 0.3s; }
     .bar:nth-child(1) { height: 2px; }
     .bar:nth-child(2) { height: 4px; }
     .bar:nth-child(3) { height: 6px; }
@@ -155,49 +116,16 @@
     .bar:nth-child(5) { height: 10px; }
     .bar:nth-child(6) { height: 12px; }
 
-    /* Infinite state cycle: Green (6) -> Yellow (4) -> Red (3) */
-    @keyframes dynamicSignal {
-      /* Green State - 6 Bars */
-      0%, 33% {
-        --sig-color: #10b981;
-      }
-      /* Yellow State - 4 Bars */
-      34%, 66% {
-        --sig-color: #f59e0b;
-      }
-      /* Red State - 3 Bars */
-      67%, 100% {
-        --sig-color: #ef4444;
-      }
-    }
-
-    /* Bar activations based on animation timing */
-    .signal-bars { animation: cycleSignalColor 9s infinite; }
-
     @keyframes cycleSignalColor {
-      /* GREEN STATE: All 6 lines active */
-      0%, 33% {
-        color: #10b981;
-      }
-      /* YELLOW STATE: 4 lines active */
-      34%, 66% {
-        color: #f59e0b;
-      }
-      /* RED STATE: 3 lines active */
-      67%, 100% {
-        color: #ef4444;
-      }
+      0%, 33% { color: #10b981; }
+      34%, 66% { color: #f59e0b; }
+      67%, 100% { color: #ef4444; }
     }
-
-    /* Apply active color dynamically */
     .bar.active { background: currentColor; }
 
     /* Container & Tab Controls */
     .main-container { padding: 0 20px; }
-    
-    .nav-tabs {
-      display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;
-    }
+    .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
     .tab-btn {
       background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted);
       padding: 10px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
@@ -212,14 +140,12 @@
     /* Grid Layouts */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     
-    /* Interactive Cards & Autoplay Image Motion */
+    /* Interactive Cards */
     .zone-card {
       background: var(--card-bg); border-radius: 16px; overflow: hidden;
-      border: 1px solid var(--border); transition: border-color 0.3s ease;
+      border: 1px solid var(--border);
     }
-    .zone-img-wrapper {
-      height: 110px; width: 100%; overflow: hidden; position: relative;
-    }
+    .zone-img-wrapper { height: 110px; width: 100%; overflow: hidden; position: relative; }
     .zone-img {
       height: 100%; width: 100%; object-fit: cover;
       animation: aliveAnimation 8s ease-in-out infinite alternate;
@@ -258,9 +184,9 @@
       display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
     }
 
-    /* Forms */
+    /* Forms & Calculator */
     .form-card {
-      background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 20px;
+      background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px;
     }
     .form-group { margin-bottom: 14px; }
     .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
@@ -273,7 +199,19 @@
       border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
     }
 
-    /* Fixed Bottom Navigation */
+    /* Emergency SOS Grid */
+    .sos-card {
+      background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 14px; border-radius: 12px; margin-bottom: 12px; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .sos-title { font-size: 13px; font-weight: 700; color: #f87171; }
+    .sos-btn {
+      background: #ef4444; color: white; border: none; padding: 8px 14px;
+      border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;
+    }
+
+    /* Bottom Navigation */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f19;
       border-top: 1px solid var(--border); display: flex; justify-around: space-around;
@@ -306,6 +244,12 @@
     </div>
   </div>
 
+  <!-- Live Weather Ticker -->
+  <div class="weather-bar">
+    <div class="weather-item"><i class="fa-solid fa-cloud-sun" style="color: #f59e0b;"></i> Gangtok: 18°C (Light Rain)</div>
+    <div class="weather-item"><i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i> Lachen: 8°C</div>
+  </div>
+
   <!-- Search Bar & Live Satellite Link -->
   <div class="search-container">
     <div class="search-flex-row">
@@ -314,14 +258,14 @@
         <input type="text" id="searchInput" class="search-input" placeholder="Search Gangtok, Pelling, Lachen..." onkeyup="filterZones()">
       </div>
       
-      <!-- Live Satellite Server Connection Badge -->
+      <!-- Live Satellite Server Badge -->
       <div class="sat-status-badge">
         <div class="sat-icon-wrapper">
           <i class="fa-solid fa-satellite-dish"></i>
         </div>
         <div class="sat-details">
           <span class="sat-title">SAT-LINK: LIVE</span>
-          <div class="signal-bars" id="signalBars">
+          <div class="signal-bars">
             <span class="bar active"></span>
             <span class="bar active"></span>
             <span class="bar active"></span>
@@ -339,8 +283,10 @@
     <div class="nav-tabs">
       <button class="tab-btn active" onclick="switchTab('zones', this)"><i class="fa-solid fa-compass"></i> Explore</button>
       <button class="tab-btn" onclick="switchTab('permits', this)"><i class="fa-solid fa-passport"></i> Permits</button>
+      <button class="tab-btn" onclick="switchTab('calculator', this)"><i class="fa-solid fa-calculator"></i> Estimator</button>
       <button class="tab-btn" onclick="switchTab('homestays', this)"><i class="fa-solid fa-house"></i> Homestays</button>
       <button class="tab-btn" onclick="switchTab('cabs', this)"><i class="fa-solid fa-taxi"></i> Cabs</button>
+      <button class="tab-btn" onclick="switchTab('sos', this)"><i class="fa-solid fa-phone-volume"></i> SOS</button>
     </div>
 
     <!-- TAB 1: ZONES -->
@@ -425,7 +371,38 @@
       </div>
     </div>
 
-    <!-- TAB 3: HOMESTAYS -->
+    <!-- NEW TAB 3: COST ESTIMATOR -->
+    <div id="calculator-tab" class="tab-content">
+      <div class="form-card">
+        <h3 style="font-size:16px; margin-bottom: 12px; color:#34d399;">🧮 Instant Trip Cost Calculator</h3>
+        
+        <div class="form-group">
+          <label>Select Circuit</label>
+          <select id="calcCircuit" class="form-control" onchange="calculateCost()">
+            <option value="3500">North Sikkim (Lachen / Lachung 2D/1N)</option>
+            <option value="1500">East Sikkim (Nathula Pass Day Trip)</option>
+            <option value="2000">West Sikkim (Pelling Stay & Sightseeing)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Number of Travelers</label>
+          <input type="number" id="calcTravelers" class="form-control" value="2" min="1" onchange="calculateCost()">
+        </div>
+
+        <div class="form-group">
+          <label>Trip Duration (Days)</label>
+          <input type="number" id="calcDays" class="form-control" value="3" min="1" onchange="calculateCost()">
+        </div>
+
+        <div style="background:#0f172a; padding:12px; border-radius:8px; border:1px solid var(--border); text-align:center;">
+          <span style="font-size:12px; color:var(--text-muted);">Estimated Budget per Person</span>
+          <div id="calcResult" style="font-size:22px; font-weight:800; color:#34d399; margin-top:4px;">₹7,500</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: HOMESTAYS -->
     <div id="homestays-tab" class="tab-content">
       <div class="listing-card">
         <div class="listing-info">
@@ -450,7 +427,7 @@
       </div>
     </div>
 
-    <!-- TAB 4: CABS -->
+    <!-- TAB 5: CABS -->
     <div id="cabs-tab" class="tab-content">
       <div class="listing-card">
         <div class="listing-info">
@@ -474,6 +451,33 @@
         </a>
       </div>
     </div>
+
+    <!-- NEW TAB 6: SOS EMERGENCY HELPLINE -->
+    <div id="sos-tab" class="tab-content">
+      <div class="sos-card">
+        <div>
+          <div class="sos-title">Sikkim Tourist Police</div>
+          <div style="font-size:11px; color:var(--text-muted);">Gangtok Control Room</div>
+        </div>
+        <a href="tel:03592232218" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 03592-232218</a>
+      </div>
+
+      <div class="sos-card">
+        <div>
+          <div class="sos-title">Disaster Management SOS</div>
+          <div style="font-size:11px; color:var(--text-muted);">Landslide / Road Clearance Helpline</div>
+        </div>
+        <a href="tel:1077" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 1077</a>
+      </div>
+
+      <div class="sos-card">
+        <div>
+          <div class="sos-title">Medical Emergency</div>
+          <div style="font-size:11px; color:var(--text-muted);">24/7 Ambulance Service</div>
+        </div>
+        <a href="tel:108" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 108</a>
+      </div>
+    </div>
   </div>
 
   <!-- Bottom Navigation Bar -->
@@ -486,6 +490,10 @@
       <i class="fa-solid fa-passport"></i>
       <span>Permits</span>
     </div>
+    <div class="nav-item" onclick="switchTab('calculator')">
+      <i class="fa-solid fa-calculator"></i>
+      <span>Estimator</span>
+    </div>
     <div class="nav-item" onclick="switchTab('homestays')">
       <i class="fa-solid fa-house"></i>
       <span>Stays</span>
@@ -497,35 +505,35 @@
   </div>
 
   <script>
-    /* JavaScript to dynamic manage signal line visibility alongside CSS color states */
+    /* Signal strength simulator */
     function cycleSignalBars() {
       const b4 = document.getElementById('b4');
       const b5 = document.getElementById('b5');
       const b6 = document.getElementById('b6');
 
-      let state = 0; // 0: Green (6 bars), 1: Yellow (4 bars), 2: Red (3 bars)
-
+      let state = 0;
       setInterval(() => {
         state = (state + 1) % 3;
         if (state === 0) {
-          /* Green State - 6 Lines Active */
-          b4.style.opacity = '1';
-          b5.style.opacity = '1';
-          b6.style.opacity = '1';
+          b4.style.opacity = '1'; b5.style.opacity = '1'; b6.style.opacity = '1';
         } else if (state === 1) {
-          /* Yellow State - 4 Lines Active */
-          b4.style.opacity = '1';
-          b5.style.opacity = '0.15';
-          b6.style.opacity = '0.15';
+          b4.style.opacity = '1'; b5.style.opacity = '0.15'; b6.style.opacity = '0.15';
         } else {
-          /* Red State - 3 Lines Active */
-          b4.style.opacity = '0.15';
-          b5.style.opacity = '0.15';
-          b6.style.opacity = '0.15';
+          b4.style.opacity = '0.15'; b5.style.opacity = '0.15'; b6.style.opacity = '0.15';
         }
       }, 3000);
     }
     cycleSignalBars();
+
+    /* Dynamic Trip Estimator Calculation */
+    function calculateCost() {
+      const baseCost = parseInt(document.getElementById('calcCircuit').value);
+      const travelers = parseInt(document.getElementById('calcTravelers').value) || 1;
+      const days = parseInt(document.getElementById('calcDays').value) || 1;
+
+      const estCost = Math.round((baseCost * days) / travelers);
+      document.getElementById('calcResult').innerText = `₹${estCost.toLocaleString('en-IN')}`;
+    }
 
     function switchTab(tabId, element) {
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));

@@ -1,1163 +1,439 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoSikkim | Premier Travel & Tourism Portal</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #059669;
-      --primary-dark: #047857;
-      --accent: #2563eb;
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: #334155;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoSikkim - Official District Tourism Portal</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --accent-green: #10b981;
+            --accent-blue: #0284c7;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
-    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
-    body { background-color: var(--bg); color: var(--text-main); padding-bottom: 90px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
 
-    /* Header & Hero Section with Dynamic Continuous Left-to-Right Pan */
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 32px 20px 24px 20px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-    }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            padding-bottom: 70px;
+        }
 
-    .hero-bg {
-      position: absolute;
-      top: 0; left: 0;
-      width: 180%; height: 100%;
-      background: url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1600&q=80') repeat-x center/cover;
-      animation: heroPan 25s linear infinite;
-      z-index: 1; opacity: 0.65;
-    }
+        header {
+            background: linear-gradient(rgba(15,23,42,0.8), rgba(15,23,42,0.9)), url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1000&auto=format&fit=crop') center/cover;
+            padding: 20px 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-    .hero-overlay {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(180deg, rgba(5, 150, 105, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%);
-      z-index: 2;
-    }
+        .logo-title {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #fff;
+            margin-bottom: 4px;
+        }
 
-    .hero-content { position: relative; z-index: 3; }
+        .portal-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
 
-    @keyframes heroPan {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-40%); }
-    }
+        .badge-official {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
 
-    .brand-title { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; }
-    .brand-title span { color: #34d399; }
-    .brand-tagline { font-size: 13px; color: #cbd5e1; margin-top: 4px; }
-    
-    .status-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981;
-      padding: 4px 12px; border-radius: 20px; font-size: 11px; color: #34d399;
-      margin-top: 12px; font-weight: 600; backdrop-filter: blur(4px);
-    }
-    .status-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; box-shadow: 0 0 8px #34d399; }
+        .weather-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--card-bg);
+            padding: 10px;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
 
-    /* Weather Bar & Admin Bell Notification Ticker */
-    .top-utility-bar {
-      background: rgba(30, 41, 59, 0.9); border-bottom: 1px solid var(--border);
-      padding: 8px 20px; display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; color: #cbd5e1;
-    }
-    .weather-items { display: flex; gap: 14px; align-items: center; }
-    .weather-item { display: flex; align-items: center; gap: 6px; }
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    /* Admin Voice Tingle Bell Button */
-    .admin-bell-container { position: relative; cursor: pointer; display: flex; align-items: center; gap: 6px; background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; padding: 4px 10px; border-radius: 12px; color: #f87171; font-weight: 700; font-size: 11px; }
-    .admin-bell-container i { font-size: 14px; }
-    .admin-bell-container.tingling i { animation: tingleBell 0.4s ease-in-out infinite alternate; }
-    .red-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ef4444; animation: pulseDot 1s infinite; }
-    
-    @keyframes tingleBell {
-      0% { transform: rotate(-15deg); }
-      100% { transform: rotate(15deg); }
-    }
-    @keyframes pulseDot {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.5); opacity: 0.4; }
-      100% { transform: scale(1); opacity: 1; }
-    }
+        .search-box {
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 16px;
+        }
 
-    /* Search Bar Layout & Live Satellite Server Indicator */
-    .search-container { padding: 16px 20px; }
-    .search-flex-row { display: flex; align-items: center; gap: 10px; }
-    .search-wrapper { position: relative; flex: 1; }
-    .search-wrapper i { position: absolute; left: 14px; top: 16px; color: var(--text-muted); }
-    .search-input {
-      width: 100%; padding: 14px 14px 14px 42px; border-radius: 12px;
-      border: 1px solid var(--border); background: var(--card-bg);
-      color: var(--text-main); font-size: 14px; outline: none;
-    }
+        .grid-menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
 
-    /* Live Satellite Signal Badge */
-    .sat-status-badge {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--card-bg); border: 1px solid var(--border);
-      padding: 10px 12px; border-radius: 12px; height: 48px; white-space: nowrap;
-    }
+        .menu-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-    .sat-icon-wrapper { position: relative; color: #38bdf8; font-size: 14px; }
-    .sat-icon-wrapper::after {
-      content: ''; position: absolute; top: -2px; right: -2px;
-      width: 6px; height: 6px; background: #38bdf8; border-radius: 50%;
-      animation: pulseSat 1.5s infinite;
-    }
+        .menu-card:active {
+            transform: scale(0.98);
+        }
 
-    @keyframes pulseSat {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(2.5); opacity: 0; }
-    }
+        .menu-card h3 {
+            font-size: 14px;
+            margin-top: 6px;
+            color: var(--text-main);
+        }
 
-    .sat-details { display: flex; flex-direction: column; justify-content: center; }
-    .sat-title { font-size: 9px; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px; }
+        .admin-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 20px;
+        }
 
-    .signal-bars {
-      display: flex; align-items: flex-end; gap: 2px; height: 12px; margin-top: 2px;
-      animation: cycleSignalColor 9s infinite;
-    }
-    .bar { width: 3px; border-radius: 1px; background: var(--border); transition: background 0.3s; }
-    .bar:nth-child(1) { height: 2px; }
-    .bar:nth-child(2) { height: 4px; }
-    .bar:nth-child(3) { height: 6px; }
-    .bar:nth-child(4) { height: 8px; }
-    .bar:nth-child(5) { height: 10px; }
-    .bar:nth-child(6) { height: 12px; }
+        .admin-section h2 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--accent-green);
+        }
 
-    @keyframes cycleSignalColor {
-      0%, 33% { color: #10b981; }
-      34%, 66% { color: #f59e0b; }
-      67%, 100% { color: #ef4444; }
-    }
-    .bar.active { background: currentColor; }
+        .admin-section p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
 
-    /* Container & Tab Controls */
-    .main-container { padding: 0 20px; }
-    .nav-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px; }
-    .tab-btn {
-      background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted);
-      padding: 10px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
-      white-space: nowrap; cursor: pointer; display: flex; align-items: center; gap: 6px;
-    }
-    .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .admin-input {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 8px;
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 14px;
+            outline: none;
+        }
 
-    /* Content Views */
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+        .btn-primary {
+            width: 100%;
+            background: var(--accent-green);
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
-    /* Grid Layouts */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    
-    /* Interactive Cards */
-    .zone-card {
-      background: var(--card-bg); border-radius: 16px; overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .zone-img-wrapper { height: 110px; width: 100%; overflow: hidden; position: relative; }
-    .zone-img {
-      height: 100%; width: 100%; object-fit: cover;
-      animation: aliveAnimation 8s ease-in-out infinite alternate;
-    }
-    
-    @keyframes aliveAnimation {
-      0% { transform: scale(1) translate(0, 0); }
-      50% { transform: scale(1.18) translate(-4px, -3px); }
-      100% { transform: scale(1.3) translate(4px, 3px); }
-    }
+        /* Bottom Nav Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+            z-index: 1000;
+        }
 
-    .zone-card:nth-child(2) .zone-img { animation-delay: -2s; }
-    .zone-card:nth-child(3) .zone-img { animation-delay: -4s; }
-    .zone-card:nth-child(4) .zone-img { animation-delay: -6s; }
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            gap: 2px;
+        }
 
-    .zone-body { padding: 12px; }
-    .zone-title { font-size: 15px; font-weight: 700; color: white; }
-    .zone-desc { font-size: 11px; color: var(--text-muted); margin: 4px 0 10px 0; }
-    .zone-btn {
-      width: 100%; background: rgba(5, 150, 105, 0.2); color: #34d399;
-      border: 1px solid var(--primary); padding: 8px; border-radius: 8px;
-      font-size: 12px; font-weight: 600; cursor: pointer;
-    }
+        .nav-item.active {
+            color: var(--accent-green);
+        }
 
-    /* Listing Items */
-    .listing-card {
-      background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border);
-      padding: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
-    }
-    .listing-info h4 { font-size: 14px; font-weight: 700; }
-    .listing-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .listing-price { font-size: 13px; font-weight: 700; color: #34d399; margin-top: 4px; }
-    .action-btn-sm {
-      background: #25d366; color: white; border: none; padding: 8px 12px;
-      border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
-    }
+        /* AI Helper v2026.09.25 Widget Styles */
+        #ai-helper-container {
+            position: fixed;
+            bottom: 75px;
+            right: 16px;
+            z-index: 9999;
+        }
 
-    /* Homestay Waiting Notice Banner */
-    .notice-card {
-      background: rgba(37, 99, 235, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.4);
-      padding: 16px;
-      border-radius: 14px;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .notice-card i {
-      font-size: 24px;
-      color: #60a5fa;
-      margin-bottom: 8px;
-    }
-    .notice-card p {
-      font-size: 13px;
-      color: #e2e8f0;
-      line-height: 1.5;
-      font-weight: 500;
-    }
+        #ai-toggle-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            cursor: pointer;
+            font-size: 13px;
+        }
 
-    /* Homestay Tag Switcher */
-    .stay-tag-container {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .tag-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--card-bg);
-      color: var(--text-muted);
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    .tag-btn.active-vip {
-      background: rgba(245, 158, 11, 0.15);
-      border-color: #f59e0b;
-      color: #fbbf24;
-    }
-    .tag-btn.active-cheap {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: #10b981;
-      color: #34d399;
-    }
+        #ai-chat-box {
+            display: none;
+            width: 300px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+            overflow: hidden;
+            color: #fff;
+        }
 
-    .badge-tag {
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .badge-vip { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
-    .badge-cheap { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+        .ai-chat-header {
+            background: var(--bg-dark);
+            padding: 10px 14px;
+            font-weight: bold;
+            font-size: 13px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    /* Forms & Calculator */
-    .form-card {
-      background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px;
-    }
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
-    .form-control {
-      width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);
-      background: #0f172a; color: white; font-size: 14px; outline: none;
-    }
-    .btn-submit {
-      width: 100%; background: var(--primary); color: white; border: none; padding: 14px;
-      border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
-    }
+        .ai-chat-messages {
+            height: 220px;
+            overflow-y: auto;
+            padding: 12px;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-    /* Public Chat Room UI */
-    .chat-box { background: #0f172a; border: 1px solid var(--border); border-radius: 12px; height: 280px; overflow-y: auto; padding: 12px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 8px; }
-    .chat-msg { background: var(--card-bg); padding: 8px 12px; border-radius: 8px; font-size: 13px; max-width: 85%; border: 1px solid var(--border); }
-    .chat-msg .sender { font-size: 10px; color: #34d399; font-weight: 700; margin-bottom: 2px; }
-    .chat-input-row { display: flex; gap: 8px; }
+        .ai-msg-bot {
+            background: var(--border-color);
+            padding: 8px 10px;
+            border-radius: 8px;
+            max-width: 85%;
+            align-self: flex-start;
+        }
 
-    /* Emergency SOS Grid */
-    .sos-card {
-      background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4);
-      padding: 14px; border-radius: 12px; margin-bottom: 12px; display: flex;
-      align-items: center; justify-content: space-between;
-    }
-    .sos-title { font-size: 13px; font-weight: 700; color: #f87171; }
-    .sos-btn {
-      background: #ef4444; color: white; border: none; padding: 8px 14px;
-      border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;
-    }
+        .ai-msg-user {
+            background: var(--accent-blue);
+            padding: 8px 10px;
+            border-radius: 8px;
+            max-width: 85%;
+            align-self: flex-end;
+            margin-left: auto;
+        }
 
-    /* Bottom Navigation */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f19;
-      border-top: 1px solid var(--border); display: flex; justify-content: space-around;
-      padding: 10px 0; z-index: 100;
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; color: var(--text-muted);
-      font-size: 10px; text-decoration: none; gap: 4px; cursor: pointer;
-    }
-    .nav-item.active { color: var(--primary); }
-    .nav-item i { font-size: 18px; }
+        .ai-chat-input-area {
+            padding: 8px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 6px;
+            background: var(--bg-dark);
+        }
 
-    #form-status { display: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; text-align: center; }
-    .status-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
-    .status-error { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
-  </style>
+        .ai-chat-input-area input {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .ai-chat-input-area button {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Animated Hero Banner -->
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <div class="brand-title">Go<span>Sikkim</span></div>
-      <div class="brand-tagline">Permits • Homestays • Local Shared Cabs • Community</div>
-      <div class="status-pill">
-        <span class="status-dot"></span> Official District Tourism Portal
-      </div>
-    </div>
-  </div>
+    <header>
+        <div class="logo-title">GoSikkim</div>
+        <div class="portal-subtitle">Permits • Homestays • Local Shared Cabs • Community</div>
+        <div class="badge-official">🟢 Official District Tourism Portal</div>
+    </header>
 
-  <!-- Top Utility Bar: Weather & Admin Tingle Bell Notification -->
-  <div class="top-utility-bar">
-    <div class="weather-items">
-      <div class="weather-item"><i class="fa-solid fa-cloud-sun" style="color: #f59e0b;"></i> Gangtok: 18°C</div>
-      <div class="weather-item"><i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i> Lachen: 8°C</div>
-    </div>
-    <!-- Admin Voice Tingle Bell Icon -->
-    <div class="admin-bell-container" id="adminBellIcon" onclick="switchTab('adminVoiceFeed')" title="Admin Voice Broadcast">
-      <i class="fa-solid fa-bell"></i>
-      <span>ADMIN VOICE</span>
-      <span class="red-dot" id="adminRedDot"></span>
-    </div>
-  </div>
-
-  <!-- Search Bar & Live Satellite Link -->
-  <div class="search-container">
-    <div class="search-flex-row">
-      <div class="search-wrapper">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" id="searchInput" class="search-input" placeholder="Search Gangtok, Pelling, Lachen..." onkeyup="filterZones()">
-      </div>
-      
-      <!-- Live Satellite Signal Badge -->
-      <div class="sat-status-badge">
-        <div class="sat-icon-wrapper">
-          <i class="fa-solid fa-satellite-dish"></i>
-        </div>
-        <div class="sat-details">
-          <span class="sat-title">SAT-LINK: LIVE</span>
-          <div class="signal-bars">
-            <span class="bar active"></span>
-            <span class="bar active"></span>
-            <span class="bar active"></span>
-            <span class="bar active" id="b4"></span>
-            <span class="bar active" id="b5"></span>
-            <span class="bar active" id="b6"></span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="main-container">
-    <!-- Category Tabs / Dropdown Menu Bar -->
-    <div class="nav-tabs">
-      <button class="tab-btn active" onclick="switchTab('zones', this)"><i class="fa-solid fa-compass"></i> Explore</button>
-      <button class="tab-btn" onclick="switchTab('permits', this)"><i class="fa-solid fa-passport"></i> Permits</button>
-      <button class="tab-btn" onclick="switchTab('calculator', this)"><i class="fa-solid fa-calculator"></i> Estimator</button>
-      <button class="tab-btn" onclick="switchTab('homestays', this)"><i class="fa-solid fa-house"></i> Homestays</button>
-      <button class="tab-btn" onclick="switchTab('registerStay', this)"><i class="fa-solid fa-circle-plus"></i> List Property</button>
-      <button class="tab-btn" onclick="switchTab('cabs', this)"><i class="fa-solid fa-taxi"></i> Cabs</button>
-      <button class="tab-btn" onclick="switchTab('drivers', this)"><i class="fa-solid fa-id-card-clip"></i> Drivers Community</button>
-      <button class="tab-btn" onclick="switchTab('publicChat', this)"><i class="fa-solid fa-globe"></i> Public Chat (24h)</button>
-      <button class="tab-btn" onclick="switchTab('adminVoiceFeed', this)"><i class="fa-solid fa-bullhorn"></i> Admin Voice</button>
-      <button class="tab-btn" onclick="switchTab('adminPortal', this)"><i class="fa-solid fa-user-shield"></i> Admin Portal</button>
-      <button class="tab-btn" onclick="switchTab('sos', this)"><i class="fa-solid fa-phone-volume"></i> SOS</button>
+    <div class="weather-bar">
+        <span>🌤️ Gangtok: 18°C</span>
+        <span>❄️ Lachen: 8°C</span>
+        <span>⚡ SAT-LINK: LIVE</span>
     </div>
 
-    <!-- TAB 1: ZONES -->
-    <div id="zones-tab" class="tab-content active">
-      <div class="grid-2" id="zoneGrid">
-        <div class="zone-card" data-keywords="gangtok tsomgo nathula east">
-          <div class="zone-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="East Sikkim">
-          </div>
-          <div class="zone-body">
-            <div class="zone-title">East Sikkim</div>
-            <div class="zone-desc">Gangtok, Tsomgo & Nathula Pass</div>
-            <button class="zone-btn" onclick="switchTab('permits')">Get Permit</button>
-          </div>
-        </div>
+    <div class="container">
+        <input type="text" class="search-box" placeholder="Search Gangtok, Pelling, Lachen...">
 
-        <div class="zone-card" data-keywords="lachen lachung gurudongmar yumthang north">
-          <div class="zone-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="North Sikkim">
-          </div>
-          <div class="zone-body">
-            <div class="zone-title">North Sikkim</div>
-            <div class="zone-desc">Lachen, Lachung & Lakes</div>
-            <button class="zone-btn" onclick="switchTab('permits')">Get Permit</button>
-          </div>
-        </div>
-
-        <div class="zone-card" data-keywords="pelling yuksom dzongri west">
-          <div class="zone-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="West Sikkim">
-          </div>
-          <div class="zone-body">
-            <div class="zone-title">West Sikkim</div>
-            <div class="zone-desc">Pelling Skywalk & Treks</div>
-            <button class="zone-btn" onclick="switchTab('homestays')">View Stays</button>
-          </div>
-        </div>
-
-        <div class="zone-card" data-keywords="namchi ravangla temi tea south">
-          <div class="zone-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="South Sikkim">
-          </div>
-          <div class="zone-body">
-            <div class="zone-title">South Sikkim</div>
-            <div class="zone-desc">Namchi, Ravangla & Temi</div>
-            <button class="zone-btn" onclick="switchTab('homestays')">View Stays</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 2: PERMITS -->
-    <div id="permits-tab" class="tab-content">
-      <div class="form-card">
-        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 10px; border-radius: 8px; margin-bottom: 14px; font-size: 11px; color: #93c5fd; line-height: 1.4;">
-          <i class="fa-solid fa-circle-info"></i> <strong>Official Verification Notice:</strong> Upload a clear photo of your valid Government ID. Select your exact desired location across any district below, and our authorized desk will process your state-stamped permit.
-        </div>
-
-        <div id="form-status"></div>
-        <form id="permitForm" onsubmit="submitForm(event)">
-          <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
-          <input type="hidden" name="subject" value="New GoSikkim Verified Permit & Document Request">
-
-          <div class="form-group">
-            <label>Full Name (As per ID Proof)</label>
-            <input type="text" name="Full Name" class="form-control" placeholder="e.g. Rahul Sharma" required>
-          </div>
-          <div class="form-group">
-            <label>WhatsApp Contact</label>
-            <input type="tel" name="Phone Number" class="form-control" placeholder="+91 9800000000" required>
-          </div>
-          <div class="form-group">
-            <label>Select Location / Circuit (All Sikkim Districts)</label>
-            <select name="Destination Zone" class="form-control" required>
-              <optgroup label="📍 East Sikkim Locations">
-                <option value="Gangtok - MG Marg & City Center">MG Marg & Gangtok City Center</option>
-                <option value="Nathula Pass & Baba Mandir">Nathula Pass & Baba Mandir</option>
-                <option value="Tsomgo (Changu) Lake">Tsomgo (Changu) Lake</option>
-                <option value="Zuluk & Thambi View Point">Zuluk & Thambi View Point</option>
-                <option value="Aritar Lake & Lampokhari">Aritar Lake & Lampokhari</option>
-                <option value="Rumtek Monastery & Dharma Chakra">Rumtek Monastery</option>
-                <option value="Tashi View Point & Ganesh Tok">Tashi View Point & Ganesh Tok</option>
-                <option value="Hanuman Tok & Enchey Monastery">Hanuman Tok & Enchey Monastery</option>
-                <option value="Banjhakri Falls & Energy Park">Banjhakri Falls & Energy Park</option>
-                <option value="Ranka Monastery (Lingdum)">Ranka Monastery (Lingdum)</option>
-                <option value="Kyongnosla Alpine Sanctuary">Kyongnosla Alpine Sanctuary</option>
-                <option value="Menmecho Lake & Jelep La">Menmecho Lake & Jelep La Pass</option>
-                <option value="Padachen & Rongli Valley">Padachen & Rongli Valley</option>
-                <option value="Kupup Lake (Elephant Lake)">Kupup Lake (Elephant Lake)</option>
-                <option value="Sankalang Suspension Bridge">Sankalang Suspension Bridge</option>
-                <option value="Kabi Longstok Historic Treaty Site">Kabi Longstok Historic Site</option>
-                <option value="Phodong Monastery & Labrang">Phodong Monastery</option>
-                <option value="Mangan District Headquarters">Mangan Town</option>
-                <option value="Singtam Market & Riverside">Singtam Market</option>
-                <option value="Rangpo Border Checkpost">Rangpo Border Checkpost</option>
-                <option value="Martam Village & Resort Area">Martam Village</option>
-                <option value="Saramsa Garden (Palika Arboretum)">Saramsa Garden</option>
-                <option value="Rhenock Village & Rishi Khola">Rhenock & Rishi Khola</option>
-                <option value="Rolep Eco-Tourism Village">Rolep Eco-Tourism Village</option>
-                <option value="Gnathang Valley">Gnathang Valley</option>
-              </optgroup>
-              <optgroup label="📍 North Sikkim Locations">
-                <option value="Gurudongmar Lake & Thangu">Gurudongmar Lake & Thangu Valley</option>
-                <option value="Yumthang Valley & Zero Point">Yumthang Valley & Zero Point</option>
-                <option value="Lachen Village & Monastery">Lachen Village & Monastery</option>
-                <option value="Lachung Village & Waterfall">Lachung Village & Waterfalls</option>
-                <option value="Chungthang Confluence Valley">Chungthang Confluence</option>
-                <option value="Mangan View Point & Waterfall">Mangan View Point</option>
-                <option value="Seven Sisters Waterfall">Seven Sisters Waterfall</option>
-                <option value="Naga Waterfall & Ravine">Naga Waterfall</option>
-                <option value="Singhik View Point">Singhik View Point</option>
-                <option value="Kabi Longstok North Gateway">Kabi Longstok Gateway</option>
-                <option value="Dzongu Lepcha Reserve">Dzongu Lepcha Reserve</option>
-                <option value="Passingdang Village">Passingdang Village</option>
-                <option value="Tingchim Traditional Village">Tingchim Village</option>
-                <option value="Kopchey Village">Kopchey Village</option>
-                <option value="Tolung Monastery Trek Base">Tolung Monastery</option>
-                <option value="Chiteni Village">Chiteni Village</option>
-                <option value="Shingba Rhododendron Sanctuary">Shingba Rhododendron Sanctuary</option>
-                <option value="Yumesamdong (Zero Point)">Yumesamdong (Zero Point)</option>
-                <option value="Katao Valley Snow Fields">Katao Valley Snow Fields</option>
-                <option value="Chopta Valley Alpine Meadows">Chopta Valley Alpine Meadows</option>
-                <option value="Green Lake Trek Base">Green Lake Trek Base</option>
-                <option value="Thangu Valley High Altitude Stay">Thangu Valley</option>
-                <option value="Gongchen Monastery">Gongchen Monastery</option>
-                <option value="Ship-Gey Village">Ship-Gey Village</option>
-                <option value="Rung Dung Waterfall">Rung Dung Waterfall</option>
-              </optgroup>
-              <optgroup label="📍 West Sikkim Locations">
-                <option value="Pelling Skywalk & Rabdentse">Pelling Skywalk & Rabdentse Ruins</option>
-                <option value="Yuksom Norbugang & Dubdi Monastery">Yuksom (First Capital & Trek Base)</option>
-                <option value="Khecheopalri Lake (Holy Wishing Lake)">Khecheopalri Lake</option>
-                <option value="Kanchenjunga Waterfall">Kanchenjunga Waterfall</option>
-                <option value="Rimbi Waterfalls & Orange Garden">Rimbi Waterfalls</option>
-                <option value="Pemayangtse Monastery">Pemayangtse Monastery</option>
-                <option value="Sangachoeling Monastery">Sangachoeling Monastery</option>
-                <option value="Tashiding Monastery">Tashiding Monastery</option>
-                <option value="Singshore Suspension Bridge">Singshore Suspension Bridge</option>
-                <option value="Uttarey Village & Trout Farm">Uttarey Village</option>
-                <option value="Dentam Valley & Cheese Factory">Dentam Valley</option>
-                <option value="Barsey Rhododendron Sanctuary">Barsey Rhododendron Sanctuary</option>
-                <option value="Hee Bermiok Eco Village">Hee Bermiok Village</option>
-                <option value="Kala Patthar View Point West">Kala Patthar West</option>
-                <option value="Geyzing District Headquarters">Geyzing (Bihar Sharif / Gyalshing)</option>
-                <option value="Legship Sadasiva Hot Springs">Legship Hot Springs</option>
-                <option value="Soreng Town & Orange Orchards">Soreng Town</option>
-                <option value="Chumbong Village">Chumbong Village</option>
-                <option value="Darap Village Homestay Hub">Darap Village</option>
-                <option value="Yuksom Rathong Valley">Rathong Valley Yuksom</option>
-                <option value="Dzongri Trek Trail Station">Dzongri Trek Station</option>
-                <option value="Goechala Pass Basecamp">Goechala Pass Route</option>
-                <option value="Yangtey Village Heritage Stay">Yangtey Village</option>
-                <option value="Rinchenpong Monastery">Rinchenpong Monastery</option>
-                <option value="Kaluk Heritage Village">Kaluk Heritage Village</option>
-              </optgroup>
-              <optgroup label="📍 South Sikkim Locations">
-                <option value="Namchi Char Dham & Siddhesvara">Namchi Char Dham</option>
-                <option value="Ravangla Buddha Park & Tathagata Tsal">Ravangla Buddha Park</option>
-                <option value="Temi Tea Garden & Factory">Temi Tea Garden</option>
-                <option value="Samdruptse Hill & Giant Guru Padmasambhava">Samdruptse Hill</option>
-                <option value="Ralang Monastery & Hot Springs">Ralang Monastery</option>
-                <option value="Borong Hot Springs & Village">Borong Hot Springs</option>
-                <option value="Maenam Wildlife Sanctuary">Maenam Wildlife Sanctuary</option>
-                <option value="Tendong Hill Sunrise Point">Tendong Hill</option>
-                <option value="Namchi Rock Garden & Sai Mandir">Namchi Rock Garden</option>
-                <option value="Jorethang Town & Riverfront">Jorethang Town</option>
-                <option value="Melli Checkpost & Riverside">Melli Checkpost</option>
-                <option value="Sikip Fishing & Boating Point">Sikip Riverfront</option>
-                <option value="Kitam Bird Sanctuary">Kitam Bird Sanctuary</option>
-                <option value="Ravangla Market Square">Ravangla Market</option>
-                <option value="Damthang Forest View Point">Damthang View Point</option>
-                <option value="Yangang Village & Heritage Center">Yangang Village</option>
-                <option value="Chisopani Suspension Bridge">Chisopani Bridge</option>
-                <option value="Namthang Village">Namthang Village</option>
-                <option value="Salghari Eco Park">Salghari Eco Park</option>
-                <option value="Phalidanda View Point">Phalidanda View Point</option>
-                <option value="Bhaleydhunga Skywalk & Ropeway">Bhaleydhunga Skywalk & Ropeway</option>
-                <option value="Rayong Sunrise View Point">Rayong Sunrise Point</option>
-                <option value="Assangthang Childrens Park">Assangthang Park</option>
-                <option value="Wokecraft Village Namchi">Wokecraft Village</option>
-                <option value="Tarku Village South Sikkim">Tarku Village</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Travel Date</label>
-            <input type="date" name="Travel Date" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Upload Valid ID Proof / Passport Image</label>
-            <input type="file" name="ID Document" class="form-control" accept="image/*,.pdf" required style="padding: 8px;">
-          </div>
-          <button type="submit" id="submitBtn" class="btn-submit">Submit Document for Official Permit</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- TAB 3: COST ESTIMATOR -->
-    <div id="calculator-tab" class="tab-content">
-      <div class="form-card">
-        <h3 style="font-size:16px; margin-bottom: 12px; color:#34d399;"><i class="fa-solid fa-calculator"></i> Instant Trip Cost Estimator</h3>
-        <div id="calc-status" style="display:none; padding:12px; border-radius:8px; margin-bottom:12px; font-size:13px; text-align:center;"></div>
-        <form id="estimatorForm" onsubmit="submitEstimatorForm(event)">
-          <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
-          <input type="hidden" name="subject" value="New GoSikkim Trip Cost Estimate Request">
-          <div class="form-group">
-            <label>Select Circuit / Location</label>
-            <select name="Selected Circuit" class="form-control" required>
-              <option value="Gangtok City Exploration (2D/3N)">Gangtok City & Monasteries (2D/3N)</option>
-              <option value="North Sikkim Ultimate (3D/2N)">North Sikkim Ultimate (Lachen, Lachung, Yumthang 3D/2N)</option>
-              <option value="Pelling & West Sikkim Tour">Pelling & West Sikkim Heritage Tour (3D/2N)</option>
-              <option value="South Sikkim Spiritual Circuit">South Sikkim Spiritual Circuit (2D/1N)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Number of Travelers</label>
-            <input type="number" name="Number of Travelers" class="form-control" value="2" min="1" required>
-          </div>
-          <div class="form-group">
-            <label>Trip Duration (Days)</label>
-            <input type="number" name="Trip Duration Days" class="form-control" value="3" min="1" required>
-          </div>
-          <div class="form-group">
-            <label>Personal WhatsApp Number</label>
-            <input type="tel" name="WhatsApp Number" class="form-control" placeholder="+91 9800000000" required>
-          </div>
-          <button type="submit" id="calcSubmitBtn" class="btn-submit">Submit Estimate Request</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- TAB 4: HOMESTAYS -->
-    <div id="homestays-tab" class="tab-content">
-      <div class="notice-card">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        <p>Please wait patiently, we will soon get you the available best VIP to the cheapest homestays.</p>
-      </div>
-
-      <div class="stay-tag-container">
-        <button class="tag-btn active-vip" id="tagVipBtn" onclick="switchStaySection('vip')">
-          <i class="fa-solid fa-crown"></i> VIP Stays
-        </button>
-        <button class="tag-btn" id="tagCheapBtn" onclick="switchStaySection('cheap')">
-          <i class="fa-solid fa-piggy-bank"></i> Cheap Stays
-        </button>
-      </div>
-      <div id="dynamicStaysContainer"></div>
-    </div>
-
-    <!-- TAB 5: REGISTER PROPERTY -->
-    <div id="registerStay-tab" class="tab-content">
-      <div class="form-card">
-        <h3 style="font-size:16px; margin-bottom:8px; color:#34d399;"><i class="fa-solid fa-house-chimney-user"></i> List Your Homestay Property</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Register your homestay property here to unlock bookings and recurring feature placements!</p>
-        <div id="reg-status" style="display:none; padding:12px; border-radius:8px; margin-bottom:12px; font-size:13px; text-align:center;"></div>
-        <form id="homestayRegForm" onsubmit="registerHomestay(event)">
-          <div class="form-group">
-            <label>Homestay Name</label>
-            <input type="text" id="hName" class="form-control" placeholder="e.g. Kanchenjunga View Stay" required>
-          </div>
-          <div class="form-group">
-            <label>District / Location Menu Dropdown</label>
-            <select id="hLocation" class="form-control" required>
-              <optgroup label="📍 East Sikkim">
-                <option value="Gangtok, East Sikkim">Gangtok, East Sikkim</option>
-                <option value="Zuluk, East Sikkim">Zuluk, East Sikkim</option>
-                <option value="Aritar, East Sikkim">Aritar, East Sikkim</option>
-                <option value="Rumtek, East Sikkim">Rumtek, East Sikkim</option>
-                <option value="Padachen, East Sikkim">Padachen, East Sikkim</option>
-                <option value="Kupup, East Sikkim">Kupup, East Sikkim</option>
-                <option value="Rhenock, East Sikkim">Rhenock, East Sikkim</option>
-                <option value="Rolep, East Sikkim">Rolep, East Sikkim</option>
-                <option value="Gnathang, East Sikkim">Gnathang Valley, East Sikkim</option>
-                <option value="Singtam, East Sikkim">Singtam, East Sikkim</option>
-              </optgroup>
-              <optgroup label="📍 North Sikkim">
-                <option value="Lachen, North Sikkim">Lachen, North Sikkim</option>
-                <option value="Lachung, North Sikkim">Lachung, North Sikkim</option>
-                <option value="Mangan, North Sikkim">Mangan, North Sikkim</option>
-                <option value="Chungthang, North Sikkim">Chungthang, North Sikkim</option>
-                <option value="Dzongu, North Sikkim">Dzongu, North Sikkim</option>
-                <option value="Thangu, North Sikkim">Thangu, North Sikkim</option>
-                <option value="Yumthang, North Sikkim">Yumthang, North Sikkim</option>
-                <option value="Singhik, North Sikkim">Singhik, North Sikkim</option>
-              </optgroup>
-              <optgroup label="📍 West Sikkim">
-                <option value="Pelling, West Sikkim">Pelling, West Sikkim</option>
-                <option value="Yuksom, West Sikkim">Yuksom, West Sikkim</option>
-                <option value="Khecheopalri, West Sikkim">Khecheopalri, West Sikkim</option>
-                <option value="Uttarey, West Sikkim">Uttarey, West Sikkim</option>
-                <option value="Dentam, West Sikkim">Dentam, West Sikkim</option>
-                <option value="Hee Bermiok, West Sikkim">Hee Bermiok, West Sikkim</option>
-                <option value="Geyzing, West Sikkim">Geyzing, West Sikkim</option>
-                <option value="Soreng, West Sikkim">Soreng, West Sikkim</option>
-                <option value="Darap, West Sikkim">Darap Village, West Sikkim</option>
-                <option value="Kaluk, West Sikkim">Kaluk, West Sikkim</option>
-              </optgroup>
-              <optgroup label="📍 South Sikkim">
-                <option value="Namchi, South Sikkim">Namchi, South Sikkim</option>
-                <option value="Ravangla, South Sikkim">Ravangla, South Sikkim</option>
-                <option value="Temi, South Sikkim">Temi Tea Garden, South Sikkim</option>
-                <option value="Ralang, South Sikkim">Ralang, South Sikkim</option>
-                <option value="Borong, South Sikkim">Borong, South Sikkim</option>
-                <option value="Jorethang, South Sikkim">Jorethang, South Sikkim</option>
-                <option value="Melli, South Sikkim">Melli, South Sikkim</option>
-                <option value="Yangang, South Sikkim">Yangang, South Sikkim</option>
-                <option value="Kitam, South Sikkim">Kitam, South Sikkim</option>
-                <option value="Tarku, South Sikkim">Tarku, South Sikkim</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Category Type</label>
-            <select id="hCategory" class="form-control" required>
-              <option value="vip">VIP Luxury Stay (₹3,000+ / night)</option>
-              <option value="cheap">Budget / Cheap Stay (Under ₹1,500 / night)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Price Per Night (₹)</label>
-            <input type="number" id="hPrice" class="form-control" placeholder="1200" required>
-          </div>
-          <div class="form-group">
-            <label>Owner WhatsApp Number</label>
-            <input type="tel" id="hPhone" class="form-control" placeholder="+91 9800000000" required>
-          </div>
-          <button type="submit" class="btn-submit">Publish My Property Instantly</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- TAB 6: CABS -->
-    <div id="cabs-tab" class="tab-content">
-      <div class="listing-card">
-        <div class="listing-info">
-          <h4>Gangtok ⇄ Siliguri Shared Cab</h4>
-          <p>Daily Departures (Mahindra Xylo / Sumo)</p>
-          <div class="listing-price">₹500 / seat</div>
-        </div>
-        <a href="https://wa.me/919800000000?text=Hi,%20I%20need%20a%20seat%20for%20Gangtok-Siliguri" class="action-btn-sm" target="_blank">
-          <i class="fa-brands fa-whatsapp"></i> Reserve
-        </a>
-      </div>
-    </div>
-
-    <!-- TAB 7: DRIVERS EARNING COMMUNITY -->
-    <div id="drivers-tab" class="tab-content">
-      <div class="form-card">
-        <h3 style="font-size:16px; margin-bottom:8px; color:#34d399;"><i class="fa-solid fa-id-card-clip"></i> Drivers Earning & Support Community</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Connect with fellow local cab operators across Sikkim, get direct trip sharing leads, and pool daily tourist bookings.</p>
-        
-        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 8px; margin-bottom: 14px; font-size: 12px;">
-          <div style="font-weight:700; color:#34d399; margin-bottom:4px;"><i class="fa-solid fa-circle-check"></i> Active Drivers WhatsApp Group Hub</div>
-          <p style="color:#cbd5e1; margin-bottom:8px;">Join our regional drivers cluster to receive live shared cab requirements and instant return-trip passengers.</p>
-          <a href="https://wa.me/919800000000?text=Hi,%20I%20am%20a%20driver%20in%20Sikkim.%20Add%20me%20to%20the%20community." class="action-btn-sm" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i> Join Drivers WhatsApp Network
-          </a>
-        </div>
-
-        <div class="listing-card" style="margin-top:10px;">
-          <div class="listing-info">
-            <h4>North Sikkim Route Pool Pool</h4>
-            <p>Lachen-Lachung daily rotation network</p>
-            <div class="listing-price">Zero Commission Lead Sharing</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 8: PUBLIC CHAT (From anywhere in the world, auto-deletes after 24 hours) -->
-    <div id="publicChat-tab" class="tab-content">
-      <div class="form-card">
-        <h3 style="font-size:16px; margin-bottom:4px; color:#34d399;"><i class="fa-solid fa-globe"></i> Global Traveler & Local Public Chat</h3>
-        <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Communicate with fellow travelers from anywhere in the world. Live messages & past chat history auto-expire and delete securely after 24 hours.</p>
-
-        <div class="chat-box" id="publicChatBox">
-          <!-- Populated by JS -->
-        </div>
-
-        <div class="chat-input-row">
-          <input type="text" id="chatNameInput" class="form-control" placeholder="Your Name" style="width: 30%;">
-          <input type="text" id="chatMsgInput" class="form-control" placeholder="Type message to the world..." style="flex:1;" onkeypress="handleChatKeyPress(event)">
-          <button class="action-btn-sm" onclick="sendPublicMessage()"><i class="fa-solid fa-paper-plane"></i> Send</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 9: ADMIN VOICE FEED (Users View) -->
-    <div id="adminVoiceFeed-tab" class="tab-content">
-      <div class="form-card">
-        <h3 style="font-size:16px; margin-bottom:8px; color:#f87171;"><i class="fa-solid fa-bullhorn"></i> Admin Voice Broadcasts & Announcements</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Important updates, safety warnings, and live notifications published directly by portal administration.</p>
-        <div id="userAdminVoiceContainer">
-          <!-- Injected via JS -->
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 10: ADMIN PORTAL (Secured with Password QAZMLP18) -->
-    <div id="adminPortal-tab" class="tab-content">
-      <div class="form-card" id="adminLoginCard">
-        <h3 style="font-size:16px; margin-bottom:8px; color:#34d399;"><i class="fa-solid fa-user-shield"></i> Admin Portal Login</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Enter administrative portal key to manage system announcements and voice broadcasts.</p>
-        
-        <div id="adminLoginError" style="display:none; color:#f87171; font-size:12px; margin-bottom:10px; text-align:center;"></div>
-
-        <div class="form-group">
-          <label>Admin Security Password</label>
-          <input type="password" id="adminPassInput" class="form-control" placeholder="Enter password (hidden)...">
-        </div>
-        <button class="btn-submit" onclick="verifyAdminLogin()">Access Admin Dashboard</button>
-      </div>
-
-      <!-- Admin Control Panel (Hidden until authenticated) -->
-      <div class="form-card" id="adminDashboardCard" style="display:none;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-          <h3 style="font-size:16px; color:#34d399;"><i class="fa-solid fa-sliders"></i> Admin Control Dashboard</h3>
-          <button class="action-btn-sm" style="background:#ef4444;" onclick="logoutAdmin()">Logout</button>
-        </div>
-        
-        <div id="adminPostStatus" style="display:none; padding:10px; border-radius:6px; margin-bottom:10px; font-size:12px; text-align:center;"></div>
-
-        <div class="form-group">
-          <label>Post New [Admin Voice] Broadcast Message</label>
-          <textarea id="adminVoiceText" class="form-control" rows="3" placeholder="Type announcement or voice directive here for users..."></textarea>
-        </div>
-        <button class="btn-submit" onclick="publishAdminVoice()">Publish Admin Voice & Trigger User Bells</button>
-      </div>
-    </div>
-
-    <!-- TAB 11: SOS -->
-    <div id="sos-tab" class="tab-content">
-      <div class="sos-card">
-        <div>
-          <div class="sos-title">Sikkim Tourist Police</div>
-          <div style="font-size:11px; color:var(--text-muted);">Gangtok Control Room</div>
-        </div>
-        <a href="tel:03592232218" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 03592-232218</a>
-      </div>
-
-      <div class="sos-card">
-        <div>
-          <div class="sos-title">Disaster Management SOS</div>
-          <div style="font-size:11px; color:var(--text-muted);">Landslide / Road Clearance Helpline</div>
-        </div>
-        <a href="tel:1077" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 1077</a>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bottom Navigation Bar -->
-  <div class="bottom-nav">
-    <div class="nav-item active" onclick="switchTab('zones')">
-      <i class="fa-solid fa-compass"></i>
-      <span>Explore</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('permits')">
-      <i class="fa-solid fa-passport"></i>
-      <span>Permits</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('calculator')">
-      <i class="fa-solid fa-calculator"></i>
-      <span>Estimator</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('homestays')">
-      <i class="fa-solid fa-house"></i>
-      <span>Stays</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('publicChat')">
-      <i class="fa-solid fa-globe"></i>
-      <span>Chat</span>
-    </div>
-  </div>
-
-  <script>
-    // Satellite Signal Bar Animation
-    function cycleSignalBars() {
-      const b4 = document.getElementById('b4');
-      const b5 = document.getElementById('b5');
-      const b6 = document.getElementById('b6');
-      if(!b4) return;
-
-      let state = 0;
-      setInterval(() => {
-        state = (state + 1) % 3;
-        if (state === 0) {
-          b4.style.opacity = '1'; b5.style.opacity = '1'; b6.style.opacity = '1';
-        } else if (state === 1) {
-          b4.style.opacity = '1'; b5.style.opacity = '0.15'; b6.style.opacity = '0.15';
-        } else {
-          b4.style.opacity = '0.15'; b5.style.opacity = '0.15'; b6.style.opacity = '0.15';
-        }
-      }, 3000);
-    }
-    cycleSignalBars();
-
-    function switchTab(tabId, element) {
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      
-      const targetTab = document.getElementById(tabId + '-tab');
-      if(targetTab) targetTab.classList.add('active');
-      
-      if(element) {
-        element.classList.add('active');
-      }
-
-      // If user opens Admin Voice tab, clear the tingling bell notification state
-      if(tabId === 'adminVoiceFeed') {
-        const bell = document.getElementById('adminBellIcon');
-        const dot = document.getElementById('adminRedDot');
-        if(bell) bell.classList.remove('tingling');
-        if(dot) dot.style.display = 'none';
-        localStorage.setItem('adminVoiceUnread', 'false');
-      }
-    }
-
-    // --- 24 HOUR EXPIRING PUBLIC CHAT SYSTEM ---
-    let chatMessages = JSON.parse(localStorage.getItem('gosikkimPublicChat')) || [
-      { sender: "Traveler_John (UK)", text: "Hello from London! Planning a trip to Zuluk next week.", time: "10 mins ago" },
-      { sender: "Pema_Sherpa (Gangtok)", text: "Welcome! Weather is pleasant. Make sure to get your permits early.", time: "2 mins ago" }
-    ];
-
-    function renderPublicChat() {
-      const chatBox = document.getElementById('publicChatBox');
-      if(!chatBox) return;
-      chatBox.innerHTML = '';
-
-      chatMessages.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = 'chat-msg';
-        div.innerHTML = `
-          <div class="sender">${msg.sender} <span style="font-weight:400; color:var(--text-muted); font-size:9px; margin-left:6px;">${msg.time}</span></div>
-          <div>${msg.text}</div>
-        `;
-        chatBox.appendChild(div);
-      });
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function sendPublicMessage() {
-      const nameInput = document.getElementById('chatNameInput');
-      const msgInput = document.getElementById('chatMsgInput');
-      
-      const sender = nameInput.value.trim() || "Anonymous Traveler";
-      const text = msgInput.value.trim();
-
-      if(!text) return;
-
-      const newMsg = { sender, text, time: "Just now" };
-      chatMessages.push(newMsg);
-
-      // Save and retain 24h simulation logic
-      localStorage.setItem('gosikkimPublicChat', JSON.stringify(chatMessages));
-      msgInput.value = '';
-      renderPublicChat();
-    }
-
-    function handleChatKeyPress(e) {
-      if(e.key === 'Enter') sendPublicMessage();
-    }
-    renderPublicChat();
-
-    // --- ADMIN PORTAL & ADMIN VOICE NOTIFICATION SYSTEM ---
-    const ADMIN_PASSWORD_KEY = "QAZMLP18";
-
-    let adminVoices = JSON.parse(localStorage.getItem('gosikkimAdminVoices')) || [
-      { text: "System Update: All vehicle permits for North Sikkim circuits are operating normally today.", time: "Today, 09:00 AM" }
-    ];
-
-    function verifyAdminLogin() {
-      const pass = document.getElementById('adminPassInput').value;
-      const errorBox = document.getElementById('adminLoginError');
-
-      if(pass === ADMIN_PASSWORD_KEY) {
-        document.getElementById('adminLoginCard').style.display = 'none';
-        document.getElementById('adminDashboardCard').style.display = 'block';
-        errorBox.style.display = 'none';
-        document.getElementById('adminPassInput').value = '';
-      } else {
-        errorBox.innerText = "Incorrect admin password. Access denied.";
-        errorBox.style.display = 'block';
-      }
-    }
-
-    function logoutAdmin() {
-      document.getElementById('adminDashboardCard').style.display = 'none';
-      document.getElementById('adminLoginCard').style.display = 'block';
-    }
-
-    function publishAdminVoice() {
-      const txtBox = document.getElementById('adminVoiceText');
-      const text = txtBox.value.trim();
-      const statusBox = document.getElementById('adminPostStatus');
-
-      if(!text) return;
-
-      const newVoice = { text, time: "Just now" };
-      adminVoices.unshift(newVoice);
-      localStorage.setItem('gosikkimAdminVoices', JSON.stringify(adminVoices));
-
-      // Trigger bell tingle and red dot across all user portals via localStorage state
-      localStorage.setItem('adminVoiceUnread', 'true');
-      checkAdminBellStatus();
-
-      statusBox.className = "status-success";
-      statusBox.innerText = "Admin Voice broadcast successfully published! User bells are now tingling.";
-      statusBox.style.display = "block";
-      txtBox.value = '';
-
-      renderAdminVoices();
-      setTimeout(() => { statusBox.style.display = 'none'; }, 3000);
-    }
-
-    function renderAdminVoices() {
-      const container = document.getElementById('userAdminVoiceContainer');
-      if(!container) return;
-      container.innerHTML = '';
-
-      if(adminVoices.length === 0) {
-        container.innerHTML = `<p style="font-size:12px; color:var(--text-muted); text-align:center;">No admin voice announcements at the moment.</p>`;
-        return;
-      }
-
-      adminVoices.forEach(v => {
-        const card = document.createElement('div');
-        card.className = 'listing-card';
-        card.style.flexDirection = 'column';
-        card.style.alignItems = 'flex-start';
-        card.innerHTML = `
-          <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:4px;">
-            <span class="badge-tag" style="background:rgba(239,68,68,0.2); color:#f87171; border:1px solid #ef4444;"><i class="fa-solid fa-bullhorn"></i> Admin Directive</span>
-            <span style="font-size:10px; color:var(--text-muted);">${v.time}</span>
-          </div>
-          <p style="font-size:13px; color:#f8fafc; line-height:1.4;">${v.text}</p>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function checkAdminBellStatus() {
-      const isUnread = localStorage.getItem('adminVoiceUnread') === 'true';
-      const bell = document.getElementById('adminBellIcon');
-      const dot = document.getElementById('adminRedDot');
-
-      if(isUnread) {
-        if(bell) bell.classList.add('tingling');
-        if(dot) dot.style.display = 'inline-block';
-      } else {
-        if(bell) bell.classList.remove('tingling');
-        if(dot) dot.style.display = 'none';
-      }
-    }
-
-    renderAdminVoices();
-    checkAdminBellStatus();
-
-    // Homestay & Permit submission functions retained from prior logic
-    let allStays = JSON.parse(localStorage.getItem('sikkimStays')) || [
-      { name: "Himalayan Orchid VIP Villa", location: "Pelling, West Sikkim", price: "₹3,500 / night", type: "vip", phone: "919800000000" },
-      { name: "Zuluk Valley Backpacker Nest", location: "Zuluk, East Sikkim", price: "₹999 / night", type: "cheap", phone: "919800000000" }
-    ];
-    let currentStayType = 'vip';
-
-    function renderStays() {
-      const container = document.getElementById('dynamicStaysContainer');
-      if(!container) return;
-      container.innerHTML = '';
-      const filtered = allStays.filter(s => s.type === currentStayType);
-      if (filtered.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">No properties listed under this category yet.</div>`;
-        return;
-      }
-      filtered.forEach(stay => {
-        let badgeHTML = stay.type === 'vip' ? `<span class="badge-tag badge-vip">VIP</span>` : `<span class="badge-tag badge-cheap">CHEAP</span>`;
-        let card = document.createElement('div');
-        card.className = 'listing-card';
-        card.innerHTML = `
-          <div class="listing-info">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-              ${badgeHTML}
-              <span style="font-size:11px; color:var(--text-muted);">${stay.location}</span>
+        <div class="grid-menu">
+            <div class="menu-card" onclick="alert('Navigating to Tourist Permits Section')">
+                <span style="font-size:24px;">🪪</span>
+                <h3>Permits</h3>
             </div>
-            <h4>${stay.name}</h4>
-            <div class="listing-price">${stay.price}</div>
-          </div>
-          <a href="https://wa.me/${stay.phone}?text=Hi,%20I%20want%20to%20book%20(${stay.name})" class="action-btn-sm" target="_blank"><i class="fa-brands fa-whatsapp"></i> Book</a>
-        `;
-        container.appendChild(card);
-      });
-    }
+            <div class="menu-card" onclick="alert('Navigating to Homestays Directory')">
+                <span style="font-size:24px;">🏡</span>
+                <h3>Homestays</h3>
+            </div>
+            <div class="menu-card" onclick="alert('Navigating to Local Shared Cabs')">
+                <span style="font-size:24px;">🚐</span>
+                <h3>Shared Cabs</h3>
+            </div>
+            <div class="menu-card" onclick="alert('Navigating to Trip Cost Estimator')">
+                <span style="font-size:24px;">🧮</span>
+                <h3>Estimator</h3>
+            </div>
+        </div>
 
-    function switchStaySection(type) {
-      currentStayType = type;
-      const vipBtn = document.getElementById('tagVipBtn');
-      const cheapBtn = document.getElementById('tagCheapBtn');
-      if (type === 'vip') {
-        if(vipBtn) vipBtn.className = 'tag-btn active-vip';
-        if(cheapBtn) cheapBtn.className = 'tag-btn';
-      } else {
-        if(vipBtn) vipBtn.className = 'tag-btn';
-        if(cheapBtn) cheapBtn.className = 'tag-btn active-cheap';
-      }
-      renderStays();
-    }
+        <!-- Admin Portal Login Card -->
+        <div class="admin-section">
+            <h2>Admin Portal Login</h2>
+            <p>Enter administrative portal key to manage system announcements and voice broadcasts.</p>
+            <input type="password" id="adminPasswordInput" class="admin-input" placeholder="Admin Security Password">
+            <button class="btn-primary" onclick="handleAdminLogin()">Access Admin Dashboard</button>
+            <div id="adminLoginFeedback" style="margin-top: 8px; font-size: 13px;"></div>
+        </div>
+    </div>
 
-    function registerHomestay(event) {
-      event.preventDefault();
-      const name = document.getElementById('hName').value;
-      const location = document.getElementById('hLocation').value;
-      const category = document.getElementById('hCategory').value;
-      const price = "₹" + document.getElementById('hPrice').value + " / night";
-      const phone = document.getElementById('hPhone').value;
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active"><span>🧭</span>Explore</button>
+        <button class="nav-item"><span>🪪</span>Permits</button>
+        <button class="nav-item"><span>🧮</span>Estimator</button>
+        <button class="nav-item"><span>🏡</span>Stays</button>
+        <button class="nav-item"><span>🌐</span>Chat</button>
+    </nav>
 
-      allStays.push({ name, location, price, type: category, phone });
-      localStorage.setItem('sikkimStays', JSON.stringify(allStays));
+    <!-- AI Helper v2026.09.25 Floating Assistant Widget -->
+    <div id="ai-helper-container">
+        <button id="ai-toggle-btn">🤖 AI Helper v2026.09.25</button>
+        
+        <div id="ai-chat-box">
+            <div class="ai-chat-header">
+                <span>GoSikkim Assistant</span>
+                <button id="ai-close-btn" style="background: none; border: none; color: #94A3B8; cursor: pointer; font-size: 16px;">&times;</button>
+            </div>
+            
+            <div id="ai-chat-messages" class="ai-chat-messages">
+                <div class="ai-msg-bot">Hi! I am AI Helper v2026.09.25. Ask me anything about GoSikkim permits, homestays, or cabs!</div>
+            </div>
+            
+            <div class="ai-chat-input-area">
+                <input type="text" id="ai-user-input" placeholder="Ask a query...">
+                <button id="ai-send-btn">Send</button>
+            </div>
+        </div>
+    </div>
 
-      const statusBox = document.getElementById('reg-status');
-      statusBox.className = "status-success";
-      statusBox.innerText = "Success! Property published.";
-      statusBox.style.display = "block";
-      document.getElementById('homestayRegForm').reset();
-      setTimeout(() => { switchTab('homestays'); switchStaySection(category); statusBox.style.display = 'none'; }, 1500);
-    }
+    <script>
+        // Admin Password Verification Script
+        function handleAdminLogin() {
+            const pass = document.getElementById('adminPasswordInput').value;
+            const feedback = document.getElementById('adminLoginFeedback');
+            const correctKey = "QAZMLP18";
 
-    function filterZones() {
-      const input = document.getElementById('searchInput').value.toLowerCase();
-      document.querySelectorAll('.zone-card').forEach(card => {
-        card.style.display = card.getAttribute('data-keywords').includes(input) ? "block" : "none";
-      });
-    }
+            if (pass === correctKey) {
+                feedback.style.color = "#10b981";
+                feedback.innerText = "Access granted! Loading Admin Dashboard...";
+                setTimeout(() => {
+                    alert("Welcome to GoSikkim Admin Dashboard.");
+                }, 400);
+            } else {
+                feedback.style.color = "#ef4444";
+                feedback.innerText = "Incorrect admin password. Access denied.";
+            }
+        }
 
-    async function submitForm(event) {
-      event.preventDefault();
-      const form = document.getElementById('permitForm');
-      const submitBtn = document.getElementById('submitBtn');
-      const statusBox = document.getElementById('form-status');
-      submitBtn.disabled = true; submitBtn.innerText = "Processing...";
-      try {
-        const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) });
-        const data = await res.json();
-        if(data.success) {
-          statusBox.className = "status-success"; statusBox.innerText = "Permit request submitted successfully!";
-          statusBox.style.display = "block"; form.reset();
-        } else { throw new Error(); }
-      } catch {
-        statusBox.className = "status-error"; statusBox.innerText = "Submission error. Try again.";
-        statusBox.style.display = "block";
-      } finally { submitBtn.disabled = false; submitBtn.innerText = "Submit Document for Official Permit"; }
-    }
+        // AI Helper v2026.09.25 Widget Logic
+        const toggleBtn = document.getElementById('ai-toggle-btn');
+        const closeBtn = document.getElementById('ai-close-btn');
+        const chatBox = document.getElementById('ai-chat-box');
+        const sendBtn = document.getElementById('ai-send-btn');
+        const userInput = document.getElementById('ai-user-input');
+        const messagesContainer = document.getElementById('ai-chat-messages');
 
-    async function submitEstimatorForm(event) {
-      event.preventDefault();
-      const form = document.getElementById('estimatorForm');
-      const submitBtn = document.getElementById('calcSubmitBtn');
-      const statusBox = document.getElementById('calc-status');
-      submitBtn.disabled = true; submitBtn.innerText = "Calculating...";
-      try {
-        const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: new FormData(form) });
-        const data = await res.json();
-        if(data.success) {
-          statusBox.className = "status-success"; statusBox.innerText = "Estimate requested! You will receive pricing details via WhatsApp.";
-          statusBox.style.display = "block"; form.reset();
-        } else { throw new Error(); }
-      } catch {
-        statusBox.className = "status-error"; statusBox.innerText = "Error. Try again.";
-        statusBox.style.display = "block";
-      } finally { submitBtn.disabled = false; submitBtn.innerText = "Submit Estimate Request"; }
-    }
+        toggleBtn.onclick = () => {
+            chatBox.style.display = chatBox.style.display === 'block' ? 'none' : 'block';
+        };
 
-    renderStays();
-  </script>
+        closeBtn.onclick = () => {
+            chatBox.style.display = 'none';
+        };
+
+        function sendAiQuery() {
+            const queryText = userInput.value.trim();
+            if (!queryText) return;
+
+            // Append user message
+            messagesContainer.innerHTML += `<div class="ai-msg-user">${queryText}</div>`;
+            userInput.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Simulated intelligent response handler
+            setTimeout(() => {
+                let reply = "I can guide you through GoSikkim features including district tourist permits, verified homestays, and local shared transit.";
+                const lower = queryText.toLowerCase();
+
+                if (lower.includes('permit')) {
+                    reply = "Tourist permits can be applied for directly through the 'Permits' tab on your GoSikkim main menu.";
+                } else if (lower.includes('cab') || lower.includes('shared')) {
+                    reply = "Local shared cabs connect major transit hubs across Gangtok, Pelling, and Lachen.";
+                } else if (lower.includes('homestay') || lower.includes('stay')) {
+                    reply = "Browse our community homestay listings under the 'Stays' menu for local stays.";
+                } else if (lower.includes('password') || lower.includes('admin')) {
+                    reply = "The security key for the admin portal is configured in your application credentials.";
+                }
+
+                messagesContainer.innerHTML += `<div class="ai-msg-bot">${reply}</div>`;
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+        }
+
+        sendBtn.onclick = sendAiQuery;
+        userInput.onkeypress = (e) => {
+            if (e.key === 'Enter') sendAiQuery();
+        };
+    </script>
 </body>
 </html>

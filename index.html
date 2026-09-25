@@ -3,129 +3,331 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoSikkim - Official Travel & Permit Portal</title>
+  <title>GoSikkim | Premier Travel & Tourism Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 0; }
-    body { background-color: #f1f5f9; padding: 16px; color: #0f172a; padding-bottom: 40px; }
-    
-    header { text-align: center; padding: 12px 0 16px 0; }
-    header h1 { color: #047857; font-size: 26px; font-weight: 800; }
-    header p { color: #64748b; font-size: 13px; margin-top: 4px; }
-    
-    .search-bar { width: 100%; margin-bottom: 16px; }
-    .search-bar input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 15px; outline: none; background: #fff; }
-    
-    .section-title { font-size: 16px; font-weight: 700; margin: 16px 0 10px 0; color: #1e293b; }
-    
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .card { background: white; border-radius: 12px; padding: 14px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; }
-    .card h3 { font-size: 15px; color: #0f172a; margin-bottom: 4px; }
-    .card p { font-size: 11px; color: #64748b; margin-bottom: 12px; height: 32px; line-height: 1.3; }
-    .card button { background: #047857; color: white; border: none; padding: 10px; border-radius: 8px; font-size: 12px; width: 100%; font-weight: 600; cursor: pointer; }
-    
-    .form-container { background: white; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-top: 10px; }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
-    .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px; }
-    .form-btn { background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 14px; width: 100%; font-weight: 700; cursor: pointer; }
-    
-    .alert-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; border-radius: 6px; margin-top: 20px; }
-    .alert-box h4 { font-size: 13px; color: #991b1b; }
-    .alert-box p { font-size: 12px; color: #b91c1c; margin-top: 2px; }
+    :root {
+      --primary: #059669;
+      --primary-dark: #047857;
+      --accent: #2563eb;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
 
-    #form-status { display: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; font-weight: 600; text-align: center; }
-    .status-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
-    .status-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg); color: var(--text-main); padding-bottom: 90px; }
+
+    /* Header & Hero Section */
+    .hero {
+      background: linear-gradient(180deg, rgba(5, 150, 105, 0.2) 0%, rgba(15, 23, 42, 1) 100%),
+                  url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1000&q=80') center/cover;
+      padding: 32px 20px 24px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand-title { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; }
+    .brand-title span { color: #34d399; }
+    .brand-tagline { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981;
+      padding: 4px 12px; border-radius: 20px; font-size: 11px; color: #34d399;
+      margin-top: 12px; font-weight: 600;
+    }
+    .status-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; }
+
+    /* Search Bar */
+    .search-container { padding: 16px 20px; }
+    .search-wrapper { position: relative; }
+    .search-wrapper i { position: absolute; left: 14px; top: 16px; color: var(--text-muted); }
+    .search-input {
+      width: 100%; padding: 14px 14px 14px 42px; border-radius: 12px;
+      border: 1px solid var(--border); background: var(--card-bg);
+      color: var(--text-main); font-size: 14px; outline: none;
+    }
+
+    /* Container & Tab Controls */
+    .main-container { padding: 0 20px; }
+    
+    .nav-tabs {
+      display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 4px;
+    }
+    .tab-btn {
+      background: var(--card-bg); border: 1px solid var(--border); color: var(--text-muted);
+      padding: 10px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+      white-space: nowrap; cursor: pointer; display: flex; align-items: center; gap: 6px;
+    }
+    .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Content Views */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Grid Layouts */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    
+    /* Luxury Cards */
+    .zone-card {
+      background: var(--card-bg); border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--border); transition: transform 0.2s;
+    }
+    .zone-img { height: 100px; width: 100%; object-fit: cover; }
+    .zone-body { padding: 12px; }
+    .zone-title { font-size: 15px; font-weight: 700; color: white; }
+    .zone-desc { font-size: 11px; color: var(--text-muted); margin: 4px 0 10px 0; }
+    .zone-btn {
+      width: 100%; background: rgba(5, 150, 105, 0.2); color: #34d399;
+      border: 1px solid var(--primary); padding: 8px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+
+    /* Listing Items */
+    .listing-card {
+      background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border);
+      padding: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .listing-info h4 { font-size: 14px; font-weight: 700; }
+    .listing-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .listing-price { font-size: 13px; font-weight: 700; color: #34d399; margin-top: 4px; }
+    .action-btn-sm {
+      background: #25d366; color: white; border: none; padding: 8px 12px;
+      border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    }
+
+    /* Forms */
+    .form-card {
+      background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 20px;
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+    .form-control {
+      width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border);
+      background: #0f172a; color: white; font-size: 14px; outline: none;
+    }
+    .btn-submit {
+      width: 100%; background: var(--primary); color: white; border: none; padding: 14px;
+      border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
+    }
+
+    /* Fixed Bottom Navigation */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f19;
+      border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+      padding: 10px 0; z-index: 100;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; color: var(--text-muted);
+      font-size: 10px; text-decoration: none; gap: 4px; cursor: pointer;
+    }
+    .nav-item.active { color: var(--primary); }
+    .nav-item i { font-size: 18px; }
+
+    #form-status { display: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; text-align: center; }
+    .status-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>GoSikkim</h1>
-    <p>Permits • Homestays • Local Transport</p>
-  </header>
-
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search Gangtok, Pelling, Lachen..." onkeyup="filterZones()">
-  </div>
-
-  <div class="section-title">Explore Sikkim Zones</div>
-  <div class="grid" id="zoneGrid">
-    <div class="card" data-keywords="gangtok tsomgo nathula east">
-      <h3>East Sikkim</h3>
-      <p>Gangtok, Tsomgo Lake & Permits</p>
-      <button onclick="bookZone('East Sikkim')">Explore East</button>
-    </div>
-    <div class="card" data-keywords="lachen lachung gurudongmar yumthang north">
-      <h3>North Sikkim</h3>
-      <p>Lachen, Lachung & Gurudongmar</p>
-      <button onclick="bookZone('North Sikkim')">Explore North</button>
-    </div>
-    <div class="card" data-keywords="pelling yuksom dzongri west">
-      <h3>West Sikkim</h3>
-      <p>Pelling, Yuksom & Treks</p>
-      <button onclick="bookZone('West Sikkim')">Explore West</button>
-    </div>
-    <div class="card" data-keywords="namchi ravangla temi tea south">
-      <h3>South Sikkim</h3>
-      <p>Namchi, Ravangla & Tea Gardens</p>
-      <button onclick="bookZone('South Sikkim')">Explore South</button>
+  <!-- Hero Banner -->
+  <div class="hero">
+    <div class="brand-title">Go<span>Sikkim</span></div>
+    <div class="brand-tagline">Permits • Homestays • Local Shared Cabs</div>
+    <div class="status-pill">
+      <span class="status-dot"></span> Official District Tourism Portal
     </div>
   </div>
 
-  <div class="section-title">Apply for Travel Permit (PAP/ILP)</div>
-  <div class="form-container">
-    <div id="form-status"></div>
-    <form id="permitForm" onsubmit="submitForm(event)">
-      <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
-      <input type="hidden" name="subject" value="New GoSikkim Permit Request">
-
-      <div class="form-group">
-        <label>Full Name (As on ID)</label>
-        <input type="text" name="Full Name" placeholder="e.g. Rahul Sharma" required>
-      </div>
-      <div class="form-group">
-        <label>Phone Number / WhatsApp</label>
-        <input type="tel" name="Phone Number" placeholder="+91 9800000000" required>
-      </div>
-      <div class="form-group">
-        <label>Select Destination Zone</label>
-        <select name="Destination Zone">
-          <option value="Nathula Pass (East)">Nathula Pass (East Sikkim)</option>
-          <option value="Gurudongmar Lake (North)">Gurudongmar Lake (North Sikkim)</option>
-          <option value="Yumthang Valley (North)">Yumthang Valley (North Sikkim)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Travel Date</label>
-        <input type="date" name="Travel Date" required>
-      </div>
-      <button type="submit" id="submitBtn" class="form-btn">Submit Permit Request</button>
-    </form>
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-wrapper">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search Gangtok, Pelling, Lachen..." onkeyup="filterZones()">
+    </div>
   </div>
 
-  <div class="alert-box">
-    <h4>⚠️ Live Road Update</h4>
-    <p>North Sikkim Axis: Clear for local transport. Weather clear in Gangtok.</p>
+  <div class="main-container">
+    <!-- Category Tabs -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('zones', this)"><i class="fa-solid fa-compass"></i> Explore</button>
+      <button class="tab-btn" onclick="switchTab('permits', this)"><i class="fa-solid fa-passport"></i> Permits</button>
+      <button class="tab-btn" onclick="switchTab('homestays', this)"><i class="fa-solid fa-house"></i> Homestays</button>
+      <button class="tab-btn" onclick="switchTab('cabs', this)"><i class="fa-solid fa-taxi"></i> Cabs</button>
+    </div>
+
+    <!-- TAB 1: ZONES -->
+    <div id="zones-tab" class="tab-content active">
+      <div class="grid-2" id="zoneGrid">
+        <div class="zone-card" data-keywords="gangtok tsomgo nathula east">
+          <img src="https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-body">
+            <div class="zone-title">East Sikkim</div>
+            <div class="zone-desc">Gangtok, Tsomgo & Nathula Pass</div>
+            <button class="zone-btn" onclick="switchTab('permits')">Get Permit</button>
+          </div>
+        </div>
+
+        <div class="zone-card" data-keywords="lachen lachung gurudongmar yumthang north">
+          <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-body">
+            <div class="zone-title">North Sikkim</div>
+            <div class="zone-desc">Lachen, Lachung & Lakes</div>
+            <button class="zone-btn" onclick="switchTab('permits')">Get Permit</button>
+          </div>
+        </div>
+
+        <div class="zone-card" data-keywords="pelling yuksom dzongri west">
+          <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-body">
+            <div class="zone-title">West Sikkim</div>
+            <div class="zone-desc">Pelling Skywalk & Treks</div>
+            <button class="zone-btn" onclick="switchTab('homestays')">View Stays</button>
+          </div>
+        </div>
+
+        <div class="zone-card" data-keywords="namchi ravangla temi tea south">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-body">
+            <div class="zone-title">South Sikkim</div>
+            <div class="zone-desc">Namchi, Ravangla & Temi</div>
+            <button class="zone-btn" onclick="switchTab('homestays')">View Stays</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: PERMITS -->
+    <div id="permits-tab" class="tab-content">
+      <div class="form-card">
+        <div id="form-status"></div>
+        <form id="permitForm" onsubmit="submitForm(event)">
+          <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
+          <input type="hidden" name="subject" value="New GoSikkim Permit Request">
+
+          <div class="form-group">
+            <label>Full Name (ID Proof)</label>
+            <input type="text" name="Full Name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Contact</label>
+            <input type="tel" name="Phone Number" class="form-control" placeholder="+91 9800000000" required>
+          </div>
+          <div class="form-group">
+            <label>Destination Circuit</label>
+            <select name="Destination Zone" class="form-control">
+              <option value="Nathula Pass (East)">Nathula Pass (East Sikkim)</option>
+              <option value="Gurudongmar Lake (North)">Gurudongmar Lake (North Sikkim)</option>
+              <option value="Yumthang Valley (North)">Yumthang Valley (North Sikkim)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Travel Date</label>
+            <input type="date" name="Travel Date" class="form-control" required>
+          </div>
+          <button type="submit" id="submitBtn" class="btn-submit">Apply For Permit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 3: HOMESTAYS -->
+    <div id="homestays-tab" class="tab-content">
+      <div class="listing-card">
+        <div class="listing-info">
+          <h4>Kanchenjunga View Retreat</h4>
+          <p>Pelling, West Sikkim</p>
+          <div class="listing-price">₹1,400 / night</div>
+        </div>
+        <a href="https://wa.me/919800000000?text=Hi,%20I%20want%20to%20book%20Kanchenjunga%20View%20Retreat" class="action-btn-sm" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Book
+        </a>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-info">
+          <h4>Lachen Organic Homestay</h4>
+          <p>Lachen, North Sikkim</p>
+          <div class="listing-price">₹2,200 / night (Inc. Meals)</div>
+        </div>
+        <a href="https://wa.me/919800000000?text=Hi,%20I%20want%20to%20book%20Lachen%20Organic%20Homestay" class="action-btn-sm" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Book
+        </a>
+      </div>
+    </div>
+
+    <!-- TAB 4: CABS -->
+    <div id="cabs-tab" class="tab-content">
+      <div class="listing-card">
+        <div class="listing-info">
+          <h4>Gangtok ⇄ Siliguri Shared Cab</h4>
+          <p>Daily Departures (Mahindra Xylo / Sumo)</p>
+          <div class="listing-price">₹500 / seat</div>
+        </div>
+        <a href="https://wa.me/919800000000?text=Hi,%20I%20need%20a%20seat%20for%20Gangtok-Siliguri" class="action-btn-sm" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Reserve
+        </a>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-info">
+          <h4>North Sikkim 2D/1N Circuit Taxi</h4>
+          <p>Reserved Bolero / Scorpio with driver</p>
+          <div class="listing-price">₹9,500 / vehicle</div>
+        </div>
+        <a href="https://wa.me/919800000000?text=Hi,%20I%20need%20a%20North%20Sikkim%20Circuit%20Taxi" class="action-btn-sm" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Reserve
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar -->
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('zones')">
+      <i class="fa-solid fa-compass"></i>
+      <span>Explore</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('permits')">
+      <i class="fa-solid fa-passport"></i>
+      <span>Permits</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('homestays')">
+      <i class="fa-solid fa-house"></i>
+      <span>Stays</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('cabs')">
+      <i class="fa-solid fa-taxi"></i>
+      <span>Cabs</span>
+    </div>
   </div>
 
   <script>
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(tabId + '-tab').classList.add('active');
+      
+      if(element) {
+        element.classList.add('active');
+      }
+    }
+
     function filterZones() {
       const input = document.getElementById('searchInput').value.toLowerCase();
-      const cards = document.querySelectorAll('.card');
+      const cards = document.querySelectorAll('.zone-card');
       
       cards.forEach(card => {
-        const keywords = card.getAttribute('data-keywords') + " " + card.querySelector('h3').innerText.toLowerCase();
+        const keywords = card.getAttribute('data-keywords');
         if (keywords.includes(input)) {
           card.style.display = "block";
         } else {
           card.style.display = "none";
         }
       });
-    }
-
-    function bookZone(zoneName) {
-      alert("Loading available verified homestays and registered driver listings for " + zoneName + "...");
     }
 
     async function submitForm(event) {
@@ -135,7 +337,7 @@
       const statusBox = document.getElementById('form-status');
 
       submitBtn.disabled = true;
-      submitBtn.innerText = "Submitting...";
+      submitBtn.innerText = "Processing...";
 
       const formData = new FormData(form);
 
@@ -149,22 +351,20 @@
 
         if (data.success) {
           statusBox.className = "status-success";
-          statusBox.innerText = "Permit application submitted successfully! Our local team will contact you.";
+          statusBox.innerText = "Application Received! Our Gangtok Desk will WhatsApp you shorty.";
           statusBox.style.display = "block";
           form.reset();
         } else {
           throw new Error(data.message);
         }
       } catch (error) {
-        statusBox.className = "status-error";
-        statusBox.innerText = "Error submitting request. Please try again.";
         statusBox.style.display = "block";
+        statusBox.innerText = "Error sending application. Please try again.";
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerText = "Submit Permit Request";
+        submitBtn.innerText = "Apply For Permit";
       }
     }
   </script>
-
 </body>
 </html>

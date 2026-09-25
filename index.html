@@ -32,6 +32,10 @@
     .alert-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 12px; border-radius: 6px; margin-top: 20px; }
     .alert-box h4 { font-size: 13px; color: #991b1b; }
     .alert-box p { font-size: 12px; color: #b91c1c; margin-top: 2px; }
+
+    #form-status { display: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; font-weight: 600; text-align: center; }
+    .status-success { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .status-error { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
   </style>
 </head>
 <body>
@@ -71,14 +75,22 @@
 
   <div class="section-title">Apply for Travel Permit (PAP/ILP)</div>
   <div class="form-container">
-    <form onsubmit="handlePermitSubmit(event)">
+    <div id="form-status"></div>
+    <form id="permitForm" onsubmit="submitForm(event)">
+      <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
+      <input type="hidden" name="subject" value="New GoSikkim Permit Request">
+
       <div class="form-group">
         <label>Full Name (As on ID)</label>
-        <input type="text" id="fullName" placeholder="e.g. Rahul Sharma" required>
+        <input type="text" name="Full Name" placeholder="e.g. Rahul Sharma" required>
+      </div>
+      <div class="form-group">
+        <label>Phone Number / WhatsApp</label>
+        <input type="tel" name="Phone Number" placeholder="+91 9800000000" required>
       </div>
       <div class="form-group">
         <label>Select Destination Zone</label>
-        <select id="destination">
+        <select name="Destination Zone">
           <option value="Nathula Pass (East)">Nathula Pass (East Sikkim)</option>
           <option value="Gurudongmar Lake (North)">Gurudongmar Lake (North Sikkim)</option>
           <option value="Yumthang Valley (North)">Yumthang Valley (North Sikkim)</option>
@@ -86,9 +98,9 @@
       </div>
       <div class="form-group">
         <label>Travel Date</label>
-        <input type="date" id="travelDate" required>
+        <input type="date" name="Travel Date" required>
       </div>
-      <button type="submit" class="form-btn">Submit Permit Request</button>
+      <button type="submit" id="submitBtn" class="form-btn">Submit Permit Request</button>
     </form>
   </div>
 
@@ -116,13 +128,41 @@
       alert("Loading available verified homestays and registered driver listings for " + zoneName + "...");
     }
 
-    function handlePermitSubmit(event) {
+    async function submitForm(event) {
       event.preventDefault();
-      const name = document.getElementById('fullName').value;
-      const dest = document.getElementById('destination').value;
-      const date = document.getElementById('travelDate').value;
-      
-      alert("Permit Request Submitted Successfully!\n\nName: " + name + "\nDestination: " + dest + "\nDate: " + date + "\n\nOur local team in Gangtok will verify your ID document.");
+      const form = document.getElementById('permitForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const statusBox = document.getElementById('form-status');
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Submitting...";
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          statusBox.className = "status-success";
+          statusBox.innerText = "Permit application submitted successfully! Our local team will contact you.";
+          statusBox.style.display = "block";
+          form.reset();
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        statusBox.className = "status-error";
+        statusBox.innerText = "Error submitting request. Please try again.";
+        statusBox.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Submit Permit Request";
+      }
     }
   </script>
 

@@ -20,7 +20,7 @@
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
     body { background-color: var(--bg); color: var(--text-main); padding-bottom: 90px; }
 
-    /* Header & Hero Section */
+    /* Header & Hero Section with Dynamic Continuous Left-to-Right Pan */
     .hero {
       position: relative;
       overflow: hidden;
@@ -71,7 +71,7 @@
     }
     .weather-item { display: flex; align-items: center; gap: 6px; }
 
-    /* Search Bar Layout & Satellite Indicator */
+    /* Search Bar Layout & Live Satellite Server Indicator */
     .search-container { padding: 16px 20px; }
     .search-flex-row { display: flex; align-items: center; gap: 10px; }
     .search-wrapper { position: relative; flex: 1; }
@@ -82,13 +82,46 @@
       color: var(--text-main); font-size: 14px; outline: none;
     }
 
+    /* Live Satellite Signal Badge */
     .sat-status-badge {
       display: flex; align-items: center; gap: 8px;
       background: var(--card-bg); border: 1px solid var(--border);
       padding: 10px 12px; border-radius: 12px; height: 48px; white-space: nowrap;
     }
+
     .sat-icon-wrapper { position: relative; color: #38bdf8; font-size: 14px; }
+    .sat-icon-wrapper::after {
+      content: ''; position: absolute; top: -2px; right: -2px;
+      width: 6px; height: 6px; background: #38bdf8; border-radius: 50%;
+      animation: pulseSat 1.5s infinite;
+    }
+
+    @keyframes pulseSat {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    .sat-details { display: flex; flex-direction: column; justify-content: center; }
     .sat-title { font-size: 9px; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px; }
+
+    .signal-bars {
+      display: flex; align-items: flex-end; gap: 2px; height: 12px; margin-top: 2px;
+      animation: cycleSignalColor 9s infinite;
+    }
+    .bar { width: 3px; border-radius: 1px; background: var(--border); transition: background 0.3s; }
+    .bar:nth-child(1) { height: 2px; }
+    .bar:nth-child(2) { height: 4px; }
+    .bar:nth-child(3) { height: 6px; }
+    .bar:nth-child(4) { height: 8px; }
+    .bar:nth-child(5) { height: 10px; }
+    .bar:nth-child(6) { height: 12px; }
+
+    @keyframes cycleSignalColor {
+      0%, 33% { color: #10b981; }
+      34%, 66% { color: #f59e0b; }
+      67%, 100% { color: #ef4444; }
+    }
+    .bar.active { background: currentColor; }
 
     /* Container & Tab Controls */
     .main-container { padding: 0 20px; }
@@ -100,19 +133,44 @@
     }
     .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
+    /* Content Views */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Homestay UI components */
-    .stay-tag-container { display: flex; gap: 10px; margin-bottom: 16px; }
-    .tag-btn {
-      flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border);
-      background: var(--card-bg); color: var(--text-muted); font-size: 12px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+    /* Grid Layouts */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    
+    /* Interactive Cards */
+    .zone-card {
+      background: var(--card-bg); border-radius: 16px; overflow: hidden;
+      border: 1px solid var(--border);
     }
-    .tag-btn.active-vip { background: rgba(245, 158, 11, 0.15); border-color: #f59e0b; color: #fbbf24; }
-    .tag-btn.active-cheap { background: rgba(16, 185, 129, 0.15); border-color: #10b981; color: #34d399; }
+    .zone-img-wrapper { height: 110px; width: 100%; overflow: hidden; position: relative; }
+    .zone-img {
+      height: 100%; width: 100%; object-fit: cover;
+      animation: aliveAnimation 8s ease-in-out infinite alternate;
+    }
+    
+    @keyframes aliveAnimation {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.18) translate(-4px, -3px); }
+      100% { transform: scale(1.3) translate(4px, 3px); }
+    }
 
+    .zone-card:nth-child(2) .zone-img { animation-delay: -2s; }
+    .zone-card:nth-child(3) .zone-img { animation-delay: -4s; }
+    .zone-card:nth-child(4) .zone-img { animation-delay: -6s; }
+
+    .zone-body { padding: 12px; }
+    .zone-title { font-size: 15px; font-weight: 700; color: white; }
+    .zone-desc { font-size: 11px; color: var(--text-muted); margin: 4px 0 10px 0; }
+    .zone-btn {
+      width: 100%; background: rgba(5, 150, 105, 0.2); color: #34d399;
+      border: 1px solid var(--primary); padding: 8px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+
+    /* Listing Items */
     .listing-card {
       background: var(--card-bg); border-radius: 14px; border: 1px solid var(--border);
       padding: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
@@ -120,18 +178,77 @@
     .listing-info h4 { font-size: 14px; font-weight: 700; }
     .listing-info p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
     .listing-price { font-size: 13px; font-weight: 700; color: #34d399; margin-top: 4px; }
-    
     .action-btn-sm {
       background: #25d366; color: white; border: none; padding: 8px 12px;
       border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
       display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
     }
 
-    .badge-tag { font-size: 10px; padding: 3px 8px; border-radius: 6px; font-weight: 800; text-transform: uppercase; }
+    /* Homestay Waiting Notice Banner */
+    .notice-card {
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      padding: 16px;
+      border-radius: 14px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .notice-card i {
+      font-size: 24px;
+      color: #60a5fa;
+      margin-bottom: 8px;
+    }
+    .notice-card p {
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    /* Homestay Tag Switcher */
+    .stay-tag-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .tag-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .tag-btn.active-vip {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: #f59e0b;
+      color: #fbbf24;
+    }
+    .tag-btn.active-cheap {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: #10b981;
+      color: #34d399;
+    }
+
+    .badge-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
     .badge-vip { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
     .badge-cheap { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
 
-    /* Forms */
+    /* Forms & Calculator */
     .form-card {
       background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border); padding: 20px; margin-bottom: 16px;
     }
@@ -144,6 +261,18 @@
     .btn-submit {
       width: 100%; background: var(--primary); color: white; border: none; padding: 14px;
       border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer;
+    }
+
+    /* Emergency SOS Grid */
+    .sos-card {
+      background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 14px; border-radius: 12px; margin-bottom: 12px; display: flex;
+      align-items: center; justify-content: space-between;
+    }
+    .sos-title { font-size: 13px; font-weight: 700; color: #f87171; }
+    .sos-btn {
+      background: #ef4444; color: white; border: none; padding: 8px 14px;
+      border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none;
     }
 
     /* Bottom Navigation */
@@ -159,42 +288,322 @@
     .nav-item.active { color: var(--primary); }
     .nav-item i { font-size: 18px; }
 
-    #reg-status { display: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; text-align: center; }
+    #form-status { display: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; text-align: center; }
     .status-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
     .status-error { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
   </style>
 </head>
 <body>
 
-  <!-- Hero Section -->
+  <!-- Animated Hero Banner -->
   <div class="hero">
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <div class="brand-title">Go<span>Sikkim</span></div>
-      <div class="brand-tagline">Homestay Self-Registration & Travel Portal</div>
+      <div class="brand-tagline">Permits • Homestays • Local Shared Cabs</div>
       <div class="status-pill">
         <span class="status-dot"></span> Official District Tourism Portal
       </div>
     </div>
   </div>
 
-  <!-- Weather Ticker -->
+  <!-- Live Weather Ticker -->
   <div class="weather-bar">
-    <div class="weather-item"><i class="fa-solid fa-cloud-sun" style="color: #f59e0b;"></i> Gangtok: 18°C</div>
+    <div class="weather-item"><i class="fa-solid fa-cloud-sun" style="color: #f59e0b;"></i> Gangtok: 18°C (Light Rain)</div>
     <div class="weather-item"><i class="fa-solid fa-snowflake" style="color: #38bdf8;"></i> Lachen: 8°C</div>
   </div>
 
-  <div class="main-container" style="margin-top: 16px;">
+  <!-- Search Bar & Live Satellite Link -->
+  <div class="search-container">
+    <div class="search-flex-row">
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search Gangtok, Pelling, Lacher..." onkeyup="filterZones()">
+      </div>
+      
+      <!-- Live Satellite Signal Badge -->
+      <div class="sat-status-badge">
+        <div class="sat-icon-wrapper">
+          <i class="fa-solid fa-satellite-dish"></i>
+        </div>
+        <div class="sat-details">
+          <span class="sat-title">SAT-LINK: LIVE</span>
+          <div class="signal-bars">
+            <span class="bar active"></span>
+            <span class="bar active"></span>
+            <span class="bar active"></span>
+            <span class="bar active" id="b4"></span>
+            <span class="bar active" id="b5"></span>
+            <span class="bar active" id="b6"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-container">
     <!-- Category Tabs -->
     <div class="nav-tabs">
-      <button class="tab-btn active" onclick="switchTab('homestays', this)"><i class="fa-solid fa-house"></i> Stays</button>
-      <button class="tab-btn" onclick="switchTab('register', this)"><i class="fa-solid fa-circle-plus"></i> List Your Stay</button>
+      <button class="tab-btn active" onclick="switchTab('zones', this)"><i class="fa-solid fa-compass"></i> Explore</button>
       <button class="tab-btn" onclick="switchTab('permits', this)"><i class="fa-solid fa-passport"></i> Permits</button>
+      <button class="tab-btn" onclick="switchTab('calculator', this)"><i class="fa-solid fa-calculator"></i> Estimator</button>
+      <button class="tab-btn" onclick="switchTab('homestays', this)"><i class="fa-solid fa-house"></i> Homestays</button>
+      <button class="tab-btn" onclick="switchTab('registerStay', this)"><i class="fa-solid fa-circle-plus"></i> List Property</button>
+      <button class="tab-btn" onclick="switchTab('cabs', this)"><i class="fa-solid fa-taxi"></i> Cabs</button>
+      <button class="tab-btn" onclick="switchTab('sos', this)"><i class="fa-solid fa-phone-volume"></i> SOS</button>
     </div>
 
-    <!-- TAB 1: HOMESTAYS (VIP & CHEAP SWITCHER) -->
-    <div id="homestays-tab" class="tab-content active">
+    <!-- TAB 1: ZONES -->
+    <div id="zones-tab" class="tab-content active">
+      <div class="grid-2" id="zoneGrid">
+        <div class="zone-card" data-keywords="gangtok tsomgo nathula east">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="East Sikkim">
+          </div>
+          <div class="zone-body">
+            <div class="zone-title">East Sikkim</div>
+            <div class="zone-desc">Gangtok, Tsomgo & Nathula Pass</div>
+            <button class="zone-btn" onclick="switchTab('permits')">Get Permit</button>
+          </div>
+        </div>
+
+        <div class="zone-card" data-keywords="lachen lachung gurudongmar yumthang north">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="North Sikkim">
+          </div>
+          <div class="zone-body">
+            <div class="zone-title">North Sikkim</div>
+            <div class="zone-desc">Lachen, Lachung & Lakes</div>
+            <button class="zone-btn" onclick="switchTab('permits')">Get Permit</button>
+          </div>
+        </div>
+
+        <div class="zone-card" data-keywords="pelling yuksom dzongri west">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="West Sikkim">
+          </div>
+          <div class="zone-body">
+            <div class="zone-title">West Sikkim</div>
+            <div class="zone-desc">Pelling Skywalk & Treks</div>
+            <button class="zone-btn" onclick="switchTab('homestays')">View Stays</button>
+          </div>
+        </div>
+
+        <div class="zone-card" data-keywords="namchi ravangla temi tea south">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="South Sikkim">
+          </div>
+          <div class="zone-body">
+            <div class="zone-title">South Sikkim</div>
+            <div class="zone-desc">Namchi, Ravangla & Temi</div>
+            <button class="zone-btn" onclick="switchTab('homestays')">View Stays</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: PERMITS (With Expanded 100+ Locations List Across All Districts) -->
+    <div id="permits-tab" class="tab-content">
+      <div class="form-card">
+        <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 10px; border-radius: 8px; margin-bottom: 14px; font-size: 11px; color: #93c5fd; line-height: 1.4;">
+          <i class="fa-solid fa-circle-info"></i> <strong>Official Verification Notice:</strong> Upload a clear photo of your valid Government ID. Select your exact desired location across any district below, and our authorized desk will process your state-stamped permit.
+        </div>
+
+        <div id="form-status"></div>
+        <form id="permitForm" onsubmit="submitForm(event)">
+          <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
+          <input type="hidden" name="subject" value="New GoSikkim Verified Permit & Document Request">
+
+          <div class="form-group">
+            <label>Full Name (As per ID Proof)</label>
+            <input type="text" name="Full Name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Contact</label>
+            <input type="tel" name="Phone Number" class="form-control" placeholder="+91 9800000000" required>
+          </div>
+          <div class="form-group">
+            <label>Select Location / Circuit (All Sikkim Districts)</label>
+            <select name="Destination Zone" class="form-control" required>
+              
+              <!-- EAST SIKKIM -->
+              <optgroup label="📍 East Sikkim Locations">
+                <option value="Gangtok - MG Marg & City Center">MG Marg & Gangtok City Center</option>
+                <option value="Nathula Pass & Baba Mandir">Nathula Pass & Baba Mandir</option>
+                <option value="Tsomgo (Changu) Lake">Tsomgo (Changu) Lake</option>
+                <option value="Zuluk & Thambi View Point">Zuluk & Thambi View Point</option>
+                <option value="Gnathang Valley">Gnathang Valley</option>
+                <option value="Rumtek Dharma Chakra Centre">Rumtek Monastery</option>
+                <option value="Enchey Monastery">Enchey Monastery</option>
+                <option value="Hanuman Tok & Ganesh Tok">Hanuman Tok & Ganesh Tok</option>
+                <option value="Tashi View Point">Tashi View Point</option>
+                <option value="Ban Jhakri Falls & Energy Park">Ban Jhakri Falls & Energy Park</option>
+                <option value="Ranka (Lingdum) Monastery">Ranka (Lingdum) Monastery</option>
+                <option value="Kupup Lake & Elephant Lake">Kupup Lake & Elephant Lake</option>
+                <option value="Menmecho Lake">Menmecho Lake</option>
+                <option value="Aritar Lake & Lampokhari">Aritar Lake & Lampokhari</option>
+                <option value="Rolep Waterfalls & Hanging Bridge">Rolep Waterfalls & Hanging Bridge</option>
+                <option value="Rongli Valley">Rongli Valley</option>
+                <option value="Saramsa Garden">Saramsa Garden</option>
+                <option value="Flower Exhibition Centre Gangtok">Flower Exhibition Centre Gangtok</option>
+                <option value="Burtuk & Lower Tadong">Burtuk & Lower Tadong</option>
+                <option value="Kyongnosla Alpine Sanctuary">Kyongnosla Alpine Sanctuary</option>
+                <option value="Pangolakha Wildlife Sanctuary">Pangolakha Wildlife Sanctuary</option>
+              </optgroup>
+
+              <!-- NORTH SIKKIM -->
+              <optgroup label="📍 North Sikkim Locations">
+                <option value="Gurudongmar Lake & Thangu">Gurudongmar Lake & Thangu Valley</option>
+                <option value="Yumthang Valley & Zero Point">Yumthang Valley & Zero Point (Yumesamdong)</option>
+                <option value="Lachen Village & Monastery">Lachen Village & Monastery</option>
+                <option value="Lachung Village & Monastery">Lachung Village & Monastery</option>
+                <option value="Chopta Valley North Sikkim">Chopta Valley</option>
+                <option value="Seven Sisters Waterfall">Seven Sisters Waterfall</option>
+                <option value="Bhim Nala Waterfall">Bhim Nala Waterfall (Kainchi Jhora)</option>
+                <option value="Naga Waterfall">Naga Waterfall</option>
+                <option value="Singhik View Point">Singhik View Point</option>
+                <option value="Mangan District Headquarters">Mangan Town</option>
+                <option value="Kabi Lungchok Historic Site">Kabi Lungchok</option>
+                <option value="Phodong Monastery">Phodong Monastery</option>
+                <option value="Labrang Monastery">Labrang Monastery</option>
+                <option value="Chungthang Confluence">Chungthang Confluence</option>
+                <option value="Shingba Rhododendron Sanctuary">Shingba Rhododendron Sanctuary</option>
+                <option value="Katao Valley">Katao Valley</option>
+                <option value="Green Lake Base Camp Route">Green Lake Base Camp Route</option>
+                <option value="Muguthang Valley">Muguthang Valley</option>
+              </optgroup>
+
+              <!-- WEST SIKKIM -->
+              <optgroup label="📍 West Sikkim Locations">
+                <option value="Pelling Skywalk & Rabdentse">Pelling Skywalk & Rabdentse Ruins</option>
+                <option value="Yuksom Norbugang & Dubdi Monastery">Yuksom (First Capital & Dubdi Monastery)</option>
+                <option value="Khecheopalri Holy Lake">Khecheopalri Holy Lake</option>
+                <option value="Kanchenjunga Waterfall & Rimbi">Kanchenjunga & Rimbi Waterfalls</option>
+                <option value="Singshore Suspension Bridge">Singshore Suspension Bridge</option>
+                <option value="Pemayangtse Monastery">Pemayangtse Monastery</option>
+                <option value="Sangachoeling Monastery">Sangachoeling Monastery</option>
+                <option value="Tashiding Monastery">Tashiding Monastery</option>
+                <option value="Varsey (Barsey) Rhododendron Sanctuary">Varsey (Barsey) Rhododendron Sanctuary</option>
+                <option value="Uttarey Village & Srijanga Waterfall">Uttarey Village & Srijanga Waterfall</option>
+                <option value="Kaluk & Rinchenpong">Kaluk & Rinchenpong</option>
+                <option value="Hee Bermiok Valley">Hee Bermiok Valley</option>
+                <option value="Dentam Valley & Cheese Factory">Dentam Valley & Cheese Factory</option>
+                <option value="Legship Kirateshwar Temple">Legship Kirateshwar Mahadev Temple</option>
+                <option value="Gyalshing Town Center">Gyalshing (Gozhing)</option>
+                <option value="Phamrong Falls West Sikkim">Phamrong Falls</option>
+                <option value="Sewaro Rock Garden">Sewaro Rock Garden</option>
+              </optgroup>
+
+              <!-- SOUTH SIKKIM -->
+              <optgroup label="📍 South Sikkim Locations">
+                <option value="Namchi Char Dham & Siddhesvara">Namchi Char Dham (Siddhesvara Dhaam)</option>
+                <option value="Samdruptse Hill Giant Statue">Samdruptse Hill (Guru Padmasambhava Statue)</option>
+                <option value="Ravangla Buddha Park & Tathagata Tsal">Ravangla Buddha Park (Tathagata Tsal)</option>
+                <option value="Temi Tea Garden & Tea Factory">Temi Tea Garden & Factory</option>
+                <option value="Ralang Monastery Ravangla">Ralang Monastery</option>
+                <option value="Borong Hot Springs & Village">Borong Hot Springs & Village</option>
+                <option value="Tendong Hill Trek">Tendong Hill</option>
+                <option value="Tarey Bhir Ridge Walk">Tarey Bhir Ridge Walk</option>
+                <option value="Maenam Wildlife Sanctuary">Maenam Wildlife Sanctuary</option>
+                <option value="Kitam Bird Sanctuary">Kitam Bird Sanctuary</option>
+                <option value="Solophok Chardham Complex">Solophok</option>
+                <option value="Sai Mandir Namchi">Sai Mandir Namchi</option>
+                <option value="Melli Bazaar Riverside">Melli Bazaar</option>
+                <option value="Jorethang Town">Jorethang</option>
+                <option value="Kewzing Village Tourism">Kewzing Village</option>
+              </optgroup>
+
+              <!-- PAKYONG & SORENG DISTRICTS -->
+              <optgroup label="📍 Pakyong & Soreng Districts">
+                <option value="Pakyong Greenfield Airport Area">Pakyong Airport Region</option>
+                <option value="Rhenock Bazaar & Kartok Monastery">Rhenock Bazaar</option>
+                <option value="Soreng District Headquarters">Soreng Town Center</option>
+                <option value="Sombaria Village">Sombaria</option>
+                <option value="Chakung Valley">Chakung</option>
+              </optgroup>
+
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Travel Date</label>
+            <input type="date" name="Travel Date" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Upload Valid ID Proof / Passport Image</label>
+            <input type="file" name="ID Document" class="form-control" accept="image/*,.pdf" required style="padding: 8px;">
+          </div>
+          <button type="submit" id="submitBtn" class="btn-submit">Submit Document for Official Permit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 3: COST ESTIMATOR -->
+    <div id="calculator-tab" class="tab-content">
+      <div class="form-card">
+        <h3 style="font-size:16px; margin-bottom: 12px; color:#34d399;"><i class="fa-solid fa-calculator"></i> Instant Trip Cost Estimator</h3>
+        
+        <div id="calc-status" style="display:none; padding:12px; border-radius:8px; margin-bottom:12px; font-size:13px; text-align:center;"></div>
+
+        <form id="estimatorForm" onsubmit="submitEstimatorForm(event)">
+          <input type="hidden" name="access_key" value="55a798f1-b804-44a3-803d-ad4066849a3b">
+          <input type="hidden" name="subject" value="New GoSikkim Trip Cost Estimate Request">
+
+          <div class="form-group">
+            <label>Select Circuit / Location</label>
+            <select name="Selected Circuit" class="form-control" required>
+              <optgroup label="📍 East Sikkim Circuits">
+                <option value="Gangtok City Exploration (2D/3N)">Gangtok City & Monasteries (2D/3N)</option>
+                <option value="Nathula Pass & Tsomgo Day Circuit">Nathula Pass & Tsomgo Day Circuit</option>
+                <option value="Silk Route Circuit (Zuluk - Gnathang - Kupup)">Silk Route Circuit (Zuluk - Gnathang - Kupup)</option>
+                <option value="Aritar & Rolep Offbeat Circuit">Aritar & Rolep Offbeat Circuit</option>
+              </optgroup>
+              <optgroup label="📍 North Sikkim Circuits">
+                <option value="North Sikkim Ultimate (Lachen, Lachung, Gurudongmar, Yumthang 3D/2N)">North Sikkim Ultimate (Lachen, Lachung, Gurudongmar, Yumthang 3D/2N)</option>
+                <option value="Lachen & Gurudongmar Lake Express (2D/1N)">Lachen & Gurudongmar Lake Express (2D/1N)</option>
+                <option value="Lachung, Yumthang & Zero Point Trip (2D/1N)">Lachung, Yumthang & Zero Point Trip (2D/1N)</option>
+              </optgroup>
+              <optgroup label="📍 West Sikkim Circuits">
+                <option value="Pelling, Yuksom & Khecheopalri Heritage Tour (3D/2N)">Pelling, Yuksom & Khecheopalri Heritage Tour (3D/2N)</option>
+                <option value="West Sikkim Offbeat (Uttarey, Kaluk, Varsey Trek)">West Sikkim Offbeat (Uttarey, Kaluk, Varsey Trek)</option>
+              </optgroup>
+              <optgroup label="📍 South Sikkim Circuits">
+                <option value="South Sikkim Spiritual & Scenic (Namchi Chardham & Ravangla Buddha Park 2D/1N)">South Sikkim Spiritual & Scenic (Namchi Chardham & Ravangla Buddha Park 2D/1N)</option>
+                <option value="Temi Tea & Tarey Bhir Ridge Tour">Temi Tea & Tarey Bhir Ridge Tour</option>
+              </optgroup>
+              <optgroup label="📍 Grand Mega Sikkim Tour">
+                <option value="Complete Sikkim Grand Circle (All 4 Districts Combined 7D/6N)">Complete Sikkim Grand Circle (All 4 Districts Combined 7D/6N)</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Number of Travelers</label>
+            <input type="number" name="Number of Travelers" class="form-control" value="2" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label>Trip Duration (Days)</label>
+            <input type="number" name="Trip Duration Days" class="form-control" value="3" min="1" required>
+          </div>
+
+          <div class="form-group">
+            <label>Personal WhatsApp Number</label>
+            <input type="tel" name="WhatsApp Number" class="form-control" placeholder="+91 9800000000" required>
+          </div>
+
+          <button type="submit" id="calcSubmitBtn" class="btn-submit">Submit Estimate Request</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 4: HOMESTAYS (VIP & CHEAP SWITCHER + DYNAMIC LISTINGS) -->
+    <div id="homestays-tab" class="tab-content">
+      <div class="notice-card">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        <p>Please wait patiently, we will soon get you the available best VIP to the cheapest homestays.</p>
+      </div>
+
       <div class="stay-tag-container">
         <button class="tag-btn active-vip" id="tagVipBtn" onclick="switchStaySection('vip')">
           <i class="fa-solid fa-crown"></i> VIP Stays
@@ -204,19 +613,19 @@
         </button>
       </div>
 
-      <!-- Dynamic Stays Feed -->
+      <!-- Dynamic Stays Feed Container -->
       <div id="dynamicStaysContainer">
-        <!-- Listings injected here dynamically via Javascript storage -->
+        <!-- Rendered via Javascript -->
       </div>
     </div>
 
-    <!-- TAB 2: REGISTER YOUR HOMESTAY (For Local Owners) -->
-    <div id="register-tab" class="tab-content">
+    <!-- TAB 5: REGISTER YOUR PROPERTY (Self-Service Onboarding for Local Owners) -->
+    <div id="registerStay-tab" class="tab-content">
       <div class="form-card">
-        <h3 style="font-size:16px; margin-bottom:8px; color:#34d399;"><i class="fa-solid fa-house-chimney-user"></i> Homestay Partner Registration</h3>
-        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Are you a local homestay owner in Sikkim? Register your property here for free listing or recurring promotion!</p>
+        <h3 style="font-size:16px; margin-bottom:8px; color:#34d399;"><i class="fa-solid fa-house-chimney-user"></i> List Your Homestay Property</h3>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">Are you a local homestay owner in Sikkim? Register your property directly here to unlock bookings and recurring features!</p>
 
-        <div id="reg-status"></div>
+        <div id="reg-status" style="display:none; padding:12px; border-radius:8px; margin-bottom:12px; font-size:13px; text-align:center;"></div>
 
         <form id="homestayRegForm" onsubmit="registerHomestay(event)">
           <div class="form-group">
@@ -224,8 +633,30 @@
             <input type="text" id="hName" class="form-control" placeholder="e.g. Kanchenjunga View Stay" required>
           </div>
           <div class="form-group">
-            <label>Location / District in Sikkim</label>
-            <input type="text" id="hLocation" class="form-control" placeholder="e.g. Zuluk, East Sikkim" required>
+            <label>District / Location Menu Dropdown</label>
+            <select id="hLocation" class="form-control" required>
+              <optgroup label="📍 East Sikkim">
+                <option value="Gangtok, East Sikkim">Gangtok</option>
+                <option value="Zuluk, East Sikkim">Zuluk</option>
+                <option value="Aritar, East Sikkim">Aritar</option>
+                <option value="Nathang, East Sikkim">Nathang</option>
+              </optgroup>
+              <optgroup label="📍 North Sikkim">
+                <option value="Lachen, North Sikkim">Lachen</option>
+                <option value="Lachung, North Sikkim">Lachung</option>
+                <option value="Mangan, North Sikkim">Mangan</option>
+              </optgroup>
+              <optgroup label="📍 West Sikkim">
+                <option value="Pelling, West Sikkim">Pelling</option>
+                <option value="Yuksom, West Sikkim">Yuksom</option>
+                <option value="Uttarey, West Sikkim">Uttarey</option>
+              </optgroup>
+              <optgroup label="📍 South Sikkim">
+                <option value="Namchi, South Sikkim">Namchi</option>
+                <option value="Ravangla, South Sikkim">Ravangla</option>
+                <option value="Temi, South Sikkim">Temi</option>
+              </optgroup>
+            </select>
           </div>
           <div class="form-group">
             <label>Category Type</label>
@@ -239,42 +670,123 @@
             <input type="number" id="hPrice" class="form-control" placeholder="1200" required>
           </div>
           <div class="form-group">
-            <label>Owner WhatsApp Number (For bookings)</label>
+            <label>Owner WhatsApp Number (For Direct Booking)</label>
             <input type="tel" id="hPhone" class="form-control" placeholder="+91 9800000000" required>
           </div>
-          <button type="submit" class="btn-submit">Publish My Homestay</button>
+          <button type="submit" class="btn-submit">Publish My Property Instantly</button>
         </form>
       </div>
     </div>
 
-    <!-- TAB 3: PERMITS -->
-    <div id="permits-tab" class="tab-content">
-      <div class="form-card">
-        <h3 style="font-size:16px; margin-bottom:12px; color:#34d399;">Quick Permit Request</h3>
-        <p style="font-size:12px; color:var(--text-muted);">Select your circuit and get state-stamped passes directly.</p>
+    <!-- TAB 6: CABS -->
+    <div id="cabs-tab" class="tab-content">
+      <div class="listing-card">
+        <div class="listing-info">
+          <h4>Gangtok ⇄ Siliguri Shared Cab</h4>
+          <p>Daily Departures (Mahindra Xylo / Sumo)</p>
+          <div class="listing-price">₹500 / seat</div>
+        </div>
+        <a href="https://wa.me/919800000000?text=Hi,%20I%20need%20a%20seat%20for%20Gangtok-Siliguri" class="action-btn-sm" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Reserve
+        </a>
+      </div>
+
+      <div class="listing-card">
+        <div class="listing-info">
+          <h4>North Sikkim 2D/1N Circuit Taxi</h4>
+          <p>Reserved Bolero / Scorpio with driver</p>
+          <div class="listing-price">₹9,500 / vehicle</div>
+        </div>
+        <a href="https://wa.me/919800000000?text=Hi,%20I%20need%20a%20North%20Sikkim%20Circuit%20Taxi" class="action-btn-sm" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> Reserve
+        </a>
       </div>
     </div>
 
+    <!-- TAB 7: SOS -->
+    <div id="sos-tab" class="tab-content">
+      <div class="sos-card">
+        <div>
+          <div class="sos-title">Sikkim Tourist Police</div>
+          <div style="font-size:11px; color:var(--text-muted);">Gangtok Control Room</div>
+        </div>
+        <a href="tel:03592232218" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 03592-232218</a>
+      </div>
+
+      <div class="sos-card">
+        <div>
+          <div class="sos-title">Disaster Management SOS</div>
+          <div style="font-size:11px; color:var(--text-muted);">Landslide / Road Clearance Helpline</div>
+        </div>
+        <a href="tel:1077" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 1077</a>
+      </div>
+
+      <div class="sos-card">
+        <div>
+          <div class="sos-title">Medical Emergency</div>
+          <div style="font-size:11px; color:var(--text-muted);">24/7 Ambulance Service</div>
+        </div>
+        <a href="tel:108" class="sos-btn"><i class="fa-solid fa-phone"></i> Call 108</a>
+      </div>
+    </div>
   </div>
 
-  <!-- Bottom Navigation -->
+  <!-- Bottom Navigation Bar -->
   <div class="bottom-nav">
-    <div class="nav-item active" onclick="switchTab('homestays')">
-      <i class="fa-solid fa-house"></i>
-      <span>Stays</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('register')">
-      <i class="fa-solid fa-circle-plus"></i>
-      <span>List Property</span>
+    <div class="nav-item active" onclick="switchTab('zones')">
+      <i class="fa-solid fa-compass"></i>
+      <span>Explore</span>
     </div>
     <div class="nav-item" onclick="switchTab('permits')">
       <i class="fa-solid fa-passport"></i>
       <span>Permits</span>
     </div>
+    <div class="nav-item" onclick="switchTab('calculator')">
+      <i class="fa-solid fa-calculator"></i>
+      <span>Estimator</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('homestays')">
+      <i class="fa-solid fa-house"></i>
+      <span>Stays</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('registerStay')">
+      <i class="fa-solid fa-circle-plus"></i>
+      <span>List Stay</span>
+    </div>
   </div>
 
   <script>
-    // Initial Mock Stays (Stored in Browser Memory)
+    function cycleSignalBars() {
+      const b4 = document.getElementById('b4');
+      const b5 = document.getElementById('b5');
+      const b6 = document.getElementById('b6');
+
+      let state = 0;
+      setInterval(() => {
+        state = (state + 1) % 3;
+        if (state === 0) {
+          b4.style.opacity = '1'; b5.style.opacity = '1'; b6.style.opacity = '1';
+        } else if (state === 1) {
+          b4.style.opacity = '1'; b5.style.opacity = '0.15'; b6.style.opacity = '0.15';
+        } else {
+          b4.style.opacity = '0.15'; b5.style.opacity = '0.15'; b6.style.opacity = '0.15';
+        }
+      }, 3000);
+    }
+    cycleSignalBars();
+
+    function switchTab(tabId, element) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(tabId + '-tab').classList.add('active');
+      
+      if(element) {
+        element.classList.add('active');
+      }
+    }
+
+    // Homestay storage and display logic
     let allStays = JSON.parse(localStorage.getItem('sikkimStays')) || [
       { name: "Himalayan Orchid VIP Villa", location: "Pelling, West Sikkim", price: "₹3,500 / night", type: "vip", phone: "919800000000" },
       { name: "Zuluk Valley Backpacker Nest", location: "Zuluk, East Sikkim", price: "₹999 / night", type: "cheap", phone: "919800000000" },
@@ -285,12 +797,13 @@
 
     function renderStays() {
       const container = document.getElementById('dynamicStaysContainer');
+      if(!container) return;
       container.innerHTML = '';
 
       const filtered = allStays.filter(s => s.type === currentStayType);
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">No properties listed under this category yet. Be the first to list yours!</div>`;
+        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">No properties listed under this category yet. Use 'List Property' to add yours!</div>`;
         return;
       }
 
@@ -324,11 +837,11 @@
       const cheapBtn = document.getElementById('tagCheapBtn');
 
       if (type === 'vip') {
-        vipBtn.className = 'tag-btn active-vip';
-        cheapBtn.className = 'tag-btn';
+        if(vipBtn) vipBtn.className = 'tag-btn active-vip';
+        if(cheapBtn) cheapBtn.className = 'tag-btn';
       } else {
-        vipBtn.className = 'tag-btn';
-        cheapBtn.className = 'tag-btn active-cheap';
+        if(vipBtn) vipBtn.className = 'tag-btn';
+        if(cheapBtn) cheapBtn.className = 'tag-btn active-cheap';
       }
       renderStays();
     }
@@ -345,12 +858,11 @@
       const newStay = { name, location, price, type: category, phone };
       allStays.push(newStay);
       
-      // Save permanently to device local storage
       localStorage.setItem('sikkimStays', JSON.stringify(allStays));
 
       const statusBox = document.getElementById('reg-status');
       statusBox.className = "status-success";
-      statusBox.innerText = "Success! Your homestay has been instantly published on GoSikkim.";
+      statusBox.innerText = "Success! Your property has been published on GoSikkim.";
       statusBox.style.display = "block";
 
       document.getElementById('homestayRegForm').reset();
@@ -362,15 +874,95 @@
       }, 1500);
     }
 
-    function switchTab(tabId, element) {
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    function filterZones() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const cards = document.querySelectorAll('.zone-card');
       
-      document.getElementById(tabId + '-tab').classList.add('active');
-      if(element) element.classList.add('active');
+      cards.forEach(card => {
+        const keywords = card.getAttribute('data-keywords');
+        if (keywords.includes(input)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
     }
 
-    // Initialize list on load
+    async function submitForm(event) {
+      event.preventDefault();
+      const form = document.getElementById('permitForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const statusBox = document.getElementById('form-status');
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Uploading & Processing...";
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          statusBox.className = "status-success";
+          statusBox.innerText = "Documents received! Our desk is processing your official state permit and will send it via WhatsApp.";
+          statusBox.style.display = "block";
+          form.reset();
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        statusBox.className = "status-error";
+        statusBox.innerText = "Error uploading document. Please try again.";
+        statusBox.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Submit Document for Official Permit";
+      }
+    }
+
+    async function submitEstimatorForm(event) {
+      event.preventDefault();
+      const form = document.getElementById('estimatorForm');
+      const submitBtn = document.getElementById('calcSubmitBtn');
+      const statusBox = document.getElementById('calc-status');
+
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Processing Estimate...";
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          statusBox.className = "status-success";
+          statusBox.innerHTML = "Please be kindly patient you will receive Sms in whatsapp regarding your filled document and it will show estimated price";
+          statusBox.style.display = "block";
+          form.reset();
+        } else {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        statusBox.className = "status-error";
+        statusBox.innerText = "Error submitting request. Please try again.";
+        statusBox.style.display = "block";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Submit Estimate Request";
+      }
+    }
+
+    // Initial call to load dynamic stays on start
     renderStays();
   </script>
 </body>

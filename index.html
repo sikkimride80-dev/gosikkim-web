@@ -117,7 +117,7 @@
     /* Fixed Bottom Navigation */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f19;
-      border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+      border-top: 1px solid var(--border); display: flex; justify-around: space-around;
       padding: 10px 0; z-index: 100;
     }
     .nav-item {
@@ -129,6 +129,7 @@
 
     #form-status { display: none; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; text-align: center; }
     .status-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+    .status-error { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
   </style>
 </head>
 <body>
@@ -351,15 +352,16 @@
 
         if (data.success) {
           statusBox.className = "status-success";
-          statusBox.innerText = "Application Received! Our Gangtok Desk will WhatsApp you shorty.";
+          statusBox.innerText = "Application Received! Our Gangtok Desk will WhatsApp you shortly.";
           statusBox.style.display = "block";
           form.reset();
         } else {
           throw new Error(data.message);
         }
       } catch (error) {
-        statusBox.style.display = "block";
+        statusBox.className = "status-error";
         statusBox.innerText = "Error sending application. Please try again.";
+        statusBox.style.display = "block";
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = "Apply For Permit";

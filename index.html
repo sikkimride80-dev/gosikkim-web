@@ -70,19 +70,38 @@
     /* Grid Layouts */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     
-    /* Luxury Cards */
+    /* Interactive Cards & Dynamic Image Effects */
     .zone-card {
       background: var(--card-bg); border-radius: 16px; overflow: hidden;
-      border: 1px solid var(--border); transition: transform 0.2s;
+      border: 1px solid var(--border); transition: transform 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
     }
-    .zone-img { height: 100px; width: 100%; object-fit: cover; }
+    .zone-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+    .zone-img-wrapper {
+      height: 100px; width: 100%; overflow: hidden; position: relative;
+    }
+    .zone-img {
+      height: 100%; width: 100%; object-fit: cover;
+      transition: transform 0.5s ease-in-out;
+    }
+    .zone-card:hover .zone-img {
+      transform: scale(1.1);
+    }
+    
     .zone-body { padding: 12px; }
     .zone-title { font-size: 15px; font-weight: 700; color: white; }
     .zone-desc { font-size: 11px; color: var(--text-muted); margin: 4px 0 10px 0; }
     .zone-btn {
       width: 100%; background: rgba(5, 150, 105, 0.2); color: #34d399;
       border: 1px solid var(--primary); padding: 8px; border-radius: 8px;
-      font-size: 12px; font-weight: 600; cursor: pointer;
+      font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .zone-card:hover .zone-btn {
+      background: var(--primary);
+      color: white;
     }
 
     /* Listing Items */
@@ -117,7 +136,7 @@
     /* Fixed Bottom Navigation */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0; background: #0b0f19;
-      border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+      border-top: 1px solid var(--border); display: flex; justify-around: space-around;
       padding: 10px 0; z-index: 100;
     }
     .nav-item {
@@ -164,7 +183,9 @@
     <div id="zones-tab" class="tab-content active">
       <div class="grid-2" id="zoneGrid">
         <div class="zone-card" data-keywords="gangtok tsomgo nathula east">
-          <img src="https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="East Sikkim">
+          </div>
           <div class="zone-body">
             <div class="zone-title">East Sikkim</div>
             <div class="zone-desc">Gangtok, Tsomgo & Nathula Pass</div>
@@ -173,7 +194,9 @@
         </div>
 
         <div class="zone-card" data-keywords="lachen lachung gurudongmar yumthang north">
-          <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="North Sikkim">
+          </div>
           <div class="zone-body">
             <div class="zone-title">North Sikkim</div>
             <div class="zone-desc">Lachen, Lachung & Lakes</div>
@@ -182,7 +205,9 @@
         </div>
 
         <div class="zone-card" data-keywords="pelling yuksom dzongri west">
-          <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="West Sikkim">
+          </div>
           <div class="zone-body">
             <div class="zone-title">West Sikkim</div>
             <div class="zone-desc">Pelling Skywalk & Treks</div>
@@ -191,7 +216,9 @@
         </div>
 
         <div class="zone-card" data-keywords="namchi ravangla temi tea south">
-          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" class="zone-img">
+          <div class="zone-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" class="zone-img" alt="South Sikkim">
+          </div>
           <div class="zone-body">
             <div class="zone-title">South Sikkim</div>
             <div class="zone-desc">Namchi, Ravangla & Temi</div>

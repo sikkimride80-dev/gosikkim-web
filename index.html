@@ -70,38 +70,45 @@
     /* Grid Layouts */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     
-    /* Interactive Cards & Dynamic Image Effects */
+    /* Interactive Cards & Autoplay Image Motion */
     .zone-card {
       background: var(--card-bg); border-radius: 16px; overflow: hidden;
-      border: 1px solid var(--border); transition: transform 0.3s ease, border-color 0.3s ease;
-      cursor: pointer;
-    }
-    .zone-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary);
+      border: 1px solid var(--border); transition: border-color 0.3s ease;
     }
     .zone-img-wrapper {
-      height: 100px; width: 100%; overflow: hidden; position: relative;
+      height: 110px; width: 100%; overflow: hidden; position: relative;
     }
     .zone-img {
       height: 100%; width: 100%; object-fit: cover;
-      transition: transform 0.5s ease-in-out;
-    }
-    .zone-card:hover .zone-img {
-      transform: scale(1.1);
+      /* Autoplay dynamic movement animation */
+      animation: aliveAnimation 8s ease-in-out infinite alternate;
     }
     
+    /* Keyframes to make images zoom and pan continuously */
+    @keyframes aliveAnimation {
+      0% {
+        transform: scale(1) translate(0, 0);
+      }
+      50% {
+        transform: scale(1.15) translate(-3px, -2px);
+      }
+      100% {
+        transform: scale(1.25) translate(3px, 2px);
+      }
+    }
+
+    /* Offset animations so cards aren't moving at identical times */
+    .zone-card:nth-child(2) .zone-img { animation-delay: -2s; }
+    .zone-card:nth-child(3) .zone-img { animation-delay: -4s; }
+    .zone-card:nth-child(4) .zone-img { animation-delay: -6s; }
+
     .zone-body { padding: 12px; }
     .zone-title { font-size: 15px; font-weight: 700; color: white; }
     .zone-desc { font-size: 11px; color: var(--text-muted); margin: 4px 0 10px 0; }
     .zone-btn {
       width: 100%; background: rgba(5, 150, 105, 0.2); color: #34d399;
       border: 1px solid var(--primary); padding: 8px; border-radius: 8px;
-      font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s;
-    }
-    .zone-card:hover .zone-btn {
-      background: var(--primary);
-      color: white;
+      font-size: 12px; font-weight: 600; cursor: pointer;
     }
 
     /* Listing Items */

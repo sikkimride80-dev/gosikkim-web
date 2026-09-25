@@ -402,11 +402,11 @@
       </div>
     </div>
 
-    <!-- TAB 2: PERMITS (Updated with ID Document Upload for Official Validation) -->
+    <!-- TAB 2: PERMITS (With Expanded 100+ Locations List Across All Districts) -->
     <div id="permits-tab" class="tab-content">
       <div class="form-card">
         <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 10px; border-radius: 8px; margin-bottom: 14px; font-size: 11px; color: #93c5fd; line-height: 1.4;">
-          <i class="fa-solid fa-circle-info"></i> <strong>Official Verification Notice:</strong> Upload a clear photo of your valid Government ID (Voter ID, Passport, or Driving License). Our authorized desk will use these documents to secure your state-stamped permit.
+          <i class="fa-solid fa-circle-info"></i> <strong>Official Verification Notice:</strong> Upload a clear photo of your valid Government ID. Select your exact desired location across any district below, and our authorized desk will process your state-stamped permit.
         </div>
 
         <div id="form-status"></div>
@@ -423,11 +423,105 @@
             <input type="tel" name="Phone Number" class="form-control" placeholder="+91 9800000000" required>
           </div>
           <div class="form-group">
-            <label>Destination Circuit</label>
-            <select name="Destination Zone" class="form-control">
-              <option value="Nathula Pass (East)">Nathula Pass (East Sikkim)</option>
-              <option value="Gurudongmar Lake (North)">Gurudongmar Lake (North Sikkim)</option>
-              <option value="Yumthang Valley (North)">Yumthang Valley (North Sikkim)</option>
+            <label>Select Location / Circuit (All Sikkim Districts)</label>
+            <select name="Destination Zone" class="form-control" required>
+              
+              <!-- EAST SIKKIM -->
+              <optgroup label="📍 East Sikkim Locations">
+                <option value="Gangtok - MG Marg & City Center">MG Marg & Gangtok City Center</option>
+                <option value="Nathula Pass & Baba Mandir">Nathula Pass & Baba Mandir</option>
+                <option value="Tsomgo (Changu) Lake">Tsomgo (Changu) Lake</option>
+                <option value="Zuluk & Thambi View Point">Zuluk & Thambi View Point</option>
+                <option value="Gnathang Valley">Gnathang Valley</option>
+                <option value="Rumtek Dharma Chakra Centre">Rumtek Monastery</option>
+                <option value="Enchey Monastery">Enchey Monastery</option>
+                <option value="Hanuman Tok & Ganesh Tok">Hanuman Tok & Ganesh Tok</option>
+                <option value="Tashi View Point">Tashi View Point</option>
+                <option value="Ban Jhakri Falls & Energy Park">Ban Jhakri Falls & Energy Park</option>
+                <option value="Ranka (Lingdum) Monastery">Ranka (Lingdum) Monastery</option>
+                <option value="Kupup Lake & Elephant Lake">Kupup Lake & Elephant Lake</option>
+                <option value="Menmecho Lake">Menmecho Lake</option>
+                <option value="Aritar Lake & Lampokhari">Aritar Lake & Lampokhari</option>
+                <option value="Rolep Waterfalls & Hanging Bridge">Rolep Waterfalls & Hanging Bridge</option>
+                <option value="Rongli Valley">Rongli Valley</option>
+                <option value="Saramsa Garden">Saramsa Garden</option>
+                <option value="Flower Exhibition Centre Gangtok">Flower Exhibition Centre Gangtok</option>
+                <option value="Burtuk & Lower Tadong">Burtuk & Lower Tadong</option>
+                <option value="Kyongnosla Alpine Sanctuary">Kyongnosla Alpine Sanctuary</option>
+                <option value="Pangolakha Wildlife Sanctuary">Pangolakha Wildlife Sanctuary</option>
+              </optgroup>
+
+              <!-- NORTH SIKKIM -->
+              <optgroup label="📍 North Sikkim Locations">
+                <option value="Gurudongmar Lake & Thangu">Gurudongmar Lake & Thangu Valley</option>
+                <option value="Yumthang Valley & Zero Point">Yumthang Valley & Zero Point (Yumesamdong)</option>
+                <option value="Lachen Village & Monastery">Lachen Village & Monastery</option>
+                <option value="Lachung Village & Monastery">Lachung Village & Monastery</option>
+                <option value="Chopta Valley North Sikkim">Chopta Valley</option>
+                <option value="Seven Sisters Waterfall">Seven Sisters Waterfall</option>
+                <option value="Bhim Nala Waterfall">Bhim Nala Waterfall (Kainchi Jhora)</option>
+                <option value="Naga Waterfall">Naga Waterfall</option>
+                <option value="Singhik View Point">Singhik View Point</option>
+                <option value="Mangan District Headquarters">Mangan Town</option>
+                <option value="Kabi Lungchok Historic Site">Kabi Lungchok</option>
+                <option value="Phodong Monastery">Phodong Monastery</option>
+                <option value="Labrang Monastery">Labrang Monastery</option>
+                <option value="Chungthang Confluence">Chungthang Confluence</option>
+                <option value="Shingba Rhododendron Sanctuary">Shingba Rhododendron Sanctuary</option>
+                <option value="Katao Valley">Katao Valley</option>
+                <option value="Green Lake Base Camp Route">Green Lake Base Camp Route</option>
+                <option value="Muguthang Valley">Muguthang Valley</option>
+              </optgroup>
+
+              <!-- WEST SIKKIM -->
+              <optgroup label="📍 West Sikkim Locations">
+                <option value="Pelling Skywalk & Rabdentse">Pelling Skywalk & Rabdentse Ruins</option>
+                <option value="Yuksom Norbugang & Dubdi Monastery">Yuksom (First Capital & Dubdi Monastery)</option>
+                <option value="Khecheopalri Holy Lake">Khecheopalri Holy Lake</option>
+                <option value="Kanchenjunga Waterfall & Rimbi">Kanchenjunga & Rimbi Waterfalls</option>
+                <option value="Singshore Suspension Bridge">Singshore Suspension Bridge</option>
+                <option value="Pemayangtse Monastery">Pemayangtse Monastery</option>
+                <option value="Sangachoeling Monastery">Sangachoeling Monastery</option>
+                <option value="Tashiding Monastery">Tashiding Monastery</option>
+                <option value="Varsey (Barsey) Rhododendron Sanctuary">Varsey (Barsey) Rhododendron Sanctuary</option>
+                <option value="Uttarey Village & Srijanga Waterfall">Uttarey Village & Srijanga Waterfall</option>
+                <option value="Kaluk & Rinchenpong">Kaluk & Rinchenpong</option>
+                <option value="Hee Bermiok Valley">Hee Bermiok Valley</option>
+                <option value="Dentam Valley & Cheese Factory">Dentam Valley & Cheese Factory</option>
+                <option value="Legship Kirateshwar Temple">Legship Kirateshwar Mahadev Temple</option>
+                <option value="Gyalshing Town Center">Gyalshing (Gozhing)</option>
+                <option value="Phamrong Falls West Sikkim">Phamrong Falls</option>
+                <option value="Sewaro Rock Garden">Sewaro Rock Garden</option>
+              </optgroup>
+
+              <!-- SOUTH SIKKIM -->
+              <optgroup label="📍 South Sikkim Locations">
+                <option value="Namchi Char Dham & Siddhesvara">Namchi Char Dham (Siddhesvara Dhaam)</option>
+                <option value="Samdruptse Hill Giant Statue">Samdruptse Hill (Guru Padmasambhava Statue)</option>
+                <option value="Ravangla Buddha Park & Tathagata Tsal">Ravangla Buddha Park (Tathagata Tsal)</option>
+                <option value="Temi Tea Garden & Tea Factory">Temi Tea Garden & Factory</option>
+                <option value="Ralang Monastery Ravangla">Ralang Monastery</option>
+                <option value="Borong Hot Springs & Village">Borong Hot Springs & Village</option>
+                <option value="Tendong Hill Trek">Tendong Hill</option>
+                <option value="Tarey Bhir Ridge Walk">Tarey Bhir Ridge Walk</option>
+                <option value="Maenam Wildlife Sanctuary">Maenam Wildlife Sanctuary</option>
+                <option value="Kitam Bird Sanctuary">Kitam Bird Sanctuary</option>
+                <option value="Solophok Chardham Complex">Solophok</option>
+                <option value="Sai Mandir Namchi">Sai Mandir Namchi</option>
+                <option value="Melli Bazaar Riverside">Melli Bazaar</option>
+                <option value="Jorethang Town">Jorethang</option>
+                <option value="Kewzing Village Tourism">Kewzing Village</option>
+              </optgroup>
+
+              <!-- PAKYONG & SORENG DISTRICTS -->
+              <optgroup label="📍 Pakyong & Soreng Districts">
+                <option value="Pakyong Greenfield Airport Area">Pakyong Airport Region</option>
+                <option value="Rhenock Bazaar & Kartok Monastery">Rhenock Bazaar</option>
+                <option value="Soreng District Headquarters">Soreng Town Center</option>
+                <option value="Sombaria Village">Sombaria</option>
+                <option value="Chakung Valley">Chakung</option>
+              </optgroup>
+
             </select>
           </div>
           <div class="form-group">
@@ -443,7 +537,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: COST ESTIMATOR -->
+    <!-- TAB 3: COST ESTIMATOR (With Expanded Options) -->
     <div id="calculator-tab" class="tab-content">
       <div class="form-card">
         <h3 style="font-size:16px; margin-bottom: 12px; color:#34d399;"><i class="fa-solid fa-calculator"></i> Instant Trip Cost Estimator</h3>
@@ -455,11 +549,30 @@
           <input type="hidden" name="subject" value="New GoSikkim Trip Cost Estimate Request">
 
           <div class="form-group">
-            <label>Select Circuit</label>
+            <label>Select Circuit / Location</label>
             <select name="Selected Circuit" class="form-control" required>
-              <option value="North Sikkim (Lachen / Lachung 2D/1N)">North Sikkim (Lachen / Lachung 2D/1N)</option>
-              <option value="East Sikkim (Nathula Pass Day Trip)">East Sikkim (Nathula Pass Day Trip)</option>
-              <option value="West Sikkim (Pelling Stay & Sightseeing)">West Sikkim (Pelling Stay & Sightseeing)</option>
+              <optgroup label="📍 East Sikkim Circuits">
+                <option value="Gangtok City Exploration (2D/3N)">Gangtok City & Monasteries (2D/3N)</option>
+                <option value="Nathula Pass & Tsomgo Day Circuit">Nathula Pass & Tsomgo Day Circuit</option>
+                <option value="Silk Route Circuit (Zuluk - Gnathang - Kupup)">Silk Route Circuit (Zuluk - Gnathang - Kupup)</option>
+                <option value="Aritar & Rolep Offbeat Circuit">Aritar & Rolep Offbeat Circuit</option>
+              </optgroup>
+              <optgroup label="📍 North Sikkim Circuits">
+                <option value="North Sikkim Ultimate (Lachen, Lachung, Gurudongmar, Yumthang 3D/2N)">North Sikkim Ultimate (Lachen, Lachung, Gurudongmar, Yumthang 3D/2N)</option>
+                <option value="Lachen & Gurudongmar Lake Express (2D/1N)">Lachen & Gurudongmar Lake Express (2D/1N)</option>
+                <option value="Lachung, Yumthang & Zero Point Trip (2D/1N)">Lachung, Yumthang & Zero Point Trip (2D/1N)</option>
+              </optgroup>
+              <optgroup label="📍 West Sikkim Circuits">
+                <option value="Pelling, Yuksom & Khecheopalri Heritage Tour (3D/2N)">Pelling, Yuksom & Khecheopalri Heritage Tour (3D/2N)</option>
+                <option value="West Sikkim Offbeat (Uttarey, Kaluk, Varsey Trek)">West Sikkim Offbeat (Uttarey, Kaluk, Varsey Trek)</option>
+              </optgroup>
+              <optgroup label="📍 South Sikkim Circuits">
+                <option value="South Sikkim Spiritual & Scenic (Namchi Chardham & Ravangla Buddha Park 2D/1N)">South Sikkim Spiritual & Scenic (Namchi Chardham & Ravangla Buddha Park 2D/1N)</option>
+                <option value="Temi Tea & Tarey Bhir Ridge Tour">Temi Tea & Tarey Bhir Ridge Tour</option>
+              </optgroup>
+              <optgroup label="📍 Grand Mega Sikkim Tour">
+                <option value="Complete Sikkim Grand Circle (All 4 Districts Combined 7D/6N)">Complete Sikkim Grand Circle (All 4 Districts Combined 7D/6N)</option>
+              </optgroup>
             </select>
           </div>
 

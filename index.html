@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sikkim Daily Hour - SKM Tricolor Flag 3D</title>
+    <title>Sikkim Daily Hour - Indian Tricolor 3D</title>
     <style>
         * {
             margin: 0;
@@ -53,7 +53,7 @@
             transform: rotateX(12deg) rotateY(-16deg);
             box-shadow: 
                 -30px 40px 70px rgba(0, 0, 0, 0.95),
-                0 0 60px rgba(255, 102, 0, 0.4),
+                0 0 60px rgba(255, 153, 51, 0.4),
                 inset 0 2px 5px rgba(255, 255, 255, 0.3),
                 inset 0 -10px 30px rgba(0, 0, 0, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.18);
@@ -113,12 +113,12 @@
         .live-dot {
             width: 8px;
             height: 8px;
-            background: #22c55e;
+            background: #138808;
             border-radius: 50%;
-            box-shadow: 0 0 10px #22c55e;
+            box-shadow: 0 0 10px #138808;
         }
 
-        /* SKM Party Flag Tricolor Horizontal Stripes (Orange, Red, Green) INSIDE Letters */
+        /* Indian National Flag Tricolor (Saffron, White, Green) INSIDE Letters */
         .layer-center {
             position: relative;
             z-index: 5;
@@ -133,8 +133,8 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             
-            /* SKM Flag horizontal bands pattern inside text: Orange -> Red -> Green */
-            background: linear-gradient(to bottom, #ff6600 0%, #ff6600 33.3%, #ff0000 33.3%, #ff0000 66.6%, #00b050 66.6%, #00b050 100%);
+            /* Indian Tricolor bands pattern inside text: Saffron (#FF9933) -> White (#FFFFFF) -> Green (#138808) */
+            background: linear-gradient(to bottom, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #138808 66.6%, #138808 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             
@@ -151,7 +151,7 @@
         }
 
         .skm-3d-title span {
-            background: linear-gradient(to bottom, #ff6600 0%, #ff6600 33.3%, #ff0000 33.3%, #ff0000 66.6%, #00b050 66.6%, #00b050 100%);
+            background: linear-gradient(to bottom, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #138808 66.6%, #138808 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 
@@ -172,7 +172,7 @@
         }
 
         .action-btn {
-            background: linear-gradient(135deg, #ff6600, #cc3300);
+            background: linear-gradient(135deg, #FF9933, #e67300);
             backdrop-filter: blur(10px);
             color: white;
             border: none;
@@ -181,7 +181,7 @@
             font-weight: 700;
             border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 102, 0, 0.4);
+            box-shadow: 0 10px 25px rgba(255, 153, 51, 0.4);
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.2s ease;
@@ -189,7 +189,7 @@
         }
 
         .action-btn:hover {
-            background: linear-gradient(135deg, #ff8533, #ff6600);
+            background: linear-gradient(135deg, #ffaa44, #FF9933);
             transform: translateY(-2px);
         }
     </style>
@@ -216,7 +216,7 @@
             </div>
 
             <div class="layer-bottom">
-                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: SKM Flag Tricolor Active.');">Initialize</button>
+                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Indian Tricolor Active.');">Initialize</button>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sikkim Daily Hour - 3D Real Object</title>
+    <title>Sikkim Daily Hour - Immersive 3D</title>
     <style>
         * {
             margin: 0;
@@ -12,14 +12,14 @@
         }
 
         body {
-            background-color: #050509;
+            background-color: #030712;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             font-family: system-ui, -apple-system, sans-serif;
-            perspective: 1000px;
+            perspective: 1200px;
         }
 
         /* Interactive 3D Stage */
@@ -37,50 +37,89 @@
             cursor: grabbing;
         }
 
-        /* The 3D Realistic Object Monolith */
+        /* Full Background Immersive 3D Monolith */
         .object-3d {
             position: relative;
-            width: 340px;
-            height: 520px;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #020617 100%);
-            border-radius: 28px;
-            padding: 2rem;
+            width: 360px;
+            height: 600px;
+            background: #000000;
+            border-radius: 32px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            padding: 2rem 1.8rem;
             transform-style: preserve-3d;
-            transform: rotateX(15deg) rotateY(-20deg);
+            transform: rotateX(12deg) rotateY(-16deg);
             box-shadow: 
-                -20px 30px 50px rgba(0, 0, 0, 0.8),
-                inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                inset 0 -5px 15px rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+                -30px 40px 70px rgba(0, 0, 0, 0.95),
+                0 0 60px rgba(14, 165, 233, 0.25),
+                inset 0 2px 5px rgba(255, 255, 255, 0.3),
+                inset 0 -10px 30px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             transition: transform 0.1s ease-out;
             user-select: none;
         }
 
-        /* Glossy Light Reflection */
+        /* Full Background Sikkim Landscape spanning everywhere inside the card */
+        .bg-landscape {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(0.65) contrast(1.15) saturate(1.1);
+            transform: translateZ(0px);
+        }
+
+        /* Cinematic Gradient Overlays to make text pop while keeping the background fully visible everywhere */
+        .card-overlay-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to bottom, rgba(3, 7, 18, 0.85) 0%, rgba(3, 7, 18, 0.4) 60%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .card-overlay-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45%;
+            background: linear-gradient(to top, rgba(3, 7, 18, 0.92) 0%, rgba(3, 7, 18, 0.6) 70%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glass Reflection Effect */
         .object-3d::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 50%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.08), transparent);
-            border-top-left-radius: 28px;
-            border-top-right-radius: 28px;
+            height: 40%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+            border-top-left-radius: 32px;
+            border-top-right-radius: 32px;
             pointer-events: none;
             z-index: 5;
         }
 
-        /* 3D Depth Layers */
-        .layer-back {
-            transform: translateZ(10px);
+        /* Content Elements Layered in 3D Space */
+        .layer-top {
+            position: relative;
+            z-index: 5;
+            transform: translateZ(35px);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            color: #64748b;
+            color: #cbd5e1;
             font-size: 0.75rem;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -95,25 +134,29 @@
             box-shadow: 0 0 10px #22c55e;
         }
 
-        .layer-content {
-            transform: translateZ(45px);
+        .layer-center {
+            position: relative;
+            z-index: 5;
+            transform: translateZ(65px);
             text-align: center;
+            margin-top: -1rem;
         }
 
+        /* Highly realistic 3D Extruded Typography */
         .brand-title {
-            font-size: 2rem;
+            font-size: 2.3rem;
             font-weight: 900;
             line-height: 1.1;
             letter-spacing: 2px;
             text-transform: uppercase;
             color: #ffffff;
             text-shadow: 
-                0 1px 0 #cbd5e1,
-                0 2px 0 #94a3b8,
-                0 3px 0 #64748b,
-                0 4px 0 #475569,
-                0 15px 25px rgba(0,0,0,0.9),
-                0 0 30px rgba(59, 130, 246, 0.5);
+                0 1px 0 #94a3b8,
+                0 2px 0 #64748b,
+                0 3px 0 #475569,
+                0 4px 0 #1e293b,
+                0 10px 25px rgba(0,0,0,0.9),
+                0 0 35px rgba(56, 189, 248, 0.7);
         }
 
         .brand-title span {
@@ -123,53 +166,38 @@
                 0 2px 0 #7dd3fc,
                 0 3px 0 #38bdf8,
                 0 4px 0 #0284c7,
-                0 15px 25px rgba(0,0,0,0.9),
-                0 0 35px rgba(56, 189, 248, 0.8);
-        }
-
-        /* Realistic Image Frame Inside The Box matching your exact description */
-        .inner-image-box {
-            transform: translateZ(30px);
-            width: 100%;
-            height: 150px;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-        }
-
-        .inner-image-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.95) contrast(1.05);
+                0 10px 25px rgba(0,0,0,0.9),
+                0 0 40px rgba(56, 189, 248, 0.9);
         }
 
         .layer-bottom {
-            transform: translateZ(25px);
+            position: relative;
+            z-index: 5;
+            transform: translateZ(45px);
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 1rem;
         }
 
         .action-btn {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: white;
             border: none;
-            padding: 0.8rem;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border-radius: 8px;
+            padding: 0.9rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.5);
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: background 0.2s;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .action-btn:hover {
             background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -177,25 +205,26 @@
 
     <div class="stage" id="stage">
         <div class="object-3d" id="object3d">
-            <div class="layer-back">
+            <!-- Full background filling everywhere inside the card: Majestic Himalayan mountains, golden sunset, distant hills, and winding roads -->
+            <img class="bg-landscape" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Sikkim Himalayan sunset mountains hills and roads">
+            
+            <div class="card-overlay-top"></div>
+            <div class="card-overlay-bottom"></div>
+
+            <div class="layer-top">
                 <span>No Limit</span>
                 <div class="live-dot"></div>
             </div>
             
-            <div class="layer-content">
+            <div class="layer-center">
                 <div class="brand-title">
                     Sikkim<br>
                     <span>Daily Hour</span>
                 </div>
             </div>
 
-            <!-- Updated image showing distant mountains/hills, city buildings, sunset sky, and people/street view -->
-            <div class="inner-image-box">
-                <img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80" alt="Distant hills, sunset, city buildings and street view">
-            </div>
-
             <div class="layer-bottom">
-                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Active & Unbounded.');">Initialize</button>
+                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Immersive View Active.');">Initialize</button>
             </div>
         </div>
     </div>
@@ -206,8 +235,8 @@
 
         let isDragging = false;
         let startX, startY;
-        let rotX = 15;
-        let rotY = -20;
+        let rotX = 12;
+        let rotY = -16;
 
         stage.addEventListener('pointerdown', (e) => {
             isDragging = true;

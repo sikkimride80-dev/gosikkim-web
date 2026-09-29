@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sikkim Daily Hour - Indian Tricolor 3D</title>
+    <title>Sikkim Daily Hour - Indian Flag Colors 3D</title>
     <style>
         * {
             margin: 0;
@@ -118,7 +118,7 @@
             box-shadow: 0 0 10px #138808;
         }
 
-        /* Indian National Flag Tricolor (Saffron, White, Green) INSIDE Letters */
+        /* Indian Flag Colors strictly INSIDE letters with high-visibility solid fill */
         .layer-center {
             position: relative;
             z-index: 5;
@@ -133,18 +133,18 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             
-            /* Indian Tricolor bands pattern inside text: Saffron (#FF9933) -> White (#FFFFFF) -> Green (#138808) */
+            /* Saffron (#FF9933) top, Pure White (#FFFFFF) middle, Green (#138808) bottom */
             background: linear-gradient(to bottom, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #138808 66.6%, #138808 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             
-            /* Sharp solid dark backing for ultimate legibility over mountain background */
+            /* Dark solid 3D shadows directly behind letters to pop against the background */
             text-shadow: 
-                0 1px 0 rgba(0, 0, 0, 0.9),
-                0 2px 0 rgba(0, 0, 0, 0.9),
-                0 3px 0 rgba(0, 0, 0, 0.9),
-                0 4px 0 rgba(0, 0, 0, 0.9),
-                0 5px 10px rgba(0, 0, 0, 0.95);
+                0 1px 0 rgba(0, 0, 0, 0.95),
+                0 2px 0 rgba(0, 0, 0, 0.95),
+                0 3px 0 rgba(0, 0, 0, 0.95),
+                0 4px 0 rgba(0, 0, 0, 0.95),
+                0 5px 12px rgba(0, 0, 0, 0.95);
             
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.95));
             padding: 0.2rem 0;
@@ -155,11 +155,11 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-shadow: 
-                0 1px 0 rgba(0, 0, 0, 0.9),
-                0 2px 0 rgba(0, 0, 0, 0.9),
-                0 3px 0 rgba(0, 0, 0, 0.9),
-                0 4px 0 rgba(0, 0, 0, 0.9),
-                0 5px 10px rgba(0, 0, 0, 0.95);
+                0 1px 0 rgba(0, 0, 0, 0.95),
+                0 2px 0 rgba(0, 0, 0, 0.95),
+                0 3px 0 rgba(0, 0, 0, 0.95),
+                0 4px 0 rgba(0, 0, 0, 0.95),
+                0 5px 12px rgba(0, 0, 0, 0.95);
         }
 
         .layer-bottom {
@@ -216,7 +216,7 @@
             </div>
 
             <div class="layer-bottom">
-                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Indian Tricolor Active.');">Initialize</button>
+                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Indian Flag Colors Active.');">Initialize</button>
             </div>
         </div>
     </div>

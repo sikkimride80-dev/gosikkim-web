@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sikkim Daily Hour - Carved Glass 3D</title>
+    <title>Sikkim Daily Hour - Regional Political Tricolour Glass 3D</title>
     <style>
         * {
             margin: 0;
@@ -53,7 +53,7 @@
             transform: rotateX(12deg) rotateY(-16deg);
             box-shadow: 
                 -30px 40px 70px rgba(0, 0, 0, 0.95),
-                0 0 60px rgba(14, 165, 233, 0.25),
+                0 0 60px rgba(30, 58, 138, 0.25),
                 inset 0 2px 5px rgba(255, 255, 255, 0.3),
                 inset 0 -10px 30px rgba(0, 0, 0, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.18);
@@ -61,7 +61,7 @@
             user-select: none;
         }
 
-        /* Full Background Landscape */
+        /* Full Background Landscape (crystal clear) */
         .bg-landscape {
             position: absolute;
             inset: 0;
@@ -72,7 +72,6 @@
             filter: brightness(0.8) contrast(1.1) saturate(1.1);
         }
 
-        /* Subtle dark vignette on top/bottom edges only so buttons stay visible, clear in the middle */
         .edge-vignette {
             position: absolute;
             inset: 0;
@@ -119,7 +118,7 @@
             box-shadow: 0 0 10px #22c55e;
         }
 
-        /* Carved Glass 3D Title: Transparent glass letting the background show through, with 3D engraved depth */
+        /* Carved 3D Glass Title styled in subtle, desaturated regional tricolour scheme (Sky Blue, Golden Yellow, Crimson Red) */
         .layer-center {
             position: relative;
             z-index: 5;
@@ -134,31 +133,24 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             
-            /* Glassmorphism styling inside the text */
-            background: inherit;
-            color: rgba(255, 255, 255, 0.85);
+            /* Less bright, sophisticated desaturated regional tricolour gradient */
+            background: linear-gradient(135deg, #7dd3fc 0%, #fde047 50%, #f87171 100%);
             -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             
-            /* Deep carved 3D bevel effect using multiple stacked shadows */
+            /* Deep carved 3D engraving and shadow effect */
             text-shadow: 
-                0 -1px 1px rgba(255, 255, 255, 0.6),
-                0 1px 2px rgba(0, 0, 0, 0.9),
-                0 3px 6px rgba(0, 0, 0, 0.7),
-                0 0 15px rgba(255, 255, 255, 0.3),
-                inset 0 0 10px rgba(255, 255, 255, 0.4);
+                0 2px 4px rgba(0, 0, 0, 0.8),
+                0 4px 12px rgba(0, 0, 0, 0.6);
             
-            /* Transparent glass border effect via backdrop & stroke appearance */
-            border-radius: 8px;
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.7));
             padding: 0.2rem 0;
         }
 
         .carved-glass-title span {
-            color: rgba(125, 211, 252, 0.9);
-            text-shadow: 
-                0 -1px 1px rgba(224, 242, 254, 0.7),
-                0 1px 2px rgba(0, 0, 0, 0.9),
-                0 3px 8px rgba(3, 105, 161, 0.8),
-                0 0 20px rgba(56, 189, 248, 0.5);
+            background: linear-gradient(135deg, #38bdf8 0%, #facc15 50%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .layer-bottom {
@@ -171,7 +163,7 @@
         }
 
         .action-btn {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.85), rgba(29, 78, 216, 0.9));
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.85), rgba(15, 23, 42, 0.9));
             backdrop-filter: blur(10px);
             color: white;
             border: none;
@@ -184,11 +176,11 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             transition: all 0.2s ease;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .action-btn:hover {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(37, 99, 235, 0.95));
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.9), rgba(30, 58, 138, 0.95));
             transform: translateY(-2px);
         }
     </style>
@@ -197,7 +189,7 @@
 
     <div class="stage" id="stage">
         <div class="object-3d" id="object3d">
-            <!-- Full background crystal clear without any blur -->
+            <!-- Full crystal clear background landscape -->
             <img class="bg-landscape" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Sikkim landscape mountains hills and roads">
             
             <div class="edge-vignette"></div>
@@ -215,7 +207,7 @@
             </div>
 
             <div class="layer-bottom">
-                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Carved Glass 3D Active.');">Initialize</button>
+                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Regional Tricolour Scheme Active.');">Initialize</button>
             </div>
         </div>
     </div>

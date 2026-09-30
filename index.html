@@ -10,6 +10,7 @@
       --card-bg: rgba(20, 28, 48, 0.9);
       --accent-gold: #ffd700;
       --accent-cyan: #00f0ff;
+      --accent-purple: #9d4edd;
       --accent-red: #ff2a6d;
       --text-color: #e0e6ed;
       --border-color: rgba(255, 215, 0, 0.3);
@@ -88,7 +89,7 @@
 
     .mult-step.active {
       color: var(--accent-gold);
-      transform: scale(1.2);
+      transform: scale(1.25);
       text-shadow: 0 0 12px var(--accent-gold);
     }
 
@@ -121,7 +122,7 @@
       gap: 6px;
     }
 
-    /* CARD SYMBOL TILES */
+    /* CARD SYMBOL TILES WITH SMOOTH CASCADING */
     .card-tile {
       height: 72px;
       background: #ffffff;
@@ -134,7 +135,7 @@
       font-weight: bold;
       font-size: 0.85rem;
       position: relative;
-      transition: transform 0.2s, opacity 0.3s;
+      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
       box-shadow: 0 3px 6px rgba(0,0,0,0.4);
     }
 
@@ -157,6 +158,34 @@
       text-align: center;
       justify-content: center;
       font-size: 1rem;
+    }
+
+    /* SCATTER SYMBOL EFFECT */
+    .card-tile.scatter {
+      background: linear-gradient(135deg, #9d4edd 0%, #3a0ca3 100%);
+      color: #ffd700 !important;
+      border: 2px solid #ffb703;
+      box-shadow: 0 0 15px #9d4edd;
+      text-align: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      animation: scatterPulse 1.2s infinite alternate;
+    }
+
+    @keyframes scatterPulse {
+      0% { transform: scale(0.98); box-shadow: 0 0 8px #9d4edd; }
+      100% { transform: scale(1.04); box-shadow: 0 0 18px #ffb703; }
+    }
+
+    /* WINNING POP ANIMATION */
+    .card-tile.winning {
+      animation: winPop 0.4s ease forwards;
+    }
+
+    @keyframes winPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); filter: brightness(1.4); }
+      100% { transform: scale(0); opacity: 0; }
     }
 
     .tile-corner {
@@ -289,6 +318,65 @@
 
     let gridData = [];
 
+    /* WEB AUDIO SYNTHESIZER (NO EXTERNAL AUDIO FILES NEEDED) */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      const now = audioCtx.currentTime;
+
+      if (type === 'spin') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(60, now + 0.1);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else if (type === 'win') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+      } else if (type === 'wild') {
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      } else if (type === 'scatter') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.linearRampToValueAtTime(900, now + 0.4);
+        gain.gain.setValueAtTime(0.25, now);
+        gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } else if (type === 'voice-scatter') {
+        // Voice-like Synth announcement using Web Speech API
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance("Free Spins Bonus Activated!");
+          utterance.rate = 1.1;
+          utterance.pitch = 1.2;
+          window.speechSynthesis.speak(utterance);
+        }
+      }
+    }
+
     function initBoard() {
       const gridEl = document.getElementById('reels-grid');
       gridEl.innerHTML = '';
@@ -311,14 +399,19 @@
     }
 
     function generateRandomCard(colIdx) {
+      // 8% chance for Scatter, 5% Wild
+      const isScatter = Math.random() < 0.08;
+      if (isScatter) {
+        return { rank: 'SCATTER', suit: '👑', color: 'scatter', isGold: false, isWild: false, isScatter: true };
+      }
+
       const isWild = Math.random() < 0.05;
       if (isWild) {
-        return { rank: 'WILD', suit: '🃏', color: 'wild', isGold: false, isWild: true };
+        return { rank: 'WILD', suit: '🃏', color: 'wild', isGold: false, isWild: true, isScatter: false };
       }
 
       const rank = ranks[Math.floor(Math.random() * ranks.length)];
       const suitObj = suits[Math.floor(Math.random() * suits.length)];
-      // Golden cards appear mostly on reels 2, 3, 4
       const isGold = (colIdx >= 1 && colIdx <= 3) && Math.random() < 0.25;
 
       return {
@@ -326,7 +419,8 @@
         suit: suitObj.s,
         color: suitObj.c,
         isGold: isGold,
-        isWild: false
+        isWild: false,
+        isScatter: false
       };
     }
 
@@ -338,7 +432,10 @@
           const item = gridData[c][r];
           const tile = document.createElement('div');
           
-          if (item.isWild) {
+          if (item.isScatter) {
+            tile.className = 'card-tile scatter';
+            tile.innerHTML = `<div>👑<br>SCATTER</div>`;
+          } else if (item.isWild) {
             tile.className = 'card-tile wild';
             tile.innerHTML = `<div>🃏<br>WILD</div>`;
           } else {
@@ -383,28 +480,49 @@
       setMultiplier(1);
       document.getElementById('status-msg').innerText = "Spinning card reels...";
 
-      // Rolling Animation Effect
-      for (let i = 0; i < 6; i++) {
+      // Smooth Spinning Cascades
+      for (let i = 0; i < 7; i++) {
+        playSound('spin');
         for (let c = 0; c < 5; c++) {
           for (let r = 0; r < 3; r++) {
             gridData[c][r] = generateRandomCard(c);
           }
         }
         renderBoard();
-        await new Promise(r => setTimeout(r, 80));
+        await new Promise(r => setTimeout(r, 90));
       }
 
+      checkScatterTrigger();
       evaluateCascadeWins();
+    }
+
+    function checkScatterTrigger() {
+      let scatterCount = 0;
+      for (let c = 0; c < 5; c++) {
+        for (let r = 0; r < 3; r++) {
+          if (gridData[c][r].isScatter) scatterCount++;
+        }
+      }
+
+      if (scatterCount >= 3) {
+        playSound('scatter');
+        playSound('voice-scatter');
+        const scatterBonus = currentBet * 10;
+        balance += scatterBonus;
+        document.getElementById('status-msg').innerText = `🔥 3 SCATTERS HIT! 10 FREE SPINS & +$${scatterBonus}!`;
+      }
     }
 
     async function evaluateCascadeWins() {
       let winFound = false;
       let roundPayout = 0;
 
-      // Check simple matching paylines across adjacent reels
+      // Check adjacent paylines
       for (let r = 0; r < 3; r++) {
         const baseRank = gridData[0][r].rank;
         let matchCount = 1;
+
+        if (gridData[0][r].isScatter) continue;
 
         for (let c = 1; c < 5; c++) {
           const currentCard = gridData[c][r];
@@ -420,30 +538,39 @@
           const payout = currentBet * matchCount * currentMultiplier;
           roundPayout += payout;
 
-          // Flip Golden cards in winning payline into Wilds
+          // Flip Golden cards into Joker Wilds with Sound
           for (let c = 0; c < matchCount; c++) {
             if (gridData[c][r].isGold) {
-              gridData[c][r] = { rank: 'WILD', suit: '🃏', color: 'wild', isGold: false, isWild: true };
+              playSound('wild');
+              gridData[c][r] = { rank: 'WILD', suit: '🃏', color: 'wild', isGold: false, isWild: true, isScatter: false };
             }
           }
         }
       }
 
       if (winFound) {
+        playSound('win');
         balance += roundPayout;
         updateUI();
         document.getElementById('status-msg').innerText = `Combo Hit! Won $${roundPayout} (Multiplier: x${currentMultiplier})`;
 
-        // Step up multiplier
+        // Step up progressive multiplier
         if (currentMultiplier === 1) setMultiplier(2);
         else if (currentMultiplier === 2) setMultiplier(3);
         else if (currentMultiplier === 3) setMultiplier(5);
 
         renderBoard();
-        await new Promise(r => setTimeout(r, 1000));
-        evaluateCascadeWins(); // Trigger cascade check again
+        await new Promise(r => setTimeout(r, 900));
+
+        // Cascading Drop - Refill top positions smoothly
+        for (let c = 0; c < 5; c++) {
+          gridData[c][0] = generateRandomCard(c);
+        }
+        renderBoard();
+        await new Promise(r => setTimeout(r, 500));
+
+        evaluateCascadeWins(); // Chain cascades
       } else {
-        document.getElementById('status-msg').innerText = roundPayout > 0 ? "Cascades completed!" : "No winning lines.";
         document.getElementById('spin-btn').disabled = false;
       }
     }
@@ -452,7 +579,7 @@
       document.getElementById('balance').innerText = balance;
     }
 
-    // Initialize initial Super Ace card board
+    // Initialize board
     initBoard();
   </script>
 </body>

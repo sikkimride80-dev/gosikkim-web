@@ -296,11 +296,10 @@
     let balance = 1000;
     let currentBet = 20;
     let currentMultiplier = 1;
+    let hasAnnouncedScatter = false; // Flag to prevent repeated voice loop
 
-    // Full card range including 2, 3, 10, J, Q, K, A
     const ranks = ['2', '3', '10', 'J', 'Q', 'K', 'A'];
     
-    // Map suits to voice names
     const suits = [
       { s: '♠', c: 'black', name: 'Spade' },
       { s: '♥', c: 'red', name: 'Heart' },
@@ -308,7 +307,6 @@
       { s: '♣', c: 'black', name: 'Club' }
     ];
 
-    // Pronunciation vocabulary map for voice announcer
     const rankVoiceMap = {
       '2': 'Two',
       '3': 'Three',
@@ -321,18 +319,17 @@
 
     let gridData = [];
 
-    /* WEB AUDIO SYNTHESIZER & VOICE ANNOUNCER */
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    function speakCardCombination(suitName, rankName) {
+    function speakText(text) {
       if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // clear previous speech queue
-        const fullText = `${suitName} ${rankVoiceMap[rankName] || rankName}`;
-        const utterance = new SpeechSynthesisUtterance(fullText);
-        utterance.rate = 1.25;
-        utterance.pitch = 1.1;
-        utterance.volume = 1.0;
-        window.speechSynthesis.speak(utterance);
+        // Only speak if nothing is actively speaking to prevent repetition loop
+        if (!window.speechSynthesis.speaking) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.rate = 1.2;
+          utterance.pitch = 1.1;
+          window.speechSynthesis.speak(utterance);
+        }
       }
     }
 
@@ -380,14 +377,6 @@
         gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
         osc.start(now);
         osc.stop(now + 0.4);
-      } else if (type === 'voice-scatter') {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const utterance = new SpeechSynthesisUtterance("Free Spins Bonus Activated!");
-          utterance.rate = 1.1;
-          utterance.pitch = 1.2;
-          window.speechSynthesis.speak(utterance);
-        }
       }
     }
 
@@ -413,7 +402,6 @@
     }
 
     function generateRandomCard(colIdx) {
-      // 8% Scatter, 5% Wild
       const isScatter = Math.random() < 0.08;
       if (isScatter) {
         return { rank: 'SCATTER', suit: '👑', color: 'scatter', suitName: 'Scatter', isGold: false, isWild: false, isScatter: true };
@@ -487,6 +475,12 @@
         return;
       }
 
+      // Reset speech engine & flags
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      hasAnnouncedScatter = false;
+
       balance -= currentBet;
       updateUI();
 
@@ -495,7 +489,6 @@
       setMultiplier(1);
       document.getElementById('status-msg').innerText = "Spinning card reels...";
 
-      // Smooth Reel Cascade Spin Animation
       for (let i = 0; i < 7; i++) {
         playSound('spin');
         for (let c = 0; c < 5; c++) {
@@ -519,9 +512,10 @@
         }
       }
 
-      if (scatterCount >= 3) {
+      if (scatterCount >= 3 && !hasAnnouncedScatter) {
+        hasAnnouncedScatter = true;
         playSound('scatter');
-        playSound('voice-scatter');
+        speakText("Free Spins Bonus!");
         const scatterBonus = currentBet * 10;
         balance += scatterBonus;
         document.getElementById('status-msg').innerText = `🔥 3 SCATTERS HIT! 10 FREE SPINS & +$${scatterBonus}!`;
@@ -534,7 +528,6 @@
       let winningSuit = '';
       let winningRank = '';
 
-      // Check adjacent paylines (supporting 2, 3, 10, J, Q, K, A)
       for (let r = 0; r < 3; r++) {
         const baseCard = gridData[0][r];
         if (baseCard.isScatter) continue;
@@ -559,7 +552,6 @@
           winningSuit = baseCard.suitName || 'Heart';
           winningRank = baseCard.rank;
 
-          // Flip Golden cards into Joker Wilds with Sound
           for (let c = 0; c < matchCount; c++) {
             if (gridData[c][r].isGold) {
               playSound('wild');
@@ -574,14 +566,16 @@
 
       if (winFound) {
         playSound('win');
-        // Voice announce connected cards (e.g., "Heart Ace", "Diamond King", "Spade Ten", "Club Two")
-        speakCardCombination(winningSuit, winningRank);
+        
+        // Only announce winning card if Scatter speech isn't currently playing
+        if (!hasAnnouncedScatter) {
+          speakText(`${winningSuit} ${rankVoiceMap[winningRank] || winningRank}`);
+        }
 
         balance += roundPayout;
         updateUI();
         document.getElementById('status-msg').innerText = `Combo Hit: ${winningSuit} ${rankVoiceMap[winningRank] || winningRank}! Won $${roundPayout} (x${currentMultiplier})`;
 
-        // Step up progressive multiplier
         if (currentMultiplier === 1) setMultiplier(2);
         else if (currentMultiplier === 2) setMultiplier(3);
         else if (currentMultiplier === 3) setMultiplier(5);
@@ -589,14 +583,13 @@
         renderBoard();
         await new Promise(r => setTimeout(r, 1100));
 
-        // Cascading Drop - Refill top positions smoothly
         for (let c = 0; c < 5; c++) {
           gridData[c][0] = generateRandomCard(c);
         }
         renderBoard();
         await new Promise(r => setTimeout(r, 500));
 
-        evaluateCascadeWins(); // Chain cascades
+        evaluateCascadeWins();
       } else {
         document.getElementById('spin-btn').disabled = false;
       }
@@ -606,7 +599,6 @@
       document.getElementById('balance').innerText = balance;
     }
 
-    // Initialize board
     initBoard();
   </script>
 </body>

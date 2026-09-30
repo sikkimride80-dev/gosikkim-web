@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Try Your Luck - Real Cards & Slot Spins</title>
+  <title>Try Your Luck - Super Ace Edition</title>
   <style>
     :root {
-      --bg-color: #0b0f19;
-      --card-bg: rgba(23, 32, 54, 0.85);
-      --accent-gold: #ffb703;
+      --bg-color: #080c14;
+      --card-bg: rgba(20, 28, 48, 0.9);
+      --accent-gold: #ffd700;
       --accent-cyan: #00f0ff;
       --accent-red: #ff2a6d;
       --text-color: #e0e6ed;
-      --border-color: rgba(255, 255, 255, 0.15);
+      --border-color: rgba(255, 215, 0, 0.3);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', Roboto, sans-serif;
       user-select: none;
     }
 
@@ -29,7 +29,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 12px;
+      padding: 10px;
       min-height: 100vh;
     }
 
@@ -39,19 +39,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 20px;
+      padding: 12px 18px;
       background: var(--card-bg);
       border-radius: 12px;
       border: 1px solid var(--border-color);
-      margin-bottom: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      margin-bottom: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
     }
 
     h1 {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       color: var(--accent-gold);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
     }
 
     .bankroll {
@@ -65,613 +66,394 @@
       max-width: 900px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-    }
-
-    .di-panel {
-      background: var(--card-bg);
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      padding: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    .di-header {
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      letter-spacing: 1.5px;
-      color: #fff;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 8px;
-    }
-
-    .sectors-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .sector-box {
-      background: rgba(0,0,0,0.35);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .sector-title {
-      font-size: 0.9rem;
-      color: var(--accent-gold);
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    /* 3D REALISTIC CARDS DECK & ANIMATION */
-    .card-slot {
-      display: flex;
-      gap: 12px;
-      margin: 10px 0;
-      perspective: 1000px;
-    }
-
-    .card-container {
-      width: 60px;
-      height: 88px;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      cursor: pointer;
-    }
-
-    .card-container.flipped {
-      transform: rotateY(180deg);
-    }
-
-    .card-front, .card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 6px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 4px 6px;
-      font-weight: bold;
-      border: 1px solid #ccc;
-    }
-
-    .card-front {
-      background: #ffffff;
-      color: #111;
-      transform: rotateY(180deg);
-    }
-
-    .card-front.red { color: #d90429; }
-    .card-front.black { color: #111; }
-
-    .card-corner {
-      font-size: 0.75rem;
-      line-height: 0.85;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .card-corner.bottom {
-      transform: rotate(180deg);
-    }
-
-    .card-center-suit {
-      font-size: 1.5rem;
-      text-align: center;
-      align-self: center;
-    }
-
-    .card-back {
-      background: linear-gradient(135deg, #1d3557 25%, #457b9d 25%, #457b9d 50%, #1d3557 50%, #1d3557 75%, #457b9d 75%, #457b9d 100%);
-      background-size: 10px 10px;
-      border: 2px solid #fff;
-    }
-
-    /* CONTROLS */
-    .bet-controls {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 10px;
-    }
-
-    .btn-small {
-      background: #2b3a55;
-      color: #fff;
-      border: 1px solid var(--border-color);
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 1.1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .btn-small:active {
-      transform: scale(0.95);
-    }
-
-    /* CENTRAL CONTROL BOX */
-    .central-control {
-      background: rgba(0, 0, 0, 0.4);
-      border: 2px solid var(--accent-cyan);
-      border-radius: 10px;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       gap: 12px;
     }
 
-    .bet-status-banner {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: var(--accent-gold);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      background: rgba(255, 183, 3, 0.1);
-      padding: 8px 20px;
-      border-radius: 20px;
-      border: 1px solid var(--accent-gold);
-      width: 100%;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .action-buttons {
+    /* MULTIPLIER BAR */
+    .multiplier-bar {
       display: flex;
-      gap: 10px;
-      width: 100%;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-action {
-      padding: 10px 18px;
-      border-radius: 6px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.2s;
-    }
-
-    .btn-quit { background: var(--accent-red); color: white; }
-    .btn-lock { background: var(--accent-gold); color: black; }
-    .btn-confirm { background: #00b4d8; color: white; }
-
-    .btn-action:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
-
-    /* GAME 2 REALISTIC REEL SPINS */
-    .game2-panel {
-      background: var(--card-bg);
-      border-radius: 12px;
+      justify-content: space-around;
+      background: rgba(0, 0, 0, 0.6);
       border: 1px solid var(--border-color);
-      padding: 15px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    @media (max-width: 650px) {
-      .game2-panel {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .slot-machine-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      background: #000;
-      padding: 12px;
-      border-radius: 10px;
-      border: 2px solid var(--accent-gold);
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
-    }
-
-    .reel-window {
-      height: 180px;
-      background: #111726;
-      border-radius: 6px;
-      overflow: hidden;
-      position: relative;
-      border: 1px solid var(--border-color);
-    }
-
-    .reel-container {
-      position: absolute;
-      width: 100%;
-      top: 0;
-      transition: transform 2s cubic-bezier(0.15, 0.9, 0.25, 1);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .symbol-tile {
-      height: 90px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 2.8rem;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .payout-rules {
-      font-size: 0.85rem;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      justify-content: center;
-      background: rgba(0,0,0,0.25);
-      padding: 12px;
+      padding: 8px;
       border-radius: 8px;
     }
 
-    .rule-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .mult-step {
+      font-weight: bold;
+      color: #666;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
     }
 
-    .spin-btn {
-      width: 100%;
-      margin-top: 12px;
+    .mult-step.active {
+      color: var(--accent-gold);
+      transform: scale(1.2);
+      text-shadow: 0 0 12px var(--accent-gold);
+    }
+
+    /* SUPER ACE SLOT REELS GRID */
+    .super-ace-board {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 2px solid var(--accent-gold);
       padding: 12px;
-      background: linear-gradient(135deg, var(--accent-cyan), #00b4d8);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .reels-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+      width: 100%;
+      background: #000;
+      padding: 8px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .reel-col {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* CARD SYMBOL TILES */
+    .card-tile {
+      height: 72px;
+      background: #ffffff;
+      color: #111;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 4px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      position: relative;
+      transition: transform 0.2s, opacity 0.3s;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+    }
+
+    .card-tile.red { color: #d90429; }
+    .card-tile.black { color: #111; }
+
+    /* GOLDEN CARD EFFECT */
+    .card-tile.gold {
+      background: linear-gradient(135deg, #fff3b0 0%, #ffd700 50%, #e6a100 100%);
+      border: 2px solid #fff;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    }
+
+    /* WILD JOKER EFFECT */
+    .card-tile.wild {
+      background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%);
+      color: #fff !important;
+      border: 2px solid var(--accent-cyan);
+      box-shadow: 0 0 12px var(--accent-cyan);
+      text-align: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .tile-corner {
+      line-height: 0.8;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .tile-center {
+      text-align: center;
+      font-size: 1.3rem;
+      align-self: center;
+    }
+
+    /* CONTROLS */
+    .controls-panel {
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .bet-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.4);
+      padding: 8px 15px;
+      border-radius: 8px;
+    }
+
+    .btn-bet {
+      background: #2b3a55;
+      color: #fff;
+      border: 1px solid var(--border-color);
+      width: 35px;
+      height: 35px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .btn-spin {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
       color: #000;
       font-weight: bold;
+      font-size: 1.2rem;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 4px 15px rgba(0,240,255,0.3);
+      letter-spacing: 1.5px;
+      box-shadow: 0 4px 15px rgba(255,215,0,0.4);
     }
 
-    .spin-btn:disabled {
+    .btn-spin:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    .log-box {
-      font-size: 0.8rem;
-      color: #aaa;
-      margin-top: 5px;
-      min-height: 18px;
+    .status-msg {
       text-align: center;
+      font-size: 0.9rem;
+      color: var(--accent-gold);
+      min-height: 20px;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>TRY YOUR LUCK</h1>
+    <h1>SUPER ACE REELS</h1>
     <div class="bankroll">Balance: $<span id="balance">1000</span></div>
   </header>
 
   <div class="main-container">
     
-    <!-- DEALER INTERFACE (D.I.) -->
-    <div class="di-panel">
-      <div class="di-header">DEALER INTERFACE (D.I.)</div>
-      
-      <div class="sectors-grid">
-        <!-- SECTOR A -->
-        <div class="sector-box">
-          <div class="sector-title">SECTOR-A (PRE-BET)</div>
-          <div style="font-size: 0.75rem; color: #888;">3 CARD SLOT (D.I. Rule)</div>
-          <div class="card-slot" id="card-slot">
-            <!-- Rendered via JS -->
-          </div>
-          <div style="font-size: 0.85rem;">Total Bet: $<span id="sector-a-bet">0</span></div>
-          <div style="font-size: 0.7rem; color: #888;">MAX BET: 500</div>
-        </div>
+    <!-- MULTIPLIER BAR -->
+    <div class="multiplier-bar">
+      <span class="mult-step active" id="m1">x1</span>
+      <span class="mult-step" id="m2">x2</span>
+      <span class="mult-step" id="m3">x3</span>
+      <span class="mult-step" id="m5">x5</span>
+    </div>
 
-        <!-- SECTOR B -->
-        <div class="sector-box">
-          <div class="sector-title">SECTOR-B (MAIN BET)</div>
-          <div style="font-size: 0.8rem;">Payout Table: x2 - x10</div>
-          <div class="bet-controls">
-            <button class="btn-small" onclick="adjustBet('b', -10)">-</button>
-            <span>$<span id="sector-b-bet">0</span></span>
-            <button class="btn-small" onclick="adjustBet('b', 10)">+</button>
-          </div>
-        </div>
-
-        <!-- SECTOR C -->
-        <div class="sector-box">
-          <div class="sector-title">SECTOR-C (SIDE BETS)</div>
-          <div style="font-size: 0.8rem;">Payout Table: x5 - x50</div>
-          <div class="bet-controls">
-            <button class="btn-small" onclick="adjustBet('c', -10)">-</button>
-            <span>$<span id="sector-c-bet">0</span></span>
-            <button class="btn-small" onclick="adjustBet('c', 10)">+</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- CENTRAL CONTROL BOX -->
-      <div class="central-control">
-        <div class="bet-status-banner" id="status-banner">BET PLEASE</div>
-        <div class="action-buttons">
-          <button class="btn-action btn-quit" onclick="resetBets()">QUIT</button>
-          <button class="btn-action btn-lock" onclick="lockBets()">LOCK BET</button>
-          <button class="btn-action btn-confirm" onclick="confirmBet()">CONFIRM BET</button>
-        </div>
-        <div class="log-box" id="di-log">Adjust bets and press LOCK or CONFIRM.</div>
+    <!-- SUPER ACE BOARD (5 REELS x 3 ROWS) -->
+    <div class="super-ace-board">
+      <div class="reels-grid" id="reels-grid">
+        <!-- Rendered via JS -->
       </div>
     </div>
 
-    <!-- GAME - 2 -->
-    <div class="game2-panel">
-      <div>
-        <div class="sector-title" style="text-align: left; margin-bottom: 8px;">GAME - 2 (SLOT REELS)</div>
-        <div class="slot-machine-grid">
-          <div class="reel-window"><div class="reel-container" id="reel0"></div></div>
-          <div class="reel-window"><div class="reel-container" id="reel1"></div></div>
-          <div class="reel-window"><div class="reel-container" id="reel2"></div></div>
+    <!-- CONTROLS -->
+    <div class="controls-panel">
+      <div class="bet-bar">
+        <span>BET AMOUNT:</span>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button class="btn-bet" onclick="changeBet(-10)">-</button>
+          <span style="font-size: 1.2rem; font-weight: bold; color: var(--accent-gold);">$<span id="bet-display">20</span></span>
+          <button class="btn-bet" onclick="changeBet(10)">+</button>
         </div>
-        <button class="spin-btn" id="spin-btn" onclick="spinGame2()">Spin Game-2 ($20)</button>
       </div>
 
-      <div class="payout-rules">
-        <div class="sector-title" style="text-align: left;">PAYOUT RULES</div>
-        <div class="rule-item">⭐ <strong>x25</strong> (3 stars diagonal)</div>
-        <div class="rule-item">🔔 <strong>x7</strong> (3 bells same line: horiz/vert)</div>
-        <div class="rule-item">🦅 <strong>x2</strong> for wings</div>
-        <ul style="margin-left: 15px; font-size: 0.75rem; color: #aaa; margin-top: 5px;">
-          <li>Min Bet: 10 | Max Bet: 100</li>
-          <li>Bonus Round: Triggers on 3 Crested Wings (🦅)</li>
-          <li>Tie-Breaks: ♠ > ♥ > ♦ > ♣</li>
-        </ul>
-      </div>
+      <button class="btn-spin" id="spin-btn" onclick="spinSuperAce()">SPIN</button>
+      <div class="status-msg" id="status-msg">Press SPIN to start Super Ace Cards Reel!</div>
     </div>
 
   </div>
 
   <script>
     let balance = 1000;
-    let betA = 0, betB = 0, betC = 0;
-    let isLocked = false;
+    let currentBet = 20;
+    let currentMultiplier = 1;
 
-    const suits = [{ s: '♥', c: 'red' }, { s: '♠', c: 'black' }, { s: '♦', c: 'red' }, { s: '♣', c: 'black' }];
-    const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7'];
+    const ranks = ['10', 'J', 'Q', 'K', 'A'];
+    const suits = [
+      { s: '♠', c: 'black' },
+      { s: '♥', c: 'red' },
+      { s: '♦', c: 'red' },
+      { s: '♣', c: 'black' }
+    ];
 
-    // Render 3 Card Slot Containers
-    function initCards() {
-      const cardSlot = document.getElementById('card-slot');
-      cardSlot.innerHTML = '';
-      for (let i = 0; i < 3; i++) {
-        cardSlot.innerHTML += `
-          <div class="card-container" id="card-${i}" onclick="flipCard(${i})">
-            <div class="card-back"></div>
-            <div class="card-front red" id="card-front-${i}">
-              <div class="card-corner"><span id="c-rank-t-${i}">Q</span><span id="c-suit-t-${i}">♥</span></div>
-              <div class="card-center-suit" id="c-suit-m-${i}">♥</div>
-              <div class="card-corner bottom"><span id="c-rank-b-${i}">Q</span><span id="c-suit-b-${i}">♥</span></div>
-            </div>
-          </div>
-        `;
-      }
-      dealNewHand();
-    }
+    let gridData = [];
 
-    function dealNewHand() {
-      for (let i = 0; i < 3; i++) {
-        const cardEl = document.getElementById(`card-${i}`);
-        cardEl.classList.remove('flipped');
+    function initBoard() {
+      const gridEl = document.getElementById('reels-grid');
+      gridEl.innerHTML = '';
+      gridData = [];
+
+      for (let c = 0; c < 5; c++) {
+        const colEl = document.createElement('div');
+        colEl.className = 'reel-col';
+        colEl.id = `col-${c}`;
         
-        setTimeout(() => {
-          const suitObj = suits[Math.floor(Math.random() * suits.length)];
-          const rank = ranks[Math.floor(Math.random() * ranks.length)];
-          const frontEl = document.getElementById(`card-front-${i}`);
-
-          frontEl.className = `card-front ${suitObj.c}`;
-          document.getElementById(`c-rank-t-${i}`).innerText = rank;
-          document.getElementById(`c-suit-t-${i}`).innerText = suitObj.s;
-          document.getElementById(`c-suit-m-${i}`).innerText = suitObj.s;
-          document.getElementById(`c-rank-b-${i}`).innerText = rank;
-          document.getElementById(`c-suit-b-${i}`).innerText = suitObj.s;
-
-          cardEl.classList.add('flipped');
-        }, 300 + (i * 200));
-      }
-    }
-
-    function flipCard(idx) {
-      const cardEl = document.getElementById(`card-${idx}`);
-      cardEl.classList.toggle('flipped');
-    }
-
-    function adjustBet(sector, amount) {
-      if (isLocked) {
-        document.getElementById('di-log').innerText = 'Bets are locked! Reset or proceed.';
-        return;
-      }
-
-      if (sector === 'b') {
-        if (betB + amount >= 0 && (betA + betB + betC + amount) <= 500) {
-          betB += amount;
+        const colData = [];
+        for (let r = 0; r < 3; r++) {
+          const card = generateRandomCard(c);
+          colData.push(card);
         }
-      } else if (sector === 'c') {
-        if (betC + amount >= 0 && (betA + betB + betC + amount) <= 500) {
-          betC += amount;
-        }
+        gridData.push(colData);
+        gridEl.appendChild(colEl);
       }
-      betA = Math.min(100, (betB + betC) / 2);
-      updateUI();
+      renderBoard();
     }
 
-    function updateUI() {
-      document.getElementById('balance').innerText = balance;
-      document.getElementById('sector-a-bet').innerText = betA;
-      document.getElementById('sector-b-bet').innerText = betB;
-      document.getElementById('sector-c-bet').innerText = betC;
-    }
-
-    function resetBets() {
-      betA = 0; betB = 0; betC = 0;
-      isLocked = false;
-      document.getElementById('status-banner').innerText = 'BET PLEASE';
-      document.getElementById('di-log').innerText = 'Bets reset to $0.';
-      dealNewHand();
-      updateUI();
-    }
-
-    function lockBets() {
-      if (betA + betB + betC === 0) {
-        document.getElementById('di-log').innerText = 'Place a bet before locking!';
-        return;
-      }
-      isLocked = true;
-      document.getElementById('status-banner').innerText = 'BET LOCKED';
-      document.getElementById('di-log').innerText = 'Bets locked. Click CONFIRM BET to execute.';
-    }
-
-    function confirmBet() {
-      if (!isLocked && (betA + betB + betC > 0)) {
-        lockBets();
-      }
-      
-      const totalBet = betA + betB + betC;
-      if (totalBet === 0) {
-        document.getElementById('di-log').innerText = 'No bets placed to confirm!';
-        return;
+    function generateRandomCard(colIdx) {
+      const isWild = Math.random() < 0.05;
+      if (isWild) {
+        return { rank: 'WILD', suit: '🃏', color: 'wild', isGold: false, isWild: true };
       }
 
-      if (balance < totalBet) {
-        document.getElementById('di-log').innerText = 'Insufficient balance!';
-        return;
-      }
+      const rank = ranks[Math.floor(Math.random() * ranks.length)];
+      const suitObj = suits[Math.floor(Math.random() * suits.length)];
+      // Golden cards appear mostly on reels 2, 3, 4
+      const isGold = (colIdx >= 1 && colIdx <= 3) && Math.random() < 0.25;
 
-      balance -= totalBet;
-      document.getElementById('status-banner').innerText = 'PROCESSING...';
-      
-      setTimeout(() => {
-        const win = Math.random() > 0.45;
-        if (win) {
-          const payout = totalBet * 2;
-          balance += payout;
-          document.getElementById('status-banner').innerText = 'WINNER!';
-          document.getElementById('di-log').innerText = `Subroutine executed. Won $${payout}!`;
-        } else {
-          document.getElementById('status-banner').innerText = 'NO WIN';
-          document.getElementById('di-log').innerText = `Subroutine executed. Lost $${totalBet}.`;
-        }
-        isLocked = false;
-        updateUI();
-      }, 1000);
+      return {
+        rank: rank,
+        suit: suitObj.s,
+        color: suitObj.c,
+        isGold: isGold,
+        isWild: false
+      };
     }
 
-    // GAME-2 SLOT REELS SYSTEM
-    const slotSymbols = ['⭐', '🔔', '🦅', '💎', '7️⃣'];
-
-    function initReels() {
-      for (let r = 0; r < 3; r++) {
-        const reelEl = document.getElementById(`reel${r}`);
-        reelEl.innerHTML = '';
-        // Build initial strip of 20 symbols
-        for (let i = 0; i < 20; i++) {
-          const sym = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
-          reelEl.innerHTML += `<div class="symbol-tile">${sym}</div>`;
+    function renderBoard() {
+      for (let c = 0; c < 5; c++) {
+        const colEl = document.getElementById(`col-${c}`);
+        colEl.innerHTML = '';
+        for (let r = 0; r < 3; r++) {
+          const item = gridData[c][r];
+          const tile = document.createElement('div');
+          
+          if (item.isWild) {
+            tile.className = 'card-tile wild';
+            tile.innerHTML = `<div>🃏<br>WILD</div>`;
+          } else {
+            tile.className = `card-tile ${item.color} ${item.isGold ? 'gold' : ''}`;
+            tile.innerHTML = `
+              <div class="tile-corner">${item.rank}<span>${item.suit}</span></div>
+              <div class="tile-center">${item.suit}</div>
+            `;
+          }
+          colEl.appendChild(tile);
         }
       }
     }
 
-    function spinGame2() {
-      const cost = 20;
-      if (balance < cost) {
-        alert('Not enough balance to spin Game-2!');
+    function changeBet(amt) {
+      if (currentBet + amt >= 10 && currentBet + amt <= 500) {
+        currentBet += amt;
+        document.getElementById('bet-display').innerText = currentBet;
+      }
+    }
+
+    function setMultiplier(val) {
+      currentMultiplier = val;
+      document.querySelectorAll('.mult-step').forEach(el => el.classList.remove('active'));
+      if (val === 1) document.getElementById('m1').classList.add('active');
+      if (val === 2) document.getElementById('m2').classList.add('active');
+      if (val === 3) document.getElementById('m3').classList.add('active');
+      if (val >= 5) document.getElementById('m5').classList.add('active');
+    }
+
+    async function spinSuperAce() {
+      if (balance < currentBet) {
+        alert("Insufficient balance!");
         return;
       }
 
-      balance -= cost;
+      balance -= currentBet;
       updateUI();
 
       const spinBtn = document.getElementById('spin-btn');
       spinBtn.disabled = true;
+      setMultiplier(1);
+      document.getElementById('status-msg').innerText = "Spinning card reels...";
 
-      const finalGrid = [];
-
-      for (let r = 0; r < 3; r++) {
-        const reelEl = document.getElementById(`reel${r}`);
-        const symbolTiles = [];
-        for (let i = 0; i < 20; i++) {
-          symbolTiles.push(slotSymbols[Math.floor(Math.random() * slotSymbols.length)]);
+      // Rolling Animation Effect
+      for (let i = 0; i < 6; i++) {
+        for (let c = 0; c < 5; c++) {
+          for (let r = 0; r < 3; r++) {
+            gridData[c][r] = generateRandomCard(c);
+          }
         }
-
-        // Render fresh strip
-        reelEl.style.transition = 'none';
-        reelEl.style.transform = 'translateY(0px)';
-        reelEl.innerHTML = symbolTiles.map(s => `<div class="symbol-tile">${s}</div>`).join('');
-
-        // Spin reel downwards
-        setTimeout(() => {
-          reelEl.style.transition = `transform ${1.5 + r * 0.5}s cubic-bezier(0.15, 0.9, 0.25, 1)`;
-          reelEl.style.transform = `translateY(-${18 * 90}px)`;
-        }, 50);
-
-        finalGrid.push(symbolTiles[18]);
-        finalGrid.push(symbolTiles[19]);
+        renderBoard();
+        await new Promise(r => setTimeout(r, 80));
       }
 
-      setTimeout(() => {
-        spinBtn.disabled = false;
-        // Evaluate outcomes
-        let winAmount = 0;
-        let logMsg = [];
-
-        if ((finalGrid[0] === '⭐' && finalGrid[4] === '⭐') || (finalGrid[2] === '⭐' && finalGrid[4] === '⭐')) {
-          winAmount += cost * 25;
-          logMsg.push('Star Diagonal (x25)!');
-        }
-
-        if ((finalGrid[0] === '🔔' && finalGrid[2] === '🔔' && finalGrid[4] === '🔔')) {
-          winAmount += cost * 7;
-          logMsg.push('Bell Line (x7)!');
-        }
-
-        const wingCount = finalGrid.filter(s => s === '🦅').length;
-        if (wingCount >= 3) {
-          winAmount += cost * 2;
-          logMsg.push('BONUS ROUND ACTIVATED (3 Wings)!');
-        }
-
-        if (winAmount > 0) {
-          balance += winAmount;
-          document.getElementById('di-log').innerText = `Game-2 Win: +$${winAmount}! ${logMsg.join(' ')}`;
-        } else {
-          document.getElementById('di-log').innerText = 'Game-2: Spin finished.';
-        }
-        updateUI();
-      }, 2600);
+      evaluateCascadeWins();
     }
 
-    // Init
-    initCards();
-    initReels();
+    async function evaluateCascadeWins() {
+      let winFound = false;
+      let roundPayout = 0;
+
+      // Check simple matching paylines across adjacent reels
+      for (let r = 0; r < 3; r++) {
+        const baseRank = gridData[0][r].rank;
+        let matchCount = 1;
+
+        for (let c = 1; c < 5; c++) {
+          const currentCard = gridData[c][r];
+          if (currentCard.rank === baseRank || currentCard.isWild) {
+            matchCount++;
+          } else {
+            break;
+          }
+        }
+
+        if (matchCount >= 3) {
+          winFound = true;
+          const payout = currentBet * matchCount * currentMultiplier;
+          roundPayout += payout;
+
+          // Flip Golden cards in winning payline into Wilds
+          for (let c = 0; c < matchCount; c++) {
+            if (gridData[c][r].isGold) {
+              gridData[c][r] = { rank: 'WILD', suit: '🃏', color: 'wild', isGold: false, isWild: true };
+            }
+          }
+        }
+      }
+
+      if (winFound) {
+        balance += roundPayout;
+        updateUI();
+        document.getElementById('status-msg').innerText = `Combo Hit! Won $${roundPayout} (Multiplier: x${currentMultiplier})`;
+
+        // Step up multiplier
+        if (currentMultiplier === 1) setMultiplier(2);
+        else if (currentMultiplier === 2) setMultiplier(3);
+        else if (currentMultiplier === 3) setMultiplier(5);
+
+        renderBoard();
+        await new Promise(r => setTimeout(r, 1000));
+        evaluateCascadeWins(); // Trigger cascade check again
+      } else {
+        document.getElementById('status-msg').innerText = roundPayout > 0 ? "Cascades completed!" : "No winning lines.";
+        document.getElementById('spin-btn').disabled = false;
+      }
+    }
+
+    function updateUI() {
+      document.getElementById('balance').innerText = balance;
+    }
+
+    // Initialize initial Super Ace card board
+    initBoard();
   </script>
 </body>
 </html>

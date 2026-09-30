@@ -1,657 +1,267 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Try Your Luck - Super Ace Free Spins Edition</title>
-  <style>
-    :root {
-      --bg-color: #080c14;
-      --card-bg: rgba(20, 28, 48, 0.9);
-      --accent-gold: #ffd700;
-      --accent-cyan: #00f0ff;
-      --accent-purple: #9d4edd;
-      --accent-red: #ff2a6d;
-      --text-color: #e0e6ed;
-      --border-color: rgba(255, 215, 0, 0.3);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-      user-select: none;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px;
-      min-height: 100vh;
-    }
-
-    header {
-      width: 100%;
-      max-width: 900px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 18px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      margin-bottom: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-    }
-
-    h1 {
-      font-size: 1.2rem;
-      color: var(--accent-gold);
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-    }
-
-    .bankroll {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: var(--accent-cyan);
-    }
-
-    .main-container {
-      width: 100%;
-      max-width: 900px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    /* MULTIPLIER BAR */
-    .multiplier-bar {
-      display: flex;
-      justify-content: space-around;
-      background: rgba(0, 0, 0, 0.6);
-      border: 1px solid var(--border-color);
-      padding: 8px;
-      border-radius: 8px;
-    }
-
-    .mult-step {
-      font-weight: bold;
-      color: #666;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-    }
-
-    .mult-step.active {
-      color: var(--accent-gold);
-      transform: scale(1.25);
-      text-shadow: 0 0 12px var(--accent-gold);
-    }
-
-    /* FREE SPINS DISPLAY HUD */
-    .fs-hud {
-      display: none;
-      background: linear-gradient(90deg, #7928ca, #ff007f);
-      border: 2px solid var(--accent-gold);
-      border-radius: 8px;
-      padding: 8px 16px;
-      text-align: center;
-      font-weight: bold;
-      color: #fff;
-      font-size: 1.1rem;
-      letter-spacing: 1px;
-      box-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
-    }
-
-    /* SUPER ACE SLOT REELS GRID */
-    .super-ace-board {
-      background: var(--card-bg);
-      border-radius: 12px;
-      border: 2px solid var(--accent-gold);
-      padding: 12px;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .reels-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      width: 100%;
-      background: #000;
-      padding: 8px;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .reel-col {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    /* CARD SYMBOL TILES */
-    .card-tile {
-      height: 72px;
-      background: #ffffff;
-      color: #111;
-      border-radius: 6px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 4px;
-      font-weight: bold;
-      font-size: 0.85rem;
-      position: relative;
-      transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.4);
-    }
-
-    .card-tile.red { color: #d90429; }
-    .card-tile.black { color: #111; }
-
-    /* GOLDEN CARD EFFECT */
-    .card-tile.gold {
-      background: linear-gradient(135deg, #fff3b0 0%, #ffd700 50%, #e6a100 100%);
-      border: 2px solid #fff;
-      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-    }
-
-    /* WILD JOKER EFFECT */
-    .card-tile.wild {
-      background: linear-gradient(135deg, #ff007f 0%, #7928ca 100%);
-      color: #fff !important;
-      border: 2px solid var(--accent-cyan);
-      box-shadow: 0 0 12px var(--accent-cyan);
-      text-align: center;
-      justify-content: center;
-      font-size: 1rem;
-    }
-
-    /* SCATTER SYMBOL EFFECT */
-    .card-tile.scatter {
-      background: linear-gradient(135deg, #9d4edd 0%, #3a0ca3 100%);
-      color: #ffd700 !important;
-      border: 2px solid #ffb703;
-      box-shadow: 0 0 15px #9d4edd;
-      text-align: center;
-      justify-content: center;
-      font-size: 0.9rem;
-      animation: scatterPulse 1.2s infinite alternate;
-    }
-
-    @keyframes scatterPulse {
-      0% { transform: scale(0.98); box-shadow: 0 0 8px #9d4edd; }
-      100% { transform: scale(1.04); box-shadow: 0 0 18px #ffb703; }
-    }
-
-    .tile-corner {
-      line-height: 0.8;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .tile-center {
-      text-align: center;
-      font-size: 1.3rem;
-      align-self: center;
-    }
-
-    /* CONTROLS */
-    .controls-panel {
-      width: 100%;
-      background: var(--card-bg);
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .bet-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0,0,0,0.4);
-      padding: 8px 15px;
-      border-radius: 8px;
-    }
-
-    .btn-bet {
-      background: #2b3a55;
-      color: #fff;
-      border: 1px solid var(--border-color);
-      width: 35px;
-      height: 35px;
-      border-radius: 6px;
-      font-weight: bold;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .btn-spin {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #ffd700, #ff8c00);
-      color: #000;
-      font-weight: bold;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      box-shadow: 0 4px 15px rgba(255,215,0,0.4);
-    }
-
-    .btn-spin:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .status-msg {
-      text-align: center;
-      font-size: 0.9rem;
-      color: var(--accent-gold);
-      min-height: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoSikkim-Web | Business Growth Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Razorpay Checkout SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-  <header>
-    <h1>SUPER ACE REELS</h1>
-    <div class="bankroll">Balance: $<span id="balance">1000</span></div>
-  </header>
-
-  <div class="main-container">
-    
-    <!-- FREE SPINS COUNTER HUD -->
-    <div class="fs-hud" id="fs-hud">
-      🔥 FREE SPINS REMAINING: <span id="fs-count">10</span>
-    </div>
-
-    <!-- MULTIPLIER BAR -->
-    <div class="multiplier-bar">
-      <span class="mult-step active" id="m1">x1</span>
-      <span class="mult-step" id="m2">x2</span>
-      <span class="mult-step" id="m3">x3</span>
-      <span class="mult-step" id="m5">x5</span>
-    </div>
-
-    <!-- SUPER ACE BOARD (5 REELS x 3 ROWS) -->
-    <div class="super-ace-board">
-      <div class="reels-grid" id="reels-grid">
-        <!-- Rendered via JS -->
-      </div>
-    </div>
-
-    <!-- CONTROLS -->
-    <div class="controls-panel">
-      <div class="bet-bar" id="bet-bar">
-        <span>BET AMOUNT:</span>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <button class="btn-bet" id="btn-minus" onclick="changeBet(-10)">-</button>
-          <span style="font-size: 1.2rem; font-weight: bold; color: var(--accent-gold);">$<span id="bet-display">20</span></span>
-          <button class="btn-bet" id="btn-plus" onclick="changeBet(10)">+</button>
+    <!-- Navigation Header -->
+    <header class="bg-emerald-700 text-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid fa-[#10B981] fa-mountain-sun text-2xl text-emerald-300"></i>
+                <h1 class="text-xl font-bold tracking-wide">GoSikkim-Web</h1>
+            </div>
+            <div class="text-xs bg-emerald-800 px-3 py-1 rounded-full text-emerald-200 border border-emerald-600 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                Razorpay Live Active
+            </div>
         </div>
-      </div>
+    </header>
 
-      <button class="btn-spin" id="spin-btn" onclick="spinSuperAce()">SPIN</button>
-      <div class="status-msg" id="status-msg">Press SPIN to start Super Ace Cards Reel!</div>
-    </div>
-
-  </div>
-
-  <script>
-    let balance = 1000;
-    let currentBet = 20;
-    let currentMultiplier = 1;
-    let freeSpinsRemaining = 0;
-    let isFreeSpinsActive = false;
-
-    const ranks = ['2', '3', '10', 'J', 'Q', 'K', 'A'];
-    
-    const suits = [
-      { s: '♠', c: 'black', name: 'Spade' },
-      { s: '♥', c: 'red', name: 'Heart' },
-      { s: '♦', c: 'red', name: 'Diamond' },
-      { s: '♣', c: 'black', name: 'Club' }
-    ];
-
-    const rankVoiceMap = {
-      '2': 'Two',
-      '3': 'Three',
-      '10': 'Ten',
-      'J': 'Jack',
-      'Q': 'Queen',
-      'K': 'King',
-      'A': 'Ace'
-    };
-
-    let gridData = [];
-
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    function speakText(text) {
-      if ('speechSynthesis' in window) {
-        if (!window.speechSynthesis.speaking) {
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.rate = 1.2;
-          utterance.pitch = 1.1;
-          window.speechSynthesis.speak(utterance);
-        }
-      }
-    }
-
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      const now = audioCtx.currentTime;
-
-      if (type === 'spin') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(60, now + 0.1);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.1);
-        osc.start(now);
-        osc.stop(now + 0.1);
-      } else if (type === 'win') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(440, now);
-        osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
-        osc.start(now);
-        osc.stop(now + 0.25);
-      } else if (type === 'wild') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(600, now);
-        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.3);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
-      } else if (type === 'scatter') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.linearRampToValueAtTime(900, now + 0.4);
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
-        osc.start(now);
-        osc.stop(now + 0.4);
-      }
-    }
-
-    function initBoard() {
-      const gridEl = document.getElementById('reels-grid');
-      gridEl.innerHTML = '';
-      gridData = [];
-
-      for (let c = 0; c < 5; c++) {
-        const colEl = document.createElement('div');
-        colEl.className = 'reel-col';
-        colEl.id = `col-${c}`;
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 md:grid-cols-3 gap-8">
         
-        const colData = [];
-        for (let r = 0; r < 3; r++) {
-          const card = generateRandomCard(c);
-          colData.push(card);
-        }
-        gridData.push(colData);
-        gridEl.appendChild(colEl);
-      }
-      renderBoard();
-    }
+        <!-- Left Sidebar: Actions & Payments -->
+        <section class="md:col-span-1 space-y-6">
+            
+            <!-- Payment Processing Card -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-credit-card text-emerald-600"></i> Accept Quick Payment
+                </h2>
+                <form id="paymentForm" onsubmit="triggerRazorpay(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Customer Name</label>
+                        <input type="text" id="custName" required placeholder="e.g. Tashi Bhutia" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Phone / WhatsApp</label>
+                        <input type="tel" id="custPhone" required placeholder="e.g. 9800012345" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Amount (₹)</label>
+                        <input type="number" id="payAmount" min="1" required placeholder="100" value="100" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Service Note</label>
+                        <input type="text" id="serviceNote" placeholder="e.g. Homestay Booking / Tour" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-[#10B981] fa-qrcode"></i> Pay via UPI / Cards
+                    </button>
+                </form>
+            </div>
 
-    function generateRandomCard(colIdx) {
-      const isScatter = Math.random() < 0.08;
-      if (isScatter) {
-        return { rank: 'SCATTER', suit: '👑', color: 'scatter', suitName: 'Scatter', isGold: false, isWild: false, isScatter: true };
-      }
+            <!-- Review Link Generator Card -->
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-star text-amber-500"></i> Google Review Automation
+                </h2>
+                <p class="text-xs text-gray-500 mb-4">Send an automated WhatsApp message to your customers requesting a 5-star Google review.</p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Your Google Review Link</label>
+                        <input type="url" id="googleReviewUrl" placeholder="https://g.page/r/your-google-business-id/review" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-600 mb-1">Customer Phone Number</label>
+                        <input type="tel" id="reviewPhone" placeholder="9800012345" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                    </div>
+                    <button onclick="sendWhatsAppReview()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg text-sm transition flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Request Review on WhatsApp
+                    </button>
+                </div>
+            </div>
 
-      const isWild = Math.random() < 0.05;
-      if (isWild) {
-        return { rank: 'WILD', suit: '🃏', color: 'wild', suitName: 'Wild', isGold: false, isWild: true, isScatter: false };
-      }
+        </section>
 
-      const rank = ranks[Math.floor(Math.random() * ranks.length)];
-      const suitObj = suits[Math.floor(Math.random() * suits.length)];
-      const isGold = (colIdx >= 1 && colIdx <= 3) && Math.random() < 0.25;
+        <!-- Right Side: Recent Transactions & Client Log -->
+        <section class="md:col-span-2">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i> Recent Payment Transactions
+                    </h2>
+                    <button onclick="clearHistory()" class="text-xs text-red-500 hover:underline">Clear History</button>
+                </div>
 
-      return {
-        rank: rank,
-        suit: suitObj.s,
-        color: suitObj.c,
-        suitName: suitObj.name,
-        isGold: isGold,
-        isWild: false,
-        isScatter: false
-      };
-    }
+                <div class="overflow-x-auto flex-grow">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider">
+                                <th class="pb-3">Customer</th>
+                                <th class="pb-3">Amount</th>
+                                <th class="pb-3">Payment ID</th>
+                                <th class="pb-3">Status</th>
+                                <th class="pb-3 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="txTableBody" class="divide-y divide-gray-100 text-sm">
+                            <tr id="emptyRow">
+                                <td colspan="5" class="py-8 text-center text-gray-400 text-xs">
+                                    No live transactions completed yet. Payments will automatically log here.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
 
-    function renderBoard() {
-      for (let c = 0; c < 5; c++) {
-        const colEl = document.getElementById(`col-${c}`);
-        colEl.innerHTML = '';
-        for (let r = 0; r < 3; r++) {
-          const item = gridData[c][r];
-          const tile = document.createElement('div');
-          
-          if (item.isScatter) {
-            tile.className = 'card-tile scatter';
-            tile.innerHTML = `<div>👑<br>SCATTER</div>`;
-          } else if (item.isWild) {
-            tile.className = 'card-tile wild';
-            tile.innerHTML = `<div>🃏<br>WILD</div>`;
-          } else {
-            tile.className = `card-tile ${item.color} ${item.isGold ? 'gold' : ''}`;
-            tile.innerHTML = `
-              <div class="tile-corner">${item.rank}<span>${item.suit}</span></div>
-              <div class="tile-center">${item.suit}</div>
-            `;
-          }
-          colEl.appendChild(tile);
-        }
-      }
-    }
+    </main>
 
-    function changeBet(amt) {
-      if (isFreeSpinsActive) return; // Prevent bet change during Free Spins
-      if (currentBet + amt >= 10 && currentBet + amt <= 500) {
-        currentBet += amt;
-        document.getElementById('bet-display').innerText = currentBet;
-      }
-    }
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-4 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-gray-500">
+            Powered by <strong>GoSikkim-Web</strong> • Built for Local Businesses in Gangtok, Sikkim
+        </div>
+    </footer>
 
-    function setMultiplier(val) {
-      currentMultiplier = val;
-      document.querySelectorAll('.mult-step').forEach(el => el.classList.remove('active'));
-      if (val === 1) document.getElementById('m1').classList.add('active');
-      if (val === 2) document.getElementById('m2').classList.add('active');
-      if (val === 3) document.getElementById('m3').classList.add('active');
-      if (val >= 5) document.getElementById('m5').classList.add('active');
-    }
+    <!-- Application Script -->
+    <script>
+        // Live Razorpay API Key pre-configured
+        const RAZORPAY_KEY_ID = 'rzp_live_TiN6t3iQ0poa9O';
 
-    async function spinSuperAce() {
-      // Free Spins deduction logic: deduct ONLY if not in Free Spins mode
-      if (!isFreeSpinsActive) {
-        if (balance < currentBet) {
-          alert("Insufficient balance!");
-          return;
-        }
-        balance -= currentBet;
-        updateUI();
-      } else {
-        // Decrement free spins count
-        freeSpinsRemaining--;
-        document.getElementById('fs-count').innerText = freeSpinsRemaining;
-      }
+        // Load transaction history from LocalStorage
+        let transactions = JSON.parse(localStorage.getItem('gosikkim_txs') || '[]');
 
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-      }
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+        });
 
-      const spinBtn = document.getElementById('spin-btn');
-      spinBtn.disabled = true;
-      setMultiplier(1);
+        // Trigger Razorpay Payment Checkout
+        function triggerRazorpay(event) {
+            event.preventDefault();
 
-      document.getElementById('status-msg').innerText = isFreeSpinsActive 
-        ? `Free Spin (${10 - freeSpinsRemaining}/10) in progress...` 
-        : "Spinning card reels...";
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const amount = document.getElementById('payAmount').value;
+            const note = document.getElementById('serviceNote').value.trim() || 'Service Charge';
 
-      for (let i = 0; i < 7; i++) {
-        playSound('spin');
-        for (let c = 0; c < 5; c++) {
-          for (let r = 0; r < 3; r++) {
-            gridData[c][r] = generateRandomCard(c);
-          }
-        }
-        renderBoard();
-        await new Promise(r => setTimeout(r, 90));
-      }
-
-      const scatterTriggered = checkScatterTrigger();
-      await evaluateCascadeWins();
-
-      // Automatically auto-trigger next free spin if remaining
-      if (isFreeSpinsActive) {
-        if (freeSpinsRemaining > 0) {
-          await new Promise(r => setTimeout(r, 1000));
-          spinSuperAce();
-        } else {
-          // Free spins completed, return to normal paid mode
-          isFreeSpinsActive = false;
-          document.getElementById('fs-hud').style.display = 'none';
-          document.getElementById('btn-minus').disabled = false;
-          document.getElementById('btn-plus').disabled = false;
-          document.getElementById('status-msg').innerText = "Free Spins Bonus Finished! Regular paid spins resumed.";
-          spinBtn.disabled = false;
-        }
-      } else {
-        spinBtn.disabled = false;
-      }
-    }
-
-    function checkScatterTrigger() {
-      let scatterCount = 0;
-      for (let c = 0; c < 5; c++) {
-        for (let r = 0; r < 3; r++) {
-          if (gridData[c][r].isScatter) scatterCount++;
-        }
-      }
-
-      if (scatterCount >= 3) {
-        playSound('scatter');
-        speakText("Free Spins Bonus Activated!");
-
-        // Set free spins count to 10
-        freeSpinsRemaining = 10;
-        isFreeSpinsActive = true;
-
-        // Display Free Spins HUD
-        document.getElementById('fs-count').innerText = freeSpinsRemaining;
-        document.getElementById('fs-hud').style.display = 'block';
-        document.getElementById('btn-minus').disabled = true;
-        document.getElementById('btn-plus').disabled = true;
-
-        document.getElementById('status-msg').innerText = `🔥 3 SCATTERS HIT! 10 FREE SPINS ACTIVATED!`;
-        return true;
-      }
-      return false;
-    }
-
-    async function evaluateCascadeWins() {
-      let winFound = false;
-      let roundPayout = 0;
-      let winningSuit = '';
-      let winningRank = '';
-
-      for (let r = 0; r < 3; r++) {
-        const baseCard = gridData[0][r];
-        if (baseCard.isScatter) continue;
-
-        const baseRank = baseCard.rank;
-        let matchCount = 1;
-
-        for (let c = 1; c < 5; c++) {
-          const currentCard = gridData[c][r];
-          if (currentCard.rank === baseRank || currentCard.isWild) {
-            matchCount++;
-          } else {
-            break;
-          }
-        }
-
-        if (matchCount >= 3) {
-          winFound = true;
-          const payout = currentBet * matchCount * currentMultiplier;
-          roundPayout += payout;
-          
-          winningSuit = baseCard.suitName || 'Heart';
-          winningRank = baseCard.rank;
-
-          for (let c = 0; c < matchCount; c++) {
-            if (gridData[c][r].isGold) {
-              playSound('wild');
-              gridData[c][r] = { 
-                rank: 'WILD', suit: '🃏', color: 'wild', 
-                suitName: 'Wild', isGold: false, isWild: true, isScatter: false 
-              };
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid payment amount.');
+                return;
             }
-          }
+
+            const options = {
+                "key": RAZORPAY_KEY_ID,
+                "amount": (parseFloat(amount) * 100).toString(), // Convert INR to Paise
+                "currency": "INR",
+                "name": "Gosikkim-Web",
+                "description": note,
+                "prefill": {
+                    "name": name,
+                    "contact": phone
+                },
+                "theme": {
+                    "color": "#047857" // Emerald Green accent
+                },
+                "handler": function (response) {
+                    saveTransaction({
+                        id: response.razorpay_payment_id,
+                        name: name,
+                        phone: phone,
+                        amount: amount,
+                        note: note,
+                        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        status: 'Success'
+                    });
+                    alert('Payment successful! Transaction ID: ' + response.razorpay_payment_id);
+                    document.getElementById('paymentForm').reset();
+                }
+            };
+
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response){
+                alert('Payment failed: ' + response.error.description);
+            });
+            rzp.open();
         }
-      }
 
-      if (winFound) {
-        playSound('win');
-        speakText(`${winningSuit} ${rankVoiceMap[winningRank] || winningRank}`);
-
-        // Accumulate winnings straight to balance account
-        balance += roundPayout;
-        updateUI();
-
-        document.getElementById('status-msg').innerText = `Combo Hit: ${winningSuit} ${rankVoiceMap[winningRank] || winningRank}! Won $${roundPayout} (x${currentMultiplier})`;
-
-        if (currentMultiplier === 1) setMultiplier(2);
-        else if (currentMultiplier === 2) setMultiplier(3);
-        else if (currentMultiplier === 3) setMultiplier(5);
-
-        renderBoard();
-        await new Promise(r => setTimeout(r, 1100));
-
-        for (let c = 0; c < 5; c++) {
-          gridData[c][0] = generateRandomCard(c);
+        // Save Completed Payment to Local Storage
+        function saveTransaction(tx) {
+            transactions.unshift(tx);
+            localStorage.setItem('gosikkim_txs', JSON.stringify(transactions));
+            renderTable();
         }
-        renderBoard();
-        await new Promise(r => setTimeout(r, 500));
 
-        await evaluateCascadeWins();
-      }
-    }
+        // Render Transaction List in Dashboard
+        function renderTable() {
+            const tbody = document.getElementById('txTableBody');
+            if (transactions.length === 0) {
+                tbody.innerHTML = `
+                    <tr id="emptyRow">
+                        <td colspan="5" class="py-8 text-center text-gray-400 text-xs">
+                            No live transactions completed yet. Payments will automatically log here.
+                        </td>
+                    </tr>`;
+                return;
+            }
 
-    function updateUI() {
-      document.getElementById('balance').innerText = balance;
-    }
+            tbody.innerHTML = transactions.map(tx => `
+                <tr class="hover:bg-gray-50">
+                    <td class="py-3 font-medium text-gray-900">
+                        ${tx.name}
+                        <div class="text-xs text-gray-400 font-normal">${tx.phone}</div>
+                    </td>
+                    <td class="py-3 font-semibold text-emerald-700">₹${tx.amount}</td>
+                    <td class="py-3 text-xs font-mono text-gray-500">${tx.id}</td>
+                    <td class="py-3">
+                        <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">Success</span>
+                    </td>
+                    <td class="py-3 text-right">
+                        <button onclick="sendWhatsAppReceipt('${tx.phone}', '${tx.name}', '${tx.amount}', '${tx.id}')" class="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded hover:bg-green-100 transition">
+                            <i class="fa-brands fa-whatsapp"></i> Receipt
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
-    initBoard();
-  </script>
+        // Clear Transaction Storage
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear your local payment history?')) {
+                transactions = [];
+                localStorage.removeItem('gosikkim_txs');
+                renderTable();
+            }
+        }
+
+        // Automated WhatsApp Review Request Generator
+        function sendWhatsAppReview() {
+            const link = document.getElementById('googleReviewUrl').value.trim();
+            const phone = document.getElementById('reviewPhone').value.trim();
+
+            if (!phone) {
+                alert('Please enter a customer phone number.');
+                return;
+            }
+
+            const reviewLink = link || 'https://g.page/review';
+            const message = encodeURIComponent(`Hello! Thank you for visiting us. We would love to hear your feedback! Please take a moment to leave us a 5-star review on Google here: ${reviewLink}`);
+            window.open(`https://wa.me/91${phone}?text=${message}`, '_blank');
+        }
+
+        // Send Instant Payment Receipt via WhatsApp
+        function sendWhatsAppReceipt(phone, name, amount, txId) {
+            const cleanPhone = phone.replace(/\D/g, '');
+            const message = encodeURIComponent(`Hi ${name}, thank you for your payment of ₹${amount} to GoSikkim-Web! Transaction ID: ${txId}. Have a great day!`);
+            window.open(`https://wa.me/91${cleanPhone}?text=${message}`, '_blank');
+        }
+    </script>
 </body>
 </html>

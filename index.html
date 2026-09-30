@@ -1,260 +1,547 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sikkim Daily Hour - Indian Flag Colors 3D</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Try Your Luck - Dealer Interface & Game-2</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(23, 32, 54, 0.8);
+      --accent-gold: #ffb703;
+      --accent-cyan: #00f0ff;
+      --accent-red: #ff2a6d;
+      --text-color: #e0e6ed;
+      --border-color: rgba(255, 255, 255, 0.15);
+    }
 
-        body {
-            background-color: #030712;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            font-family: system-ui, -apple-system, sans-serif;
-            perspective: 1200px;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        /* Interactive 3D Stage */
-        .stage {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transform-style: preserve-3d;
-            cursor: grab;
-        }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+      min-height: 100vh;
+    }
 
-        .stage:active {
-            cursor: grabbing;
-        }
+    header {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
 
-        /* Full Background Immersive 3D Monolith */
-        .object-3d {
-            position: relative;
-            width: 360px;
-            height: 600px;
-            background: #000000;
-            border-radius: 32px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 2rem 1.8rem;
-            transform-style: preserve-3d;
-            transform: rotateX(12deg) rotateY(-16deg);
-            box-shadow: 
-                -30px 40px 70px rgba(0, 0, 0, 0.95),
-                0 0 60px rgba(255, 153, 51, 0.4),
-                inset 0 2px 5px rgba(255, 255, 255, 0.3),
-                inset 0 -10px 30px rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            transition: transform 0.1s ease-out;
-            user-select: none;
-        }
+    h1 {
+      font-size: 1.4rem;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
-        /* Full Background Landscape (crystal clear) */
-        .bg-landscape {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            filter: brightness(0.85) contrast(1.15) saturate(1.1);
-        }
+    .bankroll {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--accent-cyan);
+    }
 
-        .edge-vignette {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(3,7,18,0.4) 0%, transparent 25%, transparent 75%, rgba(3,7,18,0.5) 100%);
-            z-index: 1;
-            pointer-events: none;
-        }
+    .main-container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
-        /* Glass Reflection Effect */
-        .object-3d::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 40%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.12), transparent);
-            border-top-left-radius: 32px;
-            border-top-right-radius: 32px;
-            pointer-events: none;
-            z-index: 5;
-        }
+    .di-panel {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
 
-        .layer-top {
-            position: relative;
-            z-index: 5;
-            transform: translateZ(35px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #ffffff;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
+    .di-header {
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      letter-spacing: 1.5px;
+      color: #fff;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 5px;
+    }
 
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #138808;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #138808;
-        }
+    .sectors-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
 
-        /* Indian Flag Colors strictly INSIDE letters with high-visibility solid fill */
-        .layer-center {
-            position: relative;
-            z-index: 5;
-            transform: translateZ(85px);
-            text-align: center;
-        }
+    .sector-box {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
 
-        .skm-3d-title {
-            font-size: 2.3rem;
-            font-weight: 900;
-            line-height: 1.15;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            
-            /* Saffron (#FF9933) top, Pure White (#FFFFFF) middle, Green (#138808) bottom */
-            background: linear-gradient(to bottom, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #138808 66.6%, #138808 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            
-            /* Dark solid 3D shadows directly behind letters to pop against the background */
-            text-shadow: 
-                0 1px 0 rgba(0, 0, 0, 0.95),
-                0 2px 0 rgba(0, 0, 0, 0.95),
-                0 3px 0 rgba(0, 0, 0, 0.95),
-                0 4px 0 rgba(0, 0, 0, 0.95),
-                0 5px 12px rgba(0, 0, 0, 0.95);
-            
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.95));
-            padding: 0.2rem 0;
-        }
+    .sector-title {
+      font-size: 0.9rem;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
 
-        .skm-3d-title span {
-            background: linear-gradient(to bottom, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #138808 66.6%, #138808 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 
-                0 1px 0 rgba(0, 0, 0, 0.95),
-                0 2px 0 rgba(0, 0, 0, 0.95),
-                0 3px 0 rgba(0, 0, 0, 0.95),
-                0 4px 0 rgba(0, 0, 0, 0.95),
-                0 5px 12px rgba(0, 0, 0, 0.95);
-        }
+    /* Cards Styling */
+    .card-slot {
+      display: flex;
+      gap: 8px;
+      margin: 8px 0;
+    }
 
-        .layer-bottom {
-            position: relative;
-            z-index: 5;
-            transform: translateZ(45px);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
+    .card {
+      width: 45px;
+      height: 65px;
+      background: white;
+      color: black;
+      border-radius: 5px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
 
-        .action-btn {
-            background: linear-gradient(135deg, #FF9933, #e67300);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: none;
-            padding: 0.9rem;
-            font-size: 0.9rem;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 153, 51, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.2s ease;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
+    .card.red { color: #d90429; }
+    .card.black { color: #111; }
 
-        .action-btn:hover {
-            background: linear-gradient(135deg, #ffaa44, #FF9933);
-            transform: translateY(-2px);
-        }
-    </style>
+    .bet-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-small {
+      background: #2b3a55;
+      color: #fff;
+      border: 1px solid var(--border-color);
+      padding: 5px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-small:hover {
+      background: #3a4f72;
+    }
+
+    /* Central Control Box */
+    .central-control {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid var(--accent-cyan);
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bet-status-banner {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: var(--accent-gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: rgba(255, 183, 3, 0.1);
+      padding: 8px 20px;
+      border-radius: 20px;
+      border: 1px solid var(--accent-gold);
+      width: 100%;
+      text-align: center;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      padding: 10px 18px;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+
+    .btn-quit { background: var(--accent-red); color: white; }
+    .btn-lock { background: var(--accent-gold); color: black; }
+    .btn-confirm { background: #00b4d8; color: white; }
+
+    .btn-action:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    /* Game 2 Layout */
+    .game2-panel {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 650px) {
+      .game2-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 90px);
+      gap: 8px;
+      background: #000;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .grid-cell {
+      background: #1a2235;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 2.2rem;
+      transition: transform 0.1s;
+    }
+
+    .payout-rules {
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      justify-content: center;
+      background: rgba(0,0,0,0.2);
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    .rule-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spin-btn {
+      grid-column: span 3;
+      margin-top: 10px;
+      padding: 10px;
+      background: #00f0ff;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .log-box {
+      font-size: 0.8rem;
+      color: #aaa;
+      margin-top: 5px;
+      min-height: 18px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="stage" id="stage">
-        <div class="object-3d" id="object3d">
-            <!-- Full crystal clear background landscape -->
-            <img class="bg-landscape" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80" alt="Sikkim landscape mountains hills and roads">
-            
-            <div class="edge-vignette"></div>
+  <header>
+    <h1>TRY YOUR LUCK</h1>
+    <div class="bankroll">Balance: $<span id="balance">1000</span></div>
+  </header>
 
-            <div class="layer-top">
-                <span>No Limit</span>
-                <div class="live-dot"></div>
-            </div>
-            
-            <div class="layer-center">
-                <div class="skm-3d-title">
-                    Sikkim<br>
-                    <span>Daily Hour</span>
-                </div>
-            </div>
-
-            <div class="layer-bottom">
-                <button class="action-btn" onclick="event.stopPropagation(); alert('Sikkim Daily Hour: Indian Flag Colors Active.');">Initialize</button>
-            </div>
+  <div class="main-container">
+    
+    <!-- DEALER INTERFACE (D.I.) -->
+    <div class="di-panel">
+      <div class="di-header">DEALER INTERFACE (D.I.)</div>
+      
+      <div class="sectors-grid">
+        <!-- SECTOR A -->
+        <div class="sector-box">
+          <div class="sector-title">SECTOR-A (PRE-BET)</div>
+          <div style="font-size: 0.75rem; color: #888;">3 CARD SLOT (D.I. Rule)</div>
+          <div class="card-slot" id="card-slot">
+            <div class="card red">5<br>♥</div>
+            <div class="card black">J<br>♠</div>
+            <div class="card red">10<br>♦</div>
+          </div>
+          <div style="font-size: 0.85rem;">Total Bet: $<span id="sector-a-bet">0</span></div>
+          <div style="font-size: 0.7rem; color: #888;">MAX BET: 500</div>
         </div>
+
+        <!-- SECTOR B -->
+        <div class="sector-box">
+          <div class="sector-title">SECTOR-B (MAIN BET)</div>
+          <div style="font-size: 0.8rem;">Payout Table: x2 - x10</div>
+          <div class="bet-controls">
+            <button class="btn-small" onclick="adjustBet('b', -10)">-</button>
+            <span>$<span id="sector-b-bet">0</span></span>
+            <button class="btn-small" onclick="adjustBet('b', 10)">+</button>
+          </div>
+        </div>
+
+        <!-- SECTOR C -->
+        <div class="sector-box">
+          <div class="sector-title">SECTOR-C (SIDE BETS)</div>
+          <div style="font-size: 0.8rem;">Payout Table: x5 - x50</div>
+          <div class="bet-controls">
+            <button class="btn-small" onclick="adjustBet('c', -10)">-</button>
+            <span>$<span id="sector-c-bet">0</span></span>
+            <button class="btn-small" onclick="adjustBet('c', 10)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CENTRAL CONTROL BOX -->
+      <div class="central-control">
+        <div class="bet-status-banner" id="status-banner">BET PLEASE</div>
+        <div class="action-buttons">
+          <button class="btn-action btn-quit" onclick="resetBets()">QUIT</button>
+          <button class="btn-action btn-lock" onclick="lockBets()">LOCK BET</button>
+          <button class="btn-action btn-confirm" onclick="confirmBet()">CONFIRM BET</button>
+        </div>
+        <div class="log-box" id="di-log">Adjust bets and press LOCK or CONFIRM.</div>
+      </div>
     </div>
 
-    <script>
-        const stage = document.getElementById('stage');
-        const object3d = document.getElementById('object3d');
+    <!-- GAME - 2 -->
+    <div class="game2-panel">
+      <div>
+        <div class="sector-title" style="text-align: left; margin-bottom: 8px;">GAME - 2 (SLOT REELS)</div>
+        <div class="grid-container">
+          <div class="grid-cell" id="c0">🔔</div>
+          <div class="grid-cell" id="c1">⭐</div>
+          <div class="grid-cell" id="c2">🦅</div>
+          <div class="grid-cell" id="c3">⭐</div>
+          <div class="grid-cell" id="c4">🔔</div>
+          <div class="grid-cell" id="c5">⭐</div>
+        </div>
+        <button class="spin-btn" onclick="spinGame2()">Spin Game-2 ($20)</button>
+      </div>
 
-        let isDragging = false;
-        let startX, startY;
-        let rotX = 12;
-        let rotY = -16;
+      <div class="payout-rules">
+        <div class="sector-title" style="text-align: left;">PAYOUT RULES</div>
+        <div class="rule-item">⭐ <strong>x25</strong> (3 stars diagonal)</div>
+        <div class="rule-item">🔔 <strong>x7</strong> (3 bells same line: horiz/vert)</div>
+        <div class="rule-item">🦅 <strong>x2</strong> for wings</div>
+        <ul style="margin-left: 15px; font-size: 0.75rem; color: #aaa; margin-top: 5px;">
+          <li>Min Bet: 10 | Max Bet: 100</li>
+          <li>Bonus Round: Triggers on 3 Crested Wings (🦅)</li>
+          <li>Tie-Breaks: ♠ > ♥ > ♦ > ♣</li>
+        </ul>
+      </div>
+    </div>
 
-        stage.addEventListener('pointerdown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            stage.setPointerCapture(e.pointerId);
-        });
+  </div>
 
-        stage.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
-            const deltaX = e.clientX - startX;
-            const deltaY = e.clientY - startY;
-            
-            rotY += deltaX * 0.5;
-            rotX -= deltaY * 0.5;
-            
-            object3d.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-            
-            startX = e.clientX;
-            startY = e.clientY;
-        });
+  <script>
+    let balance = 1000;
+    let betA = 0, betB = 0, betC = 0;
+    let isLocked = false;
 
-        stage.addEventListener('pointerup', (e) => {
-            isDragging = false;
-            stage.releasePointerCapture(e.pointerId);
-        });
-    </script>
+    const cardsData = [
+      { v: 'A', s: '♠', c: 'black' },
+      { v: 'K', s: '♥', c: 'red' },
+      { v: 'Q', s: '♦', c: 'red' },
+      { v: 'J', s: '♣', c: 'black' },
+      { v: '10', s: '♠', c: 'black' },
+      { v: '7', s: '♥', c: 'red' }
+    ];
+
+    function adjustBet(sector, amount) {
+      if (isLocked) {
+        document.getElementById('di-log').innerText = 'Bets are locked! Unlock or reset first.';
+        return;
+      }
+
+      if (sector === 'b') {
+        if (betB + amount >= 0 && (betA + betB + betC + amount) <= 500) {
+          betB += amount;
+        }
+      } else if (sector === 'c') {
+        if (betC + amount >= 0 && (betA + betB + betC + amount) <= 500) {
+          betC += amount;
+        }
+      }
+      betA = Math.min(100, (betB + betC) / 2); // Dynamic Pre-bet calculation
+      updateUI();
+    }
+
+    function updateUI() {
+      document.getElementById('balance').innerText = balance;
+      document.getElementById('sector-a-bet').innerText = betA;
+      document.getElementById('sector-b-bet').innerText = betB;
+      document.getElementById('sector-c-bet').innerText = betC;
+    }
+
+    function resetBets() {
+      betA = 0; betB = 0; betC = 0;
+      isLocked = false;
+      document.getElementById('status-banner').innerText = 'BET PLEASE';
+      document.getElementById('di-log').innerText = 'Bets reset to $0.';
+      dealCards();
+      updateUI();
+    }
+
+    function lockBets() {
+      if (betA + betB + betC === 0) {
+        document.getElementById('di-log').innerText = 'Place a bet before locking!';
+        return;
+      }
+      isLocked = true;
+      document.getElementById('status-banner').innerText = 'BET LOCKED';
+      document.getElementById('di-log').innerText = 'Bets locked. Click CONFIRM BET to execute.';
+    }
+
+    function confirmBet() {
+      if (!isLocked && (betA + betB + betC > 0)) {
+        lockBets();
+      }
+      
+      const totalBet = betA + betB + betC;
+      if (totalBet === 0) {
+        document.getElementById('di-log').innerText = 'No bets placed to confirm!';
+        return;
+      }
+
+      if (balance < totalBet) {
+        document.getElementById('di-log').innerText = 'Insufficient balance!';
+        return;
+      }
+
+      balance -= totalBet;
+      document.getElementById('status-banner').innerText = 'PROCESSING...';
+      
+      setTimeout(() => {
+        // Simple win resolution demo
+        const win = Math.random() > 0.5;
+        if (win) {
+          const payout = totalBet * 2;
+          balance += payout;
+          document.getElementById('status-banner').innerText = 'WINNER!';
+          document.getElementById('di-log').innerText = `Subroutine executed. Won $${payout}!`;
+        } else {
+          document.getElementById('status-banner').innerText = 'NO WIN';
+          document.getElementById('di-log').innerText = `Subroutine executed. Lost $${totalBet}.`;
+        }
+        isLocked = false;
+        updateUI();
+      }, 1000);
+    }
+
+    function dealCards() {
+      const slot = document.getElementById('card-slot');
+      slot.innerHTML = '';
+      for (let i = 0; i < 3; i++) {
+        const card = cardsData[Math.floor(Math.random() * cardsData.length)];
+        slot.innerHTML += `<div class="card ${card.c}">${card.v}<br>${card.s}</div>`;
+      }
+    }
+
+    // GAME-2 LOGIC
+    const symbols = ['⭐', '🔔', '🦅'];
+
+    function spinGame2() {
+      const cost = 20;
+      if (balance < cost) {
+        alert('Not enough balance to spin Game-2!');
+        return;
+      }
+
+      balance -= cost;
+      updateUI();
+
+      const grid = [];
+      for (let i = 0; i < 6; i++) {
+        const randSym = symbols[Math.floor(Math.random() * symbols.length)];
+        grid.push(randSym);
+        document.getElementById(`c${i}`).innerText = randSym;
+      }
+
+      // Evaluate outcomes
+      let winAmount = 0;
+      let logMsg = [];
+
+      // Star Diagonals: (0, 4) or (2, 4) etc.
+      if ((grid[0] === '⭐' && grid[4] === '⭐') || (grid[2] === '⭐' && grid[4] === '⭐')) {
+        winAmount += cost * 25;
+        logMsg.push('Star Diagonal (x25)!');
+      }
+
+      // Bell lines (horizontal/vertical)
+      if ((grid[0] === '🔔' && grid[1] === '🔔' && grid[2] === '🔔') || 
+          (grid[3] === '🔔' && grid[4] === '🔔' && grid[5] === '🔔')) {
+        winAmount += cost * 7;
+        logMsg.push('Bell Line (x7)!');
+      }
+
+      // Crested Wings check
+      const wingCount = grid.filter(s => s === '🦅').length;
+      if (wingCount >= 3) {
+        winAmount += cost * 2;
+        logMsg.push('BONUS ROUND ACTIVATED (3 Wings)!');
+      } else if (wingCount > 0) {
+        winAmount += cost * (wingCount * 0.5);
+      }
+
+      if (winAmount > 0) {
+        balance += winAmount;
+        document.getElementById('di-log').innerText = `Game-2 Win: +$${winAmount}! ${logMsg.join(' ')}`;
+      } else {
+        document.getElementById('di-log').innerText = 'Game-2: No winning combinations.';
+      }
+      updateUI();
+    }
+
+    // Initial Deal
+    dealCards();
+  </script>
 </body>
 </html>

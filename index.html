@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Try Your Luck - Super Ace Deluxe</title>
+  <title>Try Your Luck - Super Ace Free Spins Edition</title>
   <style>
     :root {
       --bg-color: #080c14;
@@ -93,6 +93,21 @@
       text-shadow: 0 0 12px var(--accent-gold);
     }
 
+    /* FREE SPINS DISPLAY HUD */
+    .fs-hud {
+      display: none;
+      background: linear-gradient(90deg, #7928ca, #ff007f);
+      border: 2px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 8px 16px;
+      text-align: center;
+      font-weight: bold;
+      color: #fff;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.6);
+    }
+
     /* SUPER ACE SLOT REELS GRID */
     .super-ace-board {
       background: var(--card-bg);
@@ -122,7 +137,7 @@
       gap: 6px;
     }
 
-    /* CARD SYMBOL TILES WITH SMOOTH CASCADING */
+    /* CARD SYMBOL TILES */
     .card-tile {
       height: 72px;
       background: #ffffff;
@@ -260,6 +275,11 @@
 
   <div class="main-container">
     
+    <!-- FREE SPINS COUNTER HUD -->
+    <div class="fs-hud" id="fs-hud">
+      🔥 FREE SPINS REMAINING: <span id="fs-count">10</span>
+    </div>
+
     <!-- MULTIPLIER BAR -->
     <div class="multiplier-bar">
       <span class="mult-step active" id="m1">x1</span>
@@ -277,12 +297,12 @@
 
     <!-- CONTROLS -->
     <div class="controls-panel">
-      <div class="bet-bar">
+      <div class="bet-bar" id="bet-bar">
         <span>BET AMOUNT:</span>
         <div style="display: flex; align-items: center; gap: 10px;">
-          <button class="btn-bet" onclick="changeBet(-10)">-</button>
+          <button class="btn-bet" id="btn-minus" onclick="changeBet(-10)">-</button>
           <span style="font-size: 1.2rem; font-weight: bold; color: var(--accent-gold);">$<span id="bet-display">20</span></span>
-          <button class="btn-bet" onclick="changeBet(10)">+</button>
+          <button class="btn-bet" id="btn-plus" onclick="changeBet(10)">+</button>
         </div>
       </div>
 
@@ -296,7 +316,8 @@
     let balance = 1000;
     let currentBet = 20;
     let currentMultiplier = 1;
-    let hasAnnouncedScatter = false; // Flag to prevent repeated voice loop
+    let freeSpinsRemaining = 0;
+    let isFreeSpinsActive = false;
 
     const ranks = ['2', '3', '10', 'J', 'Q', 'K', 'A'];
     
@@ -323,7 +344,6 @@
 
     function speakText(text) {
       if ('speechSynthesis' in window) {
-        // Only speak if nothing is actively speaking to prevent repetition loop
         if (!window.speechSynthesis.speaking) {
           const utterance = new SpeechSynthesisUtterance(text);
           utterance.rate = 1.2;
@@ -454,6 +474,7 @@
     }
 
     function changeBet(amt) {
+      if (isFreeSpinsActive) return; // Prevent bet change during Free Spins
       if (currentBet + amt >= 10 && currentBet + amt <= 500) {
         currentBet += amt;
         document.getElementById('bet-display').innerText = currentBet;
@@ -470,24 +491,31 @@
     }
 
     async function spinSuperAce() {
-      if (balance < currentBet) {
-        alert("Insufficient balance!");
-        return;
+      // Free Spins deduction logic: deduct ONLY if not in Free Spins mode
+      if (!isFreeSpinsActive) {
+        if (balance < currentBet) {
+          alert("Insufficient balance!");
+          return;
+        }
+        balance -= currentBet;
+        updateUI();
+      } else {
+        // Decrement free spins count
+        freeSpinsRemaining--;
+        document.getElementById('fs-count').innerText = freeSpinsRemaining;
       }
 
-      // Reset speech engine & flags
       if ('speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
-      hasAnnouncedScatter = false;
-
-      balance -= currentBet;
-      updateUI();
 
       const spinBtn = document.getElementById('spin-btn');
       spinBtn.disabled = true;
       setMultiplier(1);
-      document.getElementById('status-msg').innerText = "Spinning card reels...";
+
+      document.getElementById('status-msg').innerText = isFreeSpinsActive 
+        ? `Free Spin (${10 - freeSpinsRemaining}/10) in progress...` 
+        : "Spinning card reels...";
 
       for (let i = 0; i < 7; i++) {
         playSound('spin');
@@ -500,8 +528,26 @@
         await new Promise(r => setTimeout(r, 90));
       }
 
-      checkScatterTrigger();
-      evaluateCascadeWins();
+      const scatterTriggered = checkScatterTrigger();
+      await evaluateCascadeWins();
+
+      // Automatically auto-trigger next free spin if remaining
+      if (isFreeSpinsActive) {
+        if (freeSpinsRemaining > 0) {
+          await new Promise(r => setTimeout(r, 1000));
+          spinSuperAce();
+        } else {
+          // Free spins completed, return to normal paid mode
+          isFreeSpinsActive = false;
+          document.getElementById('fs-hud').style.display = 'none';
+          document.getElementById('btn-minus').disabled = false;
+          document.getElementById('btn-plus').disabled = false;
+          document.getElementById('status-msg').innerText = "Free Spins Bonus Finished! Regular paid spins resumed.";
+          spinBtn.disabled = false;
+        }
+      } else {
+        spinBtn.disabled = false;
+      }
     }
 
     function checkScatterTrigger() {
@@ -512,14 +558,24 @@
         }
       }
 
-      if (scatterCount >= 3 && !hasAnnouncedScatter) {
-        hasAnnouncedScatter = true;
+      if (scatterCount >= 3) {
         playSound('scatter');
-        speakText("Free Spins Bonus!");
-        const scatterBonus = currentBet * 10;
-        balance += scatterBonus;
-        document.getElementById('status-msg').innerText = `🔥 3 SCATTERS HIT! 10 FREE SPINS & +$${scatterBonus}!`;
+        speakText("Free Spins Bonus Activated!");
+
+        // Set free spins count to 10
+        freeSpinsRemaining = 10;
+        isFreeSpinsActive = true;
+
+        // Display Free Spins HUD
+        document.getElementById('fs-count').innerText = freeSpinsRemaining;
+        document.getElementById('fs-hud').style.display = 'block';
+        document.getElementById('btn-minus').disabled = true;
+        document.getElementById('btn-plus').disabled = true;
+
+        document.getElementById('status-msg').innerText = `🔥 3 SCATTERS HIT! 10 FREE SPINS ACTIVATED!`;
+        return true;
       }
+      return false;
     }
 
     async function evaluateCascadeWins() {
@@ -566,14 +622,12 @@
 
       if (winFound) {
         playSound('win');
-        
-        // Only announce winning card if Scatter speech isn't currently playing
-        if (!hasAnnouncedScatter) {
-          speakText(`${winningSuit} ${rankVoiceMap[winningRank] || winningRank}`);
-        }
+        speakText(`${winningSuit} ${rankVoiceMap[winningRank] || winningRank}`);
 
+        // Accumulate winnings straight to balance account
         balance += roundPayout;
         updateUI();
+
         document.getElementById('status-msg').innerText = `Combo Hit: ${winningSuit} ${rankVoiceMap[winningRank] || winningRank}! Won $${roundPayout} (x${currentMultiplier})`;
 
         if (currentMultiplier === 1) setMultiplier(2);
@@ -589,9 +643,7 @@
         renderBoard();
         await new Promise(r => setTimeout(r, 500));
 
-        evaluateCascadeWins();
-      } else {
-        document.getElementById('spin-btn').disabled = false;
+        await evaluateCascadeWins();
       }
     }
 

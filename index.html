@@ -1,267 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoSikkim-Web | Business Growth Platform</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Razorpay Checkout SDK -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GoSikkim - Tourism & Booking Services</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .service-card:hover {
+      transform: translateY(-2px);
+      transition: all 0.2s ease-in-out;
+    }
+    .selected-card {
+      border-color: #059669 !important;
+      background-color: #ecfdf5 !important;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans pb-12">
 
-    <!-- Navigation Header -->
-    <header class="bg-emerald-700 text-white shadow-md">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-[#10B981] fa-mountain-sun text-2xl text-emerald-300"></i>
-                <h1 class="text-xl font-bold tracking-wide">GoSikkim-Web</h1>
-            </div>
-            <div class="text-xs bg-emerald-800 px-3 py-1 rounded-full text-emerald-200 border border-emerald-600 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                Razorpay Live Active
-            </div>
-        </div>
-    </header>
+  <!-- Header / Branding -->
+  <header class="bg-emerald-700 text-white shadow-md">
+    <div class="max-w-3xl mx-auto px-4 py-6 text-center">
+      <h1 class="text-3xl font-bold tracking-wide flex items-center justify-center gap-2">
+        <i class="fa-solid font-mountain text-emerald-300"></i> GoSikkim Services
+      </h1>
+      <p class="text-emerald-100 text-sm mt-1">Homestay Bookings • Taxi & Cab Permits • Tour Packages</p>
+    </div>
+  </header>
 
-    <!-- Main Container -->
-    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full grid grid-cols-1 md:grid-cols-3 gap-8">
+  <main class="max-w-3xl mx-auto px-4 mt-6 space-y-6">
+
+    <!-- 1. Service Selection Menu -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <h2 class="text-lg font-semibold text-slate-900 mb-1 flex items-center gap-2">
+        <i class="fa-solid fa-layer-group text-emerald-600"></i> Select a Package or Service
+      </h2>
+      <p class="text-xs text-slate-500 mb-4">Tap a tour or homestay package below to auto-fill payment details:</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="service-grid">
         
-        <!-- Left Sidebar: Actions & Payments -->
-        <section class="md:col-span-1 space-y-6">
-            
-            <!-- Payment Processing Card -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-credit-card text-emerald-600"></i> Accept Quick Payment
-                </h2>
-                <form id="paymentForm" onsubmit="triggerRazorpay(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Customer Name</label>
-                        <input type="text" id="custName" required placeholder="e.g. Tashi Bhutia" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Phone / WhatsApp</label>
-                        <input type="tel" id="custPhone" required placeholder="e.g. 9800012345" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Amount (₹)</label>
-                        <input type="number" id="payAmount" min="1" required placeholder="100" value="100" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Service Note</label>
-                        <input type="text" id="serviceNote" placeholder="e.g. Homestay Booking / Tour" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    </div>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-[#10B981] fa-qrcode"></i> Pay via UPI / Cards
-                    </button>
-                </form>
-            </div>
-
-            <!-- Review Link Generator Card -->
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-star text-amber-500"></i> Google Review Automation
-                </h2>
-                <p class="text-xs text-gray-500 mb-4">Send an automated WhatsApp message to your customers requesting a 5-star Google review.</p>
-                
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Your Google Review Link</label>
-                        <input type="url" id="googleReviewUrl" placeholder="https://g.page/r/your-google-business-id/review" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-medium text-gray-600 mb-1">Customer Phone Number</label>
-                        <input type="tel" id="reviewPhone" placeholder="9800012345" class="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    </div>
-                    <button onclick="sendWhatsAppReview()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg text-sm transition flex items-center justify-center gap-2">
-                        <i class="fa-brands fa-whatsapp text-lg"></i> Request Review on WhatsApp
-                    </button>
-                </div>
-            </div>
-
-        </section>
-
-        <!-- Right Side: Recent Transactions & Client Log -->
-        <section class="md:col-span-2">
-            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 h-full flex flex-col">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                        <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i> Recent Payment Transactions
-                    </h2>
-                    <button onclick="clearHistory()" class="text-xs text-red-500 hover:underline">Clear History</button>
-                </div>
-
-                <div class="overflow-x-auto flex-grow">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-gray-200 text-xs text-gray-500 uppercase tracking-wider">
-                                <th class="pb-3">Customer</th>
-                                <th class="pb-3">Amount</th>
-                                <th class="pb-3">Payment ID</th>
-                                <th class="pb-3">Status</th>
-                                <th class="pb-3 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="txTableBody" class="divide-y divide-gray-100 text-sm">
-                            <tr id="emptyRow">
-                                <td colspan="5" class="py-8 text-center text-gray-400 text-xs">
-                                    No live transactions completed yet. Payments will automatically log here.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 py-4 mt-8">
-        <div class="max-w-6xl mx-auto px-4 text-center text-xs text-gray-500">
-            Powered by <strong>GoSikkim-Web</strong> • Built for Local Businesses in Gangtok, Sikkim
+        <!-- Service Card 1 -->
+        <div onclick="selectService('Gangtok Local Sightseeing (Full Day)', 2500, this)" 
+             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
+          <div class="flex justify-between items-start">
+            <h3 class="font-medium text-slate-800 text-sm">Gangtok Local Sightseeing</h3>
+            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹2,500</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Full day 7-point or 10-point cab tour in Gangtok.</p>
         </div>
-    </footer>
 
-    <!-- Application Script -->
-    <script>
-        // Live Razorpay API Key pre-configured
-        const RAZORPAY_KEY_ID = 'rzp_live_TiN6t3iQ0poa9O';
+        <!-- Service Card 2 -->
+        <div onclick="selectService('Nathula Pass & Tsomgo Lake Permit + Cab', 4500, this)" 
+             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
+          <div class="flex justify-between items-start">
+            <h3 class="font-medium text-slate-800 text-sm">Nathula & Tsomgo Permit Tour</h3>
+            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹4,500</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Includes permit processing, shared/reserved cab booking.</p>
+        </div>
 
-        // Load transaction history from LocalStorage
-        let transactions = JSON.parse(localStorage.getItem('gosikkim_txs') || '[]');
+        <!-- Service Card 3 -->
+        <div onclick="selectService('Homestay Stay (1 Night)', 1800, this)" 
+             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
+          <div class="flex justify-between items-start">
+            <h3 class="font-medium text-slate-800 text-sm">Sikkim Homestay Booking</h3>
+            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹1,800</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Standard night stay with authentic local organic breakfast.</p>
+        </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderTable();
-        });
+        <!-- Service Card 4 -->
+        <div onclick="selectService('North Sikkim Package (2D/1N Lachen & Lachung)', 8500, this)" 
+             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
+          <div class="flex justify-between items-start">
+            <h3 class="font-medium text-slate-800 text-sm">North Sikkim Package (2D/1N)</h3>
+            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹8,500</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Includes permit, meals, accommodation, and private transport.</p>
+        </div>
 
-        // Trigger Razorpay Payment Checkout
-        function triggerRazorpay(event) {
-            event.preventDefault();
+      </div>
+    </section>
 
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const amount = document.getElementById('payAmount').value;
-            const note = document.getElementById('serviceNote').value.trim() || 'Service Charge';
+    <!-- 2. Booking / Payment Counter Form -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-credit-card text-emerald-600"></i> Customer Booking & Payment
+      </h2>
 
-            if (!amount || amount <= 0) {
-                alert('Please enter a valid payment amount.');
-                return;
-            }
+      <form id="payment-form" class="space-y-4" onsubmit="handlePayment(event)">
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">Customer Full Name *</label>
+          <input type="text" id="cust-name" required placeholder="e.g. Rahul Sharma" 
+                 class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
 
-            const options = {
-                "key": RAZORPAY_KEY_ID,
-                "amount": (parseFloat(amount) * 100).toString(), // Convert INR to Paise
-                "currency": "INR",
-                "name": "Gosikkim-Web",
-                "description": note,
-                "prefill": {
-                    "name": name,
-                    "contact": phone
-                },
-                "theme": {
-                    "color": "#047857" // Emerald Green accent
-                },
-                "handler": function (response) {
-                    saveTransaction({
-                        id: response.razorpay_payment_id,
-                        name: name,
-                        phone: phone,
-                        amount: amount,
-                        note: note,
-                        date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                        status: 'Success'
-                    });
-                    alert('Payment successful! Transaction ID: ' + response.razorpay_payment_id);
-                    document.getElementById('paymentForm').reset();
-                }
-            };
+        <div>
+          <label class="block text-xs font-medium text-slate-700 mb-1">WhatsApp Mobile Number *</label>
+          <input type="tel" id="cust-phone" required placeholder="10-digit phone number" pattern="[0-9]{10}"
+                 class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
 
-            const rzp = new Razorpay(options);
-            rzp.on('payment.failed', function (response){
-                alert('Payment failed: ' + response.error.description);
-            });
-            rzp.open();
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Service / Package Description *</label>
+            <input type="text" id="service-note" required placeholder="Select from menu or type here" 
+                   class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block text-xs font-medium text-slate-700 mb-1">Total Amount (₹) *</label>
+            <input type="number" id="cust-amount" required min="1" placeholder="Amount in INR" 
+                   class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+          </div>
+        </div>
+
+        <button type="submit" 
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-qrcode"></i> Pay via UPI / Cards / Wallet
+        </button>
+      </form>
+    </section>
+
+    <!-- 3. Recent Transactions & WhatsApp Receipts -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+      <h2 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
+        <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i> Recent Payment Transactions
+      </h2>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-600">
+          <thead class="bg-slate-100 text-slate-700 font-semibold uppercase border-b border-slate-200">
+            <tr>
+              <th class="p-2.5">Customer</th>
+              <th class="p-2.5">Service</th>
+              <th class="p-2.5">Amount</th>
+              <th class="p-2.5 text-center">Receipt</th>
+            </tr>
+          </thead>
+          <tbody id="tx-history-body" class="divide-y divide-slate-100">
+            <tr id="no-tx-row">
+              <td colspan="4" class="p-4 text-center text-slate-400">No transactions recorded in this session.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Live Razorpay Key
+    const RAZORPAY_KEY = "rzp_live_TiN6t3iQ0poa9O";
+
+    // Auto-fill from Service Grid
+    function selectService(name, price, element) {
+      document.getElementById('service-note').value = name;
+      document.getElementById('cust-amount').value = price;
+
+      // Highlight selected UI element
+      document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected-card'));
+      if(element) {
+        element.classList.add('selected-card');
+      }
+    }
+
+    // Handle Payment Checkout
+    function handlePayment(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('cust-name').value.trim();
+      const phone = document.getElementById('cust-phone').value.trim();
+      const note = document.getElementById('service-note').value.trim();
+      const amount = parseFloat(document.getElementById('cust-amount').value);
+
+      if (!name || !phone || !note || !amount || amount <= 0) {
+        alert("Please fill in all details correctly.");
+        return;
+      }
+
+      const options = {
+        key: RAZORPAY_KEY,
+        amount: Math.round(amount * 100), // Amount in paise
+        currency: "INR",
+        name: "GoSikkim Tourism",
+        description: note,
+        handler: function (response) {
+          addTransactionRecord({
+            paymentId: response.razorpay_payment_id,
+            name: name,
+            phone: phone,
+            note: note,
+            amount: amount,
+            date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          });
+          alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+          document.getElementById('payment-form').reset();
+          document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected-card'));
+        },
+        prefill: {
+          name: name,
+          contact: phone
+        },
+        theme: {
+          color: "#059669"
         }
+      };
 
-        // Save Completed Payment to Local Storage
-        function saveTransaction(tx) {
-            transactions.unshift(tx);
-            localStorage.setItem('gosikkim_txs', JSON.stringify(transactions));
-            renderTable();
-        }
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
 
-        // Render Transaction List in Dashboard
-        function renderTable() {
-            const tbody = document.getElementById('txTableBody');
-            if (transactions.length === 0) {
-                tbody.innerHTML = `
-                    <tr id="emptyRow">
-                        <td colspan="5" class="py-8 text-center text-gray-400 text-xs">
-                            No live transactions completed yet. Payments will automatically log here.
-                        </td>
-                    </tr>`;
-                return;
-            }
+    // Add Record to UI Table
+    function addTransactionRecord(tx) {
+      const tbody = document.getElementById('tx-history-body');
+      const noTxRow = document.getElementById('no-tx-row');
+      if (noTxRow) noTxRow.remove();
 
-            tbody.innerHTML = transactions.map(tx => `
-                <tr class="hover:bg-gray-50">
-                    <td class="py-3 font-medium text-gray-900">
-                        ${tx.name}
-                        <div class="text-xs text-gray-400 font-normal">${tx.phone}</div>
-                    </td>
-                    <td class="py-3 font-semibold text-emerald-700">₹${tx.amount}</td>
-                    <td class="py-3 text-xs font-mono text-gray-500">${tx.id}</td>
-                    <td class="py-3">
-                        <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium">Success</span>
-                    </td>
-                    <td class="py-3 text-right">
-                        <button onclick="sendWhatsAppReceipt('${tx.phone}', '${tx.name}', '${tx.amount}', '${tx.id}')" class="text-xs bg-green-50 text-green-700 border border-green-200 px-2.5 py-1 rounded hover:bg-green-100 transition">
-                            <i class="fa-brands fa-whatsapp"></i> Receipt
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-slate-50";
 
-        // Clear Transaction Storage
-        function clearHistory() {
-            if (confirm('Are you sure you want to clear your local payment history?')) {
-                transactions = [];
-                localStorage.removeItem('gosikkim_txs');
-                renderTable();
-            }
-        }
+      const waMessage = encodeURIComponent(
+        `*GoSikkim Payment Confirmation*\n\n` +
+        `Dear ${tx.name},\n` +
+        `Thank you for booking with GoSikkim!\n\n` +
+        `*Service:* ${tx.note}\n` +
+        `*Amount Paid:* ₹${tx.amount}\n` +
+        `*Payment ID:* ${tx.paymentId}\n` +
+        `*Time:* ${tx.date}\n\n` +
+        `We wish you a wonderful journey in Sikkim!`
+      );
 
-        // Automated WhatsApp Review Request Generator
-        function sendWhatsAppReview() {
-            const link = document.getElementById('googleReviewUrl').value.trim();
-            const phone = document.getElementById('reviewPhone').value.trim();
+      const waLink = `https://wa.me/91${tx.phone}?text=${waMessage}`;
 
-            if (!phone) {
-                alert('Please enter a customer phone number.');
-                return;
-            }
+      tr.innerHTML = `
+        <td class="p-2.5 font-medium text-slate-800">${tx.name}<br><span class="text-slate-400 font-normal">${tx.phone}</span></td>
+        <td class="p-2.5 text-slate-600">${tx.note}</td>
+        <td class="p-2.5 font-semibold text-emerald-700">₹${tx.amount}</td>
+        <td class="p-2.5 text-center">
+          <a href="${waLink}" target="_blank" 
+             class="inline-flex items-center gap-1 bg-green-600 hover:bg-green-700 text-white text-xs px-2.5 py-1 rounded transition">
+            <i class="fa-brands fa-whatsapp"></i> Receipt
+          </a>
+        </td>
+      `;
 
-            const reviewLink = link || 'https://g.page/review';
-            const message = encodeURIComponent(`Hello! Thank you for visiting us. We would love to hear your feedback! Please take a moment to leave us a 5-star review on Google here: ${reviewLink}`);
-            window.open(`https://wa.me/91${phone}?text=${message}`, '_blank');
-        }
-
-        // Send Instant Payment Receipt via WhatsApp
-        function sendWhatsAppReceipt(phone, name, amount, txId) {
-            const cleanPhone = phone.replace(/\D/g, '');
-            const message = encodeURIComponent(`Hi ${name}, thank you for your payment of ₹${amount} to GoSikkim-Web! Transaction ID: ${txId}. Have a great day!`);
-            window.open(`https://wa.me/91${cleanPhone}?text=${message}`, '_blank');
-        }
-    </script>
+      tbody.prepend(tr);
+    }
+  </script>
 </body>
 </html>

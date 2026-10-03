@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Business OS - Elite Edition</title>
+    <title>Universal Business OS - Ultimate Elite Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-16 selection:bg-emerald-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-20 selection:bg-emerald-500 selection:text-slate-950">
 
     <!-- Top Navigation Header -->
-    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
+    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
         <div class="max-w-xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-emerald-500/30">U</div>
@@ -20,10 +20,10 @@
                 </div>
             </div>
             <select id="businessType" onchange="changeBusinessType()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs font-semibold text-emerald-400 focus:outline-none focus:border-emerald-500">
-                <option value="retail">🛒 Retail / General Shop</option>
+                <option value="retail">🛒 Retail / Shop</option>
                 <option value="salon">✂️ Salon / Barber</option>
-                <option value="hotel">🏨 Hotel / Hospitality</option>
-                <option value="clinic">🩺 Clinic / Professional</option>
+                <option value="hotel">🏨 Hotel / Stay</option>
+                <option value="clinic">🩺 Clinic / Doctor</option>
             </select>
         </div>
     </header>
@@ -44,14 +44,14 @@
         <!-- TAB 1: POS / BILLING -->
         <section id="content-pos" class="space-y-4">
             <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3 flex items-center justify-between">
-                    <span>Quick Billing Counter</span>
-                    <span id="quickCatalogSelect" class="text-[10px] text-slate-400">Tap stock item below</span>
-                </h2>
+                <div class="flex justify-between items-center mb-3">
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Quick Billing Counter</h2>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-md border border-emerald-500/20 font-semibold" id="aiTipBadge">💡 AI Ready</span>
+                </div>
 
                 <!-- Quick Catalog Chips -->
                 <div id="posCatalogChips" class="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-none">
-                    <span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add items in Stock tab to see quick buttons</span>
+                    <span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add stock items to view quick shortcut buttons</span>
                 </div>
 
                 <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80">
@@ -65,7 +65,7 @@
                             <input type="number" id="billItemPrice" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
                         </div>
                         <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Quantity / Units</label>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Quantity</label>
                             <input type="number" id="billItemQty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
                         </div>
                     </div>
@@ -94,9 +94,15 @@
                         <span class="text-slate-400">Change to Return:</span>
                         <span id="changeReturn" class="font-black text-yellow-400 text-lg">₹0.00</span>
                     </div>
-                    <button onclick="completeSale()" class="w-full bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 font-bold p-3 rounded-xl border border-teal-500/30 transition text-sm">
-                        ✓ Complete Sale & Save Record
-                    </button>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="completeSale()" class="w-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-bold p-3 rounded-xl border border-emerald-500/30 transition text-xs">
+                            ✓ Complete Sale
+                        </button>
+                        <button onclick="shareOnWhatsApp()" class="w-full bg-teal-600 hover:bg-teal-500 text-slate-950 font-black p-3 rounded-xl transition text-xs flex items-center justify-center gap-1 shadow-md">
+                            💬 WhatsApp Receipt
+                        </button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -104,7 +110,7 @@
         <!-- TAB 2: INVENTORY / STOCK -->
         <section id="content-inventory" class="space-y-4 hidden">
             <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3">📦 Catalog & Stock Management</h2>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3">📦 Master Stock Catalog</h2>
                 
                 <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 mb-4">
                     <input type="text" id="invItemName" placeholder="Item Name / Service Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
@@ -113,7 +119,7 @@
                         <input type="number" id="invItemStock" placeholder="Initial Stock Qty" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
                     </div>
                     <button onclick="addInventoryItem()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold border border-emerald-500/30 p-2.5 rounded-xl transition text-sm">
-                        + Save to Master Catalog
+                        + Save to Catalog
                     </button>
                 </div>
 
@@ -126,13 +132,13 @@
         <!-- TAB 3: QUEUE & BOOKINGS -->
         <section id="content-queue" class="space-y-4 hidden">
             <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3" id="queueHeaderTitle">👥 Live Queue & Appointment Manager</h2>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3" id="queueHeaderTitle">👥 Live Queue & Bookings</h2>
                 
                 <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 mb-4">
                     <input type="text" id="queueClientName" placeholder="Customer / Guest Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
                     <input type="text" id="queueServiceDetail" placeholder="Service / Table / Room details" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
                     <button onclick="addQueueToken()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold p-2.5 rounded-xl transition text-sm">
-                        + Issue Queue Token / Booking
+                        + Issue Queue Token
                     </button>
                 </div>
 
@@ -145,7 +151,7 @@
         <!-- TAB 4: LEDGER / ANALYTICS -->
         <section id="content-analytics" class="space-y-4 hidden">
             <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl space-y-4">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">📊 Master Financial Ledger</h2>
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">📊 Financial Ledger & AI Insight</h2>
                 
                 <div class="grid grid-cols-2 gap-3">
                     <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
@@ -158,9 +164,14 @@
                     </div>
                 </div>
 
+                <div class="bg-emerald-500/10 border border-emerald-500/20 p-3.5 rounded-2xl text-xs space-y-1">
+                    <p class="font-bold text-emerald-400 uppercase tracking-wide text-[10px]">🤖 Universal AI Advisor</p>
+                    <p id="aiAdvisorText" class="text-slate-300">Start logging transactions to unlock automated business growth analytics and peak inventory tracking.</p>
+                </div>
+
                 <div>
                     <h3 class="text-xs font-bold uppercase text-slate-400 mb-2">Recent Transactions Log</h3>
-                    <div id="ledgerTransactionsList" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs">
+                    <div id="ledgerTransactionsList" class="space-y-2 max-h-60 overflow-y-auto pr-1 text-xs">
                         <p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No completed transactions recorded yet.</p>
                     </div>
                 </div>
@@ -170,7 +181,6 @@
     </main>
 
     <script>
-        // State Management
         let inventory = JSON.parse(localStorage.getItem('uos_inventory')) || [];
         let cart = [];
         let queue = JSON.parse(localStorage.getItem('uos_queue')) || [];
@@ -200,10 +210,8 @@
                 clinic: "Clinic & Doctor Appointments"
             };
             document.getElementById('currentModeLabel').innerText = labels[type];
-            document.getElementById('queueHeaderTitle').innerText = type === 'salon' ? "✂️ Barber Chair / Salon Queue" : type === 'hotel' ? "🏨 Room & Table Bookings" : "👥 Live Customer Queue";
         }
 
-        // Inventory Logic
         function addInventoryItem() {
             const name = document.getElementById('invItemName').value.trim();
             const price = parseFloat(document.getElementById('invItemPrice').value);
@@ -229,7 +237,7 @@
 
             if (inventory.length === 0) {
                 container.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No stock catalog items added yet.</p>';
-                chips.innerHTML = '<span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add items in Stock tab to see quick buttons</span>';
+                chips.innerHTML = '<span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add stock items to view quick shortcut buttons</span>';
                 return;
             }
 
@@ -269,7 +277,6 @@
             document.getElementById('billItemQty').focus();
         }
 
-        // POS & Billing Logic
         function addToBill() {
             const name = document.getElementById('billItemName').value.trim();
             const price = parseFloat(document.getElementById('billItemPrice').value);
@@ -359,11 +366,24 @@
             document.getElementById('cashGiven').value = '';
             saveData();
             updateAllUI();
-            alert('Sale completed and recorded in ledger successfully!');
+            alert('Sale completed and recorded successfully!');
             switchTab('analytics');
         }
 
-        // Queue Logic
+        function shareOnWhatsApp() {
+            if (cart.length === 0) {
+                alert('Add items to bill before sharing on WhatsApp!');
+                return;
+            }
+            let total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            let text = "🧾 *UNIVERSAL OS RECEIPT*%0A--------------------------------%0A";
+            cart.forEach(item => {
+                text += `• ${item.name} (${item.qty}x) - ₹${(item.price * item.qty).toFixed(2)}%0A`;
+            });
+            text += `--------------------------------%0A*Grand Total: ₹${total.toFixed(2)}*%0AThank you for your business! 🙏`;
+            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        }
+
         function addQueueToken() {
             const name = document.getElementById('queueClientName').value.trim();
             const detail = document.getElementById('queueServiceDetail').value.trim();
@@ -396,9 +416,9 @@
                                 <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">#${idx + 1}</span>
                                 <span class="font-bold text-slate-200">${q.name}</span>
                             </div>
-                            <p class="text-slate-400 text-[10px] mt-1">${q.detail} • Token Time: ${q.time}</p>
+                            <p class="text-slate-400 text-[10px] mt-1">${q.detail} • Time: ${q.time}</p>
                         </div>
-                        <button onclick="removeQueue(${q.id})" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg font-bold">Done / Clear</button>
+                        <button onclick="removeQueue(${q.id})" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg font-bold">Done</button>
                     </div>
                 `;
             });
@@ -411,15 +431,19 @@
             updateQueueUI();
         }
 
-        // Ledger UI
         function updateLedgerUI() {
             const revEl = document.getElementById('ledgerTotalRevenue');
             const countEl = document.getElementById('ledgerTotalCount');
             const listEl = document.getElementById('ledgerTransactionsList');
+            const aiAdvisor = document.getElementById('aiAdvisorText');
 
             let totalRev = transactions.reduce((sum, t) => sum + t.total, 0);
             revEl.innerText = `₹${totalRev.toFixed(2)}`;
             countEl.innerText = transactions.length;
+
+            if (transactions.length > 0) {
+                aiAdvisor.innerText = `Great momentum! You have recorded ${transactions.length} sales today. Peak customer flow is steady. Keep stock replenished.`;
+            }
 
             if (transactions.length === 0) {
                 listEl.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No completed transactions recorded yet.</p>';
@@ -448,7 +472,6 @@
             updateLedgerUI();
         }
 
-        // Initial Load
         updateAllUI();
     </script>
 </body>

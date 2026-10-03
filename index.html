@@ -3,184 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Business OS - Step 2: Billing & Inventory</title>
+    <title>Universal Business OS - Elite Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-950 text-white font-sans min-h-screen p-4 pb-12">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-16 selection:bg-emerald-500 selection:text-slate-950">
 
-    <div class="max-w-md mx-auto space-y-6">
-
-        <!-- App Header -->
-        <div class="bg-slate-900 rounded-2xl shadow-xl p-5 border border-slate-800 text-center">
-            <h1 class="text-2xl font-black text-emerald-400 tracking-wider">UNIVERSAL OS</h1>
-            <p class="text-xs text-slate-400 mt-1">Step 2: Billing + Inventory Manager</p>
-        </div>
-
-        <!-- SECTION 1: INVENTORY MANAGER -->
-        <div class="bg-slate-900 rounded-2xl shadow-xl p-5 border border-slate-800">
-            <h2 class="text-sm font-bold uppercase text-emerald-400 mb-3 tracking-wider flex items-center justify-between">
-                <span>📦 Inventory Stock</span>
-                <span id="inventoryCount" class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">0 Items</span>
-            </h2>
-            
-            <div class="space-y-3 mb-4">
-                <input type="text" id="invName" placeholder="Item/Service Name (e.g. Milk, Haircut)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="number" id="invPrice" placeholder="Price (₹)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                    <input type="number" id="invStock" placeholder="Stock Qty" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                </div>
-                <button onclick="addInventoryItem()" class="w-full bg-slate-800 hover:bg-slate-700 font-semibold text-emerald-400 border border-emerald-500/30 p-2.5 rounded-xl transition duration-200 text-sm">
-                    + Add to Inventory Catalog
-                </button>
-            </div>
-
-            <!-- Inventory List Preview -->
-            <div id="inventoryList" class="space-y-2 max-h-32 overflow-y-auto text-xs pr-1">
-                <p class="text-slate-600 italic text-center py-2 bg-slate-950/30 rounded-lg border border-dashed border-slate-800">No catalog items yet. Add above or bill manually below.</p>
-            </div>
-        </div>
-
-        <!-- SECTION 2: BILL & CASH COUNTER -->
-        <div class="bg-slate-900 rounded-2xl shadow-xl p-5 border border-slate-800">
-            <h2 class="text-sm font-bold uppercase text-emerald-400 mb-3 tracking-wider">🛒 Quick Bill Counter</h2>
-            
-            <div class="space-y-3 mb-4 bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+    <!-- Top Navigation Header -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-emerald-500/30">U</div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Item / Service Name</label>
-                    <input type="text" id="itemName" placeholder="e.g., Shoes, Service, Room" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    <h1 class="font-black text-sm tracking-widest text-emerald-400">UNIVERSAL OS</h1>
+                    <p class="text-[10px] text-slate-400 uppercase tracking-wider" id="currentModeLabel">Retail & Services Hub</p>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Price (₹)</label>
-                        <input type="number" id="itemPrice" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Quantity</label>
-                        <input type="number" id="itemQty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                    </div>
-                </div>
-                <button onclick="addItem()" class="w-full bg-emerald-500 hover:bg-emerald-400 font-bold text-slate-950 p-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20">
-                    + Add to Bill
-                </button>
             </div>
+            <select id="businessType" onchange="changeBusinessType()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs font-semibold text-emerald-400 focus:outline-none focus:border-emerald-500">
+                <option value="retail">🛒 Retail / General Shop</option>
+                <option value="salon">✂️ Salon / Barber</option>
+                <option value="hotel">🏨 Hotel / Hospitality</option>
+                <option value="clinic">🩺 Clinic / Professional</option>
+            </select>
+        </div>
+    </header>
 
-            <!-- Active Bill Cart -->
-            <div class="mb-4">
-                <div id="cartList" class="space-y-2 max-h-36 overflow-y-auto mb-3 text-sm pr-1">
-                    <p class="text-slate-600 italic text-center py-3 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added to bill yet.</p>
+    <!-- Main Navigation Tabs -->
+    <nav class="max-w-xl mx-auto px-4 mt-4">
+        <div class="grid grid-cols-4 gap-1 bg-slate-900 p-1 rounded-2xl border border-slate-800 text-xs font-semibold">
+            <button onclick="switchTab('pos')" id="tab-pos" class="py-2.5 rounded-xl bg-emerald-500 text-slate-950 transition shadow-md">POS</button>
+            <button onclick="switchTab('inventory')" id="tab-inventory" class="py-2.5 rounded-xl text-slate-400 hover:text-white transition">Stock</button>
+            <button onclick="switchTab('queue')" id="tab-queue" class="py-2.5 rounded-xl text-slate-400 hover:text-white transition">Queue</button>
+            <button onclick="switchTab('analytics')" id="tab-analytics" class="py-2.5 rounded-xl text-slate-400 hover:text-white transition">Ledger</button>
+        </div>
+    </nav>
+
+    <!-- App Container -->
+    <main class="max-w-xl mx-auto px-4 mt-4 space-y-4">
+
+        <!-- TAB 1: POS / BILLING -->
+        <section id="content-pos" class="space-y-4">
+            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3 flex items-center justify-between">
+                    <span>Quick Billing Counter</span>
+                    <span id="quickCatalogSelect" class="text-[10px] text-slate-400">Tap stock item below</span>
+                </h2>
+
+                <!-- Quick Catalog Chips -->
+                <div id="posCatalogChips" class="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-none">
+                    <span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add items in Stock tab to see quick buttons</span>
                 </div>
+
+                <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80">
+                    <div>
+                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Item / Service Name</label>
+                        <input type="text" id="billItemName" placeholder="e.g., Product, Haircut, Room Booking" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Price (₹)</label>
+                            <input type="number" id="billItemPrice" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Quantity / Units</label>
+                            <input type="number" id="billItemQty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                        </div>
+                    </div>
+                    <button onclick="addToBill()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black p-3 rounded-xl transition text-sm shadow-lg shadow-emerald-500/20">
+                        + Add to Active Bill
+                    </button>
+                </div>
+
+                <!-- Bill Cart Items -->
+                <div class="mt-4 space-y-2">
+                    <div id="cartItemsList" class="space-y-2 max-h-40 overflow-y-auto pr-1">
+                        <p class="text-slate-600 text-xs italic text-center py-4 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">Bill is empty.</p>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800 mt-3">
+                        <span class="text-slate-400 text-sm font-semibold">Grand Total:</span>
+                        <span id="posGrandTotal" class="text-2xl font-black text-emerald-400">₹0.00</span>
+                    </div>
+                </div>
+
+                <!-- Cash & Change Register -->
+                <div class="mt-4 pt-4 border-t border-slate-800 space-y-3">
+                    <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Cash Register & Settlement</h3>
+                    <input type="number" id="cashGiven" placeholder="Cash Received from Customer (₹)" oninput="calculateChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-sm">
+                        <span class="text-slate-400">Change to Return:</span>
+                        <span id="changeReturn" class="font-black text-yellow-400 text-lg">₹0.00</span>
+                    </div>
+                    <button onclick="completeSale()" class="w-full bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 font-bold p-3 rounded-xl border border-teal-500/30 transition text-sm">
+                        ✓ Complete Sale & Save Record
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: INVENTORY / STOCK -->
+        <section id="content-inventory" class="space-y-4 hidden">
+            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3">📦 Catalog & Stock Management</h2>
                 
-                <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
-                    <span class="text-slate-400 font-semibold">Grand Total:</span>
-                    <span id="grandTotal" class="text-2xl font-black text-emerald-400">₹0.00</span>
+                <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 mb-4">
+                    <input type="text" id="invItemName" placeholder="Item Name / Service Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="number" id="invItemPrice" placeholder="Default Price (₹)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                        <input type="number" id="invItemStock" placeholder="Initial Stock Qty" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <button onclick="addInventoryItem()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold border border-emerald-500/30 p-2.5 rounded-xl transition text-sm">
+                        + Save to Master Catalog
+                    </button>
+                </div>
+
+                <div id="inventoryContainer" class="space-y-2 max-h-96 overflow-y-auto pr-1 text-xs">
+                    <p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No stock catalog items added yet.</p>
                 </div>
             </div>
+        </section>
 
-            <!-- Cash Register -->
-            <div class="space-y-3 pt-3 border-t border-slate-800">
-                <h3 class="text-xs font-bold uppercase text-slate-400 tracking-wider">Cash Register</h3>
+        <!-- TAB 3: QUEUE & BOOKINGS -->
+        <section id="content-queue" class="space-y-4 hidden">
+            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3" id="queueHeaderTitle">👥 Live Queue & Appointment Manager</h2>
+                
+                <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 mb-4">
+                    <input type="text" id="queueClientName" placeholder="Customer / Guest Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                    <input type="text" id="queueServiceDetail" placeholder="Service / Table / Room details" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
+                    <button onclick="addQueueToken()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold p-2.5 rounded-xl transition text-sm">
+                        + Issue Queue Token / Booking
+                    </button>
+                </div>
+
+                <div id="queueListContainer" class="space-y-2 max-h-96 overflow-y-auto pr-1 text-xs">
+                    <p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No active queue tokens.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: LEDGER / ANALYTICS -->
+        <section id="content-analytics" class="space-y-4 hidden">
+            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl space-y-4">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">📊 Master Financial Ledger</h2>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Revenue Today</p>
+                        <p id="ledgerTotalRevenue" class="text-xl font-black text-emerald-400 mt-1">₹0.00</p>
+                    </div>
+                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Sales Count</p>
+                        <p id="ledgerTotalCount" class="text-xl font-black text-teal-400 mt-1">0</p>
+                    </div>
+                </div>
+
                 <div>
-                    <input type="number" id="cashReceived" placeholder="Cash Received from Customer (₹)" oninput="calculateChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    <h3 class="text-xs font-bold uppercase text-slate-400 mb-2">Recent Transactions Log</h3>
+                    <div id="ledgerTransactionsList" class="space-y-2 max-h-72 overflow-y-auto pr-1 text-xs">
+                        <p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No completed transactions recorded yet.</p>
+                    </div>
                 </div>
-                <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-sm">
-                    <span class="text-slate-400">Change to Return:</span>
-                    <span id="changeDue" class="font-black text-yellow-400 text-lg">₹0.00</span>
-                </div>
-                <button onclick="clearBill()" class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-semibold p-3 rounded-xl border border-rose-900/50 transition duration-200 text-sm">
-                    Clear Bill / Complete Transaction
-                </button>
             </div>
-        </div>
+        </section>
 
-    </div>
+    </main>
 
     <script>
-        let inventory = [];
+        // State Management
+        let inventory = JSON.parse(localStorage.getItem('uos_inventory')) || [];
         let cart = [];
+        let queue = JSON.parse(localStorage.getItem('uos_queue')) || [];
+        let transactions = JSON.parse(localStorage.getItem('uos_transactions')) || [];
 
+        function saveData() {
+            localStorage.setItem('uos_inventory', JSON.stringify(inventory));
+            localStorage.setItem('uos_queue', JSON.stringify(queue));
+            localStorage.setItem('uos_transactions', JSON.stringify(transactions));
+        }
+
+        function switchTab(tabId) {
+            ['pos', 'inventory', 'queue', 'analytics'].forEach(t => {
+                document.getElementById(`content-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).className = "py-2.5 rounded-xl text-slate-400 hover:text-white transition";
+            });
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).className = "py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-bold transition shadow-md";
+        }
+
+        function changeBusinessType() {
+            const type = document.getElementById('businessType').value;
+            const labels = {
+                retail: "Retail & General Shop",
+                salon: "Salon & Barber Queue",
+                hotel: "Hotel & Hospitality Desk",
+                clinic: "Clinic & Doctor Appointments"
+            };
+            document.getElementById('currentModeLabel').innerText = labels[type];
+            document.getElementById('queueHeaderTitle').innerText = type === 'salon' ? "✂️ Barber Chair / Salon Queue" : type === 'hotel' ? "🏨 Room & Table Bookings" : "👥 Live Customer Queue";
+        }
+
+        // Inventory Logic
         function addInventoryItem() {
-            const name = document.getElementById('invName').value.trim();
-            const price = parseFloat(document.getElementById('invPrice').value);
-            const stock = parseInt(document.getElementById('invStock').value);
+            const name = document.getElementById('invItemName').value.trim();
+            const price = parseFloat(document.getElementById('invItemPrice').value);
+            const stock = parseInt(document.getElementById('invItemStock').value);
 
             if (!name || isNaN(price) || isNaN(stock)) {
-                alert('Please fill out all inventory fields correctly.');
+                alert('Please enter valid inventory details.');
                 return;
             }
 
-            inventory.push({ name, price, stock });
-            document.getElementById('invName').value = '';
-            document.getElementById('invPrice').value = '';
-            document.getElementById('invStock').value = '';
+            inventory.push({ id: Date.now(), name, price, stock });
+            document.getElementById('invItemName').value = '';
+            document.getElementById('invItemPrice').value = '';
+            document.getElementById('invItemStock').value = '';
             
-            updateInventoryDisplay();
+            saveData();
+            updateAllUI();
         }
 
-        function updateInventoryDisplay() {
-            const listEl = document.getElementById('inventoryList');
-            const countEl = document.getElementById('inventoryCount');
-            countEl.innerText = `${inventory.length} Items`;
+        function updateInventoryUI() {
+            const container = document.getElementById('inventoryContainer');
+            const chips = document.getElementById('posCatalogChips');
 
             if (inventory.length === 0) {
-                listEl.innerHTML = '<p class="text-slate-600 italic text-center py-2 bg-slate-950/30 rounded-lg border border-dashed border-slate-800">No catalog items yet.</p>';
+                container.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No stock catalog items added yet.</p>';
+                chips.innerHTML = '<span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add items in Stock tab to see quick buttons</span>';
                 return;
             }
 
             let html = '';
-            inventory.forEach((item, index) => {
+            let chipHtml = '';
+
+            inventory.forEach(item => {
                 html += `
-                    <div class="flex justify-between items-center bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
                         <div>
-                            <span class="font-semibold text-slate-200">${item.name}</span>
+                            <span class="font-bold text-slate-200">${item.name}</span>
                             <span class="text-slate-400 ml-2">₹${item.price}</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="bg-slate-900 px-2 py-0.5 rounded text-slate-300 border border-slate-800">Stock: ${item.stock}</span>
-                            <button onclick="quickBill('${item.name}', ${item.price})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 px-2 py-0.5 rounded font-bold">+</button>
+                        <div class="flex items-center gap-3">
+                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg text-emerald-400 font-semibold border border-slate-800">Stock: ${item.stock}</span>
+                            <button onclick="deleteInventory(${item.id})" class="text-rose-400 hover:text-rose-300">✕</button>
                         </div>
                     </div>
                 `;
+                chipHtml += `<button onclick="quickSelect('${item.name}', ${item.price})" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-emerald-400 text-xs px-3 py-1.5 rounded-xl whitespace-nowrap font-semibold">+ ${item.name}</button>`;
             });
-            listEl.innerHTML = html;
+
+            container.innerHTML = html;
+            chips.innerHTML = chipHtml;
         }
 
-        function quickBill(name, price) {
-            document.getElementById('itemName').value = name;
-            document.getElementById('itemPrice').value = price;
-            document.getElementById('itemQty').value = 1;
-            document.getElementById('itemQty').focus();
+        function deleteInventory(id) {
+            inventory = inventory.filter(i => i.id !== id);
+            saveData();
+            updateAllUI();
         }
 
-        function addItem() {
-            const nameInput = document.getElementById('itemName');
-            const priceInput = document.getElementById('itemPrice');
-            const qtyInput = document.getElementById('itemQty');
-            
-            const name = nameInput.value.trim();
-            const price = parseFloat(priceInput.value);
-            const qty = parseInt(qtyInput.value) || 1;
+        function quickSelect(name, price) {
+            document.getElementById('billItemName').value = name;
+            document.getElementById('billItemPrice').value = price;
+            document.getElementById('billItemQty').value = 1;
+            document.getElementById('billItemQty').focus();
+        }
+
+        // POS & Billing Logic
+        function addToBill() {
+            const name = document.getElementById('billItemName').value.trim();
+            const price = parseFloat(document.getElementById('billItemPrice').value);
+            const qty = parseInt(document.getElementById('billItemQty').value) || 1;
 
             if (!name || isNaN(price) || price < 0) {
-                alert('Please enter a valid name and price.');
+                alert('Please enter a valid item name and price.');
                 return;
             }
 
             cart.push({ name, price, qty });
-            nameInput.value = '';
-            priceInput.value = '';
-            qtyInput.value = '1';
-            nameInput.focus();
-
-            updateCartDisplay();
+            document.getElementById('billItemName').value = '';
+            document.getElementById('billItemPrice').value = '';
+            document.getElementById('billItemQty').value = '1';
+            updateCartUI();
         }
 
-        function updateCartDisplay() {
-            const cartList = document.getElementById('cartList');
-            const grandTotalEl = document.getElementById('grandTotal');
+        function updateCartUI() {
+            const list = document.getElementById('cartItemsList');
+            const totalEl = document.getElementById('posGrandTotal');
 
             if (cart.length === 0) {
-                cartList.innerHTML = '<p class="text-slate-600 italic text-center py-3 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added to bill yet.</p>';
-                grandTotalEl.innerText = '₹0.00';
+                list.innerHTML = '<p class="text-slate-600 text-xs italic text-center py-4 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">Bill is empty.</p>';
+                totalEl.innerText = '₹0.00';
                 calculateChange();
                 return;
             }
@@ -189,53 +302,154 @@
             let total = 0;
 
             cart.forEach((item, index) => {
-                const itemTotal = item.price * item.qty;
-                total += itemTotal;
+                let sub = item.price * item.qty;
+                total += sub;
                 html += `
-                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-xl border border-slate-800/60">
+                    <div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs">
                         <div>
-                            <p class="font-semibold text-slate-200">${item.name}</p>
-                            <p class="text-xs text-slate-500">₹${item.price} × ${item.qty}</p>
+                            <span class="font-bold text-slate-200">${item.name}</span>
+                            <span class="text-slate-400 ml-2">₹${item.price} × ${item.qty}</span>
                         </div>
                         <div class="flex items-center gap-3">
-                            <span class="font-bold text-emerald-400">₹${itemTotal.toFixed(2)}</span>
-                            <button onclick="removeItem(${index})" class="text-rose-400 hover:text-rose-300 text-xs bg-rose-500/10 px-2 py-1 rounded-lg">✕</button>
+                            <span class="font-bold text-emerald-400">₹${sub.toFixed(2)}</span>
+                            <button onclick="removeFromCart(${index})" class="text-rose-400">✕</button>
                         </div>
                     </div>
                 `;
             });
 
-            cartList.innerHTML = html;
-            grandTotalEl.innerText = `₹${total.toFixed(2)}`;
+            list.innerHTML = html;
+            totalEl.innerText = `₹${total.toFixed(2)}`;
             calculateChange();
         }
 
-        function removeItem(index) {
+        function removeFromCart(index) {
             cart.splice(index, 1);
-            updateCartDisplay();
+            updateCartUI();
         }
 
         function calculateChange() {
             const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const cashReceived = parseFloat(document.getElementById('cashReceived').value) || 0;
-            const changeDueEl = document.getElementById('changeDue');
+            const given = parseFloat(document.getElementById('cashGiven').value) || 0;
+            const changeEl = document.getElementById('changeReturn');
 
-            if (cashReceived >= total && total > 0) {
-                const change = cashReceived - total;
-                changeDueEl.innerText = `₹${change.toFixed(2)}`;
-                changeDueEl.className = "font-black text-emerald-400 text-lg";
+            if (given >= total && total > 0) {
+                changeEl.innerText = `₹${(given - total).toFixed(2)}`;
+                changeEl.className = "font-black text-emerald-400 text-lg";
             } else {
-                changeDueEl.innerText = "₹0.00";
-                changeDueEl.className = "font-black text-yellow-400 text-lg";
+                changeEl.innerText = "₹0.00";
+                changeEl.className = "font-black text-yellow-400 text-lg";
             }
         }
 
-        function clearBill() {
-            if (cart.length > 0 && !confirm('Complete transaction and clear bill?')) return;
+        function completeSale() {
+            if (cart.length === 0) {
+                alert('Bill is empty!');
+                return;
+            }
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            transactions.unshift({
+                id: Date.now(),
+                date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                itemsCount: cart.length,
+                total: total
+            });
+
             cart = [];
-            document.getElementById('cashReceived').value = '';
-            updateCartDisplay();
+            document.getElementById('cashGiven').value = '';
+            saveData();
+            updateAllUI();
+            alert('Sale completed and recorded in ledger successfully!');
+            switchTab('analytics');
         }
+
+        // Queue Logic
+        function addQueueToken() {
+            const name = document.getElementById('queueClientName').value.trim();
+            const detail = document.getElementById('queueServiceDetail').value.trim();
+
+            if (!name) {
+                alert('Please enter customer name.');
+                return;
+            }
+
+            queue.push({ id: Date.now(), name, detail: detail || 'General Service', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
+            document.getElementById('queueClientName').value = '';
+            document.getElementById('queueServiceDetail').value = '';
+            saveData();
+            updateQueueUI();
+        }
+
+        function updateQueueUI() {
+            const container = document.getElementById('queueListContainer');
+            if (queue.length === 0) {
+                container.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No active queue tokens.</p>';
+                return;
+            }
+
+            let html = '';
+            queue.forEach((q, idx) => {
+                html += `
+                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">#${idx + 1}</span>
+                                <span class="font-bold text-slate-200">${q.name}</span>
+                            </div>
+                            <p class="text-slate-400 text-[10px] mt-1">${q.detail} • Token Time: ${q.time}</p>
+                        </div>
+                        <button onclick="removeQueue(${q.id})" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg font-bold">Done / Clear</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function removeQueue(id) {
+            queue = queue.filter(q => q.id !== id);
+            saveData();
+            updateQueueUI();
+        }
+
+        // Ledger UI
+        function updateLedgerUI() {
+            const revEl = document.getElementById('ledgerTotalRevenue');
+            const countEl = document.getElementById('ledgerTotalCount');
+            const listEl = document.getElementById('ledgerTransactionsList');
+
+            let totalRev = transactions.reduce((sum, t) => sum + t.total, 0);
+            revEl.innerText = `₹${totalRev.toFixed(2)}`;
+            countEl.innerText = transactions.length;
+
+            if (transactions.length === 0) {
+                listEl.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No completed transactions recorded yet.</p>';
+                return;
+            }
+
+            let html = '';
+            transactions.forEach(t => {
+                html += `
+                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <div>
+                            <span class="font-bold text-slate-200">Sale #${t.id.toString().slice(-4)}</span>
+                            <span class="text-slate-400 ml-2">${t.date} (${t.itemsCount} items)</span>
+                        </div>
+                        <span class="font-black text-emerald-400">₹${t.total.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+            listEl.innerHTML = html;
+        }
+
+        function updateAllUI() {
+            updateInventoryUI();
+            updateCartUI();
+            updateQueueUI();
+            updateLedgerUI();
+        }
+
+        // Initial Load
+        updateAllUI();
     </script>
 </body>
 </html>

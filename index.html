@@ -1,257 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoSikkim - Tourism & Booking Services</title>
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Razorpay Checkout SDK -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .service-card:hover {
-      transform: translateY(-2px);
-      transition: all 0.2s ease-in-out;
-    }
-    .selected-card {
-      border-color: #059669 !important;
-      background-color: #ecfdf5 !important;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Business OS - Step 1: Billing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 min-h-screen text-slate-800 font-sans pb-12">
+<body class="bg-slate-950 text-white font-sans min-h-screen p-4">
 
-  <!-- Header / Branding -->
-  <header class="bg-emerald-700 text-white shadow-md">
-    <div class="max-w-3xl mx-auto px-4 py-6 text-center">
-      <h1 class="text-3xl font-bold tracking-wide flex items-center justify-center gap-2">
-        <i class="fa-solid fa-mountain-sun text-emerald-300"></i> GoSikkim Services
-      </h1>
-      <p class="text-emerald-100 text-sm mt-1">Homestay Bookings • Taxi & Cab Permits • Tour Packages</p>
+    <div class="max-w-md mx-auto bg-slate-900 rounded-2xl shadow-2xl p-6 border border-slate-800">
+        <!-- App Header -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-black text-emerald-400 tracking-wider">UNIVERSAL OS</h1>
+            <p class="text-xs text-slate-400 mt-1">Step 1: Universal Bill & Cash Counter</p>
+        </div>
+
+        <!-- Add Item / Service Form -->
+        <div class="space-y-4 mb-6 bg-slate-950/50 p-4 rounded-xl border border-slate-800">
+            <div>
+                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Item / Service Name</label>
+                <input type="text" id="itemName" placeholder="e.g., Shoes, Haircut, Room Booking" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Price (₹)</label>
+                    <input type="number" id="itemPrice" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Quantity</label>
+                    <input type="number" id="itemQty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+            </div>
+            <button onclick="addItem()" class="w-full bg-emerald-500 hover:bg-emerald-400 font-bold text-slate-950 p-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20">
+                + Add to Bill
+            </button>
+        </div>
+
+        <!-- Active Bill Cart -->
+        <div class="mb-6">
+            <h2 class="text-sm font-bold uppercase text-slate-400 mb-3 tracking-wider">Current Bill Summary</h2>
+            <div id="cartList" class="space-y-2 max-h-40 overflow-y-auto mb-4 text-sm pr-1">
+                <p class="text-slate-600 italic text-center py-4 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added yet.</p>
+            </div>
+            
+            <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
+                <span class="text-slate-400 font-semibold">Grand Total:</span>
+                <span id="grandTotal" class="text-2xl font-black text-emerald-400">₹0.00</span>
+            </div>
+        </div>
+
+        <!-- Cash & Change Calculator -->
+        <div class="space-y-3 pt-4 border-t border-slate-800">
+            <h2 class="text-sm font-bold uppercase text-slate-400 tracking-wider">Cash Register</h2>
+            <div>
+                <label class="block text-xs text-slate-400 mb-1">Cash Received from Customer</label>
+                <input type="number" id="cashReceived" placeholder="Enter amount given" oninput="calculateChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+            </div>
+            <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-sm">
+                <span class="text-slate-400">Change to Return:</span>
+                <span id="changeDue" class="font-black text-yellow-400 text-lg">₹0.00</span>
+            </div>
+            <button onclick="clearBill()" class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-semibold p-3 rounded-xl border border-rose-900/50 transition duration-200 text-sm">
+                Clear Bill / Complete Transaction
+            </button>
+        </div>
     </div>
-  </header>
 
-  <main class="max-w-3xl mx-auto px-4 mt-6 space-y-6">
+    <script>
+        let cart = [];
 
-    <!-- 1. Service Selection Menu -->
-    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-      <h2 class="text-lg font-semibold text-slate-900 mb-1 flex items-center gap-2">
-        <i class="fa-solid fa-layer-group text-emerald-600"></i> Select a Package or Service
-      </h2>
-      <p class="text-xs text-slate-500 mb-4">Tap a tour or homestay package below to auto-fill payment details:</p>
+        function addItem() {
+            const nameInput = document.getElementById('itemName');
+            const priceInput = document.getElementById('itemPrice');
+            const qtyInput = document.getElementById('itemQty');
+            
+            const name = nameInput.value.trim();
+            const price = parseFloat(priceInput.value);
+            const qty = parseInt(qtyInput.value) || 1;
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="service-grid">
-        
-        <!-- Service Card 1 -->
-        <div onclick="selectService('Gangtok Luxury Sightseeing (Full Day)', 5500, this)" 
-             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
-          <div class="flex justify-between items-start">
-            <h3 class="font-medium text-slate-800 text-sm">Gangtok Local Sightseeing</h3>
-            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹5,500</span>
-          </div>
-          <p class="text-xs text-slate-500 mt-1">Full-day 10-point luxury SUV/Innova tour in Gangtok.</p>
-        </div>
+            if (!name || isNaN(price) || price < 0) {
+                alert('Please enter a valid name and price.');
+                return;
+            }
 
-        <!-- Service Card 2 -->
-        <div onclick="selectService('Nathula Pass & Tsomgo VIP Reserved SUV Tour', 10500, this)" 
-             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
-          <div class="flex justify-between items-start">
-            <h3 class="font-medium text-slate-800 text-sm">Nathula & Tsomgo Permit Tour</h3>
-            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹10,500</span>
-          </div>
-          <p class="text-xs text-slate-500 mt-1">VIP permit processing, luxury 4x4 SUV & Baba Mandir tour.</p>
-        </div>
+            cart.push({ name, price, qty });
+            
+            // Reset inputs
+            nameInput.value = '';
+            priceInput.value = '';
+            qtyInput.value = '1';
+            nameInput.focus();
 
-        <!-- Service Card 3 -->
-        <div onclick="selectService('Premium Homestay Suite Booking (1 Night)', 6500, this)" 
-             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
-          <div class="flex justify-between items-start">
-            <h3 class="font-medium text-slate-800 text-sm">Sikkim Homestay Booking</h3>
-            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹6,500</span>
-          </div>
-          <p class="text-xs text-slate-500 mt-1">Luxury suite stay with all meals, drinks & bonfire night.</p>
-        </div>
-
-        <!-- Service Card 4 -->
-        <div onclick="selectService('North Sikkim Premium Package (3D/2N Lachen & Lachung)', 28500, this)" 
-             class="service-card cursor-pointer border border-slate-200 rounded-lg p-3 bg-white hover:border-emerald-500 transition">
-          <div class="flex justify-between items-start">
-            <h3 class="font-medium text-slate-800 text-sm">North Sikkim Package (3D/2N)</h3>
-            <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">₹28,500</span>
-          </div>
-          <p class="text-xs text-slate-500 mt-1">All-inclusive luxury group/family package (Gurudongmar & Yumthang).</p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- 2. Booking / Payment Counter Form -->
-    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-      <h2 class="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-        <i class="fa-solid fa-credit-card text-emerald-600"></i> Customer Booking & Payment
-      </h2>
-
-      <form id="payment-form" class="space-y-4" onsubmit="handlePayment(event)">
-        <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">Customer Full Name *</label>
-          <input type="text" id="cust-name" required placeholder="e.g. Rahul Sharma" 
-                 class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-        </div>
-
-        <div>
-          <label class="block text-xs font-medium text-slate-700 mb-1">WhatsApp Mobile Number *</label>
-          <input type="tel" id="cust-phone" required placeholder="10-digit phone number" pattern="[0-9]{10}"
-                 class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-700 mb-1">Service / Package Description *</label>
-            <input type="text" id="service-note" required placeholder="Select from menu or type here" 
-                   class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-700 mb-1">Total Amount (₹) *</label>
-            <input type="number" id="cust-amount" required min="1" placeholder="Amount in INR" 
-                   class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-          </div>
-        </div>
-
-        <button type="submit" 
-                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-4 rounded-lg shadow transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-qrcode"></i> Pay via UPI / Cards / Wallet
-        </button>
-      </form>
-    </section>
-
-    <!-- 3. Recent Transactions & WhatsApp Receipts -->
-    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
-      <h2 class="text-lg font-semibold text-slate-900 mb-3 flex items-center gap-2">
-        <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i> Recent Payment Transactions
-      </h2>
-      
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-600">
-          <thead class="bg-slate-100 text-slate-700 font-semibold uppercase border-b border-slate-200">
-            <tr>
-              <th class="p-2.5">Customer</th>
-              <th class="p-2.5">Service</th>
-              <th class="p-2.5">Amount</th>
-              <th class="p-2.5 text-center">Receipt</th>
-            </tr>
-          </thead>
-          <tbody id="tx-history-body" class="divide-y divide-slate-100">
-            <tr id="no-tx-row">
-              <td colspan="4" class="p-4 text-center text-slate-400">No transactions recorded in this session.</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-  </main>
-
-  <script>
-    // Live Razorpay Key
-    const RAZORPAY_KEY = "rzp_live_TiN6t3iQ0poa9O";
-
-    // Auto-fill from Service Grid
-    function selectService(name, price, element) {
-      document.getElementById('service-note').value = name;
-      document.getElementById('cust-amount').value = price;
-
-      // Highlight selected UI element
-      document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected-card'));
-      if(element) {
-        element.classList.add('selected-card');
-      }
-    }
-
-    // Handle Payment Checkout
-    function handlePayment(e) {
-      e.preventDefault();
-
-      const name = document.getElementById('cust-name').value.trim();
-      const phone = document.getElementById('cust-phone').value.trim();
-      const note = document.getElementById('service-note').value.trim();
-      const amount = parseFloat(document.getElementById('cust-amount').value);
-
-      if (!name || !phone || !note || !amount || amount <= 0) {
-        alert("Please fill in all details correctly.");
-        return;
-      }
-
-      const options = {
-        key: RAZORPAY_KEY,
-        amount: Math.round(amount * 100), // Amount in paise
-        currency: "INR",
-        name: "GoSikkim Tourism",
-        description: note,
-        handler: function (response) {
-          addTransactionRecord({
-            paymentId: response.razorpay_payment_id,
-            name: name,
-            phone: phone,
-            note: note,
-            amount: amount,
-            date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          });
-          alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
-          document.getElementById('payment-form').reset();
-          document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected-card'));
-        },
-        prefill: {
-          name: name,
-          contact: phone
-        },
-        theme: {
-          color: "#059669"
+            updateCartDisplay();
         }
-      };
 
-      const rzp = new Razorpay(options);
-      rzp.open();
-    }
+        function updateCartDisplay() {
+            const cartList = document.getElementById('cartList');
+            const grandTotalEl = document.getElementById('grandTotal');
 
-    // Add Record to UI Table
-    function addTransactionRecord(tx) {
-      const tbody = document.getElementById('tx-history-body');
-      const noTxRow = document.getElementById('no-tx-row');
-      if (noTxRow) noTxRow.remove();
+            if (cart.length === 0) {
+                cartList.innerHTML = '<p class="text-slate-600 italic text-center py-4 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added yet.</p>';
+                grandTotalEl.innerText = '₹0.00';
+                calculateChange();
+                return;
+            }
 
-      const tr = document.createElement('tr');
-      tr.className = "hover:bg-slate-50";
+            let html = '';
+            let total = 0;
 
-      const waMessage = encodeURIComponent(
-        `*GoSikkim Payment Confirmation*\n\n` +
-        `Dear ${tx.name},\n` +
-        `Thank you for booking with GoSikkim!\n\n` +
-        `*Service:* ${tx.note}\n` +
-        `*Amount Paid:* ₹${tx.amount}\n` +
-        `*Payment ID:* ${tx.paymentId}\n` +
-        `*Time:* ${tx.date}\n\n` +
-        `We wish you a wonderful journey in Sikkim!`
-      );
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.qty;
+                total += itemTotal;
+                html += `
+                    <div class="flex justify-between items-center bg-slate-950/60 p-3 rounded-xl border border-slate-800/60">
+                        <div>
+                            <p class="font-semibold text-slate-200">${item.name}</p>
+                            <p class="text-xs text-slate-500">₹${item.price} × ${item.qty}</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-emerald-400">₹${itemTotal.toFixed(2)}</span>
+                            <button onclick="removeItem(${index})" class="text-rose-400 hover:text-rose-300 text-xs bg-rose-500/10 px-2 py-1 rounded-lg">✕</button>
+                        </div>
+                    </div>
+                `;
+            });
 
-      const waLink = `https://wa.me/91${tx.phone}?text=${waMessage}`;
+            cartList.innerHTML = html;
+            grandTotalEl.innerText = `₹${total.toFixed(2)}`;
+            calculateChange();
+        }
 
-      tr.innerHTML = `
-        <td class="p-2.5 font-medium text-slate-800">${tx.name}<br><span class="text-slate-400 font-normal">${tx.phone}</span></td>
-        <td class="p-2.5 text-slate-600">${tx.note}</td>
-        <td class="p-2.5 font-semibold text-emerald-700">₹${tx.amount}</td>
-        <td class="p-2.5 text-center">
-          <a href="${waLink}" target="_blank" 
-             class="inline-flex items-center gap-1 bg-green-600 hover:bg-green-700 text-white text-xs px-2.5 py-1 rounded transition">
-            <i class="fa-brands fa-whatsapp"></i> Receipt
-          </a>
-        </td>
-      `;
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+        }
 
-      tbody.prepend(tr);
-    }
-  </script>
+        function calculateChange() {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            const cashReceived = parseFloat(document.getElementById('cashReceived').value) || 0;
+            const changeDueEl = document.getElementById('changeDue');
+
+            if (cashReceived >= total && total > 0) {
+                const change = cashReceived - total;
+                changeDueEl.innerText = `₹${change.toFixed(2)}`;
+                changeDueEl.className = "font-black text-emerald-400 text-lg";
+            } else {
+                changeDueEl.innerText = "₹0.00";
+                changeDueEl.className = "font-black text-yellow-400 text-lg";
+            }
+        }
+
+        function clearBill() {
+            if (cart.length > 0 && !confirm('Clear current transaction?')) return;
+            cart = [];
+            document.getElementById('cashReceived').value = '';
+            updateCartDisplay();
+        }
+    </script>
 </body>
 </html>

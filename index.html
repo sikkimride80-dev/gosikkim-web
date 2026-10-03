@@ -3,71 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Business OS - Step 1: Billing</title>
+    <title>Universal Business OS - Step 2: Billing & Inventory</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-950 text-white font-sans min-h-screen p-4">
+<body class="bg-slate-950 text-white font-sans min-h-screen p-4 pb-12">
 
-    <div class="max-w-md mx-auto bg-slate-900 rounded-2xl shadow-2xl p-6 border border-slate-800">
+    <div class="max-w-md mx-auto space-y-6">
+
         <!-- App Header -->
-        <div class="text-center mb-6">
+        <div class="bg-slate-900 rounded-2xl shadow-xl p-5 border border-slate-800 text-center">
             <h1 class="text-2xl font-black text-emerald-400 tracking-wider">UNIVERSAL OS</h1>
-            <p class="text-xs text-slate-400 mt-1">Step 1: Universal Bill & Cash Counter</p>
+            <p class="text-xs text-slate-400 mt-1">Step 2: Billing + Inventory Manager</p>
         </div>
 
-        <!-- Add Item / Service Form -->
-        <div class="space-y-4 mb-6 bg-slate-950/50 p-4 rounded-xl border border-slate-800">
-            <div>
-                <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Item / Service Name</label>
-                <input type="text" id="itemName" placeholder="e.g., Shoes, Haircut, Room Booking" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Price (₹)</label>
-                    <input type="number" id="itemPrice" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Quantity</label>
-                    <input type="number" id="itemQty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
-                </div>
-            </div>
-            <button onclick="addItem()" class="w-full bg-emerald-500 hover:bg-emerald-400 font-bold text-slate-950 p-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20">
-                + Add to Bill
-            </button>
-        </div>
-
-        <!-- Active Bill Cart -->
-        <div class="mb-6">
-            <h2 class="text-sm font-bold uppercase text-slate-400 mb-3 tracking-wider">Current Bill Summary</h2>
-            <div id="cartList" class="space-y-2 max-h-40 overflow-y-auto mb-4 text-sm pr-1">
-                <p class="text-slate-600 italic text-center py-4 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added yet.</p>
-            </div>
+        <!-- SECTION 1: INVENTORY MANAGER -->
+        <div class="bg-slate-900 rounded-2xl shadow-xl p-5 border border-slate-800">
+            <h2 class="text-sm font-bold uppercase text-emerald-400 mb-3 tracking-wider flex items-center justify-between">
+                <span>📦 Inventory Stock</span>
+                <span id="inventoryCount" class="text-xs bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">0 Items</span>
+            </h2>
             
-            <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
-                <span class="text-slate-400 font-semibold">Grand Total:</span>
-                <span id="grandTotal" class="text-2xl font-black text-emerald-400">₹0.00</span>
+            <div class="space-y-3 mb-4">
+                <input type="text" id="invName" placeholder="Item/Service Name (e.g. Milk, Haircut)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="number" id="invPrice" placeholder="Price (₹)" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    <input type="number" id="invStock" placeholder="Stock Qty" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+                <button onclick="addInventoryItem()" class="w-full bg-slate-800 hover:bg-slate-700 font-semibold text-emerald-400 border border-emerald-500/30 p-2.5 rounded-xl transition duration-200 text-sm">
+                    + Add to Inventory Catalog
+                </button>
+            </div>
+
+            <!-- Inventory List Preview -->
+            <div id="inventoryList" class="space-y-2 max-h-32 overflow-y-auto text-xs pr-1">
+                <p class="text-slate-600 italic text-center py-2 bg-slate-950/30 rounded-lg border border-dashed border-slate-800">No catalog items yet. Add above or bill manually below.</p>
             </div>
         </div>
 
-        <!-- Cash & Change Calculator -->
-        <div class="space-y-3 pt-4 border-t border-slate-800">
-            <h2 class="text-sm font-bold uppercase text-slate-400 tracking-wider">Cash Register</h2>
-            <div>
-                <label class="block text-xs text-slate-400 mb-1">Cash Received from Customer</label>
-                <input type="number" id="cashReceived" placeholder="Enter amount given" oninput="calculateChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+        <!-- SECTION 2: BILL & CASH COUNTER -->
+        <div class="bg-slate-900 rounded-2xl shadow-xl p-5 border border-slate-800">
+            <h2 class="text-sm font-bold uppercase text-emerald-400 mb-3 tracking-wider">🛒 Quick Bill Counter</h2>
+            
+            <div class="space-y-3 mb-4 bg-slate-950/50 p-3 rounded-xl border border-slate-800">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Item / Service Name</label>
+                    <input type="text" id="itemName" placeholder="e.g., Shoes, Service, Room" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Price (₹)</label>
+                        <input type="number" id="itemPrice" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Quantity</label>
+                        <input type="number" id="itemQty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                </div>
+                <button onclick="addItem()" class="w-full bg-emerald-500 hover:bg-emerald-400 font-bold text-slate-950 p-3 rounded-xl transition duration-200 text-sm shadow-lg shadow-emerald-500/20">
+                    + Add to Bill
+                </button>
             </div>
-            <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-sm">
-                <span class="text-slate-400">Change to Return:</span>
-                <span id="changeDue" class="font-black text-yellow-400 text-lg">₹0.00</span>
+
+            <!-- Active Bill Cart -->
+            <div class="mb-4">
+                <div id="cartList" class="space-y-2 max-h-36 overflow-y-auto mb-3 text-sm pr-1">
+                    <p class="text-slate-600 italic text-center py-3 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added to bill yet.</p>
+                </div>
+                
+                <div class="flex justify-between items-center bg-slate-950 p-4 rounded-xl border border-slate-800">
+                    <span class="text-slate-400 font-semibold">Grand Total:</span>
+                    <span id="grandTotal" class="text-2xl font-black text-emerald-400">₹0.00</span>
+                </div>
             </div>
-            <button onclick="clearBill()" class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-semibold p-3 rounded-xl border border-rose-900/50 transition duration-200 text-sm">
-                Clear Bill / Complete Transaction
-            </button>
+
+            <!-- Cash Register -->
+            <div class="space-y-3 pt-3 border-t border-slate-800">
+                <h3 class="text-xs font-bold uppercase text-slate-400 tracking-wider">Cash Register</h3>
+                <div>
+                    <input type="number" id="cashReceived" placeholder="Cash Received from Customer (₹)" oninput="calculateChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-500">
+                </div>
+                <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-sm">
+                    <span class="text-slate-400">Change to Return:</span>
+                    <span id="changeDue" class="font-black text-yellow-400 text-lg">₹0.00</span>
+                </div>
+                <button onclick="clearBill()" class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 font-semibold p-3 rounded-xl border border-rose-900/50 transition duration-200 text-sm">
+                    Clear Bill / Complete Transaction
+                </button>
+            </div>
         </div>
+
     </div>
 
     <script>
+        let inventory = [];
         let cart = [];
+
+        function addInventoryItem() {
+            const name = document.getElementById('invName').value.trim();
+            const price = parseFloat(document.getElementById('invPrice').value);
+            const stock = parseInt(document.getElementById('invStock').value);
+
+            if (!name || isNaN(price) || isNaN(stock)) {
+                alert('Please fill out all inventory fields correctly.');
+                return;
+            }
+
+            inventory.push({ name, price, stock });
+            document.getElementById('invName').value = '';
+            document.getElementById('invPrice').value = '';
+            document.getElementById('invStock').value = '';
+            
+            updateInventoryDisplay();
+        }
+
+        function updateInventoryDisplay() {
+            const listEl = document.getElementById('inventoryList');
+            const countEl = document.getElementById('inventoryCount');
+            countEl.innerText = `${inventory.length} Items`;
+
+            if (inventory.length === 0) {
+                listEl.innerHTML = '<p class="text-slate-600 italic text-center py-2 bg-slate-950/30 rounded-lg border border-dashed border-slate-800">No catalog items yet.</p>';
+                return;
+            }
+
+            let html = '';
+            inventory.forEach((item, index) => {
+                html += `
+                    <div class="flex justify-between items-center bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+                        <div>
+                            <span class="font-semibold text-slate-200">${item.name}</span>
+                            <span class="text-slate-400 ml-2">₹${item.price}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-slate-900 px-2 py-0.5 rounded text-slate-300 border border-slate-800">Stock: ${item.stock}</span>
+                            <button onclick="quickBill('${item.name}', ${item.price})" class="bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 px-2 py-0.5 rounded font-bold">+</button>
+                        </div>
+                    </div>
+                `;
+            });
+            listEl.innerHTML = html;
+        }
+
+        function quickBill(name, price) {
+            document.getElementById('itemName').value = name;
+            document.getElementById('itemPrice').value = price;
+            document.getElementById('itemQty').value = 1;
+            document.getElementById('itemQty').focus();
+        }
 
         function addItem() {
             const nameInput = document.getElementById('itemName');
@@ -84,8 +166,6 @@
             }
 
             cart.push({ name, price, qty });
-            
-            // Reset inputs
             nameInput.value = '';
             priceInput.value = '';
             qtyInput.value = '1';
@@ -99,7 +179,7 @@
             const grandTotalEl = document.getElementById('grandTotal');
 
             if (cart.length === 0) {
-                cartList.innerHTML = '<p class="text-slate-600 italic text-center py-4 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added yet.</p>';
+                cartList.innerHTML = '<p class="text-slate-600 italic text-center py-3 bg-slate-950/30 rounded-xl border border-dashed border-slate-800">No items added to bill yet.</p>';
                 grandTotalEl.innerText = '₹0.00';
                 calculateChange();
                 return;
@@ -151,7 +231,7 @@
         }
 
         function clearBill() {
-            if (cart.length > 0 && !confirm('Clear current transaction?')) return;
+            if (cart.length > 0 && !confirm('Complete transaction and clear bill?')) return;
             cart = [];
             document.getElementById('cashReceived').value = '';
             updateCartDisplay();

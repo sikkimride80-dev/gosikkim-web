@@ -173,6 +173,13 @@
             <label>Student Full Name:</label>
             <input type="text" id="reg-name" placeholder="e.g. Tenzin Norbu">
 
+            <label>Gender (Mandatory):</label>
+            <select id="reg-gender">
+                <option value="">-- Select Gender --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
             <label>Mobile Number (10 Digits):</label>
             <input type="tel" id="reg-phone" maxlength="10" placeholder="e.g. 9832000000">
 
@@ -395,6 +402,7 @@
     // Generate Unique ID & Register
     function processRegistration() {
         let name = document.getElementById('reg-name').value.trim();
+        let gender = document.getElementById('reg-gender').value;
         let phone = document.getElementById('reg-phone').value.trim();
         let relation = document.getElementById('reg-relation').value;
         let age = document.getElementById('reg-age').value.trim();
@@ -403,8 +411,8 @@
         let school = document.getElementById('reg-school').value.trim();
         let password = document.getElementById('reg-pass').value.trim();
 
-        if (!name || !phone || phone.length !== 10 || !relation || !age || !dob || !studentClass || !school || !password) {
-            alert("Please fill out all fields correctly (ensure mobile number is 10 digits and select relationship).");
+        if (!name || !gender || !phone || phone.length !== 10 || !relation || !age || !dob || !studentClass || !school || !password) {
+            alert("Please fill out all fields correctly (ensure gender is selected, mobile number is 10 digits, and relationship is chosen).");
             return;
         }
         if (!isSelfieConfirmed || !selfieCapturedData) {
@@ -419,6 +427,7 @@
         let studentProfile = {
             uid: uniqueID,
             name: name,
+            gender: gender,
             phone: phone,
             relation: relation,
             age: age,

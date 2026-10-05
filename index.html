@@ -63,12 +63,15 @@
         .btn:hover { background-color: #1d4ed8; }
         .btn-danger { background-color: #dc2626; }
         .btn-danger:hover { background-color: #b91c1c; }
+        .btn-secondary { background-color: #475569; }
+        .btn-secondary:hover { background-color: #334155; }
+        .btn:disabled { background-color: #334155; cursor: not-allowed; opacity: 0.7; }
 
         .hidden { display: none !important; }
 
         /* Form Inputs */
         label { font-size: 13px; color: #94a3b8; display: block; margin-bottom: 4px; margin-top: 10px; }
-        input[type="text"], input[type="number"], input[type="date"], input[type="tel"] {
+        input[type="text"], input[type="number"], input[type="date"], input[type="tel"], input[type="password"] {
             width: calc(100% - 20px);
             padding: 10px;
             background: #0f172a;
@@ -79,14 +82,14 @@
         }
 
         /* Camera & Workspace */
-        #video-box {
+        #video-box, #selfie-preview {
             width: 100%;
             height: 180px;
             background: #000;
             border-radius: 8px;
             object-fit: cover;
             margin-bottom: 10px;
-            border: 2px solid #ef4444;
+            border: 2px solid #38bdf8;
         }
         .timer-display {
             font-size: 22px;
@@ -107,6 +110,17 @@
             border-left: 4px solid #38bdf8;
         }
 
+        /* Warning Box */
+        .warning-box {
+            background: #451a03;
+            border: 1px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .warning-box h3 { color: #f59e0b; margin-top: 0; }
+
         /* Support Box */
         .support-section {
             margin-top: 20px;
@@ -123,10 +137,36 @@
 
 <div class="app-container">
 
-    <!-- VIEW 0: REGISTRATION SCREEN (First Step) -->
-    <div id="register-view">
+    <!-- VIEW -1: CHOICE SCREEN (Login or Register) -->
+    <div id="choice-view">
+        <h1>Sikkim Exam Portal</h1>
+        <div class="subtitle">Hardcore AI Proctored Prep</div>
+        <div class="card" style="text-align: center;">
+            <p style="color: #cbd5e1; font-size: 14px;">Existing student? Login with your Unique ID. New student? Register your profile.</p>
+        </div>
+        <button class="btn" onclick="showLoginView()">Login to Profile</button>
+        <button class="btn btn-secondary" onclick="showRegisterView()">New Student Registration</button>
+    </div>
+
+    <!-- VIEW -0.5: LOGIN SCREEN -->
+    <div id="login-view" class="hidden">
+        <h1>Student Login</h1>
+        <div class="subtitle">Access your secure profile dashboard</div>
+        <div class="card">
+            <label>Unique Student ID:</label>
+            <input type="text" id="login-uid" placeholder="e.g. SKM-94821">
+
+            <label>Password:</label>
+            <input type="password" id="login-pass" placeholder="Enter your password">
+        </div>
+        <button class="btn" onclick="handleLogin()">Login</button>
+        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
+    </div>
+
+    <!-- VIEW 0: REGISTRATION SCREEN -->
+    <div id="register-view" class="hidden">
         <h1>Student Registration</h1>
-        <div class="subtitle">Enter your details before accessing exam modules</div>
+        <div class="subtitle">Create your unique permanent student account</div>
 
         <div class="card">
             <label>Student Full Name:</label>
@@ -146,15 +186,39 @@
 
             <label>School / College Name:</label>
             <input type="text" id="reg-school" placeholder="e.g. Tashi Namgyal Academy, Gangtok">
+
+            <label>Create Secure Password:</label>
+            <input type="password" id="reg-pass" placeholder="Create a strong password">
+
+            <label>Take Profile Selfie:</label>
+            <video id="selfie-cam" autoplay playsinline muted style="width:100%; height:140px; background:#000; border-radius:6px; object-fit:cover;"></video>
+            <button class="btn btn-secondary" type="button" onclick="captureSelfie()">Capture Selfie</button>
+            <div id="selfie-status" style="font-size:12px; color:#4ade80; margin-top:5px; text-align:center;">Selfie not captured yet</div>
         </div>
 
-        <button class="btn" onclick="submitRegistration()">Proceed to Exam Pass</button>
+        <button class="btn" onclick="processRegistration()">Proceed to Exam Pass</button>
+        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
+    </div>
+
+    <!-- VIEW 0.75: MANDATORY 10-SEC WARNING SCREEN -->
+    <div id="warning-view" class="hidden">
+        <h1>IMPORTANT WARNING</h1>
+        <div class="warning-box">
+            <h3>SAVE YOUR CREDENTIALS!</h3>
+            <p style="font-size: 14px; color: #f8fafc; line-height: 1.5;">
+                Your Unique Generated Student ID is:<br>
+                <strong id="display-generated-uid" style="font-size: 20px; color: #4ade80;"></strong><br><br>
+                You <strong>MUST</strong> remember or write down this User ID and your Password. It is mandatory to input them every time you log in to access your profile next time!
+            </p>
+        </div>
+        <div class="timer-display" id="warning-timer" style="color: #ef4444;">10</div>
+        <button class="btn" id="proceed-warning-btn" disabled onclick="goToPaywall()">Please wait (10s) to proceed...</button>
     </div>
 
     <!-- VIEW 1: PAYWALL SCREEN -->
     <div id="paywall-view" class="hidden">
         <h1>Sikkim Hardcore Exam Pass</h1>
-        <div class="subtitle">AI Proctored Strict 30-Minute Challenge</div>
+        <div class="subtitle" id="welcome-student-banner">AI Proctored Strict 30-Minute Challenge</div>
 
         <div class="card">
             <div class="price-display">₹200 / Day Pass</div>
@@ -168,6 +232,7 @@
         </div>
 
         <button class="btn" onclick="payDailyPass()">Pay ₹200 & Unlock Day Access</button>
+        <button class="btn btn-secondary" onclick="logoutSession()">Logout</button>
     </div>
 
     <!-- VIEW 2: EXAM WORKSPACE (Hidden until paid) -->
@@ -211,38 +276,186 @@
 <script>
     let timeLeft = 1830; // 30 minutes in seconds
     let timerInterval;
+    let selfieCapturedData = "";
+    let generatedUIDForWarning = "";
+    let selfieStream = null;
 
-    // 0. Handle Registration Submission
-    function submitRegistration() {
+    // Navigation Controls
+    function showChoiceView() {
+        stopSelfieCam();
+        document.getElementById('choice-view').classList.remove('hidden');
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('register-view').classList.add('hidden');
+        document.getElementById('warning-view').classList.add('hidden');
+        document.getElementById('paywall-view').classList.add('hidden');
+    }
+
+    function showLoginView() {
+        document.getElementById('choice-view').classList.add('hidden');
+        document.getElementById('login-view').classList.remove('hidden');
+    }
+
+    function showRegisterView() {
+        document.getElementById('choice-view').classList.add('hidden');
+        document.getElementById('register-view').classList.remove('hidden');
+        startSelfieCam();
+    }
+
+    function startSelfieCam() {
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(function(stream) {
+                selfieStream = stream;
+                let videoEl = document.getElementById('selfie-cam');
+                videoEl.srcObject = stream;
+            })
+            .catch(function(error) {
+                console.log("Camera permission note for selfie");
+            });
+    }
+
+    function stopSelfieCam() {
+        if (selfieStream) {
+            selfieStream.getTracks().forEach(track => track.stop());
+            selfieStream = null;
+        }
+    }
+
+    function captureSelfie() {
+        let videoEl = document.getElementById('selfie-cam');
+        let canvas = document.createElement('canvas');
+        canvas.width = videoEl.videoWidth || 300;
+        canvas.height = videoEl.videoHeight || 200;
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+        selfieCapturedData = canvas.toDataURL('image/png');
+        document.getElementById('selfie-status').innerText = "✓ Selfie captured successfully!";
+    }
+
+    // Generate Unique ID & Register
+    function processRegistration() {
         let name = document.getElementById('reg-name').value.trim();
         let phone = document.getElementById('reg-phone').value.trim();
         let age = document.getElementById('reg-age').value.trim();
         let dob = document.getElementById('reg-dob').value.trim();
         let studentClass = document.getElementById('reg-class').value.trim();
         let school = document.getElementById('reg-school').value.trim();
+        let password = document.getElementById('reg-pass').value.trim();
 
-        if (!name || !phone || !age || !dob || !studentClass || !school) {
-            alert("Please fill out all registration fields before proceeding.");
+        if (!name || !phone || !age || !dob || !studentClass || !school || !password) {
+            alert("Please fill out all registration fields and create a password.");
+            return;
+        }
+        if (!selfieCapturedData) {
+            alert("Please capture your profile selfie before proceeding.");
             return;
         }
 
-        // Save registration data temporarily in session storage
-        sessionStorage.setItem('student_name', name);
-        sessionStorage.setItem('student_phone', phone);
-        sessionStorage.setItem('student_age', age);
-        sessionStorage.setItem('student_dob', dob);
-        sessionStorage.setItem('student_class', studentClass);
-        sessionStorage.setItem('student_school', school);
+        // Generate a unique ID (e.g. SKM-84729)
+        let uniqueID = 'SKM-' + Math.floor(10000 + Math.random() * 90000);
 
-        // Hide registration view and reveal paywall view
+        // Save to browser LocalStorage so account persists on this device
+        let studentProfile = {
+            uid: uniqueID,
+            name: name,
+            phone: phone,
+            age: age,
+            dob: dob,
+            class: studentClass,
+            school: school,
+            password: password,
+            selfie: selfieCapturedData
+        };
+
+        localStorage.setItem('student_' + uniqueID, JSON.stringify(studentProfile));
+        localStorage.setItem('active_student_uid', uniqueID);
+
+        stopSelfieCam();
+        generatedUIDForWarning = uniqueID;
+
+        // Transition to 10-second warning screen
         document.getElementById('register-view').classList.add('hidden');
+        document.getElementById('warning-view').classList.remove('hidden');
+        startWarningCountdown();
+    }
+
+    // 10-Second Warning Timer
+    function startWarningCountdown() {
+        document.getElementById('display-generated-uid').innerText = generatedUIDForWarning;
+        let count = 10;
+        let timerEl = document.getElementById('warning-timer');
+        let btnEl = document.getElementById('proceed-warning-btn');
+        btnEl.disabled = true;
+        btnEl.innerText = `Please wait (${count}s) to proceed...`;
+
+        let interval = setInterval(function() {
+            count--;
+            timerEl.innerText = count;
+            btnEl.innerText = `Please wait (${count}s) to proceed...`;
+            if (count <= 0) {
+                clearInterval(interval);
+                timerEl.innerText = "Ready!";
+                btnEl.disabled = false;
+                btnEl.innerText = "I Have Saved My ID & Password - Proceed";
+            }
+        }, 1000);
+    }
+
+    function goToPaywall() {
+        document.getElementById('warning-view').classList.add('hidden');
         document.getElementById('paywall-view').classList.remove('hidden');
+        loadStudentBanner();
+    }
+
+    // Handle Login
+    function handleLogin() {
+        let uid = document.getElementById('login-uid').value.trim();
+        let pass = document.getElementById('login-pass').value.trim();
+
+        if (!uid || !pass) {
+            alert("Please enter both Unique Student ID and Password.");
+            return;
+        }
+
+        let storedData = localStorage.getItem('student_' + uid);
+        if (!storedData) {
+            alert("Student ID not found. Please register first.");
+            return;
+        }
+
+        let profile = JSON.parse(storedData);
+        if (profile.password !== pass) {
+            alert("Incorrect password. Please try again.");
+            return;
+        }
+
+        localStorage.setItem('active_student_uid', uid);
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('paywall-view').classList.remove('hidden');
+        loadStudentBanner();
+    }
+
+    function loadStudentBanner() {
+        let activeUid = localStorage.getItem('active_student_uid');
+        if (activeUid) {
+            let profile = JSON.parse(localStorage.getItem('student_' + activeUid));
+            if (profile) {
+                document.getElementById('welcome-student-banner').innerText = `Welcome, ${profile.name} (${profile.uid}) - Daily AI Pass`;
+            }
+        }
+    }
+
+    function logoutSession() {
+        localStorage.removeItem('active_student_uid');
+        showChoiceView();
     }
 
     // 1. Payment execution for ₹200 Daily Pass via Razorpay
     function payDailyPass() {
+        let activeUid = localStorage.getItem('active_student_uid');
+        let profile = activeUid ? JSON.parse(localStorage.getItem('student_' + activeUid)) : null;
+
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_0](start_span)[span_0](end_span)
             "amount": 20000, // Amount in paise (₹200 = 20000)
             "currency": "INR",
             "name": "Sikkim Exam Prep",
@@ -252,8 +465,9 @@
                 startExamSession();
             },
             "prefill": {
-                "contact": sessionStorage.getItem('student_phone') || "8918351226",
-                "email": "sikkimride80@gmail.com"
+                "contact": profile ? profile.phone : "8918351226",
+                "email": "sikkimride80@gmail.com",
+                "name": profile ? profile.name : "Student"
             },
             "theme": {
                 "color": "#2563eb"
@@ -318,7 +532,7 @@
     // 4. Fine Payment Handler (₹150)
     function payFine() {
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_2](start_span)[span_2](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
             "amount": 15000, // ₹150 fine in paise
             "currency": "INR",
             "name": "Sikkim Exam Prep - Fine Clearance",

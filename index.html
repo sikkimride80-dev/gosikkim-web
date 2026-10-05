@@ -71,7 +71,7 @@
 
         /* Form Inputs */
         label { font-size: 13px; color: #94a3b8; display: block; margin-bottom: 4px; margin-top: 10px; }
-        input[type="text"], input[type="number"], input[type="date"], input[type="tel"], input[type="password"] {
+        input[type="text"], input[type="number"], input[type="date"], input[type="tel"], input[type="password"], select {
             width: calc(100% - 20px);
             padding: 10px;
             background: #0f172a;
@@ -80,9 +80,10 @@
             border-radius: 6px;
             margin-bottom: 5px;
         }
+        select option { background: #0f172a; color: white; }
 
         /* Camera & Workspace */
-        #video-box, #selfie-preview {
+        #video-box, #selfie-cam, #selfie-preview {
             width: 100%;
             height: 180px;
             background: #000;
@@ -172,8 +173,21 @@
             <label>Student Full Name:</label>
             <input type="text" id="reg-name" placeholder="e.g. Tenzin Norbu">
 
-            <label>Mobile Number (Self or Parent / Guardian):</label>
-            <input type="tel" id="reg-phone" placeholder="e.g. 9832XXXXXX">
+            <label>Mobile Number (10 Digits):</label>
+            <input type="tel" id="reg-phone" maxlength="10" placeholder="e.g. 9832000000">
+
+            <label>Mobile Number Belongs To (Mandatory):</label>
+            <select id="reg-relation">
+                <option value="">-- Select Option --</option>
+                <option value="Self">Self</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Brother">Brother</option>
+                <option value="Sister">Sister</option>
+                <option value="Aunt">Aunt</option>
+                <option value="Uncle">Uncle</option>
+                <option value="Guardian">Guardian</option>
+            </select>
 
             <label>Age:</label>
             <input type="number" id="reg-age" placeholder="e.g. 17">
@@ -191,12 +205,24 @@
             <input type="password" id="reg-pass" placeholder="Create a strong password">
 
             <label>Take Profile Selfie:</label>
-            <video id="selfie-cam" autoplay playsinline muted style="width:100%; height:140px; background:#000; border-radius:6px; object-fit:cover;"></video>
-            <button class="btn btn-secondary" type="button" onclick="captureSelfie()">Capture Selfie</button>
-            <div id="selfie-status" style="font-size:12px; color:#4ade80; margin-top:5px; text-align:center;">Selfie not captured yet</div>
+            <!-- Live Camera Feed Container -->
+            <div id="camera-container">
+                <video id="selfie-cam" autoplay playsinline muted></video>
+                <button class="btn btn-secondary" type="button" onclick="captureSelfie()">Capture Selfie</button>
+            </div>
+
+            <!-- Captured Photo Preview Container (Hidden initially) -->
+            <div id="preview-container" class="hidden">
+                <img id="selfie-preview" alt="Captured Selfie Preview">
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-danger" type="button" onclick="retakeSelfie()" style="margin-top:0;">Retake Selfie</button>
+                    <button class="btn" type="button" onclick="confirmSelfie()" style="margin-top:0;">Continue</button>
+                </div>
+            </div>
+            <div id="selfie-status" style="font-size:12px; color:#f59e0b; margin-top:5px; text-align:center;">Please capture your selfie photo</div>
         </div>
 
-        <button class="btn" onclick="processRegistration()">Proceed to Exam Pass</button>
+        <button class="btn" id="proceed-reg-btn" onclick="processRegistration()">Proceed to Exam Pass</button>
         <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
     </div>
 
@@ -277,6 +303,7 @@
     let timeLeft = 1830; // 30 minutes in seconds
     let timerInterval;
     let selfieCapturedData = "";
+    let isSelfieConfirmed = false;
     let generatedUIDForWarning = "";
     let selfieStream = null;
 
@@ -298,6 +325,12 @@
     function showRegisterView() {
         document.getElementById('choice-view').classList.add('hidden');
         document.getElementById('register-view').classList.remove('hidden');
+        isSelfieConfirmed = false;
+        selfieCapturedData = "";
+        document.getElementById('camera-container').classList.remove('hidden');
+        document.getElementById('preview-container').classList.add('hidden');
+        document.getElementById('selfie-status').innerText = "Please capture your selfie photo";
+        document.getElementById('selfie-status').style.color = "#f59e0b";
         startSelfieCam();
     }
 
@@ -327,26 +360,55 @@
         canvas.height = videoEl.videoHeight || 200;
         let ctx = canvas.getContext('2d');
         ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+        
         selfieCapturedData = canvas.toDataURL('image/png');
-        document.getElementById('selfie-status').innerText = "✓ Selfie captured successfully!";
+        
+        // Stop camera feed and show preview with Retake / Continue buttons
+        stopSelfieCam();
+        document.getElementById('selfie-preview').src = selfieCapturedData;
+        document.getElementById('camera-container').classList.add('hidden');
+        document.getElementById('preview-container').classList.remove('hidden');
+        document.getElementById('selfie-status').innerText = "Selfie captured! Review and click Continue or Retake.";
+        document.getElementById('selfie-status').style.color = "#38bdf8";
+    }
+
+    function retakeSelfie() {
+        selfieCapturedData = "";
+        isSelfieConfirmed = false;
+        document.getElementById('preview-container').classList.add('hidden');
+        document.getElementById('camera-container').classList.remove('hidden');
+        document.getElementById('selfie-status').innerText = "Please capture your selfie photo";
+        document.getElementById('selfie-status').style.color = "#f59e0b";
+        startSelfieCam();
+    }
+
+    function confirmSelfie() {
+        if (!selfieCapturedData) {
+            alert("Please capture a selfie first.");
+            return;
+        }
+        isSelfieConfirmed = true;
+        document.getElementById('selfie-status').innerText = "✓ Selfie confirmed successfully!";
+        document.getElementById('selfie-status').style.color = "#4ade80";
     }
 
     // Generate Unique ID & Register
     function processRegistration() {
         let name = document.getElementById('reg-name').value.trim();
         let phone = document.getElementById('reg-phone').value.trim();
+        let relation = document.getElementById('reg-relation').value;
         let age = document.getElementById('reg-age').value.trim();
         let dob = document.getElementById('reg-dob').value.trim();
         let studentClass = document.getElementById('reg-class').value.trim();
         let school = document.getElementById('reg-school').value.trim();
         let password = document.getElementById('reg-pass').value.trim();
 
-        if (!name || !phone || !age || !dob || !studentClass || !school || !password) {
-            alert("Please fill out all registration fields and create a password.");
+        if (!name || !phone || phone.length !== 10 || !relation || !age || !dob || !studentClass || !school || !password) {
+            alert("Please fill out all fields correctly (ensure mobile number is 10 digits and select relationship).");
             return;
         }
-        if (!selfieCapturedData) {
-            alert("Please capture your profile selfie before proceeding.");
+        if (!isSelfieConfirmed || !selfieCapturedData) {
+            alert("Please capture and confirm your profile selfie before proceeding.");
             return;
         }
 
@@ -358,6 +420,7 @@
             uid: uniqueID,
             name: name,
             phone: phone,
+            relation: relation,
             age: age,
             dob: dob,
             class: studentClass,

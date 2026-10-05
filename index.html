@@ -26,6 +26,7 @@
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.6);
             border: 1px solid #334155;
+            position: relative;
         }
         h1 { color: #38bdf8; text-align: center; font-size: 24px; margin-bottom: 5px; }
         .subtitle { text-align: center; color: #94a3b8; font-size: 13px; margin-bottom: 20px; }
@@ -81,6 +82,78 @@
             margin-bottom: 5px;
         }
         select option { background: #0f172a; color: white; }
+
+        /* Top Header Navigation with Selfie Avatar */
+        .top-dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #334155;
+        }
+        .profile-avatar-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #38bdf8;
+            transition: transform 0.2s;
+        }
+        .profile-avatar:hover { transform: scale(1.05); }
+        .avatar-name { font-size: 13px; font-weight: bold; color: #f8fafc; }
+        .avatar-sub { font-size: 11px; color: #38bdf8; }
+
+        /* Profile Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: #1e293b;
+            width: 90%;
+            max-width: 420px;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #38bdf8;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-card h2 { color: #38bdf8; text-align: center; margin-top: 0; font-size: 20px; }
+        .profile-detail-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 6px 0;
+            border-bottom: 1px solid #334155;
+        }
+        .profile-detail-label { color: #94a3b8; }
+        .profile-detail-val { color: #f8fafc; font-weight: 500; text-align: right; }
+
+        /* Global News Ticker / Card */
+        .news-card {
+            background: #0f172a;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+        .news-card h4 { color: #f59e0b; margin: 0 0 5px 0; font-size: 14px; }
 
         /* Camera & Workspace */
         #video-box, #selfie-cam, #selfie-preview {
@@ -212,13 +285,11 @@
             <input type="password" id="reg-pass" placeholder="Create a strong password">
 
             <label>Take Profile Selfie:</label>
-            <!-- Live Camera Feed Container -->
             <div id="camera-container">
                 <video id="selfie-cam" autoplay playsinline muted></video>
                 <button class="btn btn-secondary" type="button" onclick="captureSelfie()">Capture Selfie</button>
             </div>
 
-            <!-- Captured Photo Preview Container (Hidden initially) -->
             <div id="preview-container" class="hidden">
                 <img id="selfie-preview" alt="Captured Selfie Preview">
                 <div style="display: flex; gap: 10px;">
@@ -248,10 +319,30 @@
         <button class="btn" id="proceed-warning-btn" disabled onclick="finishRegistrationAndLogin()">Please wait (10s) to proceed...</button>
     </div>
 
-    <!-- VIEW 1: PAYWALL SCREEN -->
+    <!-- VIEW 1: DASHBOARD & TRIAL LAUNCH SCREEN -->
     <div id="paywall-view" class="hidden">
-        <h1>Sikkim Hardcore Exam Pass</h1>
+        <!-- Top Navigation Header with Selfie Avatar -->
+        <div class="top-dashboard-header">
+            <div class="profile-avatar-container" onclick="openProfileModal()">
+                <img id="header-avatar-img" class="profile-avatar" src="" alt="Profile Selfie">
+                <div>
+                    <div id="header-student-name" class="avatar-name">Student</div>
+                    <div id="header-student-id" class="avatar-sub">SKM-00000 (Tap to View Profile)</div>
+                </div>
+            </div>
+            <button class="btn btn-secondary" style="width: auto; padding: 6px 12px; font-size: 12px; margin-top:0;" onclick="logoutSession()">Logout</button>
+        </div>
+
+        <h1>Student Dashboard</h1>
         <div class="subtitle" id="welcome-student-banner">AI Proctored Strict 30-Minute Challenge</div>
+
+        <!-- Global News Update Card -->
+        <div class="news-card">
+            <h4>🌐 Global Tech & Education News Update</h4>
+            <p style="margin: 0; line-height: 1.4;">
+                Global education boards are increasingly shifting toward strict AI-proctored examination environments to maintain integrity. Stay alert, keep your camera clear, and maintain focus throughout your assessment modules!
+            </p>
+        </div>
 
         <div class="card">
             <div class="price-display">₹200 / Day Pass</div>
@@ -260,12 +351,54 @@
                 <li><strong>Live Proctoring:</strong> Camera must stay open live for the full 30 mins.</li>
                 <li><strong>Anti-Cheat Security:</strong> Tab switches, background switching, or external book copying instantly stops the timer, executes a profile lock, and triggers a <strong>₹150 fine</strong>.</li>
                 <li><strong>Scoring Rewards:</strong> Score 1,500 points to claim <strong>6 extra chapter attempts</strong> for the day.</li>
-                <li><strong>Reset Fee:</strong> Exhausted attempts cost ₹100 for tomorrow's recovery.</li>
             </ul>
         </div>
 
-        <button class="btn" onclick="payDailyPass()">Pay ₹200 & Unlock Day Access</button>
-        <button class="btn btn-secondary" onclick="logoutSession()">Logout</button>
+        <button class="btn" onclick="startHardcoreTrial()">Start Your Hardcore Trial of Exam</button>
+    </div>
+
+    <!-- PROFILE DETAILS MODAL -->
+    <div id="profile-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h2>Student Profile Details</h2>
+            <div style="text-align: center; margin-bottom: 15px;">
+                <img id="modal-avatar-img" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8;" src="" alt="Selfie">
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">Full Name:</span>
+                <span class="profile-detail-val" id="mod-name">-</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">Unique Student ID:</span>
+                <span class="profile-detail-val" id="mod-uid" style="color: #4ade80;">-</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">Gender:</span>
+                <span class="profile-detail-val" id="mod-gender">-</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">Age & DOB:</span>
+                <span class="profile-detail-val" id="mod-age-dob">-</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">Mobile & Relation:</span>
+                <span class="profile-detail-val" id="mod-phone">-</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">Class / Grade:</span>
+                <span class="profile-detail-val" id="mod-class">-</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">School / College:</span>
+                <span class="profile-detail-val" id="mod-school">-</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="profile-detail-label">Password:</span>
+                <span class="profile-detail-val" id="mod-pass" style="color: #f59e0b;">-</span>
+            </div>
+
+            <button class="btn btn-secondary" onclick="closeProfileModal()" style="margin-top: 15px;">Close Profile</button>
+        </div>
     </div>
 
     <!-- VIEW 2: EXAM WORKSPACE (Hidden until paid) -->
@@ -370,7 +503,6 @@
         
         selfieCapturedData = canvas.toDataURL('image/png');
         
-        // Stop camera feed and show preview with Retake / Continue buttons
         stopSelfieCam();
         document.getElementById('selfie-preview').src = selfieCapturedData;
         document.getElementById('camera-container').classList.add('hidden');
@@ -420,10 +552,8 @@
             return;
         }
 
-        // Generate a unique ID (e.g. SKM-84729)
         let uniqueID = 'SKM-' + Math.floor(10000 + Math.random() * 90000);
 
-        // Save to browser LocalStorage so account persists on this device
         let studentProfile = {
             uid: uniqueID,
             name: name,
@@ -443,7 +573,6 @@
         stopSelfieCam();
         generatedUIDForWarning = uniqueID;
 
-        // Transition to 10-second warning screen
         document.getElementById('register-view').classList.add('hidden');
         document.getElementById('warning-view').classList.remove('hidden');
         startWarningCountdown();
@@ -471,10 +600,9 @@
         }, 1000);
     }
 
-    // After warning finishes, take them back to login screen
     function finishRegistrationAndLogin() {
         document.getElementById('warning-view').classList.add('hidden');
-        localStorage.removeItem('active_student_uid'); // Ensure they start logged out
+        localStorage.removeItem('active_student_uid');
         showLoginView();
         alert("Registration complete! Please login using your new User ID and Password.");
     }
@@ -504,17 +632,46 @@
         localStorage.setItem('active_student_uid', uid);
         document.getElementById('login-view').classList.add('hidden');
         document.getElementById('paywall-view').classList.remove('hidden');
-        loadStudentBanner();
+        loadStudentDashboard();
     }
 
-    function loadStudentBanner() {
+    function loadStudentDashboard() {
         let activeUid = localStorage.getItem('active_student_uid');
         if (activeUid) {
             let profile = JSON.parse(localStorage.getItem('student_' + activeUid));
             if (profile) {
-                document.getElementById('welcome-student-banner').innerText = `Welcome, ${profile.name} (${profile.uid}) - Daily AI Pass`;
+                document.getElementById('welcome-student-banner').innerText = `Welcome back, ${profile.name}!`;
+                document.getElementById('header-student-name').innerText = profile.name;
+                document.getElementById('header-student-id').innerText = profile.uid + " (Tap Profile)";
+                if (profile.selfie) {
+                    document.getElementById('header-avatar-img').src = profile.selfie;
+                    document.getElementById('modal-avatar-img').src = profile.selfie;
+                }
             }
         }
+    }
+
+    // Profile Modal Handlers
+    function openProfileModal() {
+        let activeUid = localStorage.getItem('active_student_uid');
+        if (activeUid) {
+            let profile = JSON.parse(localStorage.getItem('student_' + activeUid));
+            if (profile) {
+                document.getElementById('mod-name').innerText = profile.name;
+                document.getElementById('mod-uid').innerText = profile.uid;
+                document.getElementById('mod-gender').innerText = profile.gender;
+                document.getElementById('mod-age-dob').innerText = `${profile.age} Yrs (${profile.dob})`;
+                document.getElementById('mod-phone').innerText = `${profile.phone} (${profile.relation})`;
+                document.getElementById('mod-class').innerText = profile.class;
+                document.getElementById('mod-school').innerText = profile.school;
+                document.getElementById('mod-pass').innerText = profile.password;
+                document.getElementById('profile-modal').classList.remove('hidden');
+            }
+        }
+    }
+
+    function closeProfileModal() {
+        document.getElementById('profile-modal').classList.add('hidden');
     }
 
     function logoutSession() {
@@ -522,17 +679,17 @@
         showChoiceView();
     }
 
-    // 1. Payment execution for ₹200 Daily Pass via Razorpay
-    function payDailyPass() {
+    // 1. Trigger Razorpay Trial / Pass Payment when clicking "Start Your Hardcore Trial of Exam"
+    function startHardcoreTrial() {
         let activeUid = localStorage.getItem('active_student_uid');
         let profile = activeUid ? JSON.parse(localStorage.getItem('student_' + activeUid)) : null;
 
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_0](start_span)[span_0](end_span)
             "amount": 20000, // Amount in paise (₹200 = 20000)
             "currency": "INR",
             "name": "Sikkim Exam Prep",
-            "description": "Daily 24-Hour Pass",
+            "description": "Daily Hardcore Exam Trial Pass",
             "handler": function (response){
                 alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
                 startExamSession();
@@ -555,7 +712,6 @@
         document.getElementById('paywall-view').classList.add('hidden');
         document.getElementById('exam-view').classList.remove('hidden');
 
-        // Initialize camera stream
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
             .then(function(stream) {
                 let videoElement = document.getElementById('video-box');
@@ -565,7 +721,6 @@
                 alert("Camera access is mandatory for live proctoring. Please allow camera permissions.");
             });
 
-        // Start 30-minute countdown timer
         timerInterval = setInterval(updateTimer, 1000);
     }
 
@@ -605,7 +760,7 @@
     // 4. Fine Payment Handler (₹150)
     function payFine() {
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_2](start_span)[span_2](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
             "amount": 15000, // ₹150 fine in paise
             "currency": "INR",
             "name": "Sikkim Exam Prep - Fine Clearance",

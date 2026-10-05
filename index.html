@@ -180,15 +180,11 @@
 <script>
     let timeLeft = 1830; // 30 minutes in seconds
     let timerInterval;
-    
-    // Your Merchant Details reference from Razorpay:
-    // Merchant ID: TiMZJnUpP5m6dN
-    // Account ID: acc_TiMZJnUpP5m6dN
 
     // 1. Payment execution for ₹200 Daily Pass via Razorpay
     function payDailyPass() {
         var options = {
-            "key": "rzp_live_YOUR_KEY_ID", // Replace with your Razorpay live API Key ID from your dashboard settings
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_4](start_span)[span_4](end_span)
             "amount": 20000, // Amount in paise (₹200 = 20000)
             "currency": "INR",
             "name": "Sikkim Exam Prep",
@@ -264,7 +260,7 @@
     // 4. Fine Payment Handler (₹150)
     function payFine() {
         var options = {
-            "key": "rzp_live_YOUR_KEY_ID",
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_5](start_span)[span_5](end_span)
             "amount": 15000, // ₹150 fine in paise
             "currency": "INR",
             "name": "Sikkim Exam Prep - Fine Clearance",

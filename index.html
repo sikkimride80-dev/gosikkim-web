@@ -39,13 +39,13 @@
             border: 1px solid #1e293b;
         }
         .price-display {
-            font-size: 26px;
+            font-size: 24px;
             color: #4ade80;
             font-weight: bold;
             text-align: center;
             margin: 10px 0;
         }
-        ul { padding-left: 20px; font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+        ul { padding-left: 20px; font-size: 12px; color: #cbd5e1; line-height: 1.5; }
         li { margin-bottom: 6px; }
         
         .btn {
@@ -116,7 +116,7 @@
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -319,7 +319,7 @@
         <button class="btn" id="proceed-warning-btn" disabled onclick="finishRegistrationAndLogin()">Please wait (10s) to proceed...</button>
     </div>
 
-    <!-- VIEW 1: DASHBOARD & TRIAL LAUNCH SCREEN -->
+    <!-- VIEW 1: MAIN DASHBOARD & GLOBAL NEWS -->
     <div id="paywall-view" class="hidden">
         <!-- Top Navigation Header with Selfie Avatar -->
         <div class="top-dashboard-header">
@@ -344,20 +344,14 @@
             </p>
         </div>
 
-        <div class="card">
-            <div class="price-display">₹200 / Day Pass</div>
-            <ul>
-                <li><strong>Access Duration:</strong> Valid until 12:00 AM Midnight (Auto-resets).</li>
-                <li><strong>Live Proctoring:</strong> Camera must stay open live for the full 30 mins.</li>
-                <li><strong>Anti-Cheat Security:</strong> Tab switches, background switching, or external book copying instantly stops the timer, executes a profile lock, and triggers a <strong>₹150 fine</strong>.</li>
-                <li><strong>Scoring Rewards:</strong> Score 1,500 points to claim <strong>6 extra chapter attempts</strong> for the day.</li>
-            </ul>
+        <div class="card" style="text-align: center; padding: 25px;">
+            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 15px;">
+                Tap your <strong>Selfie Avatar</strong> in the top-left corner above to check your profile credentials, details, and launch your trial examination pass.
+            </p>
         </div>
-
-        <button class="btn" onclick="startHardcoreTrial()">Start Your Hardcore Trial of Exam</button>
     </div>
 
-    <!-- PROFILE DETAILS MODAL -->
+    <!-- PROFILE DETAILS & RAZORPAY TRIAL MODAL -->
     <div id="profile-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <h2>Student Profile Details</h2>
@@ -395,6 +389,17 @@
             <div class="profile-detail-row">
                 <span class="profile-detail-label">Password:</span>
                 <span class="profile-detail-val" id="mod-pass" style="color: #f59e0b;">-</span>
+            </div>
+
+            <!-- Razorpay Trial Box Inside Profile Modal -->
+            <div style="margin-top: 15px; background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;">
+                <div class="price-display">₹200 / Day Pass</div>
+                <ul>
+                    <li><strong>Access:</strong> Valid until 12:00 AM Midnight.</li>
+                    <li><strong>Live Proctoring:</strong> Camera active full 30 mins.</li>
+                    <li><strong>Anti-Cheat:</strong> Tab/background switches trigger lock + ₹150 fine.</li>
+                </ul>
+                <button class="btn" onclick="startHardcoreTrial()">Start Your Hardcore Trial of Exam</button>
             </div>
 
             <button class="btn btn-secondary" onclick="closeProfileModal()" style="margin-top: 15px;">Close Profile</button>
@@ -455,6 +460,7 @@
         document.getElementById('register-view').classList.add('hidden');
         document.getElementById('warning-view').classList.add('hidden');
         document.getElementById('paywall-view').classList.add('hidden');
+        document.getElementById('profile-modal').classList.add('hidden');
     }
 
     function showLoginView() {
@@ -679,19 +685,20 @@
         showChoiceView();
     }
 
-    // 1. Trigger Razorpay Trial / Pass Payment when clicking "Start Your Hardcore Trial of Exam"
+    // Trigger Razorpay Trial / Pass Payment when clicking "Start Your Hardcore Trial of Exam" inside Profile Modal
     function startHardcoreTrial() {
         let activeUid = localStorage.getItem('active_student_uid');
         let profile = activeUid ? JSON.parse(localStorage.getItem('student_' + activeUid)) : null;
 
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_0](start_span)[span_0](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID
             "amount": 20000, // Amount in paise (₹200 = 20000)
             "currency": "INR",
             "name": "Sikkim Exam Prep",
             "description": "Daily Hardcore Exam Trial Pass",
             "handler": function (response){
                 alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                closeProfileModal();
                 startExamSession();
             },
             "prefill": {
@@ -707,7 +714,7 @@
         rzp.open();
     }
 
-    // 2. Start Exam Workspace & Activate WebCam Live
+    // Start Exam Workspace & Activate WebCam Live
     function startExamSession() {
         document.getElementById('paywall-view').classList.add('hidden');
         document.getElementById('exam-view').classList.remove('hidden');
@@ -738,7 +745,7 @@
         timeLeft--;
     }
 
-    // 3. Anti-Cheating Protection (Tab Switching / Window Blur)
+    // Anti-Cheating Protection (Tab Switching / Window Blur)
     document.addEventListener("visibilitychange", function() {
         if (document.hidden && !document.getElementById('exam-view').classList.contains('hidden')) {
             triggerPenaltyLock();
@@ -757,10 +764,10 @@
         document.getElementById('locked-view').classList.remove('hidden');
     }
 
-    // 4. Fine Payment Handler (₹150)
+    // Fine Payment Handler (₹150)
     function payFine() {
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID
             "amount": 15000, // ₹150 fine in paise
             "currency": "INR",
             "name": "Sikkim Exam Prep - Fine Clearance",

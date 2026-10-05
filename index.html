@@ -3,476 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Business OS - Ultimate Elite Edition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Sikkim Hardcore Exam Prep & AI Proctored Platform</title>
+    <!-- Load Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b0f19;
+            color: #f8fafc;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 550px;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            border: 1px solid #334155;
+        }
+        h1 { color: #38bdf8; text-align: center; font-size: 24px; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #94a3b8; font-size: 13px; margin-bottom: 20px; }
+        
+        .card {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #1e293b;
+        }
+        .price-display {
+            font-size: 26px;
+            color: #4ade80;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        ul { padding-left: 20px; font-size: 13px; color: #cbd5e1; line-height: 1.5; }
+        li { margin-bottom: 6px; }
+        
+        .btn {
+            width: 100%;
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .btn:hover { background-color: #1d4ed8; }
+        .btn-danger { background-color: #dc2626; }
+        .btn-danger:hover { background-color: #b91c1c; }
+
+        .hidden { display: none !important; }
+
+        /* Camera & Workspace */
+        #video-box {
+            width: 100%;
+            height: 180px;
+            background: #000;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 2px solid #ef4444;
+        }
+        .timer-display {
+            font-size: 22px;
+            font-weight: bold;
+            color: #f59e0b;
+            text-align: center;
+            background: #1e293b;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .question-box {
+            font-size: 15px;
+            background: #1e293b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid #38bdf8;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        /* Support Box */
+        .support-section {
+            margin-top: 20px;
+            border-top: 1px solid #334155;
+            padding-top: 12px;
+            font-size: 12px;
+            color: #94a3b8;
+            text-align: center;
+        }
+        .support-section a { color: #38bdf8; text-decoration: none; }
+    </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen pb-20 selection:bg-emerald-500 selection:text-slate-950">
+<body>
 
-    <!-- Top Navigation Header -->
-    <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 py-3">
-        <div class="max-w-xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-slate-950 shadow-lg shadow-emerald-500/30">U</div>
-                <div>
-                    <h1 class="font-black text-sm tracking-widest text-emerald-400">UNIVERSAL OS</h1>
-                    <p class="text-[10px] text-slate-400 uppercase tracking-wider" id="currentModeLabel">Retail & Services Hub</p>
-                </div>
-            </div>
-            <select id="businessType" onchange="changeBusinessType()" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-1.5 text-xs font-semibold text-emerald-400 focus:outline-none focus:border-emerald-500">
-                <option value="retail">🛒 Retail / Shop</option>
-                <option value="salon">✂️ Salon / Barber</option>
-                <option value="hotel">🏨 Hotel / Stay</option>
-                <option value="clinic">🩺 Clinic / Doctor</option>
-            </select>
+<div class="app-container">
+
+    <!-- VIEW 1: PAYWALL SCREEN -->
+    <div id="paywall-view">
+        <h1>Sikkim Hardcore Exam Pass</h1>
+        <div class="subtitle">AI Proctored Strict 30-Minute Challenge</div>
+
+        <div class="card">
+            <div class="price-display">₹200 / Day Pass</div>
+            <ul>
+                <li><strong>Access Duration:</strong> Valid until 12:00 AM Midnight (Auto-resets).</li>
+                <li><strong>Live Proctoring:</strong> Camera must stay open live for the full 30 mins.</li>
+                <li><strong>Anti-Cheat Security:</strong> Tab switches, background switching, or external book copying instantly stops the timer, executes a profile lock, and triggers a <strong>₹150 fine</strong>.</li>
+                <li><strong>Scoring Rewards:</strong> Score 1,500 points to claim <strong>6 extra chapter attempts</strong> for the day.</li>
+                <li><strong>Reset Fee:</strong> Exhausted attempts cost ₹100 for tomorrow's recovery.</li>
+            </ul>
         </div>
-    </header>
 
-    <!-- Main Navigation Tabs -->
-    <nav class="max-w-xl mx-auto px-4 mt-4">
-        <div class="grid grid-cols-4 gap-1 bg-slate-900 p-1 rounded-2xl border border-slate-800 text-xs font-semibold">
-            <button onclick="switchTab('pos')" id="tab-pos" class="py-2.5 rounded-xl bg-emerald-500 text-slate-950 transition shadow-md">POS</button>
-            <button onclick="switchTab('inventory')" id="tab-inventory" class="py-2.5 rounded-xl text-slate-400 hover:text-white transition">Stock</button>
-            <button onclick="switchTab('queue')" id="tab-queue" class="py-2.5 rounded-xl text-slate-400 hover:text-white transition">Queue</button>
-            <button onclick="switchTab('analytics')" id="tab-analytics" class="py-2.5 rounded-xl text-slate-400 hover:text-white transition">Ledger</button>
+        <button class="btn" onclick="payDailyPass()">Pay ₹200 & Unlock Day Access</button>
+    </div>
+
+    <!-- VIEW 2: EXAM WORKSPACE (Hidden until paid) -->
+    <div id="exam-view" class="hidden">
+        <h1>Live Exam Session</h1>
+        <div class="timer-display" id="timer">30:00</div>
+
+        <div class="card" style="padding: 10px; text-align: center;">
+            <div style="font-size: 11px; color: #ef4444; margin-bottom: 4px; font-weight: bold;">● LIVE PROCTORING ACTIVE</div>
+            <video id="video-box" autoplay playsinline muted></video>
         </div>
-    </nav>
 
-    <!-- App Container -->
-    <main class="max-w-xl mx-auto px-4 mt-4 space-y-4">
+        <div class="question-box" id="question-text">
+            Loading AI custom-generated deep core question...
+        </div>
 
-        <!-- TAB 1: POS / BILLING -->
-        <section id="content-pos" class="space-y-4">
-            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">Quick Billing Counter</h2>
-                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-md border border-emerald-500/20 font-semibold" id="aiTipBadge">💡 AI Ready</span>
-                </div>
+        <input type="text" id="user-answer" placeholder="Type your answer here...">
+        <button class="btn" onclick="submitAnswer()">Submit Answer</button>
+    </div>
 
-                <!-- Quick Catalog Chips -->
-                <div id="posCatalogChips" class="flex gap-2 overflow-x-auto pb-2 mb-3 scrollbar-none">
-                    <span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add stock items to view quick shortcut buttons</span>
-                </div>
+    <!-- VIEW 3: PROFILE LOCKED SCREEN (Cheating penalty) -->
+    <div id="locked-view" class="hidden">
+        <h1 style="color: #ef4444;">PROFILE LOCKED</h1>
+        <div class="card" style="text-align: center; border-color: #ef4444;">
+            <p style="color: #fca5a5; font-size: 14px;">Cheating or tab switch detected by live system monitor.</p>
+            <p style="font-size: 16px; font-weight: bold;">Penalty Fine Due: ₹150</p>
+            <p style="font-size: 12px; color: #94a3b8;">Your account is locked until the penalty is cleared.</p>
+        </div>
+        <button class="btn btn-danger" onclick="payFine()">Pay ₹150 Fine to Unlock Profile</button>
+    </div>
 
-                <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80">
-                    <div>
-                        <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Item / Service Name</label>
-                        <input type="text" id="billItemName" placeholder="e.g., Product, Haircut, Room Booking" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Price (₹)</label>
-                            <input type="number" id="billItemPrice" placeholder="0.00" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Quantity</label>
-                            <input type="number" id="billItemQty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                        </div>
-                    </div>
-                    <button onclick="addToBill()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black p-3 rounded-xl transition text-sm shadow-lg shadow-emerald-500/20">
-                        + Add to Active Bill
-                    </button>
-                </div>
+    <!-- SUPPORT DESK FOOTER -->
+    <div class="support-section">
+        <p><strong>Help Desk Support</strong></p>
+        <p>Email: <a href="mailto:workharddd18@gmail.com">workharddd18@gmail.com</a></p>
+        <p>WhatsApp / Call: <a href="tel:+918918351226">+91 8918351226</a></p>
+    </div>
 
-                <!-- Bill Cart Items -->
-                <div class="mt-4 space-y-2">
-                    <div id="cartItemsList" class="space-y-2 max-h-40 overflow-y-auto pr-1">
-                        <p class="text-slate-600 text-xs italic text-center py-4 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">Bill is empty.</p>
-                    </div>
+</div>
 
-                    <div class="flex justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800 mt-3">
-                        <span class="text-slate-400 text-sm font-semibold">Grand Total:</span>
-                        <span id="posGrandTotal" class="text-2xl font-black text-emerald-400">₹0.00</span>
-                    </div>
-                </div>
+<script>
+    let timeLeft = 1830; // 30 minutes in seconds
+    let timerInterval;
 
-                <!-- Cash & Change Register -->
-                <div class="mt-4 pt-4 border-t border-slate-800 space-y-3">
-                    <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Cash Register & Settlement</h3>
-                    <input type="number" id="cashGiven" placeholder="Cash Received from Customer (₹)" oninput="calculateChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800 text-sm">
-                        <span class="text-slate-400">Change to Return:</span>
-                        <span id="changeReturn" class="font-black text-yellow-400 text-lg">₹0.00</span>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="completeSale()" class="w-full bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 font-bold p-3 rounded-xl border border-emerald-500/30 transition text-xs">
-                            ✓ Complete Sale
-                        </button>
-                        <button onclick="shareOnWhatsApp()" class="w-full bg-teal-600 hover:bg-teal-500 text-slate-950 font-black p-3 rounded-xl transition text-xs flex items-center justify-center gap-1 shadow-md">
-                            💬 WhatsApp Receipt
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: INVENTORY / STOCK -->
-        <section id="content-inventory" class="space-y-4 hidden">
-            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3">📦 Master Stock Catalog</h2>
-                
-                <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 mb-4">
-                    <input type="text" id="invItemName" placeholder="Item Name / Service Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                    <div class="grid grid-cols-2 gap-3">
-                        <input type="number" id="invItemPrice" placeholder="Default Price (₹)" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                        <input type="number" id="invItemStock" placeholder="Initial Stock Qty" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                    </div>
-                    <button onclick="addInventoryItem()" class="w-full bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold border border-emerald-500/30 p-2.5 rounded-xl transition text-sm">
-                        + Save to Catalog
-                    </button>
-                </div>
-
-                <div id="inventoryContainer" class="space-y-2 max-h-96 overflow-y-auto pr-1 text-xs">
-                    <p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No stock catalog items added yet.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: QUEUE & BOOKINGS -->
-        <section id="content-queue" class="space-y-4 hidden">
-            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3" id="queueHeaderTitle">👥 Live Queue & Bookings</h2>
-                
-                <div class="space-y-3 bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800 mb-4">
-                    <input type="text" id="queueClientName" placeholder="Customer / Guest Name" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                    <input type="text" id="queueServiceDetail" placeholder="Service / Table / Room details" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-emerald-500">
-                    <button onclick="addQueueToken()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold p-2.5 rounded-xl transition text-sm">
-                        + Issue Queue Token
-                    </button>
-                </div>
-
-                <div id="queueListContainer" class="space-y-2 max-h-96 overflow-y-auto pr-1 text-xs">
-                    <p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No active queue tokens.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: LEDGER / ANALYTICS -->
-        <section id="content-analytics" class="space-y-4 hidden">
-            <div class="bg-slate-900/90 rounded-3xl p-5 border border-slate-800 shadow-2xl space-y-4">
-                <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-400">📊 Financial Ledger & AI Insight</h2>
-                
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Revenue Today</p>
-                        <p id="ledgerTotalRevenue" class="text-xl font-black text-emerald-400 mt-1">₹0.00</p>
-                    </div>
-                    <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Sales Count</p>
-                        <p id="ledgerTotalCount" class="text-xl font-black text-teal-400 mt-1">0</p>
-                    </div>
-                </div>
-
-                <div class="bg-emerald-500/10 border border-emerald-500/20 p-3.5 rounded-2xl text-xs space-y-1">
-                    <p class="font-bold text-emerald-400 uppercase tracking-wide text-[10px]">🤖 Universal AI Advisor</p>
-                    <p id="aiAdvisorText" class="text-slate-300">Start logging transactions to unlock automated business growth analytics and peak inventory tracking.</p>
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-bold uppercase text-slate-400 mb-2">Recent Transactions Log</h3>
-                    <div id="ledgerTransactionsList" class="space-y-2 max-h-60 overflow-y-auto pr-1 text-xs">
-                        <p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No completed transactions recorded yet.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <script>
-        let inventory = JSON.parse(localStorage.getItem('uos_inventory')) || [];
-        let cart = [];
-        let queue = JSON.parse(localStorage.getItem('uos_queue')) || [];
-        let transactions = JSON.parse(localStorage.getItem('uos_transactions')) || [];
-
-        function saveData() {
-            localStorage.setItem('uos_inventory', JSON.stringify(inventory));
-            localStorage.setItem('uos_queue', JSON.stringify(queue));
-            localStorage.setItem('uos_transactions', JSON.stringify(transactions));
-        }
-
-        function switchTab(tabId) {
-            ['pos', 'inventory', 'queue', 'analytics'].forEach(t => {
-                document.getElementById(`content-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).className = "py-2.5 rounded-xl text-slate-400 hover:text-white transition";
-            });
-            document.getElementById(`content-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).className = "py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-bold transition shadow-md";
-        }
-
-        function changeBusinessType() {
-            const type = document.getElementById('businessType').value;
-            const labels = {
-                retail: "Retail & General Shop",
-                salon: "Salon & Barber Queue",
-                hotel: "Hotel & Hospitality Desk",
-                clinic: "Clinic & Doctor Appointments"
-            };
-            document.getElementById('currentModeLabel').innerText = labels[type];
-        }
-
-        function addInventoryItem() {
-            const name = document.getElementById('invItemName').value.trim();
-            const price = parseFloat(document.getElementById('invItemPrice').value);
-            const stock = parseInt(document.getElementById('invItemStock').value);
-
-            if (!name || isNaN(price) || isNaN(stock)) {
-                alert('Please enter valid inventory details.');
-                return;
+    // 1. Payment execution for ₹200 Daily Pass via Razorpay
+    function payDailyPass() {
+        var options = {
+            "key": "YOUR_RAZORPAY_KEY_ID", // Replace with your live/test Razorpay Key ID
+            "amount": 20000, // Amount in paise (₹200 = 20000)
+            "currency": "INR",
+            "name": "Sikkim Exam Prep",
+            "description": "Daily 24-Hour Pass",
+            "handler": function (response){
+                // Payment successful -> Switch view to exam room and start camera
+                alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+                startExamSession();
+            },
+            "prefill": {
+                "contact": "8918351226",
+                "email": "workharddd18@gmail.com"
+            },
+            "theme": {
+                "color": "#2563eb"
             }
+        };
+        var rzp = new Razorpay(options);
+        rzp.open();
+    }
 
-            inventory.push({ id: Date.now(), name, price, stock });
-            document.getElementById('invItemName').value = '';
-            document.getElementById('invItemPrice').value = '';
-            document.getElementById('invItemStock').value = '';
-            
-            saveData();
-            updateAllUI();
-        }
+    // 2. Start Exam Workspace & Activate WebCam Live
+    function startExamSession() {
+        document.getElementById('paywall-view').classList.add('hidden');
+        document.getElementById('exam-view').classList.remove('hidden');
 
-        function updateInventoryUI() {
-            const container = document.getElementById('inventoryContainer');
-            const chips = document.getElementById('posCatalogChips');
-
-            if (inventory.length === 0) {
-                container.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No stock catalog items added yet.</p>';
-                chips.innerHTML = '<span class="text-xs text-slate-500 italic bg-slate-950 px-3 py-1 rounded-xl border border-slate-800">Add stock items to view quick shortcut buttons</span>';
-                return;
-            }
-
-            let html = '';
-            let chipHtml = '';
-
-            inventory.forEach(item => {
-                html += `
-                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
-                        <div>
-                            <span class="font-bold text-slate-200">${item.name}</span>
-                            <span class="text-slate-400 ml-2">₹${item.price}</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="bg-slate-900 px-2.5 py-1 rounded-lg text-emerald-400 font-semibold border border-slate-800">Stock: ${item.stock}</span>
-                            <button onclick="deleteInventory(${item.id})" class="text-rose-400 hover:text-rose-300">✕</button>
-                        </div>
-                    </div>
-                `;
-                chipHtml += `<button onclick="quickSelect('${item.name}', ${item.price})" class="bg-slate-950 hover:bg-slate-800 border border-slate-800 text-emerald-400 text-xs px-3 py-1.5 rounded-xl whitespace-nowrap font-semibold">+ ${item.name}</button>`;
+        // Initialize camera stream
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(function(stream) {
+                let videoElement = document.getElementById('video-box');
+                videoElement.srcObject = stream;
+            })
+            .catch(function(error) {
+                alert("Camera access is mandatory for live proctoring. Please allow camera permissions.");
             });
 
-            container.innerHTML = html;
-            chips.innerHTML = chipHtml;
+        // Start 30-minute countdown timer
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        document.getElementById('timer').innerText = 
+            (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("Session complete! Points compiled.");
+            location.reload();
         }
+        timeLeft--;
+    }
 
-        function deleteInventory(id) {
-            inventory = inventory.filter(i => i.id !== id);
-            saveData();
-            updateAllUI();
+    // 3. Anti-Cheating Protection (Tab Switching / Window Blur)
+    document.addEventListener("visibilitychange", function() {
+        if (document.hidden && !document.getElementById('exam-view').classList.contains('hidden')) {
+            triggerPenaltyLock();
         }
+    });
 
-        function quickSelect(name, price) {
-            document.getElementById('billItemName').value = name;
-            document.getElementById('billItemPrice').value = price;
-            document.getElementById('billItemQty').value = 1;
-            document.getElementById('billItemQty').focus();
+    window.addEventListener("blur", function() {
+        if (!document.getElementById('exam-view').classList.contains('hidden')) {
+            triggerPenaltyLock();
         }
+    });
 
-        function addToBill() {
-            const name = document.getElementById('billItemName').value.trim();
-            const price = parseFloat(document.getElementById('billItemPrice').value);
-            const qty = parseInt(document.getElementById('billItemQty').value) || 1;
+    function triggerPenaltyLock() {
+        clearInterval(timerInterval);
+        document.getElementById('exam-view').classList.add('hidden');
+        document.getElementById('locked-view').classList.remove('hidden');
+    }
 
-            if (!name || isNaN(price) || price < 0) {
-                alert('Please enter a valid item name and price.');
-                return;
+    // 4. Fine Payment Handler (₹150)
+    function payFine() {
+        var options = {
+            "key": "YOUR_RAZORPAY_KEY_ID",
+            "amount": 15000, // ₹150 fine in paise
+            "currency": "INR",
+            "name": "Sikkim Exam Prep - Fine Clearance",
+            "description": "Anti-Cheat Penalty Unlock",
+            "handler": function (response){
+                alert("Fine cleared successfully. Profile unlocked!");
+                location.reload();
+            },
+            "theme": {
+                "color": "#dc2626"
             }
+        };
+        var rzpFine = new Razorpay(options);
+        rzpFine.open();
+    }
 
-            cart.push({ name, price, qty });
-            document.getElementById('billItemName').value = '';
-            document.getElementById('billItemPrice').value = '';
-            document.getElementById('billItemQty').value = '1';
-            updateCartUI();
-        }
+    function submitAnswer() {
+        alert("Answer submitted. System evaluating inner and outer core chapter concepts...");
+        document.getElementById('user-answer').value = "";
+    }
+</script>
 
-        function updateCartUI() {
-            const list = document.getElementById('cartItemsList');
-            const totalEl = document.getElementById('posGrandTotal');
-
-            if (cart.length === 0) {
-                list.innerHTML = '<p class="text-slate-600 text-xs italic text-center py-4 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">Bill is empty.</p>';
-                totalEl.innerText = '₹0.00';
-                calculateChange();
-                return;
-            }
-
-            let html = '';
-            let total = 0;
-
-            cart.forEach((item, index) => {
-                let sub = item.price * item.qty;
-                total += sub;
-                html += `
-                    <div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800 text-xs">
-                        <div>
-                            <span class="font-bold text-slate-200">${item.name}</span>
-                            <span class="text-slate-400 ml-2">₹${item.price} × ${item.qty}</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <span class="font-bold text-emerald-400">₹${sub.toFixed(2)}</span>
-                            <button onclick="removeFromCart(${index})" class="text-rose-400">✕</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            list.innerHTML = html;
-            totalEl.innerText = `₹${total.toFixed(2)}`;
-            calculateChange();
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
-        }
-
-        function calculateChange() {
-            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            const given = parseFloat(document.getElementById('cashGiven').value) || 0;
-            const changeEl = document.getElementById('changeReturn');
-
-            if (given >= total && total > 0) {
-                changeEl.innerText = `₹${(given - total).toFixed(2)}`;
-                changeEl.className = "font-black text-emerald-400 text-lg";
-            } else {
-                changeEl.innerText = "₹0.00";
-                changeEl.className = "font-black text-yellow-400 text-lg";
-            }
-        }
-
-        function completeSale() {
-            if (cart.length === 0) {
-                alert('Bill is empty!');
-                return;
-            }
-            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            transactions.unshift({
-                id: Date.now(),
-                date: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                itemsCount: cart.length,
-                total: total
-            });
-
-            cart = [];
-            document.getElementById('cashGiven').value = '';
-            saveData();
-            updateAllUI();
-            alert('Sale completed and recorded successfully!');
-            switchTab('analytics');
-        }
-
-        function shareOnWhatsApp() {
-            if (cart.length === 0) {
-                alert('Add items to bill before sharing on WhatsApp!');
-                return;
-            }
-            let total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-            let text = "🧾 *UNIVERSAL OS RECEIPT*%0A--------------------------------%0A";
-            cart.forEach(item => {
-                text += `• ${item.name} (${item.qty}x) - ₹${(item.price * item.qty).toFixed(2)}%0A`;
-            });
-            text += `--------------------------------%0A*Grand Total: ₹${total.toFixed(2)}*%0AThank you for your business! 🙏`;
-            window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-        }
-
-        function addQueueToken() {
-            const name = document.getElementById('queueClientName').value.trim();
-            const detail = document.getElementById('queueServiceDetail').value.trim();
-
-            if (!name) {
-                alert('Please enter customer name.');
-                return;
-            }
-
-            queue.push({ id: Date.now(), name, detail: detail || 'General Service', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) });
-            document.getElementById('queueClientName').value = '';
-            document.getElementById('queueServiceDetail').value = '';
-            saveData();
-            updateQueueUI();
-        }
-
-        function updateQueueUI() {
-            const container = document.getElementById('queueListContainer');
-            if (queue.length === 0) {
-                container.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No active queue tokens.</p>';
-                return;
-            }
-
-            let html = '';
-            queue.forEach((q, idx) => {
-                html += `
-                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">#${idx + 1}</span>
-                                <span class="font-bold text-slate-200">${q.name}</span>
-                            </div>
-                            <p class="text-slate-400 text-[10px] mt-1">${q.detail} • Time: ${q.time}</p>
-                        </div>
-                        <button onclick="removeQueue(${q.id})" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg font-bold">Done</button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function removeQueue(id) {
-            queue = queue.filter(q => q.id !== id);
-            saveData();
-            updateQueueUI();
-        }
-
-        function updateLedgerUI() {
-            const revEl = document.getElementById('ledgerTotalRevenue');
-            const countEl = document.getElementById('ledgerTotalCount');
-            const listEl = document.getElementById('ledgerTransactionsList');
-            const aiAdvisor = document.getElementById('aiAdvisorText');
-
-            let totalRev = transactions.reduce((sum, t) => sum + t.total, 0);
-            revEl.innerText = `₹${totalRev.toFixed(2)}`;
-            countEl.innerText = transactions.length;
-
-            if (transactions.length > 0) {
-                aiAdvisor.innerText = `Great momentum! You have recorded ${transactions.length} sales today. Peak customer flow is steady. Keep stock replenished.`;
-            }
-
-            if (transactions.length === 0) {
-                listEl.innerHTML = '<p class="text-slate-600 italic text-center py-6 bg-slate-950/40 rounded-xl border border-dashed border-slate-800">No completed transactions recorded yet.</p>';
-                return;
-            }
-
-            let html = '';
-            transactions.forEach(t => {
-                html += `
-                    <div class="flex justify-between items-center bg-slate-950 p-3 rounded-xl border border-slate-800">
-                        <div>
-                            <span class="font-bold text-slate-200">Sale #${t.id.toString().slice(-4)}</span>
-                            <span class="text-slate-400 ml-2">${t.date} (${t.itemsCount} items)</span>
-                        </div>
-                        <span class="font-black text-emerald-400">₹${t.total.toFixed(2)}</span>
-                    </div>
-                `;
-            });
-            listEl.innerHTML = html;
-        }
-
-        function updateAllUI() {
-            updateInventoryUI();
-            updateCartUI();
-            updateQueueUI();
-            updateLedgerUI();
-        }
-
-        updateAllUI();
-    </script>
 </body>
 </html>

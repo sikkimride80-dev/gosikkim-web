@@ -245,7 +245,7 @@
             </p>
         </div>
         <div class="timer-display" id="warning-timer" style="color: #ef4444;">10</div>
-        <button class="btn" id="proceed-warning-btn" disabled onclick="goToPaywall()">Please wait (10s) to proceed...</button>
+        <button class="btn" id="proceed-warning-btn" disabled onclick="finishRegistrationAndLogin()">Please wait (10s) to proceed...</button>
     </div>
 
     <!-- VIEW 1: PAYWALL SCREEN -->
@@ -439,7 +439,6 @@
         };
 
         localStorage.setItem('student_' + uniqueID, JSON.stringify(studentProfile));
-        localStorage.setItem('active_student_uid', uniqueID);
 
         stopSelfieCam();
         generatedUIDForWarning = uniqueID;
@@ -472,10 +471,12 @@
         }, 1000);
     }
 
-    function goToPaywall() {
+    // After warning finishes, take them back to login screen
+    function finishRegistrationAndLogin() {
         document.getElementById('warning-view').classList.add('hidden');
-        document.getElementById('paywall-view').classList.remove('hidden');
-        loadStudentBanner();
+        localStorage.removeItem('active_student_uid'); // Ensure they start logged out
+        showLoginView();
+        alert("Registration complete! Please login using your new User ID and Password.");
     }
 
     // Handle Login
@@ -527,7 +528,7 @@
         let profile = activeUid ? JSON.parse(localStorage.getItem('student_' + activeUid)) : null;
 
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_0](start_span)[span_0](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
             "amount": 20000, // Amount in paise (₹200 = 20000)
             "currency": "INR",
             "name": "Sikkim Exam Prep",
@@ -604,7 +605,7 @@
     // 4. Fine Payment Handler (₹150)
     function payFine() {
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_2](start_span)[span_2](end_span)
             "amount": 15000, // ₹150 fine in paise
             "currency": "INR",
             "name": "Sikkim Exam Prep - Fine Clearance",

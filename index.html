@@ -7,26 +7,32 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <style>
         @keyframes slowNeonGlow {
-            0% { border-color: rgba(236, 72, 153, 0.6); box-shadow: 0 0 30px rgba(236, 72, 153, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
-            33% { border-color: rgba(6, 182, 212, 0.6); box-shadow: 0 0 30px rgba(6, 182, 212, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
-            66% { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 0 30px rgba(168, 85, 247, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
-            100% { border-color: rgba(236, 72, 153, 0.6); box-shadow: 0 0 30px rgba(236, 72, 153, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2); }
+            0% { border-color: rgba(236, 72, 153, 0.9); box-shadow: 0 0 35px rgba(236, 72, 153, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+            20% { border-color: rgba(6, 182, 212, 0.9); box-shadow: 0 0 35px rgba(6, 182, 212, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+            40% { border-color: rgba(74, 222, 128, 0.9); box-shadow: 0 0 35px rgba(74, 222, 128, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+            60% { border-color: rgba(245, 158, 11, 0.9); box-shadow: 0 0 35px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+            80% { border-color: rgba(168, 85, 247, 0.9); box-shadow: 0 0 35px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+            100% { border-color: rgba(236, 72, 153, 0.9); box-shadow: 0 0 35px rgba(236, 72, 153, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
         }
 
         @keyframes multiColorBorder {
             0% { border-color: #ec4899; }
-            33% { border-color: #38bdf8; }
-            66% { border-color: #a855f7; }
+            20% { border-color: #38bdf8; }
+            40% { border-color: #4ade80; }
+            60% { border-color: #f59e0b; }
+            80% { border-color: #a855f7; }
             100% { border-color: #ec4899; }
         }
 
         :root {
             --bg-deep: #09021a;
-            --glass-bg: rgba(20, 10, 40, 0.82);
-            --glass-card: rgba(35, 18, 68, 0.75);
+            --glass-bg: rgba(20, 10, 40, 0.85);
+            --glass-card: rgba(35, 18, 68, 0.8);
             --neon-pink: #ec4899;
             --neon-cyan: #06b6d4;
             --neon-purple: #a855f7;
+            --neon-green: #4ade80;
+            --neon-yellow: #f59e0b;
         }
 
         body {
@@ -49,7 +55,7 @@
             -webkit-backdrop-filter: blur(25px);
             padding: 24px;
             border-radius: 28px;
-            animation: slowNeonGlow 8s infinite ease-in-out;
+            animation: slowNeonGlow 4.5s infinite ease-in-out;
             border: 2px solid var(--neon-pink);
             position: relative;
             overflow: hidden;
@@ -63,7 +69,7 @@
             width: 180px; height: 180px;
             background: var(--neon-pink);
             filter: blur(80px);
-            opacity: 0.4;
+            opacity: 0.5;
             z-index: -1;
         }
         .app-container::after {
@@ -73,12 +79,12 @@
             width: 180px; height: 180px;
             background: var(--neon-cyan);
             filter: blur(80px);
-            opacity: 0.3;
+            opacity: 0.4;
             z-index: -1;
         }
 
         h1 { 
-            background: linear-gradient(135deg, #f472b6, #c084fc, #38bdf8, #4ade80);
+            background: linear-gradient(135deg, #f472b6, #c084fc, #38bdf8, #4ade80, #f59e0b);
             background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -107,8 +113,8 @@
             padding: 20px;
             border-radius: 20px;
             margin-bottom: 18px;
-            animation: multiColorBorder 8s infinite ease-in-out;
-            border: 1px solid rgba(236, 72, 153, 0.4);
+            animation: multiColorBorder 4.5s infinite ease-in-out;
+            border: 1px solid rgba(236, 72, 153, 0.5);
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
         }
 
@@ -128,7 +134,7 @@
         
         .btn {
             width: 100%;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6);
+            background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6, #06b6d4);
             background-size: 200% auto;
             color: white;
             border: none;
@@ -150,7 +156,7 @@
         }
         .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5); }
         .btn-secondary { background: rgba(51, 41, 85, 0.85); backdrop-filter: blur(12px); box-shadow: none; border: 1px solid rgba(168, 85, 247, 0.5); }
-        .btn-ai { background: linear-gradient(135deg, #a855f7, #ec4899, #06b6d4); box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5); }
+        .btn-ai { background: linear-gradient(135deg, #a855f7, #ec4899, #06b6d4, #4ade80); box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5); }
         .btn:disabled { background: #332b4a; cursor: not-allowed; opacity: 0.6; box-shadow: none; }
 
         .hidden { display: none !important; }
@@ -183,8 +189,8 @@
             padding: 14px 18px;
             border-radius: 18px;
             margin-bottom: 20px;
-            animation: multiColorBorder 8s infinite ease-in-out;
-            border: 1px solid rgba(236, 72, 153, 0.4);
+            animation: multiColorBorder 4.5s infinite ease-in-out;
+            border: 1px solid rgba(236, 72, 153, 0.5);
             box-shadow: 0 8px 25px rgba(0,0,0,0.5);
         }
         .profile-avatar-container {
@@ -226,14 +232,14 @@
             max-width: 450px;
             padding: 24px;
             border-radius: 24px;
-            animation: slowNeonGlow 8s infinite ease-in-out;
-            border: 2px solid rgba(236, 72, 153, 0.7);
-            box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(236, 72, 153, 0.3);
+            animation: slowNeonGlow 4.5s infinite ease-in-out;
+            border: 2px solid rgba(236, 72, 153, 0.8);
+            box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(236, 72, 153, 0.4);
             max-height: 92vh;
             overflow-y: auto;
         }
         .modal-card h2 { 
-            background: linear-gradient(135deg, #f472b6, #c084fc, #38bdf8);
+            background: linear-gradient(135deg, #f472b6, #c084fc, #38bdf8, #4ade80);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center; 
@@ -261,7 +267,7 @@
             margin-bottom: 18px;
             font-size: 13px;
             color: #e2e8f0;
-            animation: multiColorBorder 8s infinite ease-in-out;
+            animation: multiColorBorder 4.5s infinite ease-in-out;
             border-top: 1px solid rgba(255, 255, 255, 0.15);
             border-right: 1px solid rgba(255, 255, 255, 0.15);
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
@@ -273,19 +279,19 @@
         .lesley-banner-card {
             background: var(--glass-card);
             backdrop-filter: blur(18px);
-            animation: slowNeonGlow 6s infinite ease-in-out;
-            border: 2px solid rgba(236, 72, 153, 0.8);
+            animation: slowNeonGlow 4s infinite ease-in-out;
+            border: 2px solid rgba(236, 72, 153, 0.9);
             border-radius: 18px;
             padding: 18px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 18px;
-            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.4);
+            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.5);
         }
         .lesley-banner-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 18px 50px rgba(236, 72, 153, 0.7);
+            box-shadow: 0 18px 50px rgba(236, 72, 153, 0.8);
         }
         .lesley-hero-img {
             width: 100%;
@@ -294,7 +300,7 @@
             object-fit: contain;
             border-radius: 14px;
             background: rgba(9, 2, 26, 0.7);
-            border: 1px solid rgba(236, 72, 153, 0.5);
+            border: 1px solid rgba(236, 72, 153, 0.6);
             margin-bottom: 12px;
         }
 
@@ -304,8 +310,8 @@
             background: url('https://files.catbox.moe/qivn0s.jpg') no-repeat center center;
             background-size: contain;
             background-color: #09021a;
-            animation: multiColorBorder 8s infinite ease-in-out;
-            border: 2px solid rgba(236, 72, 153, 0.7);
+            animation: multiColorBorder 4.5s infinite ease-in-out;
+            border: 2px solid rgba(236, 72, 153, 0.8);
             border-radius: 16px;
             height: 290px;
             overflow-y: auto;
@@ -343,7 +349,7 @@
             color: #f1f5f9;
             align-self: flex-start;
             border-left: 4px solid #ec4899;
-            border: 1px solid rgba(236, 72, 153, 0.4);
+            border: 1px solid rgba(236, 72, 153, 0.5);
         }
         .chat-msg.user {
             background: rgba(236, 72, 153, 0.9);
@@ -552,7 +558,7 @@
         <div class="lesley-banner-card" onclick="openAiChatModal()">
             <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley Your Assistant">
             <div style="font-weight: 900; color: #f472b6; font-size: 17px; text-shadow: 0 2px 10px rgba(236,72,153,0.4);">💬 Chat with Lesley Your Assistant</div>
-            <div style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here to launch sniper support with auto voice responses!</div>
+            <div style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here to launch sniper support with auto sweet voice responses!</div>
         </div>
 
         <div class="support-section">
@@ -616,14 +622,14 @@
         </div>
     </div>
 
-    <!-- LESLEY ASSISTANT CHAT MODAL WITH AUTO VOICE -->
+    <!-- LESLEY ASSISTANT CHAT MODAL WITH SWEET VOICE -->
     <div id="ai-chat-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <h2>Lesley Your Assistant</h2>
-            <p style="text-align: center; font-size: 11px; color: #f472b6; margin-top: -4px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 900;">Soft & sweet voice answers active automatically!</p>
+            <p style="text-align: center; font-size: 11px; color: #f472b6; margin-top: -4px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 900;">✨ Hot & sweet voice answers active automatically! ✨</p>
 
             <div class="chat-box-container" id="chat-messages">
-                <div class="chat-msg bot">Hello student! I am Lesley, your elite assistant. Need help with your exam pass, proctoring rules, or dashboard features? Ask me anything!</div>
+                <div class="chat-msg bot">Hey there, gorgeous student! 💕 I am Lesley, your hot & sweet elite assistant. Need help with your exam pass, proctoring rules, or dashboard features? Ask me anything!</div>
             </div>
 
             <input type="text" id="user-chat-input" placeholder="Type your question here..." onkeypress="handleChatKeyPress(event)">
@@ -896,9 +902,9 @@
 
     function openAiChatModal() {
         document.getElementById('ai-chat-modal').classList.remove('hidden');
-        // Auto-speak greeting when opened
+        // Auto-speak hot & sweet greeting when opened
         setTimeout(function() {
-            speakAsLesley("Hello student! I am Lesley, your elite assistant. Need help with your exam pass, proctoring rules, or dashboard features? Ask me anything!");
+            speakAsLesley("Hey there, gorgeous student! 💕 I am Lesley, your hot and sweet elite assistant. Need help with your exam pass, proctoring rules, or dashboard features? Ask me anything!");
         }, 400);
     }
 
@@ -917,13 +923,13 @@
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             let utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.95;
-            utterance.pitch = 1.25;
+            utterance.rate = 1.05;  // Lively & smooth pace
+            utterance.pitch = 1.35; // Sweet, warm feminine pitch
             
             let voices = window.speechSynthesis.getVoices();
-            let femaleVoice = voices.find(v => (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female') || v.name.includes('natural')) && v.lang.startsWith('en'));
-            if (femaleVoice) {
-                utterance.voice = femaleVoice;
+            let sweetVoice = voices.find(v => (v.name.includes('Google US English') || v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female') || v.name.includes('natural')) && v.lang.startsWith('en'));
+            if (sweetVoice) {
+                utterance.voice = sweetVoice;
             }
             window.speechSynthesis.speak(utterance);
         }
@@ -951,17 +957,17 @@
             let lowerMsg = msg.toLowerCase();
 
             if (lowerMsg.includes('pass') || lowerMsg.includes('fee') || lowerMsg.includes('200') || lowerMsg.includes('trial')) {
-                replyText = "The daily hardcore exam pass is priced at two hundred rupees. Simply tap your profile avatar in the top-left corner of your dashboard to open your full profile details and complete the secure Razorpay checkout!";
+                replyText = "The daily hardcore exam pass is just two hundred rupees, sweetheart! 😘 Simply tap your profile avatar in the top-left corner of your dashboard to view your profile and complete your checkout seamlessly.";
             } else if (lowerMsg.includes('fine') || lowerMsg.includes('lock') || lowerMsg.includes('cheat') || lowerMsg.includes('tab')) {
-                replyText = "Our anti-cheat proctoring system automatically locks your account if you switch browser tabs or look away from the camera. You will need to clear a one hundred fifty rupees penalty fine to unlock your profile.";
+                replyText = "Oh no! Our strict anti-cheat proctoring system locks your account automatically if you switch tabs. Don't worry though, you can clear a one hundred fifty rupees penalty fine to instantly unlock your profile right back! 🔥";
             } else if (lowerMsg.includes('support') || lowerMsg.includes('contact') || lowerMsg.includes('number') || lowerMsg.includes('call') || lowerMsg.includes('whatsapp')) {
-                replyText = "You can instantly reach our twenty-four-seven customer support desk by emailing workharddd18@gmail.com or calling and messaging us on WhatsApp at plus ninety-one, eight-nine-one-eight-three-five-one-two-two-six.";
+                replyText = "I've got your back! You can reach our twenty-four-seven support team anytime at workharddd18@gmail.com or via WhatsApp at plus ninety-one, eight-nine-one-eight-three-five-one-two-two-six. 📞";
             } else if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
-                replyText = "Hello! I am Lesley, your tactical exam co-pilot. How can I assist you with your preparations today?";
+                replyText = "Hey there! 💕 So wonderful to talk with you. How can Lesley make your exam prep extra sweet and successful today?";
             } else if (lowerMsg.includes('camera') || lowerMsg.includes('video') || lowerMsg.includes('proctor')) {
-                replyText = "Live proctoring requires your camera to stay active and clear throughout the entire thirty-minute assessment. Ensure you are in a well-lit room with your face fully visible to the lens.";
+                replyText = "Keep that gorgeous face of yours fully visible to the camera! ✨ Live proctoring requires a clean lens and steady focus throughout your entire thirty-minute assessment.";
             } else {
-                replyText = "That is a great query! Make sure your camera lens is clean, your network connection is stable, and your focus remains sharp on your exam modules.";
+                replyText = "That's such a brilliant question! Just keep your network stable, stay focused, and let me know if you need anything else at all! 💖";
             }
 
             botDiv.innerText = replyText;

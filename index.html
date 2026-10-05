@@ -157,7 +157,7 @@
         }
         .news-card h4 { color: #f59e0b; margin: 0 0 5px 0; font-size: 14px; }
 
-        /* Lesley AI Banner / Interactive Image Card */
+        /* Lesley AI Banner / Interactive Catbox Image Card */
         .lesley-banner-card {
             background: #0f172a;
             border: 2px solid #7c3aed;
@@ -182,9 +182,11 @@
             margin-bottom: 8px;
         }
 
-        /* AI Chat Box Styles */
+        /* AI Chat Box Styles with Watermark Background Image */
         .chat-box-container {
-            background: #0f172a;
+            position: relative;
+            background: #0f172a url('https://files.catbox.moe/qivn0s.jpg') no-repeat center center;
+            background-size: cover;
             border: 1px solid #7c3aed;
             border-radius: 8px;
             height: 250px;
@@ -195,7 +197,18 @@
             flex-direction: column;
             gap: 8px;
         }
+        .chat-box-container::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(11, 15, 25, 0.88); /* Dark overlay to keep text readable */
+            z-index: 1;
+            border-radius: 7px;
+            pointer-events: none;
+        }
         .chat-msg {
+            position: relative;
+            z-index: 2;
             padding: 8px 12px;
             border-radius: 6px;
             font-size: 12px;
@@ -403,11 +416,11 @@
             </p>
         </div>
 
-        <!-- Lesley AI Assistant Interactive Catbox Image Card -->
+        <!-- Lesley Banner Card -->
         <div class="lesley-banner-card" onclick="openAiChatModal()">
-            <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley AI Assistant">
-            <div style="font-weight: bold; color: #a78bfa; font-size: 15px;">💬 Chat with Lesley (MLBB AI Assistant)</div>
-            <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">Tap here to launch sniper AI support for your exam queries!</div>
+            <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley Your Assistant">
+            <div style="font-weight: bold; color: #a78bfa; font-size: 15px;">💬 Chat with Lesley Your Assistant</div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">Tap here to launch sniper support with voice responses!</div>
         </div>
 
         <!-- Customer Support Footer Info -->
@@ -473,14 +486,14 @@
         </div>
     </div>
 
-    <!-- LESLEY AI ASSISTANT CHAT MODAL -->
+    <!-- LESLEY ASSISTANT CHAT MODAL WITH VOICE -->
     <div id="ai-chat-modal" class="modal-overlay hidden">
         <div class="modal-card">
-            <h2>Lesley AI Assistant (MLBB)</h2>
-            <p style="text-align: center; font-size: 11px; color: #a78bfa; margin-top: -5px; margin-bottom: 10px;">Sniper precision for your exam queries!</p>
+            <h2>Lesley Your Assistant</h2>
+            <p style="text-align: center; font-size: 11px; color: #a78bfa; margin-top: -5px; margin-bottom: 10px;">Soft & sweet voice answers for your exam queries!</p>
             
             <div class="chat-box-container" id="chat-messages">
-                <div class="chat-msg bot">Hello student! I'm Lesley, your AI Assistant. Need help with your exam pass, proctoring rules, or dashboard features? Ask me anything!</div>
+                <div class="chat-msg bot">Hello student! I am Lesley, your assistant. Need help with your exam pass, proctoring rules, or dashboard features? Ask me anything!</div>
             </div>
 
             <input type="text" id="user-chat-input" placeholder="Type your question here..." onkeypress="handleChatKeyPress(event)">
@@ -763,12 +776,30 @@
     }
 
     function closeAiChatModal() {
+        window.speechSynthesis.cancel(); // Stop talking if closing
         document.getElementById('ai-chat-modal').classList.add('hidden');
     }
 
     function handleChatKeyPress(e) {
         if (e.key === 'Enter') {
             sendChatMessage();
+        }
+    }
+
+    // Text-to-Speech function for soft and sweet female voice
+    function speakAsLesley(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel(); // Stop any previous speech
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95; // Slightly slower, calm and clear pace
+            utterance.pitch = 1.2; // Slightly higher pitch for a soft female voice tone
+            
+            let voices = window.speechSynthesis.getVoices();
+            let femaleVoice = voices.find(v => (v.name.includes('Google') || v.name.includes('Zira') || v.name.includes('Samantha') || v.name.includes('Female') || v.name.includes('natural')) && v.lang.startsWith('en'));
+            if (femaleVoice) {
+                utterance.voice = femaleVoice;
+            }
+            window.speechSynthesis.speak(utterance);
         }
     }
 
@@ -787,28 +818,34 @@
         inputEl.value = "";
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
-        // Lesley AI Bot Response Logic
+        // Lesley Assistant Response Logic with Speech
         setTimeout(function() {
             let botDiv = document.createElement('div');
             botDiv.className = 'chat-msg bot';
             
+            let replyText = "";
             let lowerMsg = msg.toLowerCase();
             if (lowerMsg.includes('pass') || lowerMsg.includes('fee') || lowerMsg.includes('200')) {
-                botDiv.innerText = "Lesley here! The trial day pass costs ₹200. Tap your selfie avatar in the top-left corner to open your profile and start the Razorpay checkout!";
+                replyText = "The trial day pass costs two hundred rupees. Tap your selfie avatar in the top-left corner to open your profile and start the Razorpay checkout.";
             } else if (lowerMsg.includes('fine') || lowerMsg.includes('lock') || lowerMsg.includes('cheat')) {
-                botDiv.innerText = "Target locked! If you switch tabs or leave the camera during the 30-min exam, your profile locks and requires a ₹150 fine clearance to unlock.";
+                replyText = "If you switch tabs or leave the camera during the thirty-minute exam, your profile locks and requires a one hundred fifty rupees fine clearance to unlock.";
             } else if (lowerMsg.includes('support') || lowerMsg.includes('contact') || lowerMsg.includes('number')) {
-                botDiv.innerText = "You can reach customer support anytime via WhatsApp/Call at +91 8918351226 or email at workharddd18@gmail.com!";
+                replyText = "You can reach customer support anytime via WhatsApp at plus ninety-one, eight-nine-one-eight-three-five-one-two-two-six.";
             } else {
-                botDiv.innerText = "Target acquired! I'm ready to assist with any app or exam questions. Make sure your camera is clean and your study focus is sharp!";
+                replyText = "I am ready to assist with any exam or app questions. Make sure your camera is clean and your focus is sharp!";
             }
 
+            botDiv.innerText = replyText;
             chatContainer.appendChild(botDiv);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Trigger soft female voice speech
+            speakAsLesley(replyText);
         }, 600);
     }
 
     function logoutSession() {
+        window.speechSynthesis.cancel();
         localStorage.removeItem('active_student_uid');
         showChoiceView();
     }

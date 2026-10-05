@@ -157,6 +157,30 @@
         }
         .news-card h4 { color: #f59e0b; margin: 0 0 5px 0; font-size: 14px; }
 
+        /* Lesley AI Banner / Interactive Image Card */
+        .lesley-banner-card {
+            background: #0f172a;
+            border: 2px solid #7c3aed;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 15px;
+        }
+        .lesley-banner-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.4);
+        }
+        .lesley-hero-img {
+            width: 100%;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #a78bfa;
+            margin-bottom: 8px;
+        }
+
         /* AI Chat Box Styles */
         .chat-box-container {
             background: #0f172a;
@@ -378,11 +402,13 @@
             </p>
         </div>
 
-        <div class="card" style="text-align: center; padding: 20px;">
-            <p style="color: #94a3b8; font-size: 14px; margin-bottom: 15px;">
-                Tap your <strong>Selfie Avatar</strong> in the top-left corner above to check your profile credentials and launch your trial examination pass.
-            </p>
-            <button class="btn btn-ai" onclick="openAiChatModal()">💬 Chat with Lesley (MLBB AI Assistant)</button>
+        <!-- Lesley AI Assistant Interactive Image Card -->
+        <div class="lesley-banner-card" onclick="openAiChatModal()">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80" 
+                 onerror="this.src='https://raw.githubusercontent.com/workharddd18/gosikkim-web/main/lesley.jpg'" 
+                 class="lesley-hero-img" alt="Lesley AI Assistant">
+            <div style="font-weight: bold; color: #a78bfa; font-size: 15px;">💬 Chat with Lesley (MLBB AI Assistant)</div>
+            <div style="font-size: 11px; color: #94a3b8; margin-top: 3px;">Tap here to launch sniper AI support for your exam queries!</div>
         </div>
 
         <!-- Customer Support Footer Info -->

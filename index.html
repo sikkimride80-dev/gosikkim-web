@@ -66,6 +66,18 @@
 
         .hidden { display: none !important; }
 
+        /* Form Inputs */
+        label { font-size: 13px; color: #94a3b8; display: block; margin-bottom: 4px; margin-top: 10px; }
+        input[type="text"], input[type="number"], input[type="date"], input[type="tel"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            background: #0f172a;
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 6px;
+            margin-bottom: 5px;
+        }
+
         /* Camera & Workspace */
         #video-box {
             width: 100%;
@@ -94,15 +106,6 @@
             margin-bottom: 10px;
             border-left: 4px solid #38bdf8;
         }
-        input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            background: #0f172a;
-            border: 1px solid #475569;
-            color: white;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
 
         /* Support Box */
         .support-section {
@@ -120,8 +123,36 @@
 
 <div class="app-container">
 
+    <!-- VIEW 0: REGISTRATION SCREEN (First Step) -->
+    <div id="register-view">
+        <h1>Student Registration</h1>
+        <div class="subtitle">Enter your details before accessing exam modules</div>
+
+        <div class="card">
+            <label>Student Full Name:</label>
+            <input type="text" id="reg-name" placeholder="e.g. Tenzin Norbu">
+
+            <label>Mobile Number (Self or Parent / Guardian):</label>
+            <input type="tel" id="reg-phone" placeholder="e.g. 9832XXXXXX">
+
+            <label>Age:</label>
+            <input type="number" id="reg-age" placeholder="e.g. 17">
+
+            <label>Date of Birth:</label>
+            <input type="date" id="reg-dob">
+
+            <label>Class / Grade:</label>
+            <input type="text" id="reg-class" placeholder="e.g. Class 12 / BA 1st Year">
+
+            <label>School / College Name:</label>
+            <input type="text" id="reg-school" placeholder="e.g. Tashi Namgyal Academy, Gangtok">
+        </div>
+
+        <button class="btn" onclick="submitRegistration()">Proceed to Exam Pass</button>
+    </div>
+
     <!-- VIEW 1: PAYWALL SCREEN -->
-    <div id="paywall-view">
+    <div id="paywall-view" class="hidden">
         <h1>Sikkim Hardcore Exam Pass</h1>
         <div class="subtitle">AI Proctored Strict 30-Minute Challenge</div>
 
@@ -181,10 +212,37 @@
     let timeLeft = 1830; // 30 minutes in seconds
     let timerInterval;
 
+    // 0. Handle Registration Submission
+    function submitRegistration() {
+        let name = document.getElementById('reg-name').value.trim();
+        let phone = document.getElementById('reg-phone').value.trim();
+        let age = document.getElementById('reg-age').value.trim();
+        let dob = document.getElementById('reg-dob').value.trim();
+        let studentClass = document.getElementById('reg-class').value.trim();
+        let school = document.getElementById('reg-school').value.trim();
+
+        if (!name || !phone || !age || !dob || !studentClass || !school) {
+            alert("Please fill out all registration fields before proceeding.");
+            return;
+        }
+
+        // Save registration data temporarily in session storage
+        sessionStorage.setItem('student_name', name);
+        sessionStorage.setItem('student_phone', phone);
+        sessionStorage.setItem('student_age', age);
+        sessionStorage.setItem('student_dob', dob);
+        sessionStorage.setItem('student_class', studentClass);
+        sessionStorage.setItem('student_school', school);
+
+        // Hide registration view and reveal paywall view
+        document.getElementById('register-view').classList.add('hidden');
+        document.getElementById('paywall-view').classList.remove('hidden');
+    }
+
     // 1. Payment execution for ₹200 Daily Pass via Razorpay
     function payDailyPass() {
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_4](start_span)[span_4](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_1](start_span)[span_1](end_span)
             "amount": 20000, // Amount in paise (₹200 = 20000)
             "currency": "INR",
             "name": "Sikkim Exam Prep",
@@ -194,7 +252,7 @@
                 startExamSession();
             },
             "prefill": {
-                "contact": "8918351226",
+                "contact": sessionStorage.getItem('student_phone') || "8918351226",
                 "email": "sikkimride80@gmail.com"
             },
             "theme": {
@@ -260,7 +318,7 @@
     // 4. Fine Payment Handler (₹150)
     function payFine() {
         var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_5](start_span)[span_5](end_span)
+            "key": "rzp_live_TiN6t3iQ0poa9O", // Your live Razorpay Key ID[span_2](start_span)[span_2](end_span)
             "amount": 15000, // ₹150 fine in paise
             "currency": "INR",
             "name": "Sikkim Exam Prep - Fine Clearance",

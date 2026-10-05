@@ -446,50 +446,77 @@
 
     <!-- VIEW -1: CHOICE SCREEN -->
     <div id="choice-view">
-        <h1>Sikkim Exam Portal</h1>
-        <div class="subtitle">Next-Gen AI Proctored Infrastructure</div>
+        <h1 id="ui-title">Sikkim Exam Portal</h1>
+        <div class="subtitle" id="ui-subtitle">Next-Gen AI Proctored Infrastructure</div>
         <div class="card" style="text-align: center;">
-            <p style="color: #e2e8f0; font-size: 14px; line-height: 1.5;">Existing student? Login with your Unique ID. New student? Register your elite profile.</p>
+            <p id="ui-choice-desc" style="color: #e2e8f0; font-size: 14px; line-height: 1.5;">Existing student? Login with your Unique ID. New student? Register your elite profile.</p>
         </div>
-        <button class="btn" onclick="showLoginView()">Login to Profile</button>
-        <button class="btn btn-secondary" onclick="showRegisterView()">New Student Registration</button>
+        <button class="btn" id="ui-btn-login" onclick="showLoginView()">Login to Profile</button>
+        <button class="btn btn-secondary" id="ui-btn-register" onclick="showRegisterView()">New Student Registration</button>
     </div>
 
     <!-- VIEW -0.5: LOGIN SCREEN -->
     <div id="login-view" class="hidden">
-        <h1>Student Login</h1>
-        <div class="subtitle">Access your secure profile dashboard</div>
+        <h1 id="ui-login-title">Student Login</h1>
+        <div class="subtitle" id="ui-login-sub">Access your secure profile dashboard</div>
         <div class="card">
-            <label>Unique Student ID:</label>
+            <label id="ui-lbl-uid">Unique Student ID:</label>
             <input type="text" id="login-uid" placeholder="e.g. SKM-94821">
 
-            <label>Password:</label>
+            <label id="ui-lbl-pass">Password:</label>
             <input type="password" id="login-pass" placeholder="Enter your password">
         </div>
-        <button class="btn" onclick="handleLogin()">Login</button>
-        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
+        <button class="btn" id="ui-btn-do-login" onclick="handleLogin()">Login</button>
+        <button class="btn btn-secondary" id="ui-btn-login-back" onclick="showChoiceView()">Back</button>
     </div>
 
     <!-- VIEW 0: REGISTRATION SCREEN -->
     <div id="register-view" class="hidden">
-        <h1>Student Registration</h1>
-        <div class="subtitle">Create your unique permanent student account</div>
+        <h1 id="ui-reg-title">Student Registration</h1>
+        <div class="subtitle" id="ui-reg-sub">Create your unique permanent student account</div>
 
         <div class="card">
-            <label>Student Full Name:</label>
+            <label id="ui-lbl-reg-lang">Preferred Language:</label>
+            <select id="reg-lang" onchange="changeAppLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="bn">বাংলা (Bengali)</option>
+                <option value="ne">नेपाली (Nepali)</option>
+                <option value="bh">भोजपुरी (Bhojpuri)</option>
+                <option value="as">অসমীয়া (Assamese)</option>
+                <option value="gu">ગુજરાતી (Gujarati)</option>
+                <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                <option value="ml">മലയാളം (Malayalam)</option>
+                <option value="mr">मराठी (Marathi)</option>
+                <option value="or">ଓଡ଼ିଆ (Odia)</option>
+                <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                <option value="ta">தமிழ் (Tamil)</option>
+                <option value="te">తెలుగు (Telugu)</option>
+                <option value="ur">اردو (Urdu)</option>
+                <option value="ks">कॉशुर / كأشُر (Kashmiri)</option>
+                <option value="sd">سنڌي (Sindhi)</option>
+                <option value="sa">संस्कृतम् (Sanskrit)</option>
+                <option value="mai">मैथिली (Maithili)</option>
+                <option value="sat">संताली (Santali)</option>
+                <option value="mni">মৈতৈলোন্ (Manipuri)</option>
+                <option value="kok">कोंकणी (Konkani)</option>
+                <option value="doi">डोगरी (Dogri)</option>
+            </select>
+
+            <label id="ui-lbl-reg-name">Student Full Name:</label>
             <input type="text" id="reg-name" placeholder="e.g. Tenzin Norbu">
 
-            <label>Gender (Mandatory):</label>
+            <label id="ui-lbl-reg-gender">Gender (Mandatory):</label>
             <select id="reg-gender">
                 <option value="">-- Select Gender --</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
             </select>
 
-            <label>Mobile Number (10 Digits):</label>
+            <label id="ui-lbl-reg-phone">Mobile Number (10 Digits):</label>
             <input type="tel" id="reg-phone" maxlength="10" placeholder="e.g. 9832000000">
 
-            <label>Mobile Number Belongs To (Mandatory):</label>
+            <label id="ui-lbl-reg-relation">Mobile Number Belongs To (Mandatory):</label>
             <select id="reg-relation">
                 <option value="">-- Select Option --</option>
                 <option value="Self">Self</option>
@@ -502,47 +529,47 @@
                 <option value="Guardian">Guardian</option>
             </select>
 
-            <label>Age:</label>
+            <label id="ui-lbl-reg-age">Age:</label>
             <input type="number" id="reg-age" placeholder="e.g. 17">
 
-            <label>Date of Birth:</label>
+            <label id="ui-lbl-reg-dob">Date of Birth:</label>
             <input type="date" id="reg-dob">
 
-            <label>Class / Grade:</label>
+            <label id="ui-lbl-reg-class">Class / Grade:</label>
             <input type="text" id="reg-class" placeholder="e.g. Class 12 / BA 1st Year">
 
-            <label>School / College Name:</label>
+            <label id="ui-lbl-reg-school">School / College Name:</label>
             <input type="text" id="reg-school" placeholder="e.g. Tashi Namgyal Academy, Gangtok">
 
-            <label>Create Secure Password:</label>
+            <label id="ui-lbl-reg-pass">Create Secure Password:</label>
             <input type="password" id="reg-pass" placeholder="Create a strong password">
 
-            <label>Take Profile Selfie:</label>
+            <label id="ui-lbl-reg-selfie">Take Profile Selfie:</label>
             <div id="camera-container">
                 <video id="selfie-cam" autoplay playsinline muted></video>
-                <button class="btn btn-secondary" type="button" onclick="captureSelfie()">Capture Selfie</button>
+                <button class="btn btn-secondary" type="button" id="ui-btn-capture" onclick="captureSelfie()">Capture Selfie</button>
             </div>
 
             <div id="preview-container" class="hidden">
                 <img id="selfie-preview" alt="Captured Selfie Preview">
                 <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-danger" type="button" onclick="retakeSelfie()" style="margin-top:0;">Retake Selfie</button>
-                    <button class="btn" type="button" onclick="confirmSelfie()" style="margin-top:0;">Continue</button>
+                    <button class="btn btn-danger" type="button" id="ui-btn-retake" onclick="retakeSelfie()" style="margin-top:0;">Retake Selfie</button>
+                    <button class="btn" type="button" id="ui-btn-continue" onclick="confirmSelfie()" style="margin-top:0;">Continue</button>
                 </div>
             </div>
             <div id="selfie-status" style="font-size:12px; color:#f59e0b; margin-top:8px; text-align:center; font-weight: 800;">Please capture your selfie photo</div>
         </div>
 
         <button class="btn" id="proceed-reg-btn" onclick="processRegistration()">Proceed to Exam Pass</button>
-        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
+        <button class="btn btn-secondary" id="ui-btn-reg-back" onclick="showChoiceView()">Back</button>
     </div>
 
     <!-- VIEW 0.75: WARNING SCREEN -->
     <div id="warning-view" class="hidden">
-        <h1>IMPORTANT WARNING</h1>
+        <h1 id="ui-warn-title">IMPORTANT WARNING</h1>
         <div class="warning-box">
-            <h3>SAVE YOUR CREDENTIALS!</h3>
-            <p style="font-size: 14px; color: #ffffff; line-height: 1.6;">
+            <h3 id="ui-warn-sub">SAVE YOUR CREDENTIALS!</h3>
+            <p id="ui-warn-desc" style="font-size: 14px; color: #ffffff; line-height: 1.6;">
                 Your Unique Generated Student ID is:<br>
                 <strong id="display-generated-uid" style="font-size: 24px; color: #4ade80; text-shadow: 0 0 15px rgba(74,222,128,0.5);"></strong><br><br>
                 You <strong>MUST</strong> remember or write down this User ID and your Password. It is mandatory to input them every time you log in to access your profile next time!
@@ -562,27 +589,27 @@
                     <div id="header-student-id" class="avatar-sub">SKM-00000 (Tap to View Profile)</div>
                 </div>
             </div>
-            <button class="btn btn-secondary" style="width: auto; padding: 8px 14px; font-size: 12px; margin-top:0;" onclick="logoutSession()">Logout</button>
+            <button class="btn btn-secondary" id="ui-btn-logout" style="width: auto; padding: 8px 14px; font-size: 12px; margin-top:0;" onclick="logoutSession()">Logout</button>
         </div>
 
-        <h1>Student Dashboard</h1>
+        <h1 id="ui-dash-title">Student Dashboard</h1>
         <div class="subtitle" id="welcome-student-banner">AI Proctored Strict 30-Minute Challenge</div>
 
         <div class="news-card">
-            <h4>🌐 Global Tech & Education News Update</h4>
-            <p style="margin: 0; line-height: 1.5;">
+            <h4 id="ui-news-title">🌐 Global Tech & Education News Update</h4>
+            <p id="ui-news-desc" style="margin: 0; line-height: 1.5;">
                 Global education boards are increasingly shifting toward strict AI-proctored examination environments to maintain integrity. Stay alert, keep your camera clear, and maintain focus throughout your assessment modules!
             </p>
         </div>
 
         <div class="lesley-banner-card" onclick="openAiChatModal()">
             <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley Your Assistant">
-            <div style="font-weight: 900; background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 17px; text-shadow: 0 2px 10px rgba(236,72,153,0.4);">💬 Chat with Lesley Your Assistant</div>
-            <div style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here to open student support and voice assistance!</div>
+            <div id="ui-lesley-card-title" style="font-weight: 900; background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 17px; text-shadow: 0 2px 10px rgba(236,72,153,0.4);">💬 Chat with Lesley Your Assistant</div>
+            <div id="ui-lesley-card-sub" style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here to open student support and voice assistance!</div>
         </div>
 
         <div class="support-section">
-            <p><strong>Customer Support Desk</strong></p>
+            <p><strong id="ui-sup-title">Customer Support Desk</strong></p>
             <p>Email: <a href="mailto:workharddd18@gmail.com">workharddd18@gmail.com</a></p>
             <p>WhatsApp / Call: <a href="tel:+918918351226">+91 8918351226</a></p>
         </div>
@@ -591,80 +618,111 @@
     <!-- PROFILE MODAL -->
     <div id="profile-modal" class="modal-overlay hidden">
         <div class="modal-card">
-            <h2>Student Profile Details</h2>
+            <h2 id="ui-prof-title">Student Profile Details</h2>
             <div style="text-align: center; margin-bottom: 16px;">
                 <img id="modal-avatar-img" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink); box-shadow: 0 0 25px rgba(236,72,153,0.6);" src="" alt="Selfie">
             </div>
+
+            <!-- Language Switcher in Profile -->
+            <div style="margin-bottom: 14px;">
+                <label id="ui-lbl-modal-lang" style="text-align: center; margin-top: 0;">Change App Language:</label>
+                <select id="modal-lang-select" onchange="changeAppLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="hi">हिंदी (Hindi)</option>
+                    <option value="bn">বাংলা (Bengali)</option>
+                    <option value="ne">नेपाली (Nepali)</option>
+                    <option value="bh">भोजपुरी (Bhojpuri)</option>
+                    <option value="as">অসমীয়া (Assamese)</option>
+                    <option value="gu">ગુજરાતી (Gujarati)</option>
+                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                    <option value="ml">മലയാളം (Malayalam)</option>
+                    <option value="mr">मराठी (Marathi)</option>
+                    <option value="or">ଓଡ଼ିଆ (Odia)</option>
+                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+                    <option value="ta">தமிழ் (Tamil)</option>
+                    <option value="te">తెలుగు (Telugu)</option>
+                    <option value="ur">اردو (Urdu)</option>
+                    <option value="ks">कॉशुर / كأشُر (Kashmiri)</option>
+                    <option value="sd">سنڌي (Sindhi)</option>
+                    <option value="sa">संस्कृतम् (Sanskrit)</option>
+                    <option value="mai">मैथिली (Maithili)</option>
+                    <option value="sat">संताली (Santali)</option>
+                    <option value="mni">মৈতৈলোন্ (Manipuri)</option>
+                    <option value="kok">कोंकणी (Konkani)</option>
+                    <option value="doi">डोगरी (Dogri)</option>
+                </select>
+            </div>
+
             <div class="profile-detail-row">
-                <span class="profile-detail-label">Full Name:</span>
+                <span class="profile-detail-label" id="ui-p-name">Full Name:</span>
                 <span class="profile-detail-val" id="mod-name">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label">Unique Student ID:</span>
+                <span class="profile-detail-label" id="ui-p-uid">Unique Student ID:</span>
                 <span class="profile-detail-val" id="mod-uid" style="color: #4ade80;">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label">Gender:</span>
+                <span class="profile-detail-label" id="ui-p-gender">Gender:</span>
                 <span class="profile-detail-val" id="mod-gender">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label">Age & DOB:</span>
+                <span class="profile-detail-label" id="ui-p-agedob">Age & DOB:</span>
                 <span class="profile-detail-val" id="mod-age-dob">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label">Mobile & Relation:</span>
+                <span class="profile-detail-label" id="ui-p-phone">Mobile & Relation:</span>
                 <span class="profile-detail-val" id="mod-phone">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label">Class / Grade:</span>
+                <span class="profile-detail-label" id="ui-p-class">Class / Grade:</span>
                 <span class="profile-detail-val" id="mod-class">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label">School / College:</span>
+                <span class="profile-detail-label" id="ui-p-school">School / College:</span>
                 <span class="profile-detail-val" id="mod-school">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label">Password:</span>
+                <span class="profile-detail-label" id="ui-p-pass">Password:</span>
                 <span class="profile-detail-val" id="mod-pass" style="color: #f59e0b;">-</span>
             </div>
 
             <div style="margin-top: 18px; background: rgba(15, 7, 30, 0.85); backdrop-filter: blur(14px); padding: 18px; border-radius: 16px; border: 1px solid rgba(236, 72, 153, 0.4);">
                 <div class="price-display">₹200 / Day Pass</div>
-                <ul>
+                <ul id="ui-pass-ul">
                     <li><strong>Access:</strong> Valid until 12:00 AM Midnight.</li>
                     <li><strong>Live Proctoring:</strong> Camera active full 30 mins.</li>
                     <li><strong>Anti-Cheat:</strong> Tab/background switches trigger lock + ₹150 fine.</li>
                 </ul>
-                <button class="btn" onclick="startHardcoreTrial()">Start Your Hardcore Trial of Exam</button>
+                <button class="btn" id="ui-btn-trial" onclick="startHardcoreTrial()">Start Your Hardcore Trial of Exam</button>
             </div>
 
-            <button class="btn btn-secondary" onclick="closeProfileModal()" style="margin-top: 16px;">Close Profile</button>
+            <button class="btn btn-secondary" id="ui-btn-close-prof" onclick="closeProfileModal()" style="margin-top: 16px;">Close Profile</button>
         </div>
     </div>
 
     <!-- LESLEY ASSISTANT CHAT MODAL -->
     <div id="ai-chat-modal" class="modal-overlay hidden">
         <div class="modal-card">
-            <h2>Lesley Your Assistant</h2>
-            <p style="text-align: center; font-size: 11px; background: linear-gradient(135deg, #f472b6, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: -4px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 900;">✨ Voice assistance active automatically! ✨</p>
+            <h2 id="ui-lesley-title">Lesley Your Assistant</h2>
+            <p id="ui-lesley-sub" style="text-align: center; font-size: 11px; background: linear-gradient(135deg, #f472b6, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: -4px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 900;">✨ Voice assistance active automatically! ✨</p>
 
             <div class="chat-box-container" id="chat-messages">
-                <div class="chat-msg bot">Hi, it's Lesley out here. How may I help you?</div>
+                <div class="chat-msg bot" id="ui-initial-greeting">Hello there! I am Lesley, your personal AI assistant. Whether you want to know about our exam platform features, or ask any general question from science and history to personal advice, I am right here for you. How may I help you today?</div>
             </div>
 
-            <input type="text" id="user-chat-input" placeholder="Type your question here..." onkeypress="handleChatKeyPress(event)">
-            <button class="btn btn-ai" onclick="sendChatMessage()">Send</button>
-            <button class="btn btn-secondary" onclick="closeAiChatModal()" style="margin-top: 10px;">Close Chat</button>
+            <input type="text" id="user-chat-input" placeholder="Ask anything..." onkeypress="handleChatKeyPress(event)">
+            <button class="btn btn-ai" id="ui-btn-send" onclick="sendChatMessage()">Send</button>
+            <button class="btn btn-secondary" id="ui-btn-close-chat" onclick="closeAiChatModal()" style="margin-top: 10px;">Close Chat</button>
         </div>
     </div>
 
     <!-- VIEW 2: EXAM WORKSPACE -->
     <div id="exam-view" class="hidden">
-        <h1>Live Exam Session</h1>
+        <h1 id="ui-exam-title">Live Exam Session</h1>
         <div class="timer-display" id="timer">30:00</div>
 
         <div class="card" style="padding: 12px; text-align: center;">
-            <div style="font-size: 11px; color: #ef4444; margin-bottom: 6px; font-weight: 900; letter-spacing: 1.5px;">● LIVE PROCTORING ACTIVE</div>
+            <div id="ui-proctor-live" style="font-size: 11px; color: #ef4444; margin-bottom: 6px; font-weight: 900; letter-spacing: 1.5px;">● LIVE PROCTORING ACTIVE</div>
             <video id="video-box" autoplay playsinline muted></video>
         </div>
 
@@ -673,18 +731,18 @@
         </div>
 
         <input type="text" id="user-answer" placeholder="Type your answer here...">
-        <button class="btn" onclick="submitAnswer()">Submit Answer</button>
+        <button class="btn" id="ui-btn-submit" onclick="submitAnswer()">Submit Answer</button>
     </div>
 
     <!-- VIEW 3: PROFILE LOCKED SCREEN -->
     <div id="locked-view" class="hidden">
-        <h1 style="background: linear-gradient(135deg, #ef4444, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PROFILE LOCKED</h1>
+        <h1 id="ui-lock-title" style="background: linear-gradient(135deg, #ef4444, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PROFILE LOCKED</h1>
         <div class="card" style="text-align: center; border-color: rgba(239, 68, 68, 0.7);">
-            <p style="color: #fca5a5; font-size: 14px;">Cheating or tab switch detected by live system monitor.</p>
-            <p style="font-size: 20px; font-weight: 900; color: #ef4444; text-shadow: 0 0 15px rgba(239,68,68,0.5);">Penalty Fine Due: ₹150</p>
-            <p style="font-size: 12px; color: #cbd5e1;">Your account is locked until the penalty is cleared.</p>
+            <p id="ui-lock-desc1" style="color: #fca5a5; font-size: 14px;">Cheating or tab switch detected by live system monitor.</p>
+            <p id="ui-lock-desc2" style="font-size: 20px; font-weight: 900; color: #ef4444; text-shadow: 0 0 15px rgba(239,68,68,0.5);">Penalty Fine Due: ₹150</p>
+            <p id="ui-lock-desc3" style="font-size: 12px; color: #cbd5e1;">Your account is locked until the penalty is cleared.</p>
         </div>
-        <button class="btn btn-danger" onclick="payFine()">Pay ₹150 Fine to Unlock Profile</button>
+        <button class="btn btn-danger" id="ui-btn-fine" onclick="payFine()">Pay ₹150 Fine to Unlock Profile</button>
     </div>
 
 </div>
@@ -696,6 +754,297 @@
     let isSelfieConfirmed = false;
     let generatedUIDForWarning = "";
     let selfieStream = null;
+    let currentLang = 'en';
+
+    const translations = {
+        en: {
+            title: "Sikkim Exam Portal",
+            subtitle: "Next-Gen AI Proctored Infrastructure",
+            choiceDesc: "Existing student? Login with your Unique ID. New student? Register your elite profile.",
+            btnLogin: "Login to Profile",
+            btnRegister: "New Student Registration",
+            loginTitle: "Student Login",
+            loginSub: "Access your secure profile dashboard",
+            lblUid: "Unique Student ID:",
+            lblPass: "Password:",
+            btnDoLogin: "Login",
+            btnBack: "Back",
+            regTitle: "Student Registration",
+            regSub: "Create your unique permanent student account",
+            lblLang: "Preferred Language:",
+            lblName: "Student Full Name:",
+            lblGender: "Gender (Mandatory):",
+            lblPhone: "Mobile Number (10 Digits):",
+            lblRelation: "Mobile Number Belongs To (Mandatory):",
+            lblAge: "Age:",
+            lblDob: "Date of Birth:",
+            lblClass: "Class / Grade:",
+            lblSchool: "School / College Name:",
+            lblCreatePass: "Create Secure Password:",
+            lblSelfie: "Take Profile Selfie:",
+            btnCapture: "Capture Selfie",
+            btnRetake: "Retake Selfie",
+            btnContinue: "Continue",
+            selfieWait: "Please capture your selfie photo",
+            btnProceedReg: "Proceed to Exam Pass",
+            warnTitle: "IMPORTANT WARNING",
+            warnSub: "SAVE YOUR CREDENTIALS!",
+            warnDesc: "Your Unique Generated Student ID is:",
+            warnNote: "You <strong>MUST</strong> remember or write down this User ID and your Password. It is mandatory to input them every time you log in to access your profile next time!",
+            dashTitle: "Student Dashboard",
+            dashSub: "AI Proctored Strict 30-Minute Challenge",
+            newsTitle: "🌐 Global Tech & Education News Update",
+            newsDesc: "Global education boards are increasingly shifting toward strict AI-proctored examination environments to maintain integrity. Stay alert, keep your camera clear, and maintain focus throughout your assessment modules!",
+            lesleyTitle: "💬 Chat with Lesley Your Assistant",
+            lesleySub: "Tap here to open student support and voice assistance!",
+            supportTitle: "Customer Support Desk",
+            profTitle: "Student Profile Details",
+            pName: "Full Name:",
+            pUid: "Unique Student ID:",
+            pGender: "Gender:",
+            pAgeDob: "Age & DOB:",
+            pPhone: "Mobile & Relation:",
+            pClass: "Class / Grade:",
+            pSchool: "School / College:",
+            pPass: "Password:",
+            passUl: "<li><strong>Access:</strong> Valid until 12:00 AM Midnight.</li><li><strong>Live Proctoring:</strong> Camera active full 30 mins.</li><li><strong>Anti-Cheat:</strong> Tab/background switches trigger lock + ₹150 fine.</li>",
+            btnTrial: "Start Your Hardcore Trial of Exam",
+            btnCloseProf: "Close Profile",
+            lesleyModalTitle: "Lesley Your Assistant",
+            lesleyModalSub: "✨ Voice assistance active automatically! ✨",
+            initialGreeting: "Hello there! I am Lesley, your personal AI assistant. Whether you want to know about our exam platform features, or ask any general question from science and history to personal advice, I am right here for you. How may I help you today?",
+            chatPlaceholder: "Ask anything...",
+            btnSend: "Send",
+            btnCloseChat: "Close Chat",
+            examTitle: "Live Exam Session",
+            proctorLive: "● LIVE PROCTORING ACTIVE",
+            btnSubmit: "Submit Answer",
+            lockTitle: "PROFILE LOCKED",
+            lockDesc1: "Cheating or tab switch detected by live system monitor.",
+            lockDesc2: "Penalty Fine Due: ₹150",
+            lockDesc3: "Your account is locked until the penalty is cleared.",
+            btnFine: "Pay ₹150 Fine to Unlock Profile"
+        },
+        hi: {
+            title: "सिक्किम परीक्षा पोर्टल",
+            subtitle: "नेक्स्ट-जेन एआई प्रॉक्टरड इंफ्रास्ट्रक्चर",
+            choiceDesc: "मौजूदा छात्र? अपनी यूनिक आईडी से लॉगिन करें। नए छात्र? अपनी विशिष्ट प्रोफाइल पंजीकृत करें।",
+            btnLogin: "प्रोफाइल में लॉगिन करें",
+            btnRegister: "नया छात्र पंजीकरण",
+            loginTitle: "छात्र लॉगिन",
+            loginSub: "अपने सुरक्षित प्रोफाइल डैशबोर्ड तक पहुंचें",
+            lblUid: "यूनिक छात्र आईडी:",
+            lblPass: "पासवर्ड:",
+            btnDoLogin: "लॉगिन करें",
+            btnBack: "पीछे",
+            regTitle: "छात्र पंजीकरण",
+            regSub: "अपना यूनिक स्थायी छात्र खाता बनाएं",
+            lblLang: "पसंदीदा भाषा:",
+            lblName: "छात्र का पूरा नाम:",
+            lblGender: "लिंग (अनिवार्य):",
+            lblPhone: "मोबाइल नंबर (10 अंक):",
+            lblRelation: "मोबाइल नंबर किसका है (अनिवार्य):",
+            lblAge: "आयु:",
+            lblDob: "जन्म तिथि:",
+            lblClass: "कक्षा / ग्रेड:",
+            lblSchool: "स्कूल / कॉलेज का नाम:",
+            lblCreatePass: "सुरक्षित पासवर्ड बनाएं:",
+            lblSelfie: "प्रोफाइल सेल्फी लें:",
+            btnCapture: "सेल्फी लें",
+            btnRetake: "पुनः सेल्फी लें",
+            btnContinue: "जारी रखें",
+            selfieWait: "कृपया अपनी सेल्फी फोटो लें",
+            btnProceedReg: "परीक्षा पास के लिए आगे बढ़ें",
+            warnTitle: "महत्वपूर्ण चेतावनी",
+            warnSub: "अपने क्रेडेंशियल्स सहेजें!",
+            warnDesc: "आपकी यूनिक जनरेटेड छात्र आईडी है:",
+            warnNote: "आपको इस यूजर आईडी और पासवर्ड को <strong>अवश्य</strong> याद रखना या लिखना चाहिए। अगली बार अपनी प्रोफाइल तक पहुंचने के लिए लॉगिन करते समय इन्हें दर्ज करना अनिवार्य है!",
+            dashTitle: "छात्र डैशबोर्ड",
+            dashSub: "एआई प्रॉक्टरड सख्त 30 मिनट की चुनौती",
+            newsTitle: "🌐 वैश्विक तकनीक और शिक्षा समाचार अपडेट",
+            newsDesc: "अखंडता बनाए रखने के लिए वैश्विक शिक्षा बोर्ड तेजी से सख्त एआई-प्रॉक्टरड परीक्षा वातावरण की ओर बढ़ रहे हैं। सतर्क रहें, अपना कैमरा साफ रखें, और अपने पूरे मूल्यांकन मॉड्यूल में ध्यान केंद्रित रखें!",
+            lesleyTitle: "💬 लेस्ली आपकी सहायक से चैट करें",
+            lesleySub: "छात्र सहायता और वॉयस सहायता खोलने के लिए यहां टैप करें!",
+            supportTitle: "ग्राहक सहायता डेस्क",
+            profTitle: "छात्र प्रोफाइल विवरण",
+            pName: "पूरा नाम:",
+            pUid: "यूनिक छात्र आईडी:",
+            pGender: "लिंग:",
+            pAgeDob: "आयु और जन्म तिथि:",
+            pPhone: "मोबाइल और रिश्ता:",
+            pClass: "कक्षा / ग्रेड:",
+            pSchool: "स्कूल / कॉलेज:",
+            pPass: "पासवर्ड:",
+            passUl: "<li><strong>पहुंच:</strong> रात 12:00 बजे तक वैध।</li><li><strong>लाइव प्रॉक्टरिंग:</strong> कैमरा पूरे 30 मिनट सक्रिय।</li><li><strong>एंटी-चीट:</strong> टैब/बैकग्राउंड स्विच से लॉक + ₹150 जुर्माना।</li>",
+            btnTrial: "अपनी हार्डकोर परीक्षा ट्रायल शुरू करें",
+            btnCloseProf: "प्रोफाइल बंद करें",
+            lesleyModalTitle: "लेस्ली आपकी सहायक",
+            lesleyModalSub: "✨ वॉयस सहायता स्वचालित रूप से सक्रिय है! ✨",
+            initialGreeting: "नमस्ते! मैं लेस्ली हूँ, आपकी पर्सनल एआई असिस्टेंट। चाहे आप हमारी परीक्षा प्लेटफ़ॉर्म सुविधाओं के बारे में जानना चाहें, या विज्ञान और इतिहास से लेकर व्यक्तिगत सलाह तक कोई भी सामान्य प्रश्न पूछना चाहें, मैं यहाँ आपके लिए हूँ। आज मैं आपकी किस प्रकार सहायता कर सकती हूँ?",
+            chatPlaceholder: "कुछ भी पूछें...",
+            btnSend: "भेजें",
+            btnCloseChat: "चैट बंद करें",
+            examTitle: "लाइव परीक्षा सत्र",
+            proctorLive: "● लाइव प्रॉक्टरिंग सक्रिय",
+            btnSubmit: "उत्तर जमा करें",
+            lockTitle: "प्रोफाइल लॉक",
+            lockDesc1: "लाइव सिस्टम मॉनिटर द्वारा नकल या टैब स्विच का पता चला।",
+            lockDesc2: "जुर्माना देय: ₹150",
+            lockDesc3: "जब तक जुर्माना चुकाया नहीं जाता, आपका खाता लॉक है।",
+            btnFine: "प्रोफाइल अनलॉक करने के लिए ₹150 जुर्माना भरें"
+        },
+        ne: {
+            title: "सिक्किम परीक्षा पोर्टल",
+            subtitle: "नेक्स्ट-जेन एआई प्रक्टोर्ड इन्फ्रास्ट्रक्चर",
+            choiceDesc: "अवस्थित विद्यार्थी? आफ्नो युनिक आईडीबाट लगइन गर्नुहोस्। नयाँ विद्यार्थी? आफ्नो विशिष्ट प्रोफाइल दर्ता गर्नुहोस्।",
+            btnLogin: "प्रोफाइलमा लगइन गर्नुहोस्",
+            btnRegister: "नयाँ विद्यार्थी दर्ता",
+            loginTitle: "विद्यार्थी लगइन",
+            loginSub: "तपाईंको सुरक्षित प्रोफाइल ड्यासबोर्डमा पहुँच गर्नुहोस्",
+            lblUid: "युनिक विद्यार्थी आईडी:",
+            lblPass: "पासवर्ड:",
+            btnDoLogin: "लगइन गर्नुहोस्",
+            btnBack: "पछाडि",
+            regTitle: "विद्यार्थी दर्ता",
+            regSub: "तपाईंको युनिक स्थायी विद्यार्थी खाता सिर्जना गर्नुहोस्",
+            lblLang: "रुचाइएको भाषा:",
+            lblName: "विद्यार्थीको पूरा नाम:",
+            lblGender: "लिङ्ग (अनिवार्य):",
+            lblPhone: "मोबाइल नम्बर (१० अंक):",
+            lblRelation: "मोबाइल नम्बर कोसँग सम्बन्धित छ (अनिवार्य):",
+            lblAge: "उमेर:",
+            lblDob: "जन्म मिति:",
+            lblClass: "कक्षा / ग्रेड:",
+            lblSchool: "स्कूल / कलेजको नाम:",
+            lblCreatePass: "सुरक्षित पासवर्ड सिर्जना गर्नुहोस्:",
+            lblSelfie: "प्रोफाइल सेल्फी लिनुहोस्:",
+            btnCapture: "सेल्फी लिनुहोस्",
+            btnRetake: "फेरि सेल्फी लिनुहोस्",
+            btnContinue: "जारी राख्नुहोस्",
+            selfieWait: "कृपया आफ्नो सेल्फी फोटो खिच्नुहोस्",
+            btnProceedReg: "परीक्षा पासको लागि अगाडि बढ्नुहोस्",
+            warnTitle: "महत्त्वपूर्ण चेतावनी",
+            warnSub: "आफ्नो प्रमाणहरू सुरक्षित गर्नुहोस्!",
+            warnDesc: "तपाईंको युनिक जेनरेट गरिएको विद्यार्थी आईडी हो:",
+            warnNote: "तपाईंले यो युजर आईडी र पासवर्ड <strong>अवश्य</strong> याद राख्नु पर्छ या लेख्नु पर्छ। अर्को पटक आफ्नो प्रोफाइलमा पहुँच गर्न लगइन गर्दा यी प्रविष्ट गर्न अनिवार्य छ!",
+            dashTitle: "विद्यार्थी ड्यासबोर्ड",
+            dashSub: "एआई प्रक्टोर्ड कडा ३० मिनेटको चुनौती",
+            newsTitle: "🌐 विश्वव्यापी टेक र शिक्षा समाचार अपडेट",
+            newsDesc: "अखंडता कायम राख्न विश्वव्यापी शिक्षा बोर्डहरू कडा एआई-प्रक्टोर्ड परीक्षा वातावरणतर्फ उन्मुख छन्। सचेत रहनुहोस्, आफ्नो क्यामेरा सफा राख्नुहोस्, र आफ्नो मूल्याङ्कन मोड्युलहरूमा ध्यान केन्द्रित राख्नुहोस्!",
+            lesleyTitle: "💬 लेस्ली तपाईंको सहायकसँग कुराकानी गर्नुहोस्",
+            lesleySub: "विद्यार्थी सहायता र आवाज सहायता खोल्न यहाँ ट्याप गर्नुहोस्!",
+            supportTitle: "ग्राहक सहायता डेस्क",
+            profTitle: "विद्यार्थी प्रोफाइल विवरण",
+            pName: "पूरा नाम:",
+            pUid: "युनिक विद्यार्थी आईडी:",
+            pGender: "लिङ्ग:",
+            pAgeDob: "उमेर र जन्म मिति:",
+            pPhone: "मोबाइल र सम्बन्ध:",
+            pClass: "कक्षा / ग्रेड:",
+            pSchool: "स्कूल / कलेज:",
+            pPass: "पासवर्ड:",
+            passUl: "<li><strong>पहुँच:</strong> राति १२:०० बजेसम्म मान्य।</li><li><strong>लाइभ प्रक्टोरिङ:</strong> क्यामेरा पूरा ३० मिनेट सक्रिय।</li><li><strong>एन्टि-चिट:</strong> ट्याब/ब्याकग्राउन्ड स्विचले लक + रु. १५० जरिवाना।</li>",
+            btnTrial: "तपाईंको हार्डकोर परीक्षा ट्रायल सुरु गर्नुहोस्",
+            btnCloseProf: "प्रोफाइल बन्द गर्नुहोस्",
+            lesleyModalTitle: "लेस्ली तपाईंको सहायक",
+            lesleyModalSub: "✨ आवाज सहायता स्वतः सक्रिय छ! ✨",
+            initialGreeting: "नमस्ते! म लेस्ली हुँ, तपाईंको व्यक्तिगत एआई सहायक। चाहे तपाईं हाम्रो परीक्षा प्लेटफर्म सुविधाहरू बारे जान्न चाहनुहुन्छ, वा विज्ञान र इतिहासदेखि व्यक्तिगत सल्लाहसम्म कुनै पनि सामान्य प्रश्न सोध्न चाहनुहुन्छ, म यहाँ तपाईंको लागि छु। आज म तपाईंलाई कसरी मद्दत गर्न सक्छु?",
+            chatPlaceholder: "केहि पनि सोध्नुहोस्...",
+            btnSend: "पठाउनुहोस्",
+            btnCloseChat: "चैट बन्द गर्नुहोस्",
+            examTitle: "लाइभ परीक्षा सत्र",
+            proctorLive: "● लाइभ प्रक्टोरिङ सक्रिय",
+            btnSubmit: "उत्तर बुझाउनुहोस्",
+    lockTitle: "प्रोफाइल लक",
+    lockDesc1: "लाइभ सिस्टम मोनिटरद्वारा नकल वा ट्याब स्विच पत्ता लाग्यो।",
+    lockDesc2: "जरिवाना बाँकी: रु. १५०",
+    lockDesc3: "जरिवाना चुक्ता नभएसम्म तपाईंको खाता लक छ।",
+    btnFine: "प्रोफाइल अनलक गर्न रु. १५० जरिवाना तिर्नुहोस्"
+}
+    };
+
+    function changeAppLanguage(lang) {
+        if (!translations[lang]) lang = 'en';
+        currentLang = lang;
+        let t = translations[lang];
+
+        document.getElementById('ui-title').innerText = t.title;
+        document.getElementById('ui-subtitle').innerText = t.subtitle;
+        document.getElementById('ui-choice-desc').innerText = t.choiceDesc;
+        document.getElementById('ui-btn-login').innerText = t.btnLogin;
+        document.getElementById('ui-btn-register').innerText = t.btnRegister;
+
+        document.getElementById('ui-login-title').innerText = t.loginTitle;
+        document.getElementById('ui-login-sub').innerText = t.loginSub;
+        document.getElementById('ui-lbl-uid').innerText = t.lblUid;
+        document.getElementById('ui-lbl-pass').innerText = t.lblPass;
+        document.getElementById('ui-btn-do-login').innerText = t.btnDoLogin;
+        document.getElementById('ui-btn-login-back').innerText = t.btnBack;
+
+        document.getElementById('ui-reg-title').innerText = t.regTitle;
+        document.getElementById('ui-reg-sub').innerText = t.regSub;
+        document.getElementById('ui-lbl-reg-lang').innerText = t.lblLang;
+        document.getElementById('ui-lbl-reg-name').innerText = t.lblName;
+        document.getElementById('ui-lbl-reg-gender').innerText = t.lblGender;
+        document.getElementById('ui-lbl-reg-phone').innerText = t.lblPhone;
+        document.getElementById('ui-lbl-reg-relation').innerText = t.lblRelation;
+        document.getElementById('ui-lbl-reg-age').innerText = t.lblAge;
+        document.getElementById('ui-lbl-reg-dob').innerText = t.lblDob;
+        document.getElementById('ui-lbl-reg-class').innerText = t.lblClass;
+        document.getElementById('ui-lbl-reg-school').innerText = t.lblSchool;
+        document.getElementById('ui-lbl-reg-pass').innerText = t.lblCreatePass;
+        document.getElementById('ui-lbl-reg-selfie').innerText = t.lblSelfie;
+        document.getElementById('ui-btn-capture').innerText = t.btnCapture;
+        document.getElementById('ui-btn-retake').innerText = t.btnRetake;
+        document.getElementById('ui-btn-continue').innerText = t.btnContinue;
+        document.getElementById('proceed-reg-btn').innerText = t.btnProceedReg;
+        document.getElementById('ui-btn-reg-back').innerText = t.btnBack;
+
+        document.getElementById('ui-warn-title').innerText = t.warnTitle;
+        document.getElementById('ui-warn-sub').innerText = t.warnSub;
+        document.getElementById('ui-warn-desc').innerHTML = `${t.warnDesc}<br><strong id="display-generated-uid" style="font-size: 24px; color: #4ade80; text-shadow: 0 0 15px rgba(74,222,128,0.5);">${generatedUIDForWarning}</strong><br><br>${t.warnNote}`;
+
+        document.getElementById('ui-dash-title').innerText = t.dashTitle;
+        document.getElementById('ui-news-title').innerText = t.newsTitle;
+        document.getElementById('ui-news-desc').innerText = t.newsDesc;
+        document.getElementById('ui-lesley-card-title').innerText = t.lesleyTitle;
+        document.getElementById('ui-lesley-card-sub').innerText = t.lesleySub;
+        document.getElementById('ui-sup-title').innerText = t.supportTitle;
+        document.getElementById('ui-btn-logout').innerText = t.logout || "Logout";
+
+        document.getElementById('ui-prof-title').innerText = t.profTitle;
+        document.getElementById('ui-p-name').innerText = t.pName;
+        document.getElementById('ui-p-uid').innerText = t.pUid;
+        document.getElementById('ui-p-gender').innerText = t.pGender;
+        document.getElementById('ui-p-agedob').innerText = t.pAgeDob;
+        document.getElementById('ui-p-phone').innerText = t.pPhone;
+        document.getElementById('ui-p-class').innerText = t.pClass;
+        document.getElementById('ui-p-school').innerText = t.pSchool;
+        document.getElementById('ui-p-pass').innerText = t.pPass;
+        document.getElementById('ui-pass-ul').innerHTML = t.passUl;
+        document.getElementById('ui-btn-trial').innerText = t.btnTrial;
+        document.getElementById('ui-btn-close-prof').innerText = t.btnCloseProf;
+
+        document.getElementById('ui-lesley-title').innerText = t.lesleyModalTitle;
+        document.getElementById('ui-lesley-sub').innerText = t.lesleyModalSub;
+        document.getElementById('ui-initial-greeting').innerText = t.initialGreeting;
+        document.getElementById('user-chat-input').placeholder = t.chatPlaceholder;
+        document.getElementById('ui-btn-send').innerText = t.btnSend;
+        document.getElementById('ui-btn-close-chat').innerText = t.btnCloseChat;
+
+        document.getElementById('ui-exam-title').innerText = t.examTitle;
+        document.getElementById('ui-proctor-live').innerText = t.proctorLive;
+        document.getElementById('ui-btn-submit').innerText = t.btnSubmit;
+
+        document.getElementById('ui-lock-title').innerText = t.lockTitle;
+        document.getElementById('ui-lock-desc1').innerText = t.lockDesc1;
+        document.getElementById('ui-lock-desc2').innerText = t.lockDesc2;
+        document.getElementById('ui-lock-desc3').innerText = t.lockDesc3;
+        document.getElementById('ui-btn-fine').innerText = t.btnFine;
+
+        document.getElementById('reg-lang').value = lang;
+        document.getElementById('modal-lang-select').value = lang;
+    }
 
     function showChoiceView() {
         stopSelfieCam();
@@ -720,7 +1069,7 @@
         selfieCapturedData = "";
         document.getElementById('camera-container').classList.remove('hidden');
         document.getElementById('preview-container').classList.add('hidden');
-        document.getElementById('selfie-status').innerText = "Please capture your selfie photo";
+        document.getElementById('selfie-status').innerText = translations[currentLang].selfieWait;
         document.getElementById('selfie-status').style.color = "#f59e0b";
         startSelfieCam();
     }
@@ -767,7 +1116,7 @@
         isSelfieConfirmed = false;
         document.getElementById('preview-container').classList.add('hidden');
         document.getElementById('camera-container').classList.remove('hidden');
-        document.getElementById('selfie-status').innerText = "Please capture your selfie photo";
+        document.getElementById('selfie-status').innerText = translations[currentLang].selfieWait;
         document.getElementById('selfie-status').style.color = "#f59e0b";
         startSelfieCam();
     }
@@ -815,7 +1164,8 @@
             class: studentClass,
             school: school,
             password: password,
-            selfie: selfieCapturedData
+            selfie: selfieCapturedData,
+            lang: currentLang
         };
 
         localStorage.setItem('student_' + uniqueID, JSON.stringify(studentProfile));
@@ -877,6 +1227,10 @@
         }
 
         localStorage.setItem('active_student_uid', uid);
+        if (profile.lang) {
+            changeAppLanguage(profile.lang);
+        }
+
         document.getElementById('login-view').classList.add('hidden');
         document.getElementById('paywall-view').classList.remove('hidden');
         loadStudentDashboard();
@@ -923,7 +1277,7 @@
     function openAiChatModal() {
         document.getElementById('ai-chat-modal').classList.remove('hidden');
         setTimeout(function() {
-            speakAsLesley("Hi, it's Lesley out here. How may I help you?");
+            speakAsLesley(translations[currentLang].initialGreeting);
         }, 400);
     }
 
@@ -942,11 +1296,11 @@
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             let utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1.0;  
-            utterance.pitch = 1.0; 
+            utterance.rate = 0.92; // Slightly softer & slower pace
+            utterance.pitch = 1.15; // Warmer, softer feminine touch
             
             let voices = window.speechSynthesis.getVoices();
-            let standardVoice = voices.find(v => (v.name.includes('Google') || v.name.includes('English') || v.name.includes('Natural')) && v.lang.startsWith('en'));
+            let standardVoice = voices.find(v => (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Female')) && v.lang.startsWith(currentLang === 'hi' ? 'hi' : 'en'));
             if (standardVoice) {
                 utterance.voice = standardVoice;
             }
@@ -982,11 +1336,12 @@
             } else if (lowerMsg.includes('support') || lowerMsg.includes('contact') || lowerMsg.includes('number') || lowerMsg.includes('call') || lowerMsg.includes('whatsapp')) {
                 replyText = "You can reach our support team anytime at workharddd18@gmail.com or via WhatsApp at +91 8918351226.";
             } else if (lowerMsg.includes('hello') || lowerMsg.includes('hi') || lowerMsg.includes('hey')) {
-                replyText = "Hello! How may I assist you with your exam preparation today?";
+                replyText = "Hello there! I am Lesley, your personal AI assistant. How may I assist you with your exam prep or anything else today?";
             } else if (lowerMsg.includes('camera') || lowerMsg.includes('video') || lowerMsg.includes('proctor')) {
                 replyText = "Please ensure your camera is clear and your face remains visible throughout your assessment session.";
             } else {
-                replyText = "Thank you for your question. Please let me know if you need help with your exam pass, proctoring guidelines, or account settings.";
+                // General AI fallback mimicking Gemini style answering any question from personal advice to science/history
+                replyText = `That is a wonderful question! As your personal AI assistant, I can tell you that exploring "${msg}" involves a balanced perspective of logic, context, and continuous learning. Whether you are studying core academics, thinking about personal goals, or exploring general knowledge, staying curious is key. How else can I help you on your journey today?`;
             }
 
             botDiv.innerText = replyText;

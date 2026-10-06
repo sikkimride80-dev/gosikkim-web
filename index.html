@@ -955,12 +955,12 @@
             examTitle: "लाइभ परीक्षा सत्र",
             proctorLive: "● लाइभ प्रक्टोरिङ सक्रिय",
             btnSubmit: "उत्तर बुझाउनुहोस्",
-    lockTitle: "प्रोफाइल लक",
-    lockDesc1: "लाइभ सिस्टम मोनिटरद्वारा नकल वा ट्याब स्विच पत्ता लाग्यो।",
-    lockDesc2: "जरिवाना बाँकी: रु. १५०",
-    lockDesc3: "जरिवाना चुक्ता नभएसम्म तपाईंको खाता लक छ।",
-    btnFine: "प्रोफाइल अनलक गर्न रु. १५० जरिवाना तिर्नुहोस्"
-}
+            lockTitle: "प्रोफाइल लक",
+            lockDesc1: "लाइभ सिस्टम मोनिटरद्वारा नकल वा ट्याब स्विच पत्ता लाग्यो।",
+            lockDesc2: "जरिवाना बाँकी: रु. १५०",
+            lockDesc3: "जरिवाना चुक्ता नभएसम्म तपाईंको खाता लक छ।",
+            btnFine: "प्रोफाइल अनलक गर्न रु. १५० जरिवाना तिर्नुहोस्"
+        }
     };
 
     function changeAppLanguage(lang) {
@@ -1296,8 +1296,8 @@
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
             let utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.92; // Slightly softer & slower pace
-            utterance.pitch = 1.15; // Warmer, softer feminine touch
+            utterance.rate = 0.92;
+            utterance.pitch = 1.15;
             
             let voices = window.speechSynthesis.getVoices();
             let standardVoice = voices.find(v => (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Female')) && v.lang.startsWith(currentLang === 'hi' ? 'hi' : 'en'));
@@ -1340,7 +1340,6 @@
             } else if (lowerMsg.includes('camera') || lowerMsg.includes('video') || lowerMsg.includes('proctor')) {
                 replyText = "Please ensure your camera is clear and your face remains visible throughout your assessment session.";
             } else {
-                // General AI fallback mimicking Gemini style answering any question from personal advice to science/history
                 replyText = `That is a wonderful question! As your personal AI assistant, I can tell you that exploring "${msg}" involves a balanced perspective of logic, context, and continuous learning. Whether you are studying core academics, thinking about personal goals, or exploring general knowledge, staying curious is key. How else can I help you on your journey today?`;
             }
 

@@ -235,17 +235,17 @@
             padding: 10px;
         }
         .modal-card {
-            background: rgba(25, 12, 50, 0.92);
+            background: rgba(25, 12, 50, 0.95);
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             width: 100%;
-            max-width: 450px;
-            padding: 24px;
+            max-width: 480px;
+            padding: 20px;
             border-radius: 24px;
             animation: slowNeonGlow 2.25s infinite ease-in-out;
             border: 2px solid rgba(236, 72, 153, 0.8);
             box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(236, 72, 153, 0.4);
-            max-height: 92vh;
+            max-height: 94vh;
             overflow-y: auto;
         }
         .modal-card h2 { 
@@ -324,58 +324,126 @@
             margin-bottom: 12px;
         }
 
-        .chat-box-container {
-            position: relative;
-            background: url('https://files.catbox.moe/qivn0s.jpg') no-repeat center center;
-            background-size: contain;
-            background-color: #09021a;
-            animation: multiColorBorder 2.25s infinite ease-in-out;
-            border: 2px solid rgba(236, 72, 153, 0.8);
-            border-radius: 16px;
-            height: 290px;
-            overflow-y: auto;
-            padding: 14px;
-            margin-bottom: 14px;
+        /* UPGRADED META-AI / GEMINI CHAT STYLING */
+        .ai-chat-header {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             gap: 12px;
-            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
-        }
-        .chat-box-container::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(9, 2, 26, 0.88);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1;
-            border-radius: 15px;
-            pointer-events: none;
-        }
-        .chat-msg {
-            position: relative;
-            z-index: 2;
-            padding: 12px 16px;
+            background: rgba(45, 20, 75, 0.9);
+            padding: 10px 14px;
             border-radius: 14px;
-            font-size: 13px;
-            max-width: 82%;
-            line-height: 1.5;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-        }
-        .chat-msg.bot {
-            background: rgba(45, 20, 75, 0.95);
-            color: #f1f5f9;
-            align-self: flex-start;
-            border-left: 4px solid #ec4899;
+            margin-bottom: 12px;
             border: 1px solid rgba(236, 72, 153, 0.5);
         }
+        .ai-avatar-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #06b6d4;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
+        }
+        .ai-header-info h3 { margin: 0; font-size: 15px; color: #fff; font-weight: 900; }
+        .ai-header-info span { font-size: 10px; color: #4ade80; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+        .ai-header-info span::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #4ade80; }
+
+        .chat-box-container {
+            position: relative;
+            background: rgba(12, 5, 25, 0.95);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 16px;
+            height: 320px;
+            overflow-y: auto;
+            padding: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
+        }
+        .chat-msg {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            max-width: 85%;
+            line-height: 1.5;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+            word-wrap: break-word;
+        }
+        .chat-msg.bot {
+            background: rgba(35, 18, 68, 0.95);
+            color: #f1f5f9;
+            align-self: flex-start;
+            border-left: 3px solid #06b6d4;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-top-left-radius: 2px;
+        }
         .chat-msg.user {
-            background: rgba(236, 72, 153, 0.9);
+            background: linear-gradient(135deg, #ec4899, #a855f7);
             color: white;
             align-self: flex-end;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-top-right-radius: 2px;
         }
+
+        .ai-suggestions-row {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            scrollbar-width: none;
+        }
+        .ai-suggestions-row::-webkit-scrollbar { display: none; }
+        .ai-chip {
+            background: rgba(52, 28, 89, 0.9);
+            border: 1px solid rgba(236, 72, 153, 0.5);
+            color: #f472b6;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .ai-chip:hover { background: #ec4899; color: #fff; box-shadow: 0 0 12px rgba(236,72,153,0.6); }
+
+        .ai-input-wrapper {
+            display: flex;
+            gap: 8px;
+            background: rgba(15, 7, 30, 0.9);
+            padding: 6px 10px;
+            border-radius: 14px;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            align-items: center;
+        }
+        .ai-input-wrapper input {
+            background: transparent;
+            border: none;
+            padding: 8px;
+            color: white;
+            font-size: 13px;
+            width: 100%;
+            outline: none;
+            margin: 0;
+        }
+        .ai-send-btn {
+            background: linear-gradient(135deg, #06b6d4, #a855f7);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(6,182,212,0.5);
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        .ai-send-btn:hover { transform: scale(1.08); }
 
         #video-box, #selfie-cam, #selfie-preview {
             width: 100%;
@@ -700,19 +768,34 @@
         </div>
     </div>
 
-    <!-- LESLEY ASSISTANT CHAT MODAL -->
+    <!-- UPGRADED META-AI / GEMINI STYLE LESLEY CHAT MODAL -->
     <div id="ai-chat-modal" class="modal-overlay hidden">
         <div class="modal-card">
-            <h2 id="ui-lesley-title">Lesley Your Assistant</h2>
-            <p id="ui-lesley-sub" style="text-align: center; font-size: 11px; background: linear-gradient(135deg, #f472b6, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: -4px; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 900;">✨ Voice assistance active automatically! ✨</p>
-
-            <div class="chat-box-container" id="chat-messages">
-                <div class="chat-msg bot" id="ui-initial-greeting">Hello there! I am Lesley, your personal AI assistant. Whether you want to know about our exam platform features, or ask any general question from science and history to personal advice, I am right here for you. How may I help you today?</div>
+            <div class="ai-chat-header">
+                <img src="https://files.catbox.moe/qivn0s.jpg" class="ai-avatar-badge" alt="Lesley">
+                <div class="ai-header-info">
+                    <h3 id="ui-lesley-title">Lesley AI Assistant</h3>
+                    <span id="ui-lesley-sub">Online & Voice Active</span>
+                </div>
             </div>
 
-            <input type="text" id="user-chat-input" placeholder="Ask anything..." onkeypress="handleChatKeyPress(event)">
-            <button class="btn btn-ai" id="ui-btn-send" onclick="sendChatMessage()">Send</button>
-            <button class="btn btn-secondary" id="ui-btn-close-chat" onclick="closeAiChatModal()" style="margin-top: 10px;">Close Chat</button>
+            <div class="chat-box-container" id="chat-messages">
+                <div class="chat-msg bot" id="ui-initial-greeting">Hello! I am Lesley, your multi-modal AI collaborator. Ask me anything about exam prep, features, fines, or general knowledge!</div>
+            </div>
+
+            <div class="ai-suggestions-row">
+                <div class="ai-chip" onclick="sendQuickChip('How to start exam?')">💡 Exam Pass Info</div>
+                <div class="ai-chip" onclick="sendQuickChip('What is the fine for tab switch?')">🔒 Anti-Cheat Rules</div>
+                <div class="ai-chip" onclick="sendQuickChip('Contact support team')">📞 Support Desk</div>
+                <div class="ai-chip" onclick="sendQuickChip('Tell me a science fact')">✨ Science Fact</div>
+            </div>
+
+            <div class="ai-input-wrapper">
+                <input type="text" id="user-chat-input" placeholder="Ask Lesley anything..." onkeypress="handleChatKeyPress(event)">
+                <button class="ai-send-btn" onclick="sendChatMessage()">&#10148;</button>
+            </div>
+
+            <button class="btn btn-secondary" id="ui-btn-close-chat" onclick="closeAiChatModal()" style="margin-top: 12px; padding: 10px;">Close Chat</button>
         </div>
     </div>
 
@@ -810,11 +893,10 @@
             passUl: "<li><strong>Access:</strong> Valid until 12:00 AM Midnight.</li><li><strong>Live Proctoring:</strong> Camera active full 30 mins.</li><li><strong>Anti-Cheat:</strong> Tab/background switches trigger lock + ₹150 fine.</li>",
             btnTrial: "Start Your Hardcore Trial of Exam",
             btnCloseProf: "Close Profile",
-            lesleyModalTitle: "Lesley Your Assistant",
-            lesleyModalSub: "✨ Voice assistance active automatically! ✨",
-            initialGreeting: "Hello there! I am Lesley, your personal AI assistant. Whether you want to know about our exam platform features, or ask any general question from science and history to personal advice, I am right here for you. How may I help you today?",
-            chatPlaceholder: "Ask anything...",
-            btnSend: "Send",
+            lesleyModalTitle: "Lesley AI Assistant",
+            lesleyModalSub: "Online & Voice Active",
+            initialGreeting: "Hello! I am Lesley, your multi-modal AI collaborator. Ask me anything about exam prep, features, fines, or general knowledge!",
+            chatPlaceholder: "Ask Lesley anything...",
             btnCloseChat: "Close Chat",
             examTitle: "Live Exam Session",
             proctorLive: "● LIVE PROCTORING ACTIVE",
@@ -878,11 +960,10 @@
             passUl: "<li><strong>पहुंच:</strong> रात 12:00 बजे तक वैध।</li><li><strong>लाइव प्रॉक्टरिंग:</strong> कैमरा पूरे 30 मिनट सक्रिय।</li><li><strong>एंटी-चीट:</strong> टैब/बैकग्राउंड स्विच से लॉक + ₹150 जुर्माना।</li>",
             btnTrial: "अपनी हार्डकोर परीक्षा ट्रायल शुरू करें",
             btnCloseProf: "प्रोफाइल बंद करें",
-            lesleyModalTitle: "लेस्ली आपकी सहायक",
-            lesleyModalSub: "✨ वॉयस सहायता स्वचालित रूप से सक्रिय है! ✨",
-            initialGreeting: "नमस्ते! मैं लेस्ली हूँ, आपकी पर्सनल एआई असिस्टेंट। चाहे आप हमारी परीक्षा प्लेटफ़ॉर्म सुविधाओं के बारे में जानना चाहें, या विज्ञान और इतिहास से लेकर व्यक्तिगत सलाह तक कोई भी सामान्य प्रश्न पूछना चाहें, मैं यहाँ आपके लिए हूँ। आज मैं आपकी किस प्रकार सहायता कर सकती हूँ?",
-            chatPlaceholder: "कुछ भी पूछें...",
-            btnSend: "भेजें",
+            lesleyModalTitle: "लेस्ली एआई असिस्टेंट",
+            lesleyModalSub: "ऑनलाइन और वॉयस सक्रिय",
+            initialGreeting: "नमस्ते! मैं लेस्ली हूँ, आपकी मल्टी-मोडल एआई असिस्टेंट। परीक्षा की तैयारी, फीस या किसी भी सामान्य ज्ञान के बारे में मुझसे पूछें!",
+            chatPlaceholder: "लेस्ली से कुछ भी पूछें...",
             btnCloseChat: "चैट बंद करें",
             examTitle: "लाइव परीक्षा सत्र",
             proctorLive: "● लाइव प्रॉक्टरिंग सक्रिय",
@@ -946,11 +1027,10 @@
             passUl: "<li><strong>पहुँच:</strong> राति १२:०० बजेसम्म मान्य।</li><li><strong>लाइभ प्रक्टोरिङ:</strong> क्यामेरा पूरा ३० मिनेट सक्रिय।</li><li><strong>एन्टि-चिट:</strong> ट्याब/ब्याकग्राउन्ड स्विचले लक + रु. १५० जरिवाना।</li>",
             btnTrial: "तपाईंको हार्डकोर परीक्षा ट्रायल सुरु गर्नुहोस्",
             btnCloseProf: "प्रोफाइल बन्द गर्नुहोस्",
-            lesleyModalTitle: "लेस्ली तपाईंको सहायक",
-            lesleyModalSub: "✨ आवाज सहायता स्वतः सक्रिय छ! ✨",
-            initialGreeting: "नमस्ते! म लेस्ली हुँ, तपाईंको व्यक्तिगत एआई सहायक। चाहे तपाईं हाम्रो परीक्षा प्लेटफर्म सुविधाहरू बारे जान्न चाहनुहुन्छ, वा विज्ञान र इतिहासदेखि व्यक्तिगत सल्लाहसम्म कुनै पनि सामान्य प्रश्न सोध्न चाहनुहुन्छ, म यहाँ तपाईंको लागि छु। आज म तपाईंलाई कसरी मद्दत गर्न सक्छु?",
-            chatPlaceholder: "केहि पनि सोध्नुहोस्...",
-            btnSend: "पठाउनुहोस्",
+            lesleyModalTitle: "लेस्ली एआई सहायक",
+            lesleyModalSub: "अनलाइन र आवाज सक्रिय",
+            initialGreeting: "नमस्ते! म लेस्ली हुँ, तपाईंको मल्टि-मोडल एआई सहायक। परीक्षाको तयारी, फि वा कुनै पनि सामान्य ज्ञानको बारेमा मलाई सोध्नुहोस्!",
+            chatPlaceholder: "लेस्लीलाई केहि सोध्नुहोस्...",
             btnCloseChat: "चैट बन्द गर्नुहोस्",
             examTitle: "लाइभ परीक्षा सत्र",
             proctorLive: "● लाइभ प्रक्टोरिङ सक्रिय",
@@ -1029,7 +1109,6 @@
         document.getElementById('ui-lesley-sub').innerText = t.lesleyModalSub;
         document.getElementById('ui-initial-greeting').innerText = t.initialGreeting;
         document.getElementById('user-chat-input').placeholder = t.chatPlaceholder;
-        document.getElementById('ui-btn-send').innerText = t.btnSend;
         document.getElementById('ui-btn-close-chat').innerText = t.btnCloseChat;
 
         document.getElementById('ui-exam-title').innerText = t.examTitle;
@@ -1292,6 +1371,11 @@
         }
     }
 
+    function sendQuickChip(text) {
+        document.getElementById('user-chat-input').value = text;
+        sendChatMessage();
+    }
+
     function speakAsLesley(text) {
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
@@ -1340,7 +1424,7 @@
             } else if (lowerMsg.includes('camera') || lowerMsg.includes('video') || lowerMsg.includes('proctor')) {
                 replyText = "Please ensure your camera is clear and your face remains visible throughout your assessment session.";
             } else {
-                replyText = `That is a wonderful question! As your personal AI assistant, I can tell you that exploring "${msg}" involves a balanced perspective of logic, context, and continuous learning. Whether you are studying core academics, thinking about personal goals, or exploring general knowledge, staying curious is key. How else can I help you on your journey today?`;
+                replyText = `That is a wonderful question! As your personal AI assistant, I can tell you that exploring "${msg}" involves a balanced perspective of logic, context, and continuous learning. How else can I help you on your journey today?`;
             }
 
             botDiv.innerText = replyText;

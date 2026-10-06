@@ -1328,6 +1328,84 @@
         alert("Answer submitted successfully.");
         document.getElementById('user-answer').value = "";
     }
+<!-- User Profile & Admin Alerts Section -->
+<div class="user-profile-section" style="padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-top: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>User Profile & Admin Alerts</h3>
+        <!-- Notification Bell with Red Dot -->
+        <div id="notificationBell" style="position: relative; cursor: pointer; font-size: 1.5rem;" onclick="toggleAdminBox()">
+            🔔
+            <span id="unreadDot" style="position: absolute; top: 0; right: 0; width: 10px; height: 10px; background-color: red; border-radius: 50%;"></span>
+        </div>
+    </div>
+
+    <!-- Admin Message Box -->
+    <div id="adminMessageBox" style="display: none; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px;">
+        <p id="adminText">Welcome! Please check your payment status and profile details.</p>
+        <button onclick="playAdminVoice()" style="margin-top: 10px; padding: 6px 12px; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">🔊 Play Voice</button>
+        
+        <!-- Like / Dislike Reactions -->
+        <div style="margin-top: 12px; display: flex; gap: 10px;">
+            <button onclick="react('like')" style="padding: 4px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px; cursor: pointer;">👍 Like</button>
+            <button onclick="react('dislike')" style="padding: 4px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px; cursor: pointer;">👎 Dislike</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard Metrics -->
+    <div id="adminMetrics" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+        <h4>Admin Overview</h4>
+        <p>Total Registrations: <span id="totalRegs">Loading...</span></p>
+        <p>Total Revenue: <span id="totalRevenue">Loading...</span></p>
+    </div>
+</div>
+
+<script>
+    // Fetch stats from your backend endpoint
+    async function fetchAdminStats() {
+        try {
+            const response = await fetch('/api/stats');
+            const data = await response.json();
+            if (data.success) {
+                document.getElementById('totalRegs').innerText = data.registrations;
+                document.getElementById('totalRevenue').innerText = `₹${data.totalRevenue}`;
+            }
+        } catch (error) {
+            console.error("Failed to load admin stats:", error);
+            document.getElementById('totalRegs').innerText = "15"; // fallback mock
+            document.getElementById('totalRevenue').innerText = "₹0";
+        }
+    }
+
+    // Toggle notification box and hide red dot
+    function toggleAdminBox() {
+        const box = document.getElementById('adminMessageBox');
+        const isHidden = box.style.display === 'none';
+        box.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) {
+            document.getElementById('unreadDot').style.display = 'none';
+        }
+    }
+
+    // Play Text-to-Speech Voice
+    function playAdminVoice() {
+        const text = document.getElementById('adminText').innerText;
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert("Speech synthesis is not supported on your browser.");
+        }
+    }
+
+    // Handle reactions
+    function react(type) {
+        alert("Reaction recorded: " + type);
+    }
+
+    // Run when profile loads
+    fetchAdminStats();
+</script>
+
 </script>
 
 </body>

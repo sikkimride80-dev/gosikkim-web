@@ -157,9 +157,7 @@
             border: 1px solid rgba(236, 72, 153, 0.4);
         }
         .profile-avatar-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .profile-avatar {
-            width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink);
-        }
+        .profile-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink); }
         .avatar-name { font-size: 15px; font-weight: 900; color: #ffffff; }
         .avatar-sub { font-size: 11px; color: #4ade80; font-weight: 700; }
 
@@ -205,6 +203,14 @@
         #video-box, #selfie-cam, #selfie-preview {
             width: 100%; height: 200px; background: #000; border-radius: 14px; object-fit: cover; margin-bottom: 12px; border: 2px solid var(--neon-pink);
         }
+        
+        /* Small Round Floating Camera for Active Questions */
+        #floating-cam {
+            width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #4ade80;
+            position: fixed; top: 15px; right: 15px; z-index: 999; box-shadow: 0 0 15px rgba(74,222,128,0.6);
+            background: #000;
+        }
+
         .timer-display {
             font-size: 26px; font-weight: 900; color: #f59e0b; text-align: center; background: rgba(25, 12, 50, 0.9); padding: 12px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(245, 158, 11, 0.6);
         }
@@ -417,13 +423,17 @@
         <h1>Live Exam Session</h1>
         <div class="timer-display" id="timer">30:00</div>
 
-        <div class="card" style="padding: 12px; text-align: center;">
-            <div id="ui-proctor-live" style="font-size: 11px; color: #ef4444; margin-bottom: 6px; font-weight: 900;">● LIVE PROCTORING & VIDEO FEED (0-2 MIN CHECK)</div>
+        <!-- 0-2 Min Video Record Check Section -->
+        <div id="video-check-section" class="card" style="padding: 12px; text-align: center;">
+            <div style="font-size: 11px; color: #ef4444; margin-bottom: 6px; font-weight: 900;">● 0 - 2 MINUTE VIDEO RECORDING CHECK</div>
+            <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 10px;">Please record/verify your video feed for 0-2 minutes and submit to unlock exam questions.</p>
             <video id="video-box" autoplay playsinline muted></video>
-            <button class="btn btn-secondary" id="btn-submit-video" onclick="submitVideoCheck()" style="padding: 8px; font-size: 12px; margin-top:4px;">Submit Video Feed & Start Exam Questions</button>
+            <button class="btn" id="btn-submit-video" onclick="submitVideoCheck()">Submit Video Feed (0-2 Min)</button>
         </div>
 
+        <!-- Continuous Hardcore Questions Section (Hidden until video is submitted) -->
         <div id="exam-question-container" class="hidden">
+            <video id="floating-cam" autoplay playsinline muted></video>
             <div style="font-size: 13px; color: #4ade80; margin-bottom: 6px; font-weight: bold;">Current Score: <span id="current-score">0</span> / 1500 Points</div>
             <div class="question-box" id="question-text">Generating hardcore question...</div>
             <input type="text" id="user-answer" placeholder="Type your precise answer...">
@@ -479,6 +489,7 @@
     let isSelfieConfirmed = false;
     let generatedUIDForWarning = "";
     let selfieStream = null;
+    let examStream = null;
     let currentLang = 'en';
     let violationCount = 0;
     let userScore = 0;
@@ -492,12 +503,11 @@
         "Analyze the encryption vulnerabilities present in legacy asymmetric RSA implementations under prime factorization attacks."
     ];
 
-    function changeAppLanguage(lang) {
-        currentLang = lang;
-    }
+    function changeAppLanguage(lang) { currentLang = lang; }
 
     function showChoiceView() {
         stopSelfieCam();
+        stopExamCam();
         document.getElementById('choice-view').classList.remove('hidden');
         document.getElementById('login-view').classList.add('hidden');
         document.getElementById('register-view').classList.add('hidden');
@@ -534,6 +544,10 @@
 
     function stopSelfieCam() {
         if (selfieStream) { selfieStream.getTracks().forEach(t => t.stop()); selfieStream = null; }
+    }
+
+    function stopExamCam() {
+        if (examStream) { examStream.getTracks().forEach(t => t.stop()); examStream = null; }
     }
 
     function captureSelfie() {
@@ -712,18 +726,23 @@
         questionCounter = 0;
         document.getElementById('paywall-view').classList.add('hidden');
         document.getElementById('exam-view').classList.remove('hidden');
+        document.getElementById('video-check-section').classList.remove('hidden');
+        document.getElementById('exam-question-container').classList.add('hidden');
         
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => { document.getElementById('video-box').srcObject = stream; })
+            .then(stream => {
+                examStream = stream;
+                document.getElementById('video-box').srcObject = stream;
+                document.getElementById('floating-cam').srcObject = stream;
+            })
             .catch(err => alert("Camera permission is mandatory for proctoring."));
         
         timerInterval = setInterval(updateTimer, 1000);
     }
 
     function submitVideoCheck() {
-        // Hides video check section after 0-2 minute check, opens continuous questions
-        document.getElementById('btn-submit-video').style.display = 'none';
-        document.getElementById('ui-proctor-live').innerText = "● EXAM QUESTIONS ACTIVE";
+        // Hides video check section after 0-2 minute check, reveals questions & small round floating cam
+        document.getElementById('video-check-section').classList.add('hidden');
         document.getElementById('exam-question-container').classList.remove('hidden');
         loadNextQuestion();
     }
@@ -741,7 +760,6 @@
         let ans = document.getElementById('user-answer').value.trim();
         if (!ans) return alert("Please enter an answer.");
         
-        // Accumulate points (max 1500)
         userScore = Math.min(1500, userScore + 150);
         document.getElementById('current-score').innerText = userScore;
         document.getElementById('user-answer').value = "";
@@ -761,6 +779,7 @@
     }
 
     function triggerDisclaimerScreen() {
+        stopExamCam();
         document.getElementById('exam-view').classList.add('hidden');
         document.getElementById('disclaimer-warning-view').classList.remove('hidden');
         
@@ -785,7 +804,6 @@
     function evaluateFinalResults() {
         document.getElementById('disclaimer-warning-view').classList.add('hidden');
         
-        // If user reached 1500/1500 points, trigger the rigged lucky spin wheel
         if (userScore >= 1500) {
             document.getElementById('wheel-view').classList.remove('hidden');
             startLuckyWheel();
@@ -803,8 +821,6 @@
         display.innerText = "🎡 [ SPINNING WHEEL... ]";
         
         setTimeout(() => {
-            // Rigged probabilities (Internal saved logic): 
-            // High chance 5% discount, rare 2-day trial (only 3 people), 1-day trial (only 5 users)
             let rand = Math.random();
             let prize = "5% Discount Voucher";
             
@@ -829,9 +845,14 @@
         showChoiceView();
     }
 
-    // Proctoring tab switch listeners
+    // Strict Proctoring Tab Switch & Background Listeners
     document.addEventListener("visibilitychange", function() {
         if (document.hidden && !document.getElementById('exam-view').classList.contains('hidden')) {
+            handleViolation();
+        }
+    });
+    window.addEventListener("blur", function() {
+        if (!document.getElementById('exam-view').classList.contains('hidden')) {
             handleViolation();
         }
     });
@@ -839,9 +860,10 @@
     function handleViolation() {
         violationCount++;
         if (violationCount === 1) {
-            alert("⚠️ PROCTOR WARNING #1: Tab switch detected! Next violation locks profile.");
+            alert("⚠️ PROCTOR WARNING #1: Tab switch or background activity detected! Next violation locks profile.");
         } else {
             clearInterval(timerInterval);
+            stopExamCam();
             document.getElementById('exam-view').classList.add('hidden');
             document.getElementById('locked-view').classList.remove('hidden');
         }

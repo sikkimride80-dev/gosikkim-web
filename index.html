@@ -26,34 +26,19 @@
         window.firebaseFns = { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, doc, setDoc, getDoc };
     </script>
     <style>
-        @keyframes slowNeonGlow {
-            0% { border-color: rgba(236, 72, 153, 0.9); box-shadow: 0 0 35px rgba(236, 72, 153, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-            20% { border-color: rgba(6, 182, 212, 0.9); box-shadow: 0 0 35px rgba(6, 182, 212, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-            40% { border-color: rgba(74, 222, 128, 0.9); box-shadow: 0 0 35px rgba(74, 222, 128, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-            60% { border-color: rgba(245, 158, 11, 0.9); box-shadow: 0 0 35px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-            80% { border-color: rgba(168, 85, 247, 0.9); box-shadow: 0 0 35px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-            100% { border-color: rgba(236, 72, 153, 0.9); box-shadow: 0 0 35px rgba(236, 72, 153, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
-        }
-
-        @keyframes multiColorBorder {
-            0% { border-color: #ec4899; }
-            20% { border-color: #38bdf8; }
-            40% { border-color: #4ade80; }
-            60% { border-color: #f59e0b; }
-            80% { border-color: #a855f7; }
-            100% { border-color: #ec4899; }
-        }
-
-        @keyframes neonTextGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes heartbeatPulse {
+            0% { transform: scale(1); opacity: 0.9; }
+            15% { transform: scale(1.04); opacity: 1; }
+            30% { transform: scale(1); opacity: 0.9; }
+            45% { transform: scale(1.04); opacity: 1; }
+            60% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 0.9; }
         }
 
         :root {
             --bg-deep: #09021a;
-            --glass-bg: rgba(20, 10, 40, 0.85);
-            --glass-card: rgba(35, 18, 68, 0.8);
+            --glass-bg: rgba(20, 10, 40, 0.9);
+            --glass-card: rgba(35, 18, 68, 0.85);
             --neon-pink: #ec4899;
             --neon-cyan: #06b6d4;
             --neon-purple: #a855f7;
@@ -77,88 +62,49 @@
             width: 100%;
             max-width: 580px;
             background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             padding: 24px;
             border-radius: 28px;
-            animation: slowNeonGlow 2.25s infinite ease-in-out;
             border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .app-container::before {
-            content: '';
-            position: absolute;
-            top: -50px; right: -50px;
-            width: 180px; height: 180px;
-            background: var(--neon-pink);
-            filter: blur(80px);
-            opacity: 0.5;
-            z-index: -1;
-        }
-        .app-container::after {
-            content: '';
-            position: absolute;
-            bottom: -50px; left: -50px;
-            width: 180px; height: 180px;
-            background: var(--neon-cyan);
-            filter: blur(80px);
-            opacity: 0.4;
-            z-index: -1;
-        }
-
         h1 { 
-            background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80, #f59e0b, #a855f7, #ec4899);
-            background-size: 300% 300%;
+            background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center; 
-            font-size: 30px; 
+            font-size: 28px; 
             font-weight: 900;
             margin-bottom: 6px; 
-            letter-spacing: 0.8px;
-            animation: neonTextGradient 2.25s infinite linear;
-            text-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
         }
 
         .subtitle { 
             text-align: center; 
-            background: linear-gradient(135deg, #f472b6, #38bdf8, #4ade80);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #38bdf8;
             font-size: 11px; 
             margin-bottom: 24px; 
             text-transform: uppercase;
-            letter-spacing: 2.5px;
+            letter-spacing: 2px;
             font-weight: 800;
-            animation: neonTextGradient 2.25s infinite linear;
         }
         
         .card {
             background: var(--glass-card);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
             padding: 20px;
             border-radius: 20px;
             margin-bottom: 18px;
-            animation: multiColorBorder 2.25s infinite ease-in-out;
-            border: 1px solid rgba(236, 72, 153, 0.5);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(236, 72, 153, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
 
         .price-display {
-            font-size: 32px;
-            background: linear-gradient(135deg, #4ade80, #38bdf8, #ec4899);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 28px;
+            color: #4ade80;
             font-weight: 900;
             text-align: center;
             margin: 12px 0;
-            animation: neonTextGradient 2.25s infinite linear;
-            text-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
         }
 
         ul { padding-left: 20px; font-size: 13px; color: #e2e8f0; line-height: 1.6; }
@@ -166,8 +112,7 @@
         
         .btn {
             width: 100%;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6, #06b6d4, #4ade80);
-            background-size: 300% auto;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
             color: white;
             border: none;
             padding: 15px;
@@ -175,39 +120,30 @@
             font-weight: 800;
             border-radius: 14px;
             cursor: pointer;
-            transition: 0.4s ease;
+            transition: 0.2s ease;
             margin-top: 10px;
-            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.5px;
-            animation: neonTextGradient 3s infinite linear;
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
         }
-        .btn:hover { 
-            background-position: right center;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(236, 72, 153, 0.7); 
-        }
-        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5); animation: none; }
-        .btn-secondary { background: rgba(51, 41, 85, 0.85); backdrop-filter: blur(12px); box-shadow: none; border: 1px solid rgba(168, 85, 247, 0.5); animation: none; }
-        .btn:disabled { background: #332b4a; cursor: not-allowed; opacity: 0.6; box-shadow: none; animation: none; }
+        .btn:hover { transform: translateY(-2px); opacity: 0.95; }
+        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4); }
+        .btn-secondary { background: rgba(51, 41, 85, 0.9); border: 1px solid rgba(168, 85, 247, 0.5); }
+        .btn:disabled { background: #332b4a; cursor: not-allowed; opacity: 0.6; }
 
         .hidden { display: none !important; }
 
-        label { font-size: 11px; background: linear-gradient(135deg, #f472b6, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; margin-bottom: 5px; margin-top: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
+        label { font-size: 11px; color: #f472b6; display: block; margin-bottom: 5px; margin-top: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
         input[type="text"], input[type="number"], input[type="date"], input[type="tel"], input[type="password"], select {
             width: calc(100% - 24px);
             padding: 13px;
-            background: rgba(15, 7, 30, 0.85);
+            background: rgba(15, 7, 30, 0.9);
             border: 1px solid rgba(168, 85, 247, 0.5);
             color: white;
             border-radius: 12px;
             margin-bottom: 6px;
-            backdrop-filter: blur(10px);
             outline: none;
             font-size: 14px;
-            transition: all 0.3s;
         }
-        input:focus, select:focus { border-color: #ec4899; box-shadow: 0 0 20px rgba(236, 72, 153, 0.6); }
+        input:focus, select:focus { border-color: #ec4899; }
         select option { background: #1a0b35; color: white; }
 
         .top-dashboard-header {
@@ -215,487 +151,206 @@
             justify-content: space-between;
             align-items: center;
             background: var(--glass-card);
-            backdrop-filter: blur(18px);
             padding: 14px 18px;
             border-radius: 18px;
             margin-bottom: 20px;
-            animation: multiColorBorder 2.25s infinite ease-in-out;
-            border: 1px solid rgba(236, 72, 153, 0.5);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            border: 1px solid rgba(236, 72, 153, 0.4);
         }
-        .profile-avatar-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
+        .profile-avatar-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
         .profile-avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
-            transition: transform 0.3s;
+            width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink);
         }
-        .profile-avatar:hover { transform: scale(1.1); }
-        .avatar-name { font-size: 15px; font-weight: 900; color: #ffffff; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
-        .avatar-sub { font-size: 11px; background: linear-gradient(135deg, #38bdf8, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
+        .avatar-name { font-size: 15px; font-weight: 900; color: #ffffff; }
+        .avatar-sub { font-size: 11px; color: #4ade80; font-weight: 700; }
 
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(9, 2, 26, 0.92);
-            backdrop-filter: blur(16px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 10px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(9, 2, 26, 0.95);
+            display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 10px;
         }
         .modal-card {
-            background: rgba(25, 12, 50, 0.95);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            width: 100%;
-            max-width: 480px;
-            padding: 20px;
-            border-radius: 24px;
-            animation: slowNeonGlow 2.25s infinite ease-in-out;
-            border: 2px solid rgba(236, 72, 153, 0.8);
-            box-shadow: 0 35px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(236, 72, 153, 0.4);
-            max-height: 94vh;
-            overflow-y: auto;
+            background: rgba(25, 12, 50, 0.98);
+            width: 100%; max-width: 480px; padding: 20px; border-radius: 24px;
+            border: 2px solid rgba(236, 72, 153, 0.8); max-height: 94vh; overflow-y: auto;
         }
-        .modal-card h2 { 
-            background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80, #f59e0b, #a855f7);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center; 
-            margin-top: 0; 
-            font-size: 26px; 
-            font-weight: 900;
-            animation: neonTextGradient 2.25s infinite linear;
-        }
+        .modal-card h2 { color: #ec4899; text-align: center; margin-top: 0; font-size: 24px; font-weight: 900; }
+        
         .profile-detail-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; justify-content: space-between; font-size: 13px; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .profile-detail-label { background: linear-gradient(135deg, #f472b6, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 600; }
+        .profile-detail-label { color: #f472b6; font-weight: 600; }
         .profile-detail-val { color: #ffffff; font-weight: 700; text-align: right; }
 
         .news-card {
-            background: var(--glass-card);
-            backdrop-filter: blur(18px);
-            border-left: 5px solid #ec4899;
-            padding: 18px;
-            border-radius: 16px;
-            margin-bottom: 18px;
-            font-size: 13px;
-            color: #e2e8f0;
-            animation: multiColorBorder 2.25s infinite ease-in-out;
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            border-right: 1px solid rgba(255, 255, 255, 0.15);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: var(--glass-card); border-left: 5px solid #ec4899; padding: 18px; border-radius: 16px; margin-bottom: 18px; font-size: 13px; color: #e2e8f0;
         }
-        .news-card h4 { 
-            background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0 0 8px 0; 
-            font-size: 15px; 
-            font-weight: 900; 
-            animation: neonTextGradient 2.25s infinite linear;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5); 
-        }
+        .news-card h4 { color: #ec4899; margin: 0 0 8px 0; font-size: 15px; font-weight: 900; }
 
         .lesley-banner-card {
-            background: var(--glass-card);
-            backdrop-filter: blur(18px);
-            animation: slowNeonGlow 2s infinite ease-in-out;
-            border: 2px solid rgba(236, 72, 153, 0.9);
-            border-radius: 18px;
-            padding: 18px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 18px;
-            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.5);
+            background: var(--glass-card); border: 2px solid rgba(236, 72, 153, 0.9); border-radius: 18px; padding: 18px; text-align: center; cursor: pointer; margin-bottom: 18px;
         }
-        .lesley-banner-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 50px rgba(236, 72, 153, 0.8);
-        }
-        .lesley-hero-img {
-            width: 100%;
-            height: auto;
-            max-height: 290px;
-            object-fit: contain;
-            border-radius: 14px;
-            background: rgba(9, 2, 26, 0.7);
-            border: 1px solid rgba(236, 72, 153, 0.6);
-            margin-bottom: 12px;
-        }
+        .lesley-hero-img { width: 100%; max-height: 220px; object-fit: contain; border-radius: 14px; background: rgba(0,0,0,0.5); margin-bottom: 12px; }
 
-        .ai-chat-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(45, 20, 75, 0.9);
-            padding: 10px 14px;
-            border-radius: 14px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(236, 72, 153, 0.5);
-        }
-        .ai-avatar-badge {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #06b6d4;
-            box-shadow: 0 0 12px rgba(6, 182, 212, 0.6);
-        }
-        .ai-header-info h3 { margin: 0; font-size: 15px; color: #fff; font-weight: 900; }
-        .ai-header-info span { font-size: 10px; color: #4ade80; font-weight: 700; display: flex; align-items: center; gap: 4px; }
-        .ai-header-info span::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #4ade80; }
+        .ai-chat-header { display: flex; align-items: center; gap: 12px; background: rgba(45, 20, 75, 0.9); padding: 10px 14px; border-radius: 14px; margin-bottom: 12px; }
+        .ai-avatar-badge { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #06b6d4; }
+        .chat-box-container { background: rgba(12, 5, 25, 0.95); border-radius: 16px; height: 280px; overflow-y: auto; padding: 14px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
+        .chat-msg { padding: 10px 14px; border-radius: 12px; font-size: 13px; max-width: 85%; line-height: 1.5; }
+        .chat-msg.bot { background: rgba(35, 18, 68, 0.95); color: #f1f5f9; align-self: flex-start; border-left: 3px solid #06b6d4; }
+        .chat-msg.user { background: linear-gradient(135deg, #ec4899, #a855f7); color: white; align-self: flex-end; }
 
-        .chat-box-container {
-            position: relative;
-            background: rgba(12, 5, 25, 0.95);
-            border: 1px solid rgba(168, 85, 247, 0.4);
-            border-radius: 16px;
-            height: 320px;
-            overflow-y: auto;
-            padding: 14px;
-            margin-bottom: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
-        }
-        .chat-msg {
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 13px;
-            max-width: 85%;
-            line-height: 1.5;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
-            word-wrap: break-word;
-        }
-        .chat-msg.bot {
-            background: rgba(35, 18, 68, 0.95);
-            color: #f1f5f9;
-            align-self: flex-start;
-            border-left: 3px solid #06b6d4;
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-top-left-radius: 2px;
-        }
-        .chat-msg.user {
-            background: linear-gradient(135deg, #ec4899, #a855f7);
-            color: white;
-            align-self: flex-end;
-            border-top-right-radius: 2px;
-        }
-
-        .ai-suggestions-row {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            margin-bottom: 8px;
-            scrollbar-width: none;
-        }
-        .ai-suggestions-row::-webkit-scrollbar { display: none; }
-        .ai-chip {
-            background: rgba(52, 28, 89, 0.9);
-            border: 1px solid rgba(236, 72, 153, 0.5);
-            color: #f472b6;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: 0.2s;
-        }
-        .ai-chip:hover { background: #ec4899; color: #fff; box-shadow: 0 0 12px rgba(236,72,153,0.6); }
-
-        .ai-input-wrapper {
-            display: flex;
-            gap: 8px;
-            background: rgba(15, 7, 30, 0.9);
-            padding: 6px 10px;
-            border-radius: 14px;
-            border: 1px solid rgba(168, 85, 247, 0.5);
-            align-items: center;
-        }
-        .ai-input-wrapper input {
-            background: transparent;
-            border: none;
-            padding: 8px;
-            color: white;
-            font-size: 13px;
-            width: 100%;
-            outline: none;
-            margin: 0;
-        }
-        .ai-send-btn {
-            background: linear-gradient(135deg, #06b6d4, #a855f7);
-            color: white;
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(6,182,212,0.5);
-            flex-shrink: 0;
-            transition: 0.2s;
-        }
-        .ai-send-btn:hover { transform: scale(1.08); }
+        .ai-input-wrapper { display: flex; gap: 8px; background: rgba(15, 7, 30, 0.9); padding: 6px 10px; border-radius: 14px; align-items: center; }
+        .ai-input-wrapper input { background: transparent; border: none; padding: 8px; color: white; font-size: 13px; width: 100%; outline: none; }
+        .ai-send-btn { background: #06b6d4; color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-weight: bold; }
 
         #video-box, #selfie-cam, #selfie-preview {
-            width: 100%;
-            height: 200px;
-            background: #000;
-            border-radius: 14px;
-            object-fit: cover;
-            margin-bottom: 12px;
-            border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 25px rgba(236, 72, 153, 0.5);
+            width: 100%; height: 200px; background: #000; border-radius: 14px; object-fit: cover; margin-bottom: 12px; border: 2px solid var(--neon-pink);
         }
         .timer-display {
-            font-size: 28px;
-            font-weight: 900;
-            background: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            background-color: rgba(25, 12, 50, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 14px;
-            border-radius: 14px;
-            margin-bottom: 16px;
-            animation: neonTextGradient 2.25s infinite linear;
-            border: 1px solid rgba(245, 158, 11, 0.6);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            font-size: 26px; font-weight: 900; color: #f59e0b; text-align: center; background: rgba(25, 12, 50, 0.9); padding: 12px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(245, 158, 11, 0.6);
         }
         .question-box {
-            font-size: 15px;
-            background: var(--glass-card);
-            backdrop-filter: blur(14px);
-            padding: 18px;
-            border-radius: 14px;
-            margin-bottom: 16px;
-            border-left: 5px solid var(--neon-cyan);
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            font-size: 15px; background: var(--glass-card); padding: 18px; border-radius: 14px; margin-bottom: 16px; border-left: 5px solid var(--neon-cyan);
         }
-
         .warning-box {
-            background: rgba(69, 26, 3, 0.85);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(245, 158, 11, 0.7);
-            padding: 20px;
-            border-radius: 16px;
-            text-align: center;
-            margin-bottom: 18px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            background: rgba(69, 26, 3, 0.9); border: 2px solid #ef4444; padding: 22px; border-radius: 18px; text-align: center; margin-bottom: 18px;
+            animation: heartbeatPulse 1s infinite ease-in-out;
         }
-        .warning-box h3 { color: #f59e0b; margin-top: 0; font-weight: 900; font-size: 18px; }
-
-        .support-section {
-            margin-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            padding-top: 16px;
-            font-size: 12px;
-            color: #cbd5e1;
-            text-align: center;
-        }
-        .support-section a { background: linear-gradient(135deg, #38bdf8, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; font-weight: 800; }
-        .support-section a:hover { text-decoration: underline; }
+        .warning-box h3 { color: #f59e0b; margin-top: 0; font-size: 18px; font-weight: 900; }
+        .support-section { margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 16px; font-size: 12px; color: #cbd5e1; text-align: center; }
+        .support-section a { color: #38bdf8; text-decoration: none; font-weight: 800; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
 
-    <!-- VIEW -1: CHOICE SCREEN -->
+    <!-- CHOICE SCREEN -->
     <div id="choice-view">
         <h1 id="ui-title">Sikkim Exam Portal</h1>
-        <div class="subtitle" id="ui-subtitle">Next-Gen AI Proctored Infrastructure</div>
+        <div class="subtitle">Next-Gen AI Proctored Infrastructure</div>
         <div class="card" style="text-align: center;">
-            <p id="ui-choice-desc" style="color: #e2e8f0; font-size: 14px; line-height: 1.5;">Existing student? Login with your Unique ID. New student? Register your elite profile.</p>
+            <p style="color: #e2e8f0; font-size: 14px;">Existing student? Login with your Unique ID. New student? Register your elite profile.</p>
         </div>
-        <button class="btn" id="ui-btn-login" onclick="showLoginView()">Login to Profile</button>
-        <button class="btn btn-secondary" id="ui-btn-register" onclick="showRegisterView()">New Student Registration</button>
+        <button class="btn" onclick="showLoginView()">Login to Profile</button>
+        <button class="btn btn-secondary" onclick="showRegisterView()">New Student Registration</button>
     </div>
 
-    <!-- VIEW -0.5: LOGIN SCREEN -->
+    <!-- LOGIN SCREEN -->
     <div id="login-view" class="hidden">
-        <h1 id="ui-login-title">Student Login</h1>
-        <div class="subtitle" id="ui-login-sub">Access your secure profile dashboard</div>
+        <h1>Student Login</h1>
+        <div class="subtitle">Access your secure profile dashboard</div>
         <div class="card">
-            <label id="ui-lbl-uid">Unique Student ID:</label>
+            <label>Unique Student ID:</label>
             <input type="text" id="login-uid" placeholder="e.g. SKM-94821">
-
-            <label id="ui-lbl-pass">Password:</label>
+            <label>Password:</label>
             <input type="password" id="login-pass" placeholder="Enter your password">
         </div>
-        <button class="btn" id="ui-btn-do-login" onclick="handleLogin()">Login</button>
-        <button class="btn btn-secondary" id="ui-btn-login-back" onclick="showChoiceView()">Back</button>
+        <button class="btn" onclick="handleLogin()">Login</button>
+        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
     </div>
 
-    <!-- VIEW 0: REGISTRATION SCREEN -->
+    <!-- REGISTRATION SCREEN -->
     <div id="register-view" class="hidden">
-        <h1 id="ui-reg-title">Student Registration</h1>
-        <div class="subtitle" id="ui-reg-sub">Create your unique permanent student account</div>
-
+        <h1>Student Registration</h1>
+        <div class="subtitle">Create your unique permanent student account</div>
         <div class="card">
-            <label id="ui-lbl-reg-lang">Preferred Language:</label>
+            <label>Preferred Language:</label>
             <select id="reg-lang" onchange="changeAppLanguage(this.value)">
                 <option value="en">English</option>
                 <option value="hi">हिंदी (Hindi)</option>
-                <option value="bn">বাংলা (Bengali)</option>
                 <option value="ne">नेपाली (Nepali)</option>
-                <option value="bh">भोजपुरी (Bhojpuri)</option>
-                <option value="as">অসমীয়া (Assamese)</option>
-                <option value="gu">ગુજરાતી (Gujarati)</option>
-                <option value="kn">ಕನ್ನಡ (Kannada)</option>
-                <option value="ml">മലയാളം (Malayalam)</option>
-                <option value="mr">मराठी (Marathi)</option>
-                <option value="or">ଓଡ଼ିଆ (Odia)</option>
-                <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                <option value="ta">தமிழ் (Tamil)</option>
-                <option value="te">తెలుగు (Telugu)</option>
-                <option value="ur">اردو (Urdu)</option>
-                <option value="ks">कॉशुर / كأشُر (Kashmiri)</option>
-                <option value="sd">سنڌي (Sindhi)</option>
-                <option value="sa">संस्कृतम् (Sanskrit)</option>
-                <option value="mai">मैथिली (Maithili)</option>
-                <option value="sat">संताली (Santali)</option>
-                <option value="mni">মৈতৈলোন্ (Manipuri)</option>
-                <option value="kok">कोंकणी (Konkani)</option>
-                <option value="doi">डोगरी (Dogri)</option>
             </select>
-
-            <label id="ui-lbl-reg-name">Student Full Name:</label>
+            <label>Student Full Name:</label>
             <input type="text" id="reg-name" placeholder="e.g. Tenzin Norbu">
-
-            <label id="ui-lbl-reg-gender">Gender (Mandatory):</label>
+            <label>Gender:</label>
             <select id="reg-gender">
                 <option value="">-- Select Gender --</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
             </select>
-
-            <label id="ui-lbl-reg-phone">Mobile Number (10 Digits):</label>
+            <label>Mobile Number (10 Digits):</label>
             <input type="tel" id="reg-phone" maxlength="10" placeholder="e.g. 9832000000">
-
-            <label id="ui-lbl-reg-relation">Mobile Number Belongs To (Mandatory):</label>
+            <label>Mobile Number Belongs To:</label>
             <select id="reg-relation">
                 <option value="">-- Select Option --</option>
                 <option value="Self">Self</option>
                 <option value="Father">Father</option>
                 <option value="Mother">Mother</option>
-                <option value="Brother">Brother</option>
-                <option value="Sister">Sister</option>
-                <option value="Aunt">Aunt</option>
-                <option value="Uncle">Uncle</option>
-                <option value="Guardian">Guardian</option>
             </select>
-
-            <label id="ui-lbl-reg-age">Age:</label>
+            <label>Age:</label>
             <input type="number" id="reg-age" placeholder="e.g. 17">
-
-            <label id="ui-lbl-reg-dob">Date of Birth:</label>
+            <label>Date of Birth:</label>
             <input type="date" id="reg-dob">
-
-            <label id="ui-lbl-reg-class">Class / Grade:</label>
-            <input type="text" id="reg-class" placeholder="e.g. Class 12 / BA 1st Year">
-
-            <label id="ui-lbl-reg-school">School / College Name:</label>
-            <input type="text" id="reg-school" placeholder="e.g. Tashi Namgyal Academy, Gangtok">
-
-            <label id="ui-lbl-reg-pass">Create Secure Password:</label>
+            <label>Class / Grade:</label>
+            <input type="text" id="reg-class" placeholder="e.g. Class 12">
+            <label>School / College Name:</label>
+            <input type="text" id="reg-school" placeholder="e.g. Tashi Namgyal Academy">
+            <label>Create Secure Password:</label>
             <input type="password" id="reg-pass" placeholder="Create a strong password">
-
-            <label id="ui-lbl-reg-selfie">Take Profile Selfie:</label>
+            <label>Take Profile Selfie:</label>
             <div id="camera-container">
                 <video id="selfie-cam" autoplay playsinline muted></video>
-                <button class="btn btn-secondary" type="button" id="ui-btn-capture" onclick="captureSelfie()">Capture Selfie</button>
+                <button class="btn btn-secondary" type="button" onclick="captureSelfie()">Capture Selfie</button>
             </div>
-
             <div id="preview-container" class="hidden">
-                <img id="selfie-preview" alt="Captured Selfie Preview">
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-danger" type="button" id="ui-btn-retake" onclick="retakeSelfie()" style="margin-top:0;">Retake Selfie</button>
-                    <button class="btn" type="button" id="ui-btn-continue" onclick="confirmSelfie()" style="margin-top:0;">Continue</button>
+                <img id="selfie-preview" alt="Captured Selfie Preview" style="width:100%; height:160px; border-radius:12px; object-fit:cover;">
+                <div style="display: flex; gap: 10px; margin-top:10px;">
+                    <button class="btn btn-danger" type="button" onclick="retakeSelfie()" style="margin-top:0;">Retake</button>
+                    <button class="btn" type="button" onclick="confirmSelfie()" style="margin-top:0;">Continue</button>
                 </div>
             </div>
             <div id="selfie-status" style="font-size:12px; color:#f59e0b; margin-top:8px; text-align:center; font-weight: 800;">Please capture your selfie photo</div>
         </div>
-
-        <button class="btn" id="proceed-reg-btn" onclick="processRegistration()">Proceed to Exam Pass</button>
-        <button class="btn btn-secondary" id="ui-btn-reg-back" onclick="showChoiceView()">Back</button>
+        <button class="btn" onclick="processRegistration()">Proceed to Exam Pass</button>
+        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
     </div>
 
-    <!-- VIEW 0.75: WARNING SCREEN -->
+    <!-- WARNING SCREEN -->
     <div id="warning-view" class="hidden">
-        <h1 id="ui-warn-title">IMPORTANT WARNING</h1>
+        <h1>IMPORTANT WARNING</h1>
         <div class="warning-box">
-            <h3 id="ui-warn-sub">SAVE YOUR CREDENTIALS!</h3>
-            <p id="ui-warn-desc" style="font-size: 14px; color: #ffffff; line-height: 1.6;">
+            <h3>SAVE YOUR CREDENTIALS!</h3>
+            <p style="font-size: 14px; color: #ffffff; line-height: 1.6;">
                 Your Unique Generated Student ID is:<br>
-                <strong id="display-generated-uid" style="font-size: 24px; color: #4ade80; text-shadow: 0 0 15px rgba(74,222,128,0.5);"></strong><br><br>
-                You <strong>MUST</strong> remember or write down this User ID and your Password. It is mandatory to input them every time you log in to access your profile next time!
+                <strong id="display-generated-uid" style="font-size: 24px; color: #4ade80;"></strong><br><br>
+                You <strong>MUST</strong> write down this User ID and Password to log in next time!
             </p>
         </div>
         <div class="timer-display" id="warning-timer" style="color: #ef4444;">10</div>
         <button class="btn" id="proceed-warning-btn" disabled onclick="finishRegistrationAndLogin()">Please wait (10s) to proceed...</button>
     </div>
 
-    <!-- VIEW 1: MAIN DASHBOARD -->
+    <!-- MAIN DASHBOARD -->
     <div id="paywall-view" class="hidden">
         <div class="top-dashboard-header">
             <div class="profile-avatar-container" onclick="openProfileModal()">
                 <img id="header-avatar-img" class="profile-avatar" src="" alt="Profile Selfie">
                 <div>
                     <div id="header-student-name" class="avatar-name">Student</div>
-                    <div id="header-student-id" class="avatar-sub">SKM-00000 (Tap to View Profile)</div>
+                    <div id="header-student-id" class="avatar-sub">SKM-00000 (Tap Profile)</div>
                 </div>
             </div>
-            <button class="btn btn-secondary" id="ui-btn-logout" style="width: auto; padding: 8px 14px; font-size: 12px; margin-top:0;" onclick="logoutSession()">Logout</button>
+            <button class="btn btn-secondary" style="width: auto; padding: 8px 14px; font-size: 12px; margin-top:0;" onclick="logoutSession()">Logout</button>
         </div>
 
-        <h1 id="ui-dash-title">Student Dashboard</h1>
+        <h1>Student Dashboard</h1>
         <div class="subtitle" id="welcome-student-banner">AI Proctored Strict 30-Minute Challenge</div>
 
         <div class="news-card">
-            <h4 id="ui-news-title">🌐 Global Tech & Education News Update</h4>
-            <p id="ui-news-desc" style="margin: 0; line-height: 1.5;">
-                Global education boards are increasingly shifting toward strict AI-proctored examination environments to maintain integrity. Stay alert, keep your camera clear, and maintain focus throughout your assessment modules!
+            <h4>🌐 Global Tech & Education News Update</h4>
+            <p style="margin: 0; line-height: 1.5;">
+                Global education boards are shifting toward strict AI-proctored examination environments. Answer as many hardcore questions as possible (up to 1500 points) to win vouchers, coupons, or a 2-day free trial!
             </p>
         </div>
 
         <div class="lesley-banner-card" onclick="openAiChatModal()">
-            <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley Your Assistant">
-            <div id="ui-lesley-card-title" style="font-weight: 900; background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 17px; text-shadow: 0 2px 10px rgba(236,72,153,0.4);">💬 Chat with Lesley Your Assistant</div>
-            <div id="ui-lesley-card-sub" style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here to open student support, voice assistance & live search!</div>
+            <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley">
+            <div style="font-weight: 900; color: #ec4899; font-size: 16px;">💬 Chat with Lesley Your Assistant</div>
+            <div style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here for student support & live search!</div>
         </div>
 
         <div class="support-section">
-            <p><strong id="ui-sup-title">Customer Support Desk</strong></p>
+            <p><strong>Customer Support Desk</strong></p>
             <p>Email Support & Unblock Requests: <a href="mailto:workharddd18@gmail.com">workharddd18@gmail.com</a></p>
         </div>
     </div>
@@ -703,149 +358,115 @@
     <!-- PROFILE MODAL -->
     <div id="profile-modal" class="modal-overlay hidden">
         <div class="modal-card">
-            <h2 id="ui-prof-title">Student Profile Details</h2>
+            <h2>Student Profile Details</h2>
             <div style="text-align: center; margin-bottom: 16px;">
-                <img id="modal-avatar-img" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink); box-shadow: 0 0 25px rgba(236,72,153,0.6);" src="" alt="Selfie">
+                <img id="modal-avatar-img" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink);" src="" alt="Selfie">
             </div>
-
-            <div style="margin-bottom: 14px;">
-                <label id="ui-lbl-modal-lang" style="text-align: center; margin-top: 0;">Change App Language:</label>
-                <select id="modal-lang-select" onchange="changeAppLanguage(this.value)">
-                    <option value="en">English</option>
-                    <option value="hi">हिंदी (Hindi)</option>
-                    <option value="bn">বাংলা (Bengali)</option>
-                    <option value="ne">नेपाली (Nepali)</option>
-                    <option value="bh">भोजपुरी (Bhojpuri)</option>
-                    <option value="as">অসমীয়া (Assamese)</option>
-                    <option value="gu">ગુજરાતી (Gujarati)</option>
-                    <option value="kn">ಕನ್ನಡ (Kannada)</option>
-                    <option value="ml">മലയാളം (Malayalam)</option>
-                    <option value="mr">मराठी (Marathi)</option>
-                    <option value="or">ଓଡ଼ିଆ (Odia)</option>
-                    <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                    <option value="ta">தமிழ் (Tamil)</option>
-                    <option value="te">తెలుగు (Telugu)</option>
-                    <option value="ur">اردو (Urdu)</option>
-                    <option value="ks">कॉशुर / كأشُر (Kashmiri)</option>
-                    <option value="sd">سنڌي (Sindhi)</option>
-                    <option value="sa">संस्कृतम् (Sanskrit)</option>
-                    <option value="mai">मैथिली (Maithili)</option>
-                    <option value="sat">संताली (Santali)</option>
-                    <option value="mni">মৈতৈলোন্ (Manipuri)</option>
-                    <option value="kok">कोंकणी (Konkani)</option>
-                    <option value="doi">डोगरी (Dogri)</option>
-                </select>
-            </div>
-
             <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-name">Full Name:</span>
+                <span class="profile-detail-label">Full Name:</span>
                 <span class="profile-detail-val" id="mod-name">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-uid">Unique Student ID:</span>
+                <span class="profile-detail-label">Unique Student ID:</span>
                 <span class="profile-detail-val" id="mod-uid" style="color: #4ade80;">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-gender">Gender:</span>
-                <span class="profile-detail-val" id="mod-gender">-</span>
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-agedob">Age & DOB:</span>
-                <span class="profile-detail-val" id="mod-age-dob">-</span>
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-phone">Mobile & Relation:</span>
-                <span class="profile-detail-val" id="mod-phone">-</span>
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-class">Class / Grade:</span>
+                <span class="profile-detail-label">Class / Grade:</span>
                 <span class="profile-detail-val" id="mod-class">-</span>
             </div>
             <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-school">School / College:</span>
-                <span class="profile-detail-val" id="mod-school">-</span>
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label" id="ui-p-pass">Password:</span>
+                <span class="profile-detail-label">Password:</span>
                 <span class="profile-detail-val" id="mod-pass" style="color: #f59e0b;">-</span>
             </div>
 
-            <div style="margin-top: 18px; background: rgba(15, 7, 30, 0.85); backdrop-filter: blur(14px); padding: 18px; border-radius: 16px; border: 1px solid rgba(236, 72, 153, 0.4);">
-                <div class="price-display" id="trial-price-banner">1st Attempt FREE (Then ₹200 Day 1 / ₹150 Day 2+)</div>
-                <ul id="ui-pass-ul">
+            <div style="margin-top: 18px; background: rgba(15, 7, 30, 0.9); padding: 16px; border-radius: 16px; border: 1px solid rgba(236, 72, 153, 0.4);">
+                <div class="price-display" id="trial-price-banner">1st Attempt FREE (Then ₹200 Day 1)</div>
+                <ul>
                     <li><strong>Free Attempt:</strong> 1st 30-min hardcore exam is 100% free!</li>
-                    <li><strong>Day 1 Pass:</strong> ₹200 after your first free attempt.</li>
-                    <li><strong>Day 2+ Pass:</strong> Only ₹150 per day.</li>
-                    <li><strong>Anti-Cheat:</strong> 1st tab-switch gives warning; 2nd locks profile.</li>
+                    <li><strong>Scoring Challenge:</strong> Score 1500 points to unlock rewards & lucky spin wheel!</li>
                 </ul>
                 <button class="btn" id="ui-btn-trial" onclick="handleExamAttemptFlow()">Start Your Free Hardcore Attempt</button>
             </div>
-
-            <button class="btn btn-secondary" id="ui-btn-close-prof" onclick="closeProfileModal()" style="margin-top: 16px;">Close Profile</button>
+            <button class="btn btn-secondary" onclick="closeProfileModal()" style="margin-top: 16px;">Close Profile</button>
         </div>
     </div>
 
-    <!-- GEMINI-STYLE LESLEY CHAT MODAL WITH DIRECT WEB KNOWLEDGE SYNTHESIS -->
+    <!-- LESLEY CHAT MODAL -->
     <div id="ai-chat-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <div class="ai-chat-header">
                 <img src="https://files.catbox.moe/qivn0s.jpg" class="ai-avatar-badge" alt="Lesley">
-                <div class="ai-header-info">
-                    <h3 id="ui-lesley-title">Lesley AI Assistant</h3>
-                    <span id="ui-lesley-sub">Gemini-Style Live Search & Voice Active</span>
+                <div>
+                    <h3 style="margin: 0; font-size: 15px;">Lesley AI Assistant</h3>
+                    <span style="font-size: 10px; color: #4ade80;">Live Search Active</span>
                 </div>
             </div>
-
             <div class="chat-box-container" id="chat-messages">
-                <div class="chat-msg bot" id="ui-initial-greeting">Hello! I am Lesley, your Gemini-powered web assistant. Ask me any question—dates, prime ministers, facts, or exam prep—and I will answer instantly!</div>
+                <div class="chat-msg bot">Hello! I am Lesley, your Gemini-powered web assistant. Ask me anything about the exam or general topics!</div>
             </div>
-
-            <div class="ai-suggestions-row">
-                <div class="ai-chip" onclick="sendQuickChip('What day is today?')">📅 Today's Day</div>
-                <div class="ai-chip" onclick="sendQuickChip('What date is today?')">🗓️ Today's Date</div>
-                <div class="ai-chip" onclick="sendQuickChip('Who is the Prime Minister of India?')">🇮🇳 Prime Minister of India</div>
-                <div class="ai-chip" onclick="sendQuickChip('What is the capital of Sikkim?')">🏔️ Capital of Sikkim</div>
-            </div>
-
             <div class="ai-input-wrapper">
                 <input type="text" id="user-chat-input" placeholder="Ask Lesley anything..." onkeypress="handleChatKeyPress(event)">
                 <button class="ai-send-btn" onclick="sendChatMessage()">&#10148;</button>
             </div>
-
-            <button class="btn btn-secondary" id="ui-btn-close-chat" onclick="closeAiChatModal()" style="margin-top: 12px; padding: 10px;">Close Chat</button>
+            <button class="btn btn-secondary" onclick="closeAiChatModal()" style="margin-top: 12px; padding: 10px;">Close Chat</button>
         </div>
     </div>
 
-    <!-- VIEW 2: EXAM WORKSPACE -->
+    <!-- EXAM WORKSPACE (0-2 min video check + continuous hardcore questions) -->
     <div id="exam-view" class="hidden">
-        <h1 id="ui-exam-title">Live Exam Session</h1>
+        <h1>Live Exam Session</h1>
         <div class="timer-display" id="timer">30:00</div>
 
         <div class="card" style="padding: 12px; text-align: center;">
-            <div id="ui-proctor-live" style="font-size: 11px; color: #ef4444; margin-bottom: 6px; font-weight: 900; letter-spacing: 1.5px;">● LIVE PROCTORING ACTIVE</div>
+            <div id="ui-proctor-live" style="font-size: 11px; color: #ef4444; margin-bottom: 6px; font-weight: 900;">● LIVE PROCTORING & VIDEO FEED (0-2 MIN CHECK)</div>
             <video id="video-box" autoplay playsinline muted></video>
+            <button class="btn btn-secondary" id="btn-submit-video" onclick="submitVideoCheck()" style="padding: 8px; font-size: 12px; margin-top:4px;">Submit Video Feed & Start Exam Questions</button>
         </div>
 
-        <div class="question-box" id="question-text">
-            Loading AI custom-generated deep core question...
+        <div id="exam-question-container" class="hidden">
+            <div style="font-size: 13px; color: #4ade80; margin-bottom: 6px; font-weight: bold;">Current Score: <span id="current-score">0</span> / 1500 Points</div>
+            <div class="question-box" id="question-text">Generating hardcore question...</div>
+            <input type="text" id="user-answer" placeholder="Type your precise answer...">
+            <button class="btn" onclick="submitAnswer()">Submit Answer & Next</button>
         </div>
-
-        <input type="text" id="user-answer" placeholder="Type your answer here...">
-        <button class="btn" id="ui-btn-submit" onclick="submitAnswer()">Submit Answer</button>
     </div>
 
-    <!-- VIEW 3: PROFILE LOCKED SCREEN -->
-    <div id="locked-view" class="hidden">
-        <h1 id="ui-lock-title" style="background: linear-gradient(135deg, #ef4444, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PROFILE LOCKED</h1>
-        <div class="card" style="text-align: center; border-color: rgba(239, 68, 68, 0.7);">
-            <p id="ui-lock-desc1" style="color: #fca5a5; font-size: 14px;">Fraud, cheating, or repeated tab-switch violations detected.</p>
-            <p id="ui-lock-desc2" style="font-size: 20px; font-weight: 900; color: #ef4444; text-shadow: 0 0 15px rgba(239,68,68,0.5);">Unlock Options Available</p>
-            <p id="ui-lock-desc3" style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
-                Option 1: Pay ₹150 penalty fine below to unlock instantly.<br>
-                Option 2: Email your Student ID & unlock request to <strong>workharddd18@gmail.com</strong> for manual admin review.
+    <!-- 10 SEC WARNING & DISCLAIMER SCREEN BEFORE LUCKY WHEEL OR RESULTS -->
+    <div id="disclaimer-warning-view" class="hidden">
+        <h1>SESSION SUMMARY DISCLAIMER</h1>
+        <div class="warning-box">
+            <h3>⚠️ HARDCORE EVALUATION NOTICE</h3>
+            <p style="font-size: 13px; color: #ffffff; line-height: 1.5;">
+                Your session score has been computed. Answer accuracy determines your final score from 0 to 1500 points. Users scoring 1500/1500 automatically unlock our exclusive Lucky Spin Wheel for vouchers, coupons, and 2-day free trials!
             </p>
         </div>
-        <button class="btn btn-danger" id="ui-btn-fine" onclick="payFine()">Pay ₹150 Fine to Unlock Profile Instantly</button>
+        <div class="timer-display" id="disclaimer-timer" style="color: #ef4444; animation: heartbeatPulse 1s infinite ease-in-out;">10</div>
+        <button class="btn" id="btn-proceed-results" disabled style="background:#332b4a;">Processing final results (10s)...</button>
+    </div>
+
+    <!-- LUCKY SPIN WHEEL VIEW (Triggered if 1500/1500) -->
+    <div id="wheel-view" class="hidden">
+        <h1>🎉 LUCKY SPIN WHEEL</h1>
+        <div class="card" style="text-align: center;">
+            <p style="color: #4ade80; font-weight: bold; font-size: 15px;">Perfect 1500/1500 Score Detected!</p>
+            <div id="wheel-display-box" style="font-size: 36px; margin: 20px 0; font-weight: 900; color: #f59e0b;">🎡 [ SPINNING... ]</div>
+            <p id="wheel-result-text" style="font-size: 14px; color: #e2e8f0; min-height: 40px;"></p>
+        </div>
+        <button class="btn" id="btn-claim-reward" onclick="claimWheelReward()" style="display:none;">Claim Reward & Finish</button>
+    </div>
+
+    <!-- PROFILE LOCKED SCREEN -->
+    <div id="locked-view" class="hidden">
+        <h1 style="color: #ef4444;">PROFILE LOCKED</h1>
+        <div class="card" style="text-align: center; border-color: rgba(239, 68, 68, 0.7);">
+            <p style="color: #fca5a5; font-size: 14px;">Tab-switch or background proctoring violation detected.</p>
+            <p style="font-size: 18px; font-weight: 900; color: #ef4444;">Unlock Options Available</p>
+            <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
+                Option 1: Pay ₹150 penalty fine below to unlock instantly.<br>
+                Option 2: Email your Student ID to <strong>workharddd18@gmail.com</strong>.
+            </p>
+        </div>
+        <button class="btn btn-danger" onclick="payFine()">Pay ₹150 Fine to Unlock Profile</button>
         <button class="btn btn-secondary" onclick="requestEmailUnlock()" style="margin-top:10px;">Send Unlock Request via Email</button>
     </div>
 
@@ -859,146 +480,20 @@
     let generatedUIDForWarning = "";
     let selfieStream = null;
     let currentLang = 'en';
-    let violationCount = 0; // Tracks anti-cheat warnings
+    let violationCount = 0;
+    let userScore = 0;
+    let questionCounter = 0;
 
-    const translations = {
-        en: {
-            title: "Sikkim Exam Portal",
-            subtitle: "Next-Gen AI Proctored Infrastructure",
-            choiceDesc: "Existing student? Login with your Unique ID. New student? Register your elite profile.",
-            btnLogin: "Login to Profile",
-            btnRegister: "New Student Registration",
-            loginTitle: "Student Login",
-            loginSub: "Access your secure profile dashboard",
-            lblUid: "Unique Student ID:",
-            lblPass: "Password:",
-            btnDoLogin: "Login",
-            btnBack: "Back",
-            regTitle: "Student Registration",
-            regSub: "Create your unique permanent student account",
-            lblLang: "Preferred Language:",
-            lblName: "Student Full Name:",
-            lblGender: "Gender (Mandatory):",
-            lblPhone: "Mobile Number (10 Digits):",
-            lblRelation: "Mobile Number Belongs To (Mandatory):",
-            lblAge: "Age:",
-            lblDob: "Date of Birth:",
-            lblClass: "Class / Grade:",
-            lblSchool: "School / College Name:",
-            lblCreatePass: "Create Secure Password:",
-            lblSelfie: "Take Profile Selfie:",
-            btnCapture: "Capture Selfie",
-            btnRetake: "Retake Selfie",
-            btnContinue: "Continue",
-            selfieWait: "Please capture your selfie photo",
-            btnProceedReg: "Proceed to Exam Pass",
-            warnTitle: "IMPORTANT WARNING",
-            warnSub: "SAVE YOUR CREDENTIALS!",
-            warnDesc: "Your Unique Generated Student ID is:",
-            warnNote: "You <strong>MUST</strong> remember or write down this User ID and your Password. It is mandatory to input them every time you log in to access your profile next time!",
-            dashTitle: "Student Dashboard",
-            dashSub: "AI Proctored Strict 30-Minute Challenge",
-            newsTitle: "🌐 Global Tech & Education News Update",
-            newsDesc: "Global education boards are increasingly shifting toward strict AI-proctored examination environments to maintain integrity. Stay alert, keep your camera clear, and maintain focus throughout your assessment modules!",
-            lesleyTitle: "💬 Chat with Lesley Your Assistant",
-            lesleySub: "Tap here to open student support, voice assistance & live search!",
-            supportTitle: "Customer Support Desk",
-            profTitle: "Student Profile Details",
-            pName: "Full Name:",
-            pUid: "Unique Student ID:",
-            pGender: "Gender:",
-            pAgeDob: "Age & DOB:",
-            pPhone: "Mobile & Relation:",
-            pClass: "Class / Grade:",
-            pSchool: "School / College:",
-            pPass: "Password:",
-            passUl: "<li><strong>Free Attempt:</strong> 1st 30-min hardcore exam is 100% free!</li><li><strong>Day 1 Pass:</strong> ₹200 after your first free attempt.</li><li><strong>Day 2+ Pass:</strong> Only ₹150 per day.</li><li><strong>Anti-Cheat:</strong> 1st tab-switch gives warning; 2nd locks profile.</li>",
-            btnTrial: "Start Your Free Hardcore Attempt",
-            btnCloseProf: "Close Profile",
-            lesleyModalTitle: "Lesley AI Assistant",
-            lesleyModalSub: "Gemini-Style Live Search & Voice Active",
-            initialGreeting: "Hello! I am Lesley, your Gemini-powered web assistant. Ask me any question—dates, prime ministers, facts, or exam prep—and I will answer instantly!",
-            chatPlaceholder: "Ask Lesley anything...",
-            btnCloseChat: "Close Chat",
-            examTitle: "Live Exam Session",
-            proctorLive: "● LIVE PROCTORING ACTIVE",
-            btnSubmit: "Submit Answer",
-            lockTitle: "PROFILE LOCKED",
-            lockDesc1: "Fraud, cheating, or repeated tab-switch violations detected.",
-            lockDesc2: "Unlock Options Available",
-            lockDesc3: "Option 1: Pay ₹150 penalty fine below to unlock instantly.<br>Option 2: Email your Student ID & unlock request to workharddd18@gmail.com for manual admin review.",
-            btnFine: "Pay ₹150 Fine to Unlock Profile Instantly"
-        }
-    };
+    const hardcoreQuestions = [
+        "Explain the deep thermodynamic implications of the Carnot cycle in closed quantum systems.",
+        "What are the precise geopolitical triggers that led to the constitutional integration of Sikkim in 1975?",
+        "Describe the algorithmic complexity trade-offs between asynchronous event-loops and multithreaded web workers.",
+        "Detail the structural biochemical role of collagen helices in high-altitude physiological endurance.",
+        "Analyze the encryption vulnerabilities present in legacy asymmetric RSA implementations under prime factorization attacks."
+    ];
 
     function changeAppLanguage(lang) {
-        if (!translations[lang]) lang = 'en';
         currentLang = lang;
-        let t = translations[lang];
-
-        document.getElementById('ui-title').innerText = t.title;
-        document.getElementById('ui-subtitle').innerText = t.subtitle;
-        document.getElementById('ui-choice-desc').innerText = t.choiceDesc;
-        document.getElementById('ui-btn-login').innerText = t.btnLogin;
-        document.getElementById('ui-btn-register').innerText = t.btnRegister;
-        document.getElementById('ui-login-title').innerText = t.loginTitle;
-        document.getElementById('ui-login-sub').innerText = t.loginSub;
-        document.getElementById('ui-lbl-uid').innerText = t.lblUid;
-        document.getElementById('ui-lbl-pass').innerText = t.lblPass;
-        document.getElementById('ui-btn-do-login').innerText = t.btnDoLogin;
-        document.getElementById('ui-btn-login-back').innerText = t.btnBack;
-        document.getElementById('ui-reg-title').innerText = t.regTitle;
-        document.getElementById('ui-reg-sub').innerText = t.regSub;
-        document.getElementById('ui-lbl-reg-lang').innerText = t.lblLang;
-        document.getElementById('ui-lbl-reg-name').innerText = t.lblName;
-        document.getElementById('ui-lbl-reg-gender').innerText = t.lblGender;
-        document.getElementById('ui-lbl-reg-phone').innerText = t.lblPhone;
-        document.getElementById('ui-lbl-reg-relation').innerText = t.lblRelation;
-        document.getElementById('ui-lbl-reg-age').innerText = t.lblAge;
-        document.getElementById('ui-lbl-reg-dob').innerText = t.lblDob;
-        document.getElementById('ui-lbl-reg-class').innerText = t.lblClass;
-        document.getElementById('ui-lbl-reg-school').innerText = t.lblSchool;
-        document.getElementById('ui-lbl-reg-pass').innerText = t.lblCreatePass;
-        document.getElementById('ui-lbl-reg-selfie').innerText = t.lblSelfie;
-        document.getElementById('ui-btn-capture').innerText = t.btnCapture;
-        document.getElementById('ui-btn-retake').innerText = t.btnRetake;
-        document.getElementById('ui-btn-continue').innerText = t.btnContinue;
-        document.getElementById('proceed-reg-btn').innerText = t.btnProceedReg;
-        document.getElementById('ui-btn-reg-back').innerText = t.btnBack;
-        document.getElementById('ui-warn-title').innerText = t.warnTitle;
-        document.getElementById('ui-warn-sub').innerText = t.warnSub;
-        document.getElementById('ui-warn-desc').innerHTML = `${t.warnDesc}<br><strong id="display-generated-uid" style="font-size: 24px; color: #4ade80; text-shadow: 0 0 15px rgba(74,222,128,0.5);">${generatedUIDForWarning}</strong><br><br>${t.warnNote}`;
-        document.getElementById('ui-dash-title').innerText = t.dashTitle;
-        document.getElementById('ui-news-title').innerText = t.newsTitle;
-        document.getElementById('ui-news-desc').innerText = t.newsDesc;
-        document.getElementById('ui-lesley-card-title').innerText = t.lesleyTitle;
-        document.getElementById('ui-lesley-card-sub').innerText = t.lesleySub;
-        document.getElementById('ui-sup-title').innerText = t.supportTitle;
-        document.getElementById('ui-prof-title').innerText = t.profTitle;
-        document.getElementById('ui-p-name').innerText = t.pName;
-        document.getElementById('ui-p-uid').innerText = t.pUid;
-        document.getElementById('ui-p-gender').innerText = t.pGender;
-        document.getElementById('ui-p-agedob').innerText = t.pAgeDob;
-        document.getElementById('ui-p-phone').innerText = t.pPhone;
-        document.getElementById('ui-p-class').innerText = t.pClass;
-        document.getElementById('ui-p-school').innerText = t.pSchool;
-        document.getElementById('ui-p-pass').innerText = t.pPass;
-        document.getElementById('ui-pass-ul').innerHTML = t.passUl;
-        document.getElementById('ui-btn-trial').innerText = t.btnTrial;
-        document.getElementById('ui-btn-close-prof').innerText = t.btnCloseProf;
-        document.getElementById('ui-lesley-title').innerText = t.lesleyModalTitle;
-        document.getElementById('ui-lesley-sub').innerText = t.lesleyModalSub;
-        document.getElementById('ui-initial-greeting').innerText = t.initialGreeting;
-        document.getElementById('user-chat-input').placeholder = t.chatPlaceholder;
-        document.getElementById('ui-btn-close-chat').innerText = t.btnCloseChat;
-        document.getElementById('ui-exam-title').innerText = t.examTitle;
-        document.getElementById('ui-proctor-live').innerText = t.proctorLive;
-        document.getElementById('ui-btn-submit').innerText = t.btnSubmit;
-        document.getElementById('ui-lock-title').innerText = t.lockTitle;
-        document.getElementById('ui-lock-desc1').innerText = t.lockDesc1;
-        document.getElementById('ui-lock-desc2').innerText = t.lockDesc2;
-        document.getElementById('ui-lock-desc3').innerHTML = t.lockDesc3;
-        document.getElementById('ui-btn-fine').innerText = t.btnFine;
     }
 
     function showChoiceView() {
@@ -1010,6 +505,10 @@
         document.getElementById('paywall-view').classList.add('hidden');
         document.getElementById('profile-modal').classList.add('hidden');
         document.getElementById('ai-chat-modal').classList.add('hidden');
+        document.getElementById('exam-view').classList.add('hidden');
+        document.getElementById('disclaimer-warning-view').classList.add('hidden');
+        document.getElementById('wheel-view').classList.add('hidden');
+        document.getElementById('locked-view').classList.add('hidden');
     }
 
     function showLoginView() {
@@ -1024,26 +523,17 @@
         selfieCapturedData = "";
         document.getElementById('camera-container').classList.remove('hidden');
         document.getElementById('preview-container').classList.add('hidden');
-        document.getElementById('selfie-status').innerText = translations[currentLang].selfieWait;
-        document.getElementById('selfie-status').style.color = "#f59e0b";
         startSelfieCam();
     }
 
     function startSelfieCam() {
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(function(stream) {
-                selfieStream = stream;
-                let videoEl = document.getElementById('selfie-cam');
-                videoEl.srcObject = stream;
-            })
-            .catch(function(error) { console.log("Camera note"); });
+            .then(stream => { selfieStream = stream; document.getElementById('selfie-cam').srcObject = stream; })
+            .catch(e => console.log("Camera note"));
     }
 
     function stopSelfieCam() {
-        if (selfieStream) {
-            selfieStream.getTracks().forEach(track => track.stop());
-            selfieStream = null;
-        }
+        if (selfieStream) { selfieStream.getTracks().forEach(t => t.stop()); selfieStream = null; }
     }
 
     function captureSelfie() {
@@ -1051,15 +541,13 @@
         let canvas = document.createElement('canvas');
         canvas.width = videoEl.videoWidth || 300;
         canvas.height = videoEl.videoHeight || 200;
-        let ctx = canvas.getContext('2d');
-        ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+        canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height);
         selfieCapturedData = canvas.toDataURL('image/png');
         stopSelfieCam();
         document.getElementById('selfie-preview').src = selfieCapturedData;
         document.getElementById('camera-container').classList.add('hidden');
         document.getElementById('preview-container').classList.remove('hidden');
-        document.getElementById('selfie-status').innerText = "Selfie captured! Click Continue.";
-        document.getElementById('selfie-status').style.color = "#38bdf8";
+        document.getElementById('selfie-status').innerText = "✓ Selfie captured! Click Continue.";
     }
 
     function retakeSelfie() {
@@ -1074,7 +562,6 @@
         if (!selfieCapturedData) return alert("Please capture a selfie first.");
         isSelfieConfirmed = true;
         document.getElementById('selfie-status').innerText = "✓ Selfie confirmed successfully!";
-        document.getElementById('selfie-status').style.color = "#4ade80";
     }
 
     async function processRegistration() {
@@ -1094,31 +581,11 @@
         }
 
         let uniqueID = 'SKM-' + Math.floor(10000 + Math.random() * 90000);
-        let studentProfile = { 
-            uid: uniqueID, 
-            name, 
-            gender, 
-            phone, 
-            relation, 
-            age, 
-            dob, 
-            class: studentClass, 
-            school, 
-            password, 
-            selfie: selfieCapturedData, 
-            lang: currentLang,
-            freeAttemptUsed: false,
-            paidDaysCount: 0
-        };
+        let studentProfile = { uid: uniqueID, name, gender, phone, relation, age, dob, class: studentClass, school, password, selfie: selfieCapturedData, freeAttemptUsed: false, paidDaysCount: 0 };
 
-        // Save to Firebase Firestore & Auth
         try {
-            const email = `${uniqueID.toLowerCase()}@sikkimcloud.auth`;
-            await window.firebaseFns.createUserWithEmailAndPassword(window.auth, email, password);
             await window.firebaseFns.setDoc(window.firebaseFns.doc(window.db, "students", uniqueID), studentProfile);
-        } catch (e) {
-            console.log("Cloud sync note:", e.message);
-        }
+        } catch (e) { console.log("Cloud sync note"); }
 
         localStorage.setItem('student_' + uniqueID, JSON.stringify(studentProfile));
         stopSelfieCam();
@@ -1136,7 +603,7 @@
         let btnEl = document.getElementById('proceed-warning-btn');
         btnEl.disabled = true;
 
-        let interval = setInterval(function() {
+        let interval = setInterval(() => {
             count--;
             timerEl.innerText = count;
             btnEl.innerText = `Please wait (${count}s) to proceed...`;
@@ -1158,29 +625,22 @@
     async function handleLogin() {
         let uid = document.getElementById('login-uid').value.trim();
         let pass = document.getElementById('login-pass').value.trim();
-        
         let profile = null;
+
         try {
-            const docRef = window.firebaseFns.doc(window.db, "students", uid);
-            const docSnap = await window.firebaseFns.getDoc(docRef);
-            if (docSnap.exists()) {
-                profile = docSnap.data();
-            }
-        } catch (e) {
-            console.log("Cloud fetch fallback");
-        }
+            let docSnap = await window.firebaseFns.getDoc(window.firebaseFns.doc(window.db, "students", uid));
+            if (docSnap.exists()) profile = docSnap.data();
+        } catch (e) { console.log("Cloud fetch fallback"); }
 
         if (!profile) {
-            let storedData = localStorage.getItem('student_' + uid);
-            if (storedData) profile = JSON.parse(storedData);
+            let stored = localStorage.getItem('student_' + uid);
+            if (stored) profile = JSON.parse(stored);
         }
 
         if (!profile) return alert("Student ID not found.");
         if (profile.password !== pass) return alert("Incorrect password.");
 
         localStorage.setItem('active_student_uid', uid);
-        if (profile.lang) changeAppLanguage(profile.lang);
-
         document.getElementById('login-view').classList.add('hidden');
         document.getElementById('paywall-view').classList.remove('hidden');
         loadStudentDashboard();
@@ -1198,214 +658,180 @@
                     document.getElementById('header-avatar-img').src = profile.selfie;
                     document.getElementById('modal-avatar-img').src = profile.selfie;
                 }
-                updateButtonStates(profile);
             }
         }
     }
 
-    function updateButtonStates(profile) {
-        let btn = document.getElementById('ui-btn-trial');
-        let banner = document.getElementById('trial-price-banner');
-        if (!profile.freeAttemptUsed) {
-            btn.innerText = "Start Your Free Hardcore Attempt";
-            banner.innerText = "1st Attempt FREE (Then ₹200 Day 1 / ₹150 Day 2+)";
-        } else if (profile.paidDaysCount === 0) {
-            btn.innerText = "Pay ₹200 for Day 1 Pass";
-            banner.innerText = "₹200 / Day 1 Pass";
-        } else {
-            btn.innerText = "Pay ₹150 for Day 2+ Pass";
-            banner.innerText = "₹150 / Day 2+ Pass";
-        }
-    }
-
-    function openProfileModal() {
-        let activeUid = localStorage.getItem('active_student_uid');
-        if (activeUid) {
-            let profile = JSON.parse(localStorage.getItem('student_' + activeUid));
-            if (profile) {
-                document.getElementById('mod-name').innerText = profile.name;
-                document.getElementById('mod-uid').innerText = profile.uid;
-                document.getElementById('mod-gender').innerText = profile.gender;
-                document.getElementById('mod-age-dob').innerText = `${profile.age} Yrs (${profile.dob})`;
-                document.getElementById('mod-phone').innerText = `${profile.phone} (${profile.relation})`;
-                document.getElementById('mod-class').innerText = profile.class;
-                document.getElementById('mod-school').innerText = profile.school;
-                document.getElementById('mod-pass').innerText = profile.password;
-                updateButtonStates(profile);
-                document.getElementById('profile-modal').classList.remove('hidden');
-            }
-        }
-    }
-
+    function openProfileModal() { document.getElementById('profile-modal').classList.remove('hidden'); }
     function closeProfileModal() { document.getElementById('profile-modal').classList.add('hidden'); }
-    function openAiChatModal() {
-        document.getElementById('ai-chat-modal').classList.remove('hidden');
-        setTimeout(() => speakAsLesley(translations[currentLang].initialGreeting), 400);
-    }
-    function closeAiChatModal() {
-        window.speechSynthesis.cancel();
-        document.getElementById('ai-chat-modal').classList.add('hidden');
-    }
+    function openAiChatModal() { document.getElementById('ai-chat-modal').classList.remove('hidden'); }
+    function closeAiChatModal() { window.speechSynthesis.cancel(); document.getElementById('ai-chat-modal').classList.add('hidden'); }
 
     function handleChatKeyPress(e) { if (e.key === 'Enter') sendChatMessage(); }
-    function sendQuickChip(text) {
-        document.getElementById('user-chat-input').value = text;
-        sendChatMessage();
-    }
-
-    function speakAsLesley(text) {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            let utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 0.92;
-            utterance.pitch = 1.15;
-            window.speechSynthesis.speak(utterance);
-        }
-    }
 
     async function sendChatMessage() {
         let inputEl = document.getElementById('user-chat-input');
         let msg = inputEl.value.trim();
         if (!msg) return;
-
-        let chatContainer = document.getElementById('chat-messages');
+        let container = document.getElementById('chat-messages');
 
         let userDiv = document.createElement('div');
         userDiv.className = 'chat-msg user';
         userDiv.innerText = msg;
-        chatContainer.appendChild(userDiv);
+        container.appendChild(userDiv);
         inputEl.value = "";
-        chatContainer.scrollTop = chatContainer.scrollHeight;
 
         let botDiv = document.createElement('div');
         botDiv.className = 'chat-msg bot';
-        botDiv.innerText = "Thinking & searching web...";
-        chatContainer.appendChild(botDiv);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        botDiv.innerText = "Lesley is searching & analyzing...";
+        container.appendChild(botDiv);
 
-        let replyText = "";
-        let lower = msg.toLowerCase();
-        let now = new Date();
-
-        if (lower.includes('what day is today') || lower.includes('day is today') || lower.includes('what day')) {
-            let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            replyText = `Today is ${now.toLocaleDateString('en-US', options)}.`;
-        } else if (lower.includes('what date is today') || lower.includes('date is today') || lower.includes('todays date') || lower.includes('what date')) {
-            replyText = `Today's date is ${now.toLocaleDateString('en-GB')}.`;
-        } else if (lower.includes('prime minister of india') || lower.includes('pm of india')) {
-            replyText = "The Prime Minister of India is Shri Narendra Modi.";
-        } else if (lower.includes('capital of sikkim')) {
-            replyText = "The capital of Sikkim is Gangtok.";
-        } else if (lower.includes('pass') || lower.includes('fee') || lower.includes('200') || lower.includes('150')) {
-            replyText = "Your 1st exam attempt is 100% free! After that, Day 1 pass is ₹200 and Day 2+ passes are ₹150. You can unlock passes by tapping your profile avatar.";
-        } else if (lower.includes('fine') || lower.includes('lock') || lower.includes('cheat')) {
-            replyText = "Switching tabs triggers our proctor warning. A second violation locks your profile, which you can unlock by paying the ₹150 fine or emailing workharddd18@gmail.com.";
-        } else if (lower.includes('support') || lower.includes('contact') || lower.includes('email')) {
-            replyText = "You can contact support or request profile unblocks at workharddd18@gmail.com.";
-        } else {
-            try {
-                let res = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(msg)}&format=json&no_html=1&skip_disambig=1`);
-                let data = await res.json();
-                if (data.AbstractText) {
-                    replyText = data.AbstractText;
-                } else if (data.RelatedTopics && data.RelatedTopics.length > 0 && data.RelatedTopics[0].Text) {
-                    replyText = data.RelatedTopics[0].Text;
-                } else {
-                    replyText = `Regarding "${msg}": Lesley searched the web and found that this relates to ongoing factual data and structured educational knowledge.`;
-                }
-            } catch (err) {
-                replyText = `Regarding "${msg}": As your AI assistant, I am ready to help you examine this topic with precise information!`;
-            }
+        try {
+            let res = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(msg)}&format=json&no_html=1&skip_disambig=1`);
+            let data = await res.json();
+            botDiv.innerText = data.AbstractText || `Regarding "${msg}": Verified via Sikkim AI Knowledge base.`;
+        } catch(e) {
+            botDiv.innerText = `Regarding "${msg}": AI Proctored Assistant is ready to help!`;
         }
-
-        botDiv.innerText = replyText;
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        speakAsLesley(replyText);
+        container.scrollTop = container.scrollHeight;
     }
 
     function logoutSession() {
-        window.speechSynthesis.cancel();
         localStorage.removeItem('active_student_uid');
         showChoiceView();
     }
 
     function handleExamAttemptFlow() {
-        let activeUid = localStorage.getItem('active_student_uid');
-        let profile = activeUid ? JSON.parse(localStorage.getItem('student_' + activeUid)) : null;
-        if (!profile) return alert("Please login again.");
-
-        if (!profile.freeAttemptUsed) {
-            profile.freeAttemptUsed = true;
-            localStorage.setItem('student_' + activeUid, JSON.stringify(profile));
-            updateCloudProfile(profile);
-            closeProfileModal();
-            alert("Your 1st Hardcore Exam Attempt is Free! Starting now.");
-            startExamSession();
-            return;
-        }
-
-        let amountToPay = (profile.paidDaysCount === 0) ? 20000 : 15000;
-        let passDesc = (profile.paidDaysCount === 0) ? "Day 1 Exam Pass (₹200)" : "Day 2+ Exam Pass (₹150)";
-
-        var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O",
-            "amount": amountToPay,
-            "currency": "INR",
-            "name": "Sikkim Exam Prep",
-            "description": passDesc,
-            "handler": function (response){
-                profile.paidDaysCount += 1;
-                localStorage.setItem('student_' + activeUid, JSON.stringify(profile));
-                updateCloudProfile(profile);
-                alert("Payment Successful! ID: " + response.razorpay_payment_id);
-                closeProfileModal();
-                startExamSession();
-            },
-            "prefill": { "contact": profile.phone, "email": "sikkimride80@gmail.com", "name": profile.name },
-            "theme": { "color": "#ec4899" }
-        };
-        var rzp = new Razorpay(options);
-        rzp.open();
-    }
-
-    async function updateCloudProfile(profile) {
-        try {
-            await window.firebaseFns.setDoc(window.firebaseFns.doc(window.db, "students", profile.uid), profile);
-        } catch(e) {
-            console.log("Cloud update error:", e);
-        }
+        closeProfileModal();
+        startExamSession();
     }
 
     function startExamSession() {
-        violationCount = 0; // reset violation count for new exam session
+        violationCount = 0;
+        userScore = 0;
+        questionCounter = 0;
         document.getElementById('paywall-view').classList.add('hidden');
         document.getElementById('exam-view').classList.remove('hidden');
+        
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
             .then(stream => { document.getElementById('video-box').srcObject = stream; })
             .catch(err => alert("Camera permission is mandatory for proctoring."));
+        
         timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function submitVideoCheck() {
+        // Hides video check section after 0-2 minute check, opens continuous questions
+        document.getElementById('btn-submit-video').style.display = 'none';
+        document.getElementById('ui-proctor-live').innerText = "● EXAM QUESTIONS ACTIVE";
+        document.getElementById('exam-question-container').classList.remove('hidden');
+        loadNextQuestion();
+    }
+
+    function loadNextQuestion() {
+        if (questionCounter < hardcoreQuestions.length) {
+            document.getElementById('question-text').innerText = hardcoreQuestions[questionCounter];
+        } else {
+            document.getElementById('question-text').innerText = `Advanced Core Analysis #${questionCounter + 1}: Synthesize system parameters for high-altitude resilience.`;
+        }
+        questionCounter++;
+    }
+
+    function submitAnswer() {
+        let ans = document.getElementById('user-answer').value.trim();
+        if (!ans) return alert("Please enter an answer.");
+        
+        // Accumulate points (max 1500)
+        userScore = Math.min(1500, userScore + 150);
+        document.getElementById('current-score').innerText = userScore;
+        document.getElementById('user-answer').value = "";
+        loadNextQuestion();
     }
 
     function updateTimer() {
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
         document.getElementById('timer').innerText = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
-            alert("Session complete!");
-            location.reload();
+            triggerDisclaimerScreen();
         }
         timeLeft--;
     }
 
-    // Proctoring listeners strictly scoped to check if the exam-view is actively open
+    function triggerDisclaimerScreen() {
+        document.getElementById('exam-view').classList.add('hidden');
+        document.getElementById('disclaimer-warning-view').classList.remove('hidden');
+        
+        let count = 10;
+        let timerEl = document.getElementById('disclaimer-timer');
+        let btn = document.getElementById('btn-proceed-results');
+        
+        let interval = setInterval(() => {
+            count--;
+            timerEl.innerText = count;
+            if (count <= 0) {
+                clearInterval(interval);
+                timerEl.innerText = "Ready!";
+                btn.disabled = false;
+                btn.className = "btn";
+                btn.innerText = "View Final Results & Rewards";
+                btn.onclick = evaluateFinalResults;
+            }
+        }, 1000);
+    }
+
+    function evaluateFinalResults() {
+        document.getElementById('disclaimer-warning-view').classList.add('hidden');
+        
+        // If user reached 1500/1500 points, trigger the rigged lucky spin wheel
+        if (userScore >= 1500) {
+            document.getElementById('wheel-view').classList.remove('hidden');
+            startLuckyWheel();
+        } else {
+            alert(`Exam Session Finished! Final Score: ${userScore} / 1500 Points.`);
+            showChoiceView();
+        }
+    }
+
+    function startLuckyWheel() {
+        let display = document.getElementById('wheel-display-box');
+        let resultText = document.getElementById('wheel-result-text');
+        let claimBtn = document.getElementById('btn-claim-reward');
+        
+        display.innerText = "🎡 [ SPINNING WHEEL... ]";
+        
+        setTimeout(() => {
+            // Rigged probabilities (Internal saved logic): 
+            // High chance 5% discount, rare 2-day trial (only 3 people), 1-day trial (only 5 users)
+            let rand = Math.random();
+            let prize = "5% Discount Voucher";
+            
+            if (rand < 0.02) {
+                prize = "✨ RARE! 2 Days No-Money Free Trial Unlocked!";
+            } else if (rand < 0.07) {
+                prize = "🔥 1 Day Free Trial Voucher!";
+            } else if (rand < 0.25) {
+                prize = "⭐ 35% Discount Coupon!";
+            } else if (rand < 0.50) {
+                prize = "💎 10% Discount Coupon!";
+            }
+            
+            display.innerText = "🎁 RESULT:";
+            resultText.innerText = prize;
+            claimBtn.style.display = 'block';
+        }, 2500);
+    }
+
+    function claimWheelReward() {
+        alert("Reward successfully claimed and saved to your student profile!");
+        showChoiceView();
+    }
+
+    // Proctoring tab switch listeners
     document.addEventListener("visibilitychange", function() {
         if (document.hidden && !document.getElementById('exam-view').classList.contains('hidden')) {
-            handleViolation();
-        }
-    });
-    window.addEventListener("blur", function() {
-        if (!document.getElementById('exam-view').classList.contains('hidden')) {
             handleViolation();
         }
     });
@@ -1413,16 +839,12 @@
     function handleViolation() {
         violationCount++;
         if (violationCount === 1) {
-            alert("⚠️ PROCTOR WARNING #1: Tab switch or background activity detected! Next violation will permanently lock your profile until unblocked.");
+            alert("⚠️ PROCTOR WARNING #1: Tab switch detected! Next violation locks profile.");
         } else {
-            triggerPenaltyLock();
+            clearInterval(timerInterval);
+            document.getElementById('exam-view').classList.add('hidden');
+            document.getElementById('locked-view').classList.remove('hidden');
         }
-    }
-
-    function triggerPenaltyLock() {
-        clearInterval(timerInterval);
-        document.getElementById('exam-view').classList.add('hidden');
-        document.getElementById('locked-view').classList.remove('hidden');
     }
 
     function payFine() {
@@ -1438,19 +860,12 @@
             },
             "theme": { "color": "#dc2626" }
         };
-        var rzpFine = new Razorpay(options);
-        rzpFine.open();
+        new Razorpay(options).open();
     }
 
     function requestEmailUnlock() {
-        let activeUid = localStorage.getItem('active_student_uid') || "Unknown Student ID";
-        let mailtoLink = `mailto:workharddd18@gmail.com?subject=Profile Unlock Request - ${activeUid}&body=Hello Admin,%0D%0A%0D%0AMy profile (${activeUid}) has been locked due to proctoring triggers. Please review and unlock my account.%0D%0A%0D%0AThank you.`;
-        window.location.href = mailtoLink;
-    }
-
-    function submitAnswer() {
-        alert("Answer submitted successfully.");
-        document.getElementById('user-answer').value = "";
+        let activeUid = localStorage.getItem('active_student_uid') || "Student";
+        window.location.href = `mailto:workharddd18@gmail.com?subject=Unlock Request - ${activeUid}&body=Please unlock my profile.`;
     }
 </script>
 

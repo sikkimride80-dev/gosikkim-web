@@ -1398,11 +1398,16 @@
         timeLeft--;
     }
 
+    // Proctoring listeners strictly scoped to check if the exam-view is actively open
     document.addEventListener("visibilitychange", function() {
-        if (document.hidden && !document.getElementById('exam-view').classList.contains('hidden')) handleViolation();
+        if (document.hidden && !document.getElementById('exam-view').classList.contains('hidden')) {
+            handleViolation();
+        }
     });
     window.addEventListener("blur", function() {
-        if (!document.getElementById('exam-view').classList.contains('hidden')) handleViolation();
+        if (!document.getElementById('exam-view').classList.contains('hidden')) {
+            handleViolation();
+        }
     });
 
     function handleViolation() {

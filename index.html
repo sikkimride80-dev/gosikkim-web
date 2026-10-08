@@ -691,7 +691,7 @@
         <div class="lesley-banner-card" onclick="openAiChatModal()">
             <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley Your Assistant">
             <div id="ui-lesley-card-title" style="font-weight: 900; background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 17px; text-shadow: 0 2px 10px rgba(236,72,153,0.4);">💬 Chat with Lesley Your Assistant</div>
-            <div id="ui-lesley-card-sub" style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here to open student support, voice assistance & live web search!</div>
+            <div id="ui-lesley-card-sub" style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here to open student support, voice assistance & live search!</div>
         </div>
 
         <div class="support-section">
@@ -772,13 +772,14 @@
             </div>
 
             <div style="margin-top: 18px; background: rgba(15, 7, 30, 0.85); backdrop-filter: blur(14px); padding: 18px; border-radius: 16px; border: 1px solid rgba(236, 72, 153, 0.4);">
-                <div class="price-display">₹200 / Day Pass</div>
+                <div class="price-display" id="trial-price-banner">1st Attempt FREE (Then ₹200 Day 1 / ₹150 Day 2+)</div>
                 <ul id="ui-pass-ul">
-                    <li><strong>Access:</strong> Valid until 12:00 AM Midnight.</li>
-                    <li><strong>Live Proctoring:</strong> Camera active full 30 mins.</li>
+                    <li><strong>Free Attempt:</strong> 1st 30-min hardcore exam is 100% free!</li>
+                    <li><strong>Day 1 Pass:</strong> ₹200 after your first free attempt.</li>
+                    <li><strong>Day 2+ Pass:</strong> Only ₹150 per day.</li>
                     <li><strong>Anti-Cheat:</strong> Tab/background switches trigger lock + ₹150 fine.</li>
                 </ul>
-                <button class="btn" id="ui-btn-trial" onclick="startHardcoreTrial()">Start Your Hardcore Trial of Exam</button>
+                <button class="btn" id="ui-btn-trial" onclick="handleExamAttemptFlow()">Start Your Free Hardcore Attempt</button>
             </div>
 
             <button class="btn btn-secondary" id="ui-btn-close-prof" onclick="closeProfileModal()" style="margin-top: 16px;">Close Profile</button>
@@ -845,35 +846,6 @@
         <button class="btn btn-danger" id="ui-btn-fine" onclick="payFine()">Pay ₹150 Fine to Unlock Profile</button>
     </div>
 
-    <!-- WRAPPED USER PROFILE & ADMIN DASHBOARD SECTION -->
-    <div id="adminDashboardWrapper" style="display: none;">
-        <div id="userProfileDashboard" class="user-profile-section" style="padding: 20px; background: rgba(255,255,255,0.03); border-radius: 12px; margin-top: 20px; position: relative; z-index: 1000;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3>User Profile & Admin Alerts</h3>
-                <div id="notificationBell" style="position: relative; cursor: pointer; font-size: 1.5rem;" onclick="toggleAdminBox()">
-                    🔔
-                    <span id="unreadDot" style="position: absolute; top: 0; right: 0; width: 10px; height: 10px; background-color: red; border-radius: 50%;"></span>
-                </div>
-            </div>
-
-            <div id="adminMessageBox" style="display: none; margin-top: 15px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px;">
-                <p id="adminText">Welcome! Please check your payment status and profile details.</p>
-                <button onclick="playAdminVoice()" style="margin-top: 10px; padding: 6px 12px; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">🔊 Play Voice</button>
-                
-                <div style="margin-top: 12px; display: flex; gap: 10px;">
-                    <button onclick="react('like')" style="padding: 4px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px; cursor: pointer;">👍 Like</button>
-                    <button onclick="react('dislike')" style="padding: 4px 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 4px; cursor: pointer;">👎 Dislike</button>
-                </div>
-            </div>
-
-            <div id="adminMetrics" style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-                <h4>Admin Overview</h4>
-                <p>Total Registrations: <span id="totalRegs">Loading...</span></p>
-                <p>Total Revenue: <span id="totalRevenue">Loading...</span></p>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <script>
@@ -936,8 +908,8 @@
             pClass: "Class / Grade:",
             pSchool: "School / College:",
             pPass: "Password:",
-            passUl: "<li><strong>Access:</strong> Valid until 12:00 AM Midnight.</li><li><strong>Live Proctoring:</strong> Camera active full 30 mins.</li><li><strong>Anti-Cheat:</strong> Tab/background switches trigger lock + ₹150 fine.</li>",
-            btnTrial: "Start Your Hardcore Trial of Exam",
+            passUl: "<li><strong>Free Attempt:</strong> 1st 30-min hardcore exam is 100% free!</li><li><strong>Day 1 Pass:</strong> ₹200 after your first free attempt.</li><li><strong>Day 2+ Pass:</strong> Only ₹150 per day.</li><li><strong>Anti-Cheat:</strong> Tab/background switches trigger lock + ₹150 fine.</li>",
+            btnTrial: "Start Your Free Hardcore Attempt",
             btnCloseProf: "Close Profile",
             lesleyModalTitle: "Lesley AI Assistant",
             lesleyModalSub: "Gemini-Style Live Search & Voice Active",
@@ -1118,7 +1090,22 @@
         }
 
         let uniqueID = 'SKM-' + Math.floor(10000 + Math.random() * 90000);
-        let studentProfile = { uid: uniqueID, name, gender, phone, relation, age, dob, class: studentClass, school, password, selfie: selfieCapturedData, lang: currentLang };
+        let studentProfile = { 
+            uid: uniqueID, 
+            name, 
+            gender, 
+            phone, 
+            relation, 
+            age, 
+            dob, 
+            class: studentClass, 
+            school, 
+            password, 
+            selfie: selfieCapturedData, 
+            lang: currentLang,
+            freeAttemptUsed: false,
+            paidDaysCount: 0
+        };
 
         // Save to Firebase Firestore & Auth
         try {
@@ -1207,7 +1194,23 @@
                     document.getElementById('header-avatar-img').src = profile.selfie;
                     document.getElementById('modal-avatar-img').src = profile.selfie;
                 }
+                updateButtonStates(profile);
             }
+        }
+    }
+
+    function updateButtonStates(profile) {
+        let btn = document.getElementById('ui-btn-trial');
+        let banner = document.getElementById('trial-price-banner');
+        if (!profile.freeAttemptUsed) {
+            btn.innerText = "Start Your Free Hardcore Attempt";
+            banner.innerText = "1st Attempt FREE (Then ₹200 Day 1 / ₹150 Day 2+)";
+        } else if (profile.paidDaysCount === 0) {
+            btn.innerText = "Pay ₹200 for Day 1 Pass";
+            banner.innerText = "₹200 / Day 1 Pass";
+        } else {
+            btn.innerText = "Pay ₹150 for Day 2+ Pass";
+            banner.innerText = "₹150 / Day 2+ Pass";
         }
     }
 
@@ -1224,6 +1227,7 @@
                 document.getElementById('mod-class').innerText = profile.class;
                 document.getElementById('mod-school').innerText = profile.school;
                 document.getElementById('mod-pass').innerText = profile.password;
+                updateButtonStates(profile);
                 document.getElementById('profile-modal').classList.remove('hidden');
             }
         }
@@ -1288,8 +1292,8 @@
             replyText = "The Prime Minister of India is Shri Narendra Modi.";
         } else if (lower.includes('capital of sikkim')) {
             replyText = "The capital of Sikkim is Gangtok.";
-        } else if (lower.includes('pass') || lower.includes('fee') || lower.includes('200')) {
-            replyText = "The daily hardcore exam pass is ₹200. You can complete checkout by tapping your profile avatar in the top-left corner.";
+        } else if (lower.includes('pass') || lower.includes('fee') || lower.includes('200') || lower.includes('150')) {
+            replyText = "Your 1st exam attempt is 100% free! After that, Day 1 pass is ₹200 and Day 2+ passes are ₹150. You can unlock passes by tapping your profile avatar.";
         } else if (lower.includes('fine') || lower.includes('lock') || lower.includes('cheat')) {
             replyText = "Switching tabs triggers our proctor lock. You can clear the ₹150 penalty fine to unlock your profile instantly.";
         } else if (lower.includes('support') || lower.includes('contact') || lower.includes('email')) {
@@ -1321,26 +1325,53 @@
         showChoiceView();
     }
 
-    function startHardcoreTrial() {
+    function handleExamAttemptFlow() {
         let activeUid = localStorage.getItem('active_student_uid');
         let profile = activeUid ? JSON.parse(localStorage.getItem('student_' + activeUid)) : null;
+        if (!profile) return alert("Please login again.");
+
+        // If free attempt has NOT been used yet -> start free exam directly!
+        if (!profile.freeAttemptUsed) {
+            profile.freeAttemptUsed = true;
+            localStorage.setItem('student_' + activeUid, JSON.stringify(profile));
+            updateCloudProfile(profile);
+            closeProfileModal();
+            alert("Your 1st Hardcore Exam Attempt is Free! Starting now.");
+            startExamSession();
+            return;
+        }
+
+        // If free attempt IS used, check whether Day 1 (₹200) or Day 2+ (₹150)
+        let amountToPay = (profile.paidDaysCount === 0) ? 20000 : 15000;
+        let passDesc = (profile.paidDaysCount === 0) ? "Day 1 Exam Pass (₹200)" : "Day 2+ Exam Pass (₹150)";
 
         var options = {
             "key": "rzp_live_TiN6t3iQ0poa9O",
-            "amount": 20000,
+            "amount": amountToPay,
             "currency": "INR",
             "name": "Sikkim Exam Prep",
-            "description": "Daily Hardcore Exam Trial Pass",
+            "description": passDesc,
             "handler": function (response){
+                profile.paidDaysCount += 1;
+                localStorage.setItem('student_' + activeUid, JSON.stringify(profile));
+                updateCloudProfile(profile);
                 alert("Payment Successful! ID: " + response.razorpay_payment_id);
                 closeProfileModal();
                 startExamSession();
             },
-            "prefill": { "contact": profile ? profile.phone : "8918351226", "email": "sikkimride80@gmail.com", "name": profile ? profile.name : "Student" },
+            "prefill": { "contact": profile.phone, "email": "sikkimride80@gmail.com", "name": profile.name },
             "theme": { "color": "#ec4899" }
         };
         var rzp = new Razorpay(options);
         rzp.open();
+    }
+
+    async function updateCloudProfile(profile) {
+        try {
+            await window.firebaseFns.setDoc(window.firebaseFns.doc(window.db, "students", profile.uid), profile);
+        } catch(e) {
+            console.log("Cloud update error:", e);
+        }
     }
 
     function startExamSession() {
@@ -1398,40 +1429,6 @@
         alert("Answer submitted successfully.");
         document.getElementById('user-answer').value = "";
     }
-
-    async function fetchAdminStats() {
-        try {
-            document.getElementById('totalRegs').innerText = "1";
-            document.getElementById('totalRevenue').innerText = "₹200";
-        } catch (error) {
-            console.error("Failed to load admin stats:", error);
-        }
-    }
-
-    function toggleAdminBox() {
-        const box = document.getElementById('adminMessageBox');
-        const isHidden = box.style.display === 'none';
-        box.style.display = isHidden ? 'block' : 'none';
-        if (isHidden) {
-            document.getElementById('unreadDot').style.display = 'none';
-        }
-    }
-
-    function playAdminVoice() {
-        const text = document.getElementById('adminText').innerText;
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-            window.speechSynthesis.speak(utterance);
-        } else {
-            alert("Speech synthesis is not supported on your browser.");
-        }
-    }
-
-    function react(type) {
-        alert("Reaction recorded: " + type);
-    }
-
-    fetchAdminStats();
 </script>
 
 </body>

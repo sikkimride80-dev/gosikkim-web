@@ -59,7 +59,7 @@
         }
 
         @keyframes smoothDrop {
-            0% { opacity: 0; transform: translateY(-50px); }
+            0% { opacity: 0; transform: translateY(-60px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
@@ -76,8 +76,8 @@
         .rain-char {
             display: inline-block;
             opacity: 0;
-            /* Slower drop transition (0.4s), faster color cycle (1.2s) */
-            animation: smoothDrop 0.4s ease-out forwards, colorFlickerFast 1.2s infinite linear;
+            /* Much slower drop transition (0.5s), fast color cycle (1.2s) */
+            animation: smoothDrop 0.5s ease-out forwards, colorFlickerFast 1.2s infinite linear;
         }
 
         .btn {
@@ -116,7 +116,7 @@
         ["We", "offer", "you", "the", "most", "discounted", "prices"],
         ["You", "can", "buy", "every", "electronic", "item", "here"],
         ["Please", "Enjoy", "Your", "Visit"],
-        ["Founder", ":", "Uttam", "Rai"]
+        ["🌹", "🙏", "Founder", ":", "Uttam", "Rai", "🙏", "🌹"]
     ];
 
     function startRainIntro() {
@@ -136,8 +136,8 @@
                     charSpan.className = 'rain-char';
                     charSpan.innerText = char;
                     
-                    // Slower staggering delay (0.055s per char) for a slow falling effect
-                    charSpan.style.animationDelay = `${globalCharIndex * 0.055}s, ${globalCharIndex * 0.08}s`;
+                    // Much slower staggering delay (0.12s per char) for a slow-motion rain effect
+                    charSpan.style.animationDelay = `${globalCharIndex * 0.12}s, ${globalCharIndex * 0.08}s`;
                     
                     wordSpan.appendChild(charSpan);
                     globalCharIndex++;
@@ -154,7 +154,7 @@
 
         // Calculate total animation time based on the slower falling speed
         let totalCharacters = globalCharIndex;
-        let totalAnimationTimeMs = (totalCharacters * 55) + 400;
+        let totalAnimationTimeMs = (totalCharacters * 120) + 500;
 
         setTimeout(() => {
             document.getElementById('btn-next-step').classList.remove('hidden');

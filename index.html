@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rai Electronics - Step 1: Cinematic Welcome & Store</title>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <title>Rai Electronics - Step 1: Cinematic Intro</title>
     <style>
         @keyframes panZoom {
             0% { transform: scale(1) translate(0, 0); }
@@ -12,22 +11,21 @@
             100% { transform: scale(1) translate(0, 0); }
         }
 
-        @keyframes brightNeonGlow {
-            0% { color: #ff0055; text-shadow: 0 0 10px #ff0055, 0 0 25px #ff0055, 0 0 40px #ff0055; }
-            33% { color: #00ffcc; text-shadow: 0 0 10px #00ffcc, 0 0 25px #00ffcc, 0 0 40px #00ffcc; }
-            66% { color: #ffff00; text-shadow: 0 0 10px #ffff00, 0 0 25px #ffff00, 0 0 40px #ffff00; }
-            100% { color: #ff0055; text-shadow: 0 0 10px #ff0055, 0 0 25px #ff0055, 0 0 40px #ff0055; }
+        @keyframes ultraBrightGlow {
+            0% { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055, 0 0 50px #ff0055; }
+            33% { color: #00ffcc; text-shadow: 0 0 15px #00ffcc, 0 0 30px #00ffcc, 0 0 50px #00ffcc; }
+            66% { color: #ffff00; text-shadow: 0 0 15px #ffff00, 0 0 30px #ffff00, 0 0 50px #ffff00; }
+            100% { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055, 0 0 50px #ff0055; }
         }
 
         @keyframes letterRainDrop {
-            0% { opacity: 0; transform: translateY(-30px); }
+            0% { opacity: 0; transform: translateY(-35px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
         :root {
-            --bg-deep: #09021a;
-            --glass-bg: rgba(20, 10, 40, 0.94);
-            --glass-card: rgba(35, 18, 68, 0.9);
+            --bg-deep: #050110;
+            --glass-bg: rgba(15, 8, 35, 0.95);
             --neon-pink: #ff0055;
             --neon-cyan: #00ffcc;
             --neon-yellow: #ffff00;
@@ -35,50 +33,35 @@
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1e1b4b, #09021a 70%);
+            background: radial-gradient(circle at 50% 0%, #1a1042, var(--bg-deep) 75%);
             color: #ffffff;
             margin: 0;
-            padding: 12px;
+            padding: 16px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         .app-container {
             width: 100%;
-            max-width: 580px;
+            max-width: 520px;
             background: var(--glass-bg);
-            padding: 24px;
-            border-radius: 28px;
-            border: 2px solid var(--neon-yellow);
-            box-shadow: 0 0 35px rgba(255, 255, 0, 0.4);
+            padding: 30px 24px;
+            border-radius: 32px;
+            border: 3px solid var(--neon-yellow);
+            box-shadow: 0 0 45px rgba(255, 255, 0, 0.45);
             position: relative;
             overflow: hidden;
-        }
-
-        /* Cinematic Intro Screen with 2.0x Pan Zoom & Bright Glow */
-        #intro-screen {
-            position: relative;
-            min-height: 440px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             text-align: center;
-            padding: 20px;
-            border-radius: 20px;
-            background: rgba(10, 5, 25, 0.9);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 0, 0.5);
-            margin-bottom: 10px;
         }
 
+        /* Cinematic Background with 2.0x Pan Zoom Effect */
         .cinematic-bg {
             position: absolute;
-            top: -20px; left: -20px; right: -20px; bottom: -20px;
-            background: radial-gradient(circle, rgba(255,0,85,0.25) 0%, rgba(0,255,204,0.2) 50%, rgba(9,2,26,0.95) 100%);
+            top: -30px; left: -30px; right: -30px; bottom: -30px;
+            background: radial-gradient(circle, rgba(255,0,85,0.3) 0%, rgba(0,255,204,0.25) 50%, rgba(5,1,16,0.95) 100%);
             animation: panZoom 3s infinite ease-in-out;
             z-index: 0;
             pointer-events: none;
@@ -87,13 +70,14 @@
         .rain-text-container {
             position: relative;
             z-index: 2;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 900;
-            line-height: 1.8;
-            max-width: 440px;
+            line-height: 2.2;
+            max-width: 460px;
+            margin: 0 auto;
             white-space: pre-line;
-            animation: brightNeonGlow 3s infinite linear;
-            letter-spacing: 0.5px;
+            animation: ultraBrightGlow 3s infinite linear;
+            letter-spacing: 1px;
         }
 
         .rain-char {
@@ -102,217 +86,43 @@
             animation: letterRainDrop 0.08s forwards;
         }
 
-        h1 { 
-            background: linear-gradient(135deg, #ffff00, #ff0055, #00ffcc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center; 
-            font-size: 26px; 
-            font-weight: 900;
-            margin-bottom: 4px; 
-        }
-
-        .subtitle { 
-            text-align: center; 
-            color: #00ffcc;
-            font-size: 11px; 
-            margin-bottom: 20px; 
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 800;
-        }
-        
-        .card {
-            background: var(--glass-card);
-            padding: 18px;
-            border-radius: 20px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255, 255, 0, 0.4);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .product-card {
-            background: rgba(15, 7, 30, 0.85);
-            border: 1px solid rgba(0, 255, 204, 0.4);
-            border-radius: 16px;
-            padding: 12px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 110px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 8px;
-        }
-
-        .product-title {
-            font-size: 13px;
-            font-weight: bold;
-            color: #fff;
-            margin-bottom: 4px;
-        }
-
-        .product-price {
-            font-size: 14px;
-            font-weight: 900;
-            color: #00ffcc;
-            margin-bottom: 8px;
-        }
-
         .btn {
             width: 100%;
-            background: linear-gradient(135deg, #ffff00, #ff0055);
+            background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink));
             color: white;
             border: none;
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 800;
-            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 900;
+            border-radius: 16px;
             cursor: pointer;
-            transition: 0.2s ease;
-            margin-top: 8px;
-            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
+            transition: 0.3s ease;
+            margin-top: 25px;
+            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.5);
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
         }
-        .btn:hover { transform: translateY(-2px); opacity: 0.95; }
-        .btn-secondary { background: rgba(51, 41, 85, 0.9); border: 1px solid rgba(0, 255, 204, 0.5); box-shadow: none; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 255, 0, 0.6); }
 
         .hidden { display: none !important; }
-
-        label { font-size: 11px; color: #ff0055; display: block; margin-bottom: 4px; margin-top: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
-        input[type="text"], input[type="tel"], textarea {
-            width: calc(100% - 20px);
-            padding: 11px;
-            background: rgba(15, 7, 30, 0.9);
-            border: 1px solid rgba(0, 255, 204, 0.5);
-            color: white;
-            border-radius: 10px;
-            margin-bottom: 4px;
-            outline: none;
-            font-size: 13px;
-        }
-        input:focus, textarea:focus { border-color: #ffff00; }
-
-        .cart-badge {
-            background: #ff0055; color: white; border-radius: 50%; padding: 2px 8px; font-size: 11px; font-weight: bold;
-        }
-
-        .top-nav {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
-            background: var(--glass-card); padding: 10px 16px; border-radius: 14px; border: 1px solid rgba(255,255,0,0.3);
-        }
     </style>
 </head>
 <body>
 
 <div class="app-container">
+    <div class="cinematic-bg"></div>
+    
+    <!-- Rain Text Container -->
+    <div id="rain-text-output" class="rain-text-container"></div>
 
-    <!-- STEP 1: CINEMATIC INTRO RAIN SCREEN -->
-    <div id="intro-screen">
-        <div class="cinematic-bg"></div>
-        <div id="rain-text-output" class="rain-text-container"></div>
-        <button class="btn" id="btn-enter-store" onclick="enterStorefront()" style="margin-top: 20px; position: relative; z-index: 2; display: none;">Enter Rai Electronics Store 🚀</button>
-    </div>
-
-    <!-- STOREFRONT VIEW -->
-    <div id="store-view" class="hidden">
-        <div class="top-nav">
-            <div>
-                <h1 style="font-size: 18px; text-align: left; margin:0;">🔌 Rai Electronics</h1>
-                <span style="font-size: 10px; color: #00ffcc; font-weight: bold;">Founder: Uttam Rai</span>
-            </div>
-            <button class="btn btn-secondary" onclick="openCart()" style="width: auto; padding: 8px 14px; margin-top:0;">
-                🛒 Cart <span id="cart-count" class="cart-badge">0</span>
-            </button>
-        </div>
-
-        <div class="subtitle">Step 1: Core Electronic Catalog & Direct Checkout</div>
-
-        <div class="product-grid">
-            <div class="product-card">
-                <div>
-                    <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=300" alt="Smartwatch">
-                    <div class="product-title">Pro AMOLED Smartwatch</div>
-                </div>
-                <div>
-                    <div class="product-price">₹1,499</div>
-                    <button class="btn" onclick="addToCart('Pro AMOLED Smartwatch', 1499)">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div>
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300" alt="Headphones">
-                    <div class="product-title">Bass Boost Wireless Pods</div>
-                </div>
-                <div>
-                    <div class="product-price">₹899</div>
-                    <button class="btn" onclick="addToCart('Bass Boost Wireless Pods', 899)">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div>
-                    <img src="https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=300" alt="Projector">
-                    <div class="product-title">Mini Home Cinema Projector</div>
-                </div>
-                <div>
-                    <div class="product-price">₹3,499</div>
-                    <button class="btn" onclick="addToCart('Mini Home Cinema Projector', 3499)">Add to Cart</button>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div>
-                    <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300" alt="Speaker">
-                    <div class="product-title">Party Rock Bluetooth Speaker</div>
-                </div>
-                <div>
-                    <div class="product-price">₹1,999</div>
-                    <button class="btn" onclick="addToCart('Party Rock Bluetooth Speaker', 1999)">Add to Cart</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CART & CHECKOUT VIEW -->
-    <div id="cart-view" class="hidden">
-        <h1>Checkout & Delivery</h1>
-        <div class="subtitle">Enter your home address for direct shipping</div>
-
-        <div class="card">
-            <div id="cart-item-summary" style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #00ffcc;">Cart is empty</div>
-            <div id="cart-total-display" style="font-size: 16px; font-weight: 900; margin-bottom: 14px;">Total: ₹0</div>
-
-            <label>Full Customer Name:</label>
-            <input type="text" id="ship-name" placeholder="e.g. Uttam Rai">
-
-            <label>Mobile Number (10 Digits):</label>
-            <input type="tel" id="ship-phone" maxlength="10" placeholder="e.g. 9832000000">
-
-            <label>Complete Delivery Address:</label>
-            <textarea id="ship-address" rows="3" placeholder="House No, Street, Landmark, City, Pincode"></textarea>
-        </div>
-
-        <button class="btn" id="btn-pay-order" onclick="payViaRazorpay()" disabled>Proceed to Secure Online Payment</button>
-        <button class="btn btn-secondary" onclick="backToStore()">Back to Store</button>
-    </div>
-
+    <!-- Enter Button (Appears after rain finishes) -->
+    <button class="btn hidden" id="btn-next-step" onclick="alert('Step 1 Intro Complete! Ready for Step 2.')">Enter Rai Electronics 🚀</button>
 </div>
 
 <script>
-    const introText = `Welcome to Rai Electronics\n\nWe offer you the most discounted prices\n\nYou can buy every electronic item here\n\nPlease Enjoy Your Visit\n\nFounder: Uttam Rai`;
+    // Explicitly spaced, professional lines with clean breaks
+    const introText = `Welcome to Rai Electronics\n\nWe offer you the most discounted prices\n\nYou can buy every electronic item here\n\nPlease Enjoy Your Visit\n\nFounder : Uttam Rai`;
     
     function startRainIntro() {
         let container = document.getElementById('rain-text-output');
@@ -324,85 +134,28 @@
                 let char = introText.charAt(charIndex);
                 let span = document.createElement('span');
                 span.className = 'rain-char';
-                span.style.animationDelay = `${charIndex * 0.03}s`;
-                span.innerHTML = char === '\n' ? '<br>' : char;
+                span.style.animationDelay = `${charIndex * 0.035}s`;
+                
+                if (char === '\n') {
+                    span.innerHTML = '<br>';
+                } else if (char === ' ') {
+                    span.innerHTML = '&nbsp;'; // Preserve explicit professional spacing
+                } else {
+                    span.innerHTML = char;
+                }
+                
                 container.appendChild(span);
                 charIndex++;
             } else {
                 clearInterval(delayTimer);
-                document.getElementById('btn-enter-store').style.display = 'block';
+                document.getElementById('btn-next-step').classList.remove('hidden');
             }
-        }, 35);
+        }, 30);
     }
 
     window.onload = function() {
         startRainIntro();
     };
-
-    function enterStorefront() {
-        document.getElementById('intro-screen').classList.add('hidden');
-        document.getElementById('store-view').classList.remove('hidden');
-    }
-
-    let cart = { name: "", price: 0 };
-
-    function addToCart(itemName, itemPrice) {
-        cart = { name: itemName, price: itemPrice };
-        document.getElementById('cart-count').innerText = "1";
-        document.getElementById('cart-item-summary').innerText = `${cart.name} (1x)`;
-        document.getElementById('cart-total-display').innerText = `Total Amount: ₹${cart.price}`;
-        document.getElementById('btn-pay-order').disabled = false;
-        
-        document.getElementById('store-view').classList.add('hidden');
-        document.getElementById('cart-view').classList.remove('hidden');
-    }
-
-    function openCart() {
-        document.getElementById('store-view').classList.add('hidden');
-        document.getElementById('cart-view').classList.remove('hidden');
-    }
-
-    function backToStore() {
-        document.getElementById('cart-view').classList.add('hidden');
-        document.getElementById('store-view').classList.remove('hidden');
-    }
-
-    function payViaRazorpay() {
-        let name = document.getElementById('ship-name').value.trim();
-        let phone = document.getElementById('ship-phone').value.trim();
-        let address = document.getElementById('ship-address').value.trim();
-
-        if (!name || !phone || phone.length !== 10 || !address) {
-            alert("Please fill in your name, 10-digit mobile number, and complete delivery address.");
-            return;
-        }
-
-        let amountInPaise = cart.price * 100;
-
-        var options = {
-            "key": "rzp_live_TiN6t3iQ0poa9O",
-            "amount": amountInPaise,
-            "currency": "INR",
-            "name": "Rai Electronics",
-            "description": `Order: ${cart.name}`,
-            "handler": function (response) {
-                alert(`Order Placed Successfully! Payment ID: ${response.razorpay_payment_id}\nYour item will be shipped to: ${address}`);
-                cart = { name: "", price: 0 };
-                document.getElementById('cart-count').innerText = "0";
-                backToStore();
-            },
-            "prefill": {
-                "name": name,
-                "contact": phone,
-                "email": "raielectronics@sikkimcloud.auth"
-            },
-            "theme": {
-                "color": "#ffff00"
-            }
-        };
-        var rzp = new Razorpay(options);
-        rzp.open();
-    }
 </script>
 
 </body>

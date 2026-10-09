@@ -12,11 +12,11 @@
             100% { transform: scale(1) translate(0, 0); }
         }
 
-        @keyframes neonGlowCycle {
-            0% { color: #ef4444; text-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444; }
-            33% { color: #4ade80; text-shadow: 0 0 15px #4ade80, 0 0 30px #4ade80; }
-            66% { color: #f59e0b; text-shadow: 0 0 15px #f59e0b, 0 0 30px #f59e0b; }
-            100% { color: #ef4444; text-shadow: 0 0 15px #ef4444, 0 0 30px #ef4444; }
+        @keyframes brightNeonGlow {
+            0% { color: #ff0055; text-shadow: 0 0 10px #ff0055, 0 0 25px #ff0055, 0 0 40px #ff0055; }
+            33% { color: #00ffcc; text-shadow: 0 0 10px #00ffcc, 0 0 25px #00ffcc, 0 0 40px #00ffcc; }
+            66% { color: #ffff00; text-shadow: 0 0 10px #ffff00, 0 0 25px #ffff00, 0 0 40px #ffff00; }
+            100% { color: #ff0055; text-shadow: 0 0 10px #ff0055, 0 0 25px #ff0055, 0 0 40px #ff0055; }
         }
 
         @keyframes letterRainDrop {
@@ -28,10 +28,9 @@
             --bg-deep: #09021a;
             --glass-bg: rgba(20, 10, 40, 0.94);
             --glass-card: rgba(35, 18, 68, 0.9);
-            --neon-pink: #ec4899;
-            --neon-cyan: #06b6d4;
-            --neon-green: #4ade80;
-            --neon-yellow: #f59e0b;
+            --neon-pink: #ff0055;
+            --neon-cyan: #00ffcc;
+            --neon-yellow: #ffff00;
         }
 
         body {
@@ -54,12 +53,12 @@
             padding: 24px;
             border-radius: 28px;
             border: 2px solid var(--neon-yellow);
-            box-shadow: 0 0 35px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 35px rgba(255, 255, 0, 0.4);
             position: relative;
             overflow: hidden;
         }
 
-        /* Cinematic Intro Screen with 2.0x Pan Zoom Video/Bg Effect */
+        /* Cinematic Intro Screen with 2.0x Pan Zoom & Bright Glow */
         #intro-screen {
             position: relative;
             min-height: 440px;
@@ -70,17 +69,17 @@
             text-align: center;
             padding: 20px;
             border-radius: 20px;
-            background: rgba(10, 5, 25, 0.85);
+            background: rgba(10, 5, 25, 0.9);
             overflow: hidden;
-            border: 1px solid rgba(245, 158, 11, 0.5);
+            border: 1px solid rgba(255, 255, 0, 0.5);
             margin-bottom: 10px;
         }
 
         .cinematic-bg {
             position: absolute;
             top: -20px; left: -20px; right: -20px; bottom: -20px;
-            background: radial-gradient(circle, rgba(239,68,68,0.2) 0%, rgba(74,222,128,0.15) 50%, rgba(9,2,26,0.95) 100%);
-            animation: panZoom 4s infinite ease-in-out;
+            background: radial-gradient(circle, rgba(255,0,85,0.25) 0%, rgba(0,255,204,0.2) 50%, rgba(9,2,26,0.95) 100%);
+            animation: panZoom 3s infinite ease-in-out;
             z-index: 0;
             pointer-events: none;
         }
@@ -88,12 +87,13 @@
         .rain-text-container {
             position: relative;
             z-index: 2;
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 900;
             line-height: 1.8;
             max-width: 440px;
             white-space: pre-line;
-            animation: neonGlowCycle 3s infinite linear;
+            animation: brightNeonGlow 3s infinite linear;
+            letter-spacing: 0.5px;
         }
 
         .rain-char {
@@ -103,7 +103,7 @@
         }
 
         h1 { 
-            background: linear-gradient(135deg, #f59e0b, #ec4899, #38bdf8);
+            background: linear-gradient(135deg, #ffff00, #ff0055, #00ffcc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center; 
@@ -114,7 +114,7 @@
 
         .subtitle { 
             text-align: center; 
-            color: #4ade80;
+            color: #00ffcc;
             font-size: 11px; 
             margin-bottom: 20px; 
             text-transform: uppercase;
@@ -127,7 +127,7 @@
             padding: 18px;
             border-radius: 20px;
             margin-bottom: 16px;
-            border: 1px solid rgba(245, 158, 11, 0.4);
+            border: 1px solid rgba(255, 255, 0, 0.4);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
 
@@ -140,7 +140,7 @@
 
         .product-card {
             background: rgba(15, 7, 30, 0.85);
-            border: 1px solid rgba(168, 85, 247, 0.4);
+            border: 1px solid rgba(0, 255, 204, 0.4);
             border-radius: 16px;
             padding: 12px;
             text-align: center;
@@ -167,13 +167,13 @@
         .product-price {
             font-size: 14px;
             font-weight: 900;
-            color: #4ade80;
+            color: #00ffcc;
             margin-bottom: 8px;
         }
 
         .btn {
             width: 100%;
-            background: linear-gradient(135deg, #f59e0b, #ec4899);
+            background: linear-gradient(135deg, #ffff00, #ff0055);
             color: white;
             border: none;
             padding: 12px;
@@ -183,34 +183,34 @@
             cursor: pointer;
             transition: 0.2s ease;
             margin-top: 8px;
-            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
         }
         .btn:hover { transform: translateY(-2px); opacity: 0.95; }
-        .btn-secondary { background: rgba(51, 41, 85, 0.9); border: 1px solid rgba(168, 85, 247, 0.5); box-shadow: none; }
+        .btn-secondary { background: rgba(51, 41, 85, 0.9); border: 1px solid rgba(0, 255, 204, 0.5); box-shadow: none; }
 
         .hidden { display: none !important; }
 
-        label { font-size: 11px; color: #f472b6; display: block; margin-bottom: 4px; margin-top: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
+        label { font-size: 11px; color: #ff0055; display: block; margin-bottom: 4px; margin-top: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
         input[type="text"], input[type="tel"], textarea {
             width: calc(100% - 20px);
             padding: 11px;
             background: rgba(15, 7, 30, 0.9);
-            border: 1px solid rgba(168, 85, 247, 0.5);
+            border: 1px solid rgba(0, 255, 204, 0.5);
             color: white;
             border-radius: 10px;
             margin-bottom: 4px;
             outline: none;
             font-size: 13px;
         }
-        input:focus, textarea:focus { border-color: #f59e0b; }
+        input:focus, textarea:focus { border-color: #ffff00; }
 
         .cart-badge {
-            background: #ef4444; color: white; border-radius: 50%; padding: 2px 8px; font-size: 11px; font-weight: bold;
+            background: #ff0055; color: white; border-radius: 50%; padding: 2px 8px; font-size: 11px; font-weight: bold;
         }
 
         .top-nav {
             display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
-            background: var(--glass-card); padding: 10px 16px; border-radius: 14px; border: 1px solid rgba(245,158,11,0.3);
+            background: var(--glass-card); padding: 10px 16px; border-radius: 14px; border: 1px solid rgba(255,255,0,0.3);
         }
     </style>
 </head>
@@ -230,7 +230,7 @@
         <div class="top-nav">
             <div>
                 <h1 style="font-size: 18px; text-align: left; margin:0;">🔌 Rai Electronics</h1>
-                <span style="font-size: 10px; color: #4ade80; font-weight: bold;">Founder: Uttam Rai</span>
+                <span style="font-size: 10px; color: #00ffcc; font-weight: bold;">Founder: Uttam Rai</span>
             </div>
             <button class="btn btn-secondary" onclick="openCart()" style="width: auto; padding: 8px 14px; margin-top:0;">
                 🛒 Cart <span id="cart-count" class="cart-badge">0</span>
@@ -292,7 +292,7 @@
         <div class="subtitle">Enter your home address for direct shipping</div>
 
         <div class="card">
-            <div id="cart-item-summary" style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #4ade80;">Cart is empty</div>
+            <div id="cart-item-summary" style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #00ffcc;">Cart is empty</div>
             <div id="cart-total-display" style="font-size: 16px; font-weight: 900; margin-bottom: 14px;">Total: ₹0</div>
 
             <label>Full Customer Name:</label>
@@ -312,14 +312,13 @@
 </div>
 
 <script>
-    const introText = `Welcome to Rai Electronics\nWe give you at most discounted price\nYou can Buy Every electronics here\nPlease Enjoy\nFounder Uttam Rai`;
+    const introText = `Welcome to Rai Electronics\n\nWe offer you the most discounted prices\n\nYou can buy every electronic item here\n\nPlease Enjoy Your Visit\n\nFounder: Uttam Rai`;
     
     function startRainIntro() {
         let container = document.getElementById('rain-text-output');
         container.innerHTML = "";
         let charIndex = 0;
         
-        // Convert text into individual animated spans for letter-drop rain effect
         let delayTimer = setInterval(() => {
             if (charIndex < introText.length) {
                 let char = introText.charAt(charIndex);
@@ -398,7 +397,7 @@
                 "email": "raielectronics@sikkimcloud.auth"
             },
             "theme": {
-                "color": "#f59e0b"
+                "color": "#ffff00"
             }
         };
         var rzp = new Razorpay(options);

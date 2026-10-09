@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rai Electronics - Step 1: Cinematic Intro</title>
+    <title>Rai Electronics - Multilingual Cinematic Intro</title>
     <style>
         :root {
             --bg-deep: #050110;
@@ -38,7 +38,7 @@
         .rain-text-container {
             position: relative;
             z-index: 2;
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 800;
             line-height: 2.2;
             max-width: 460px;
@@ -100,68 +100,164 @@
             border-radius: 16px;
             cursor: pointer;
             transition: 0.3s ease;
-            margin-top: 30px;
+            margin-top: 25px;
             box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
             letter-spacing: 0.5px;
         }
         .btn:hover { transform: translateY(-2px); }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ffff00;
+            color: white;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+            transition: 0.2s;
+        }
+        .lang-btn:hover { background: #ffff00; color: #050110; }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<!-- Audio Gate to bypass mobile browser speech/audio restrictions -->
-<div id="audio-gate" style="position: fixed; inset: 0; background: rgba(5,1,16,0.96); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;">
-    <div style="font-size: 22px; font-weight: 900; color: #ffff00; margin-bottom: 10px;">🔌 Rai Electronics</div>
-    <div style="font-size: 13px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Tap anywhere to launch fast cinematic experience with voice</div>
-    <button class="btn" style="max-width: 280px;" onclick="startExperience()">Launch Experience 🚀</button>
+<!-- Language Selection Gateway -->
+<div id="lang-gate" style="position: fixed; inset: 0; background: rgba(5,1,16,0.97); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; text-align: center;">
+    <div style="font-size: 22px; font-weight: 900; color: #ffff00; margin-bottom: 8px;">🔌 Rai Electronics</div>
+    <div style="font-size: 14px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Please select your preferred language / भाषा छान्नुहोस्</div>
+    
+    <div style="width: 100%; max-width: 300px;">
+        <button class="lang-btn" onclick="setLanguage('en')">English</button>
+        <button class="lang-btn" onclick="setLanguage('ne')">नेपाली (Nepali)</button>
+        <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी (Hindi)</button>
+    </div>
 </div>
 
+<!-- Main App Container -->
 <div class="app-container">
+    <!-- Top Bar with Language Switcher -->
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+        <select id="switcher" onchange="switchAppLanguage(this.value)" style="background: rgba(255,255,255,0.15); color: #ffff00; border: 1px solid #ffff00; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">
+            <option value="en" style="background:#050110;">English</option>
+            <option value="ne" style="background:#050110;">नेपाली</option>
+            <option value="hi" style="background:#050110;">हिन्दी</option>
+        </select>
+    </div>
+
     <div id="rain-text-output" class="rain-text-container"></div>
-    <button class="btn hidden" id="btn-next-step" onclick="alert('Step 1 Intro Complete! Ready for Step 2.')">Enter Rai Electronics 🚀</button>
+    <button class="btn hidden" id="btn-next-step" onclick="alert(translations[currentLang].alertText)">Enter Rai Electronics 🚀</button>
 </div>
 
 <script>
-    const lines = [
-        ["Welcome", "to", "Rai", "Electronics"],
-        ["We", "offer", "you", "the", "most", "discounted", "prices"],
-        ["You", "can", "buy", "every", "electronic", "item", "here"],
-        ["Please", "Enjoy", "Your", "Visit"],
-        { type: "founder", items: [
-            { type: "icon", text: "🌹" },
-            { type: "icon", text: "🙏" },
-            { type: "word", text: "Founder" },
-            { type: "word", text: ":" },
-            { type: "word", text: "Uttam" },
-            { type: "word", text: "Rai" },
-            { type: "icon", text: "🙏" },
-            { type: "icon", text: "🌹" }
-        ]}
-    ];
+    // Multilingual Content Dictionary
+    const translations = {
+        en: {
+            speech: "Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.",
+            btnText: "Enter Rai Electronics 🚀",
+            alertText: "Step 1 Intro Complete! Ready for Step 2.",
+            lines: [
+                ["Welcome", "to", "Rai", "Electronics"],
+                ["We", "offer", "you", "the", "most", "discounted", "prices"],
+                ["You", "can", "buy", "every", "electronic", "item", "here"],
+                ["Please", "Enjoy", "Your", "Visit"],
+                { type: "founder", items: [
+                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
+                    { type: "word", text: "Founder" }, { type: "word", text: ":" },
+                    { type: "word", text: "Uttam" }, { type: "word", text: "Rai" },
+                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
+                ]}
+            ]
+        },
+        ne: {
+            speech: "राई इलेक्ट्रोडिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
+            btnText: "राई इलेक्ट्रोडिक्समा प्रवेश गर्नुहोस् 🚀",
+            alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार.",
+            lines: [
+                ["राई", "इलेक्ट्रोनिक्समा", "स्वागत", "छ"],
+                ["हामी", "तपाईंलाई", "सहुलियत", "मूल्यमा", "सामान", "दिन्छौं"],
+                ["तपाईं", "यहाँ", "सबै", "इलेक्ट्रोनिक", "सामान", "किन्न", "सक्नुहुन्छ"],
+                ["कृपया", "तपाईंको", "भ्रमणको", "आनन्द", "लिनुहोस्"],
+                { type: "founder", items: [
+                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
+                    { type: "word", text: "संस्थापक" }, { type: "word", text: ":" },
+                    { type: "word", text: "उत्तम" }, { type: "word", text: "राई" },
+                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
+                ]}
+            ]
+        },
+        hi: {
+            speech: "राई इलेक्ट्रॉनिक्स में आपका स्वागत है। हम आपको सबसे कम कीमत पर सामान प्रदान करते हैं। आप यहाँ हर इलेक्ट्रॉनिक सामान खरीद सकते हैं। कृपया अपनी यात्रा का आनंद लें। संस्थापक उत्तम राय।",
+            btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
+            alertText: "चरण 1 परिचय पूर्ण! चरण 2 के लिए तैयार.",
+            lines: [
+                ["राई", "इलेक्ट्रॉनिक्स", "में", "स्वागत", "है"],
+                ["हम", "आपको", "सबसे", "अच्छी", "छूट", "पर", "सामान", "देते", "हैं"],
+                ["आप", "यहाँ", "हर", "इलेक्ट्रॉनिक", "आइटम", "खरीद", "सकते", "हैं"],
+                ["कृपया", "अपनी", "यात्रा", "का", "आनंद", "लें"],
+                { type: "founder", items: [
+                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
+                    { type: "word", text: "संस्थापक" }, { type: "word", text: ":" },
+                    { type: "word", text: "उत्तम" }, { type: "word", text: "राय" },
+                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
+                ]}
+            ]
+        }
+    };
 
-    function startExperience() {
-        // Remove audio gate overlay
-        let gate = document.getElementById('audio-gate');
+    let currentLang = 'en';
+
+    // Check if user already selected a language previously
+    window.onload = function() {
+        let savedLang = localStorage.getItem('rai_preferred_lang');
+        if (savedLang && translations[savedLang]) {
+            currentLang = savedLang;
+            document.getElementById('lang-gate').style.display = 'none';
+            document.getElementById('switcher').value = currentLang;
+            startExperience();
+        }
+    };
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('rai_preferred_lang', lang);
+        document.getElementById('switcher').value = lang;
+        
+        let gate = document.getElementById('lang-gate');
         gate.style.opacity = '0';
         setTimeout(() => { gate.style.display = 'none'; }, 300);
 
-        // Trigger voice narration
+        startExperience();
+    }
+
+    function switchAppLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('rai_preferred_lang', lang);
+        window.speechSynthesis.cancel();
+        startExperience();
+    }
+
+    function startExperience() {
+        // Trigger voice narration in selected language locale
         if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-            let utterance = new SpeechSynthesisUtterance("Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.");
-            utterance.rate = 1.0;
-            utterance.pitch = 1.0;
+            let utterance = new SpeechSynthesisUtterance(translations[currentLang].speech);
+            utterance.lang = currentLang === 'ne' ? 'ne-NP' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
+            utterance.rate = 0.95;
             window.speechSynthesis.speak(utterance);
         }
 
-        // Start fast letter rain drop animation
+        // Render localized fast letter rain
         let container = document.getElementById('rain-text-output');
         container.innerHTML = "";
         let globalIndex = 0;
+        let dataLines = translations[currentLang].lines;
 
-        lines.forEach((lineData, lineIndex) => {
+        dataLines.forEach((lineData, lineIndex) => {
             let wordsInLine = [];
             if (Array.isArray(lineData)) {
                 wordsInLine = lineData.map(w => ({ type: "word", text: w }));
@@ -190,7 +286,6 @@
                         let charSpan = document.createElement('span');
                         charSpan.className = 'rain-char';
                         charSpan.innerText = char;
-                        // Fast drop stagger delay (0.03s per character)
                         charSpan.style.animationDelay = `${globalIndex * 0.03}s, ${globalIndex * 0.05}s`;
                         
                         wordInnerSpan.appendChild(charSpan);
@@ -200,17 +295,21 @@
                 }
             });
 
-            if (lineIndex < lines.length - 1) {
+            if (lineIndex < dataLines.length - 1) {
                 let br = document.createElement('div');
                 br.className = 'line-break';
                 container.appendChild(br);
             }
         });
 
-        // Reveal enter button precisely after letters finish dropping
+        // Update button text and reveal after animation
+        let btn = document.getElementById('btn-next-step');
+        btn.innerText = translations[currentLang].btnText;
+        btn.classList.add('hidden');
+
         let totalTimeMs = (globalIndex * 30) + 300;
         setTimeout(() => {
-            document.getElementById('btn-next-step').classList.remove('hidden');
+            btn.classList.remove('hidden');
         }, totalTimeMs);
     }
 </script>

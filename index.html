@@ -59,7 +59,7 @@
         }
 
         @keyframes smoothDrop {
-            0% { opacity: 0; transform: translateY(-60px); }
+            0% { opacity: 0; transform: translateY(-70px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
@@ -76,8 +76,24 @@
         .rain-char {
             display: inline-block;
             opacity: 0;
-            /* Much slower drop transition (0.5s), fast color cycle (1.2s) */
-            animation: smoothDrop 0.5s ease-out forwards, colorFlickerFast 1.2s infinite linear;
+            animation: smoothDrop 0.8s ease-out forwards, colorFlickerFast 1.2s infinite linear;
+        }
+
+        /* Real SVG Icon Styling */
+        .icon-item {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+            opacity: 0;
+            animation: smoothDrop 0.8s ease-out forwards;
+            width: 24px;
+            height: 24px;
+        }
+
+        .icon-item svg {
+            width: 100%;
+            height: 100%;
         }
 
         .btn {
@@ -116,7 +132,16 @@
         ["We", "offer", "you", "the", "most", "discounted", "prices"],
         ["You", "can", "buy", "every", "electronic", "item", "here"],
         ["Please", "Enjoy", "Your", "Visit"],
-        ["🌹", "🙏", "Founder", ":", "Uttam", "Rai", "🙏", "🌹"]
+        { type: "founder", items: [
+            { type: "icon", svg: '<svg viewBox="0 0 24 24"><path fill="#ff3333" d="M12 2C10.5 2 9.2 3.2 9.2 4.7C8.1 4.2 6.8 4.6 6.1 5.7C5.4 6.8 5.7 8.2 6.8 9C5.7 9.8 5.3 11.2 6.1 12.3C6.9 13.4 8.2 13.8 9.3 13.2C9.8 14.5 11 15.3 12.5 15.3C14.3 15.3 15.8 13.8 15.8 12C16.8 12.4 18 12 18.7 10.9C19.4 9.8 19.1 8.4 18 7.6C19.1 6.8 19.5 5.4 18.7 4.3C17.9 3.2 16.5 2.8 15.4 3.4C14.5 2.5 13.3 2 12 2M12 7.5C13.4 7.5 14.5 8.6 14.5 10C14.5 11.4 13.4 12.5 12 12.5C10.6 12.5 9.5 11.4 9.5 10C9.5 8.6 10.6 7.5 12 7.5M11.5 16.5V22H12.5V16.5H11.5Z"/></svg>' },
+            { type: "icon", svg: '<svg viewBox="0 0 24 24"><path fill="#00ccff" d="M12 2C9.5 2 7.5 4 7.5 6.5C7.5 8.1 8.3 9.5 9.5 10.3V12H8C6.9 12 6 12.9 6 14V15H5C3.9 15 3 15.9 3 17V21C3 22.1 3.9 23 5 23H19C20.1 23 21 22.1 21 21V17C21 15.9 20.1 15 19 15H18V14C18 12.9 17.1 12 16 12H14.5V10.3C15.7 9.5 16.5 8.1 16.5 6.5C16.5 4 14.5 2 12 2M12 4C13.4 4 14.5 5.1 14.5 6.5C14.5 7.9 13.4 9 12 9C10.6 9 9.5 7.9 9.5 6.5C9.5 5.1 10.6 4 12 4Z"/></svg>' },
+            { type: "word", text: "Founder" },
+            { type: "word", text: ":" },
+            { type: "word", text: "Uttam" },
+            { type: "word", text: "Rai" },
+            { type: "icon", svg: '<svg viewBox="0 0 24 24"><path fill="#00ccff" d="M12 2C9.5 2 7.5 4 7.5 6.5C7.5 8.1 8.3 9.5 9.5 10.3V12H8C6.9 12 6 12.9 6 14V15H5C3.9 15 3 15.9 3 17V21C3 22.1 3.9 23 5 23H19C20.1 23 21 22.1 21 21V17C21 15.9 20.1 15 19 15H18V14C18 12.9 17.1 12 16 12H14.5V10.3C15.7 9.5 16.5 8.1 16.5 6.5C16.5 4 14.5 2 12 2M12 4C13.4 4 14.5 5.1 14.5 6.5C14.5 7.9 13.4 9 12 9C10.6 9 9.5 7.9 9.5 6.5C9.5 5.1 10.6 4 12 4Z"/></svg>' },
+            { type: "icon", svg: '<svg viewBox="0 0 24 24"><path fill="#ff3333" d="M12 2C10.5 2 9.2 3.2 9.2 4.7C8.1 4.2 6.8 4.6 6.1 5.7C5.4 6.8 5.7 8.2 6.8 9C5.7 9.8 5.3 11.2 6.1 12.3C6.9 13.4 8.2 13.8 9.3 13.2C9.8 14.5 11 15.3 12.5 15.3C14.3 15.3 15.8 13.8 15.8 12C16.8 12.4 18 12 18.7 10.9C19.4 9.8 19.1 8.4 18 7.6C19.1 6.8 19.5 5.4 18.7 4.3C17.9 3.2 16.5 2.8 15.4 3.4C14.5 2.5 13.3 2 12 2M12 7.5C13.4 7.5 14.5 8.6 14.5 10C14.5 11.4 13.4 12.5 12 12.5C10.6 12.5 9.5 11.4 9.5 10C9.5 8.6 10.6 7.5 12 7.5M11.5 16.5V22H12.5V16.5H11.5Z"/></svg>' }
+        ]}
     ];
 
     function startRainIntro() {
@@ -125,24 +150,45 @@
         
         let globalCharIndex = 0;
 
-        lines.forEach((wordsInLine, lineIndex) => {
-            wordsInLine.forEach((word) => {
-                let wordSpan = document.createElement('span');
-                wordSpan.className = 'word-wrapper';
-                
-                for (let i = 0; i < word.length; i++) {
-                    let char = word.charAt(i);
-                    let charSpan = document.createElement('span');
-                    charSpan.className = 'rain-char';
-                    charSpan.innerText = char;
-                    
-                    // Much slower staggering delay (0.12s per char) for a slow-motion rain effect
-                    charSpan.style.animationDelay = `${globalCharIndex * 0.12}s, ${globalCharIndex * 0.08}s`;
-                    
-                    wordSpan.appendChild(charSpan);
+        lines.forEach((lineData, lineIndex) => {
+            let wordsInLine = [];
+            
+            if (Array.isArray(lineData)) {
+                wordsInLine = lineData.map(w => ({ type: "word", text: w }));
+            } else if (lineData.type === "founder") {
+                wordsInLine = lineData.items;
+            }
+
+            let wordSpan = document.createElement('span');
+            wordSpan.className = 'word-wrapper';
+
+            wordsInLine.forEach((item) => {
+                if (item.type === "icon") {
+                    let iconSpan = document.createElement('span');
+                    iconSpan.className = 'icon-item';
+                    iconSpan.innerHTML = item.svg;
+                    // Slower delay (0.25s per element)
+                    iconSpan.style.animationDelay = `${globalCharIndex * 0.25}s`;
+                    container.appendChild(iconSpan);
                     globalCharIndex++;
+                } else {
+                    let wordInnerSpan = document.createElement('span');
+                    wordInnerSpan.className = 'word-wrapper';
+                    
+                    let word = item.text;
+                    for (let i = 0; i < word.length; i++) {
+                        let char = word.charAt(i);
+                        let charSpan = document.createElement('span');
+                        charSpan.className = 'rain-char';
+                        charSpan.innerText = char;
+                        // Slower staggering delay (0.25s per char) for slow-motion cascade
+                        charSpan.style.animationDelay = `${globalCharIndex * 0.25}s, ${globalCharIndex * 0.08}s`;
+                        
+                        wordInnerSpan.appendChild(charSpan);
+                        globalCharIndex++;
+                    }
+                    container.appendChild(wordInnerSpan);
                 }
-                container.appendChild(wordSpan);
             });
 
             if (lineIndex < lines.length - 1) {
@@ -152,9 +198,9 @@
             }
         });
 
-        // Calculate total animation time based on the slower falling speed
-        let totalCharacters = globalCharIndex;
-        let totalAnimationTimeMs = (totalCharacters * 120) + 500;
+        // Adjusted timeout for slower 0.25s drop speed
+        let totalElements = globalCharIndex;
+        let totalAnimationTimeMs = (totalElements * 250) + 800;
 
         setTimeout(() => {
             document.getElementById('btn-next-step').classList.remove('hidden');

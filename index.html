@@ -5,30 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rai Electronics - Step 1: Cinematic Intro</title>
     <style>
-        @keyframes panZoom {
-            0% { transform: scale(1) translate(0, 0); }
-            50% { transform: scale(1.15) translate(-10px, -10px); }
-            100% { transform: scale(1) translate(0, 0); }
-        }
-
-        @keyframes ultraBrightGlow {
-            0% { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055, 0 0 50px #ff0055; }
-            33% { color: #00ffcc; text-shadow: 0 0 15px #00ffcc, 0 0 30px #00ffcc, 0 0 50px #00ffcc; }
-            66% { color: #ffff00; text-shadow: 0 0 15px #ffff00, 0 0 30px #ffff00, 0 0 50px #ffff00; }
-            100% { color: #ff0055; text-shadow: 0 0 15px #ff0055, 0 0 30px #ff0055, 0 0 50px #ff0055; }
-        }
-
-        @keyframes letterRainDrop {
-            0% { opacity: 0; transform: translateY(-35px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
         :root {
             --bg-deep: #050110;
-            --glass-bg: rgba(15, 8, 35, 0.95);
-            --neon-pink: #ff0055;
-            --neon-cyan: #00ffcc;
-            --neon-yellow: #ffff00;
+            --glass-bg: rgba(15, 8, 35, 0.98);
         }
 
         body {
@@ -48,47 +27,51 @@
             width: 100%;
             max-width: 520px;
             background: var(--glass-bg);
-            padding: 30px 24px;
+            padding: 35px 24px;
             border-radius: 32px;
-            border: 3px solid var(--neon-yellow);
-            box-shadow: 0 0 45px rgba(255, 255, 0, 0.45);
+            border: 3px solid #ffff00;
+            box-shadow: 0 0 30px rgba(255, 255, 0, 0.3);
             position: relative;
-            overflow: hidden;
             text-align: center;
-        }
-
-        /* Cinematic Background with 2.0x Pan Zoom Effect */
-        .cinematic-bg {
-            position: absolute;
-            top: -30px; left: -30px; right: -30px; bottom: -30px;
-            background: radial-gradient(circle, rgba(255,0,85,0.3) 0%, rgba(0,255,204,0.25) 50%, rgba(5,1,16,0.95) 100%);
-            animation: panZoom 3s infinite ease-in-out;
-            z-index: 0;
-            pointer-events: none;
         }
 
         .rain-text-container {
             position: relative;
             z-index: 2;
             font-size: 20px;
-            font-weight: 900;
+            font-weight: 800;
             line-height: 2.2;
             max-width: 460px;
             margin: 0 auto;
-            white-space: pre-wrap;
-            animation: ultraBrightGlow 3s infinite linear;
-            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        /* Word wrapper to prevent splitting words across lines */
+        .word-wrapper {
+            display: inline-block;
+            white-space: nowrap;
+            margin-right: 6px;
+        }
+
+        .line-break {
+            display: block;
+            height: 10px;
+        }
+
+        @keyframes smoothDrop {
+            0% { opacity: 0; transform: translateY(-40px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .rain-char {
             display: inline-block;
             opacity: 0;
-            animation: letterRainDrop 0.08s forwards;
+            animation: smoothDrop 0.25s ease-out forwards;
         }
 
         .btn {
             width: 100%;
-            background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink));
+            background: linear-gradient(135deg, #ffff00, #ff0055);
             color: white;
             border: none;
             padding: 16px;
@@ -97,13 +80,11 @@
             border-radius: 16px;
             cursor: pointer;
             transition: 0.3s ease;
-            margin-top: 25px;
-            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.5);
+            margin-top: 30px;
+            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
             letter-spacing: 0.5px;
-            position: relative;
-            z-index: 2;
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 35px rgba(255, 255, 0, 0.6); }
+        .btn:hover { transform: translateY(-2px); }
 
         .hidden { display: none !important; }
     </style>
@@ -111,47 +92,69 @@
 <body>
 
 <div class="app-container">
-    <div class="cinematic-bg"></div>
-    
     <!-- Rain Text Container -->
     <div id="rain-text-output" class="rain-text-container"></div>
 
-    <!-- Enter Button (Appears only after rain finishes) -->
-    <button class="btn hidden" id="btn-next-step" onclick="alert('Step 1 Intro Complete! Ready for Step 2.')">Enter Rai Electronics Store 🚀</button>
+    <!-- Enter Button (Appears strictly after rain finishes) -->
+    <button class="btn hidden" id="btn-next-step" onclick="alert('Step 1 Intro Complete! Ready for Step 2.')">Enter Rai Electronics 🚀</button>
 </div>
 
 <script>
-    const introText = "Welcome to Rai Electronics\n\nWe offer you the most discounted prices\n\nYou can buy every electronic item here\n\nPlease Enjoy Your Visit\n\nFounder : Uttam Rai";
-    
+    // Structured lines with natural words
+    const lines = [
+        ["Welcome", "to", "Rai", "Electronics"],
+        ["We", "offer", "you", "the", "most", "discounted", "prices"],
+        ["You", "can", "buy", "every", "electronic", "item", "here"],
+        ["Please", "Enjoy", "Your", "Visit"],
+        ["Founder", ":", "Uttam", "Rai"]
+    ];
+
+    // Natural solid color rotation (Red, Green, Yellow) without glow or shine
+    const naturalColors = ["#ff3333", "#33cc66", "#ffcc00"];
+
     function startRainIntro() {
         let container = document.getElementById('rain-text-output');
         container.innerHTML = "";
-        let charIndex = 0;
         
-        // 1.8x speed boost (18ms interval per character)
-        let delayTimer = setInterval(() => {
-            if (charIndex < introText.length) {
-                let char = introText.charAt(charIndex);
-                let span = document.createElement('span');
-                span.className = 'rain-char';
-                span.style.animationDelay = `${charIndex * 0.018}s`;
+        let globalCharIndex = 0;
+
+        lines.forEach((wordsInLine, lineIndex) => {
+            wordsInLine.forEach((word) => {
+                let wordSpan = document.createElement('span');
+                wordSpan.className = 'word-wrapper';
                 
-                if (char === '\n') {
-                    span.innerHTML = '<br>';
-                } else if (char === ' ') {
-                    span.innerHTML = '&nbsp;'; // Preserves explicit spaces correctly
-                } else {
-                    span.innerHTML = char;
+                for (let i = 0; i < word.length; i++) {
+                    let char = word.charAt(i);
+                    let charSpan = document.createElement('span');
+                    charSpan.className = 'rain-char';
+                    charSpan.innerText = char;
+                    
+                    // Assign natural solid color conditionally per character
+                    charSpan.style.color = naturalColors[globalCharIndex % naturalColors.length];
+                    
+                    // 1.8x accelerated smooth staggering delay
+                    charSpan.style.animationDelay = `${globalCharIndex * 0.022}s`;
+                    
+                    wordSpan.appendChild(charSpan);
+                    globalCharIndex++;
                 }
-                
-                container.appendChild(span);
-                charIndex++;
-            } else {
-                clearInterval(delayTimer);
-                // Reveal button strictly after all letters drop
-                document.getElementById('btn-next-step').classList.remove('hidden');
+                container.appendChild(wordSpan);
+            });
+
+            if (lineIndex < lines.length - 1) {
+                let br = document.createElement('div');
+                br.className = 'line-break';
+                container.appendChild(br);
             }
-        }, 18);
+        });
+
+        // Calculate total animation time based on character count and reveal button exactly when done
+        let totalCharacters = globalCharIndex;
+        let totalAnimationTimeMs = (totalCharacters * 22) + 250;
+
+        setTimeout(() => {
+            document.getElementById('btn-next-step').classList.remove('hidden');
+        }, totalAnimationTimeMs);
     }
 
     window.onload = function() {

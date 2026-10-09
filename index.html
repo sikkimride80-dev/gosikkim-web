@@ -91,6 +91,13 @@
 <body>
 
 <div class="app-container">
+    <!-- Auto-Trigger Gateway Overlay (Satisfies Mobile Browser Audio Security Policies) -->
+    <div id="audio-gate" style="position: absolute; inset: 0; background: rgba(5, 1, 16, 0.95); z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; border-radius: 30px;">
+        <div style="font-size: 20px; font-weight: 900; color: #ffff00; margin-bottom: 12px;">🔌 Rai Electronics</div>
+        <div style="font-size: 13px; color: #00ff66; margin-bottom: 20px; font-weight: 600;">Tap anywhere to begin audio & visual experience</div>
+        <button class="btn" onclick="startExperience()">Start Cinematic Intro 🚀</button>
+    </div>
+
     <!-- Smooth Fade-In & Color Flickering Intro Box -->
     <div id="intro-box" class="intro-text-box flicker-text">
         Welcome to Rai Electronics
@@ -109,41 +116,32 @@
 </div>
 
 <script>
-    function startAutoPresentation() {
+    function startExperience() {
+        // Remove the audio restriction gate instantly on tap
+        let gate = document.getElementById('audio-gate');
+        gate.style.opacity = '0';
+        setTimeout(() => { gate.style.display = 'none'; }, 300);
+
+        // Trigger visual fade-in animation
         let introBox = document.getElementById('intro-box');
         setTimeout(() => {
             introBox.classList.add('visible');
         }, 100);
 
-        // Auto Speech Synthesis Execution
+        // Trigger guaranteed automated speech synthesis narration
         if ('speechSynthesis' in window) {
-            let speakNow = () => {
-                window.speechSynthesis.cancel();
-                let utterance = new SpeechSynthesisUtterance("Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.");
-                utterance.rate = 0.9;
-                utterance.pitch = 1.0;
-                window.speechSynthesis.speak(utterance);
-            };
-
-            // Some mobile browsers require voices to be loaded first
-            if (window.speechSynthesis.getVoices().length > 0) {
-                speakNow();
-            } else {
-                window.speechSynthesis.onvoiceschanged = speakNow;
-                // Fallback direct execution trigger
-                setTimeout(speakNow, 200);
-            }
+            window.speechSynthesis.cancel();
+            let utterance = new SpeechSynthesisUtterance("Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.");
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
         }
 
-        // Reveal the enter button after the intro presentation finishes (~4.5 seconds)
+        // Reveal the final enter button after the presentation finishes (~4.5 seconds)
         setTimeout(() => {
             document.getElementById('btn-next-step').classList.remove('hidden');
         }, 4500);
     }
-
-    window.onload = function() {
-        startAutoPresentation();
-    };
 </script>
 
 </body>

@@ -75,7 +75,7 @@
             line-height: 2.2;
             max-width: 460px;
             margin: 0 auto;
-            white-space: pre-line;
+            white-space: pre-wrap;
             animation: ultraBrightGlow 3s infinite linear;
             letter-spacing: 1px;
         }
@@ -116,30 +116,30 @@
     <!-- Rain Text Container -->
     <div id="rain-text-output" class="rain-text-container"></div>
 
-    <!-- Enter Button (Appears after rain finishes) -->
-    <button class="btn hidden" id="btn-next-step" onclick="alert('Step 1 Intro Complete! Ready for Step 2.')">Enter Rai Electronics 🚀</button>
+    <!-- Enter Button (Appears only after rain finishes) -->
+    <button class="btn hidden" id="btn-next-step" onclick="alert('Step 1 Intro Complete! Ready for Step 2.')">Enter Rai Electronics Store 🚀</button>
 </div>
 
 <script>
-    // Explicitly spaced, professional lines with clean breaks
-    const introText = `Welcome to Rai Electronics\n\nWe offer you the most discounted prices\n\nYou can buy every electronic item here\n\nPlease Enjoy Your Visit\n\nFounder : Uttam Rai`;
+    const introText = "Welcome to Rai Electronics\n\nWe offer you the most discounted prices\n\nYou can buy every electronic item here\n\nPlease Enjoy Your Visit\n\nFounder : Uttam Rai";
     
     function startRainIntro() {
         let container = document.getElementById('rain-text-output');
         container.innerHTML = "";
         let charIndex = 0;
         
+        // 1.8x speed boost (18ms interval per character)
         let delayTimer = setInterval(() => {
             if (charIndex < introText.length) {
                 let char = introText.charAt(charIndex);
                 let span = document.createElement('span');
                 span.className = 'rain-char';
-                span.style.animationDelay = `${charIndex * 0.035}s`;
+                span.style.animationDelay = `${charIndex * 0.018}s`;
                 
                 if (char === '\n') {
                     span.innerHTML = '<br>';
                 } else if (char === ' ') {
-                    span.innerHTML = '&nbsp;'; // Preserve explicit professional spacing
+                    span.innerHTML = '&nbsp;'; // Preserves explicit spaces correctly
                 } else {
                     span.innerHTML = char;
                 }
@@ -148,9 +148,10 @@
                 charIndex++;
             } else {
                 clearInterval(delayTimer);
+                // Reveal button strictly after all letters drop
                 document.getElementById('btn-next-step').classList.remove('hidden');
             }
-        }, 30);
+        }, 18);
     }
 
     window.onload = function() {

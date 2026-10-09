@@ -3,45 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sikkim Hardcore Exam Prep & AI Proctored Platform</title>
+    <title>Rai Electronics - Step 1: Storefront & Checkout</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <!-- Firebase SDKs -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyB5rYO1l1sfoSFtwjE2hC7AIC8t7NBoXEs",
-            authDomain: "sikkimcloudauth.firebaseapp.com",
-            projectId: "sikkimcloudauth",
-            storageBucket: "sikkimcloudauth.firebasestorage.app",
-            messagingSenderId: "110693888519",
-            appId: "1:110693888519:web:7bb7f22ac99b914846b0a2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        window.db = getFirestore(app);
-        window.auth = getAuth(app);
-        window.firebaseFns = { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, doc, setDoc, getDoc };
-    </script>
     <style>
-        @keyframes heartbeatPulse {
-            0% { transform: scale(1); opacity: 0.9; }
-            15% { transform: scale(1.04); opacity: 1; }
-            30% { transform: scale(1); opacity: 0.9; }
-            45% { transform: scale(1.04); opacity: 1; }
-            60% { transform: scale(1); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 0.9; }
-        }
-
         :root {
             --bg-deep: #09021a;
-            --glass-bg: rgba(20, 10, 40, 0.9);
-            --glass-card: rgba(35, 18, 68, 0.85);
+            --glass-bg: rgba(20, 10, 40, 0.92);
+            --glass-card: rgba(35, 18, 68, 0.88);
             --neon-pink: #ec4899;
             --neon-cyan: #06b6d4;
-            --neon-purple: #a855f7;
             --neon-green: #4ade80;
             --neon-yellow: #f59e0b;
         }
@@ -64,27 +34,27 @@
             background: var(--glass-bg);
             padding: 24px;
             border-radius: 28px;
-            border: 2px solid var(--neon-pink);
-            box-shadow: 0 0 25px rgba(236, 72, 153, 0.3);
+            border: 2px solid var(--neon-yellow);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
             position: relative;
             overflow: hidden;
         }
 
         h1 { 
-            background: linear-gradient(135deg, #ec4899, #38bdf8, #4ade80);
+            background: linear-gradient(135deg, #f59e0b, #ec4899, #38bdf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             text-align: center; 
-            font-size: 28px; 
+            font-size: 26px; 
             font-weight: 900;
-            margin-bottom: 6px; 
+            margin-bottom: 4px; 
         }
 
         .subtitle { 
             text-align: center; 
-            color: #38bdf8;
+            color: #4ade80;
             font-size: 11px; 
-            margin-bottom: 24px; 
+            margin-bottom: 20px; 
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: 800;
@@ -92,802 +62,245 @@
         
         .card {
             background: var(--glass-card);
-            padding: 20px;
+            padding: 18px;
             border-radius: 20px;
-            margin-bottom: 18px;
-            border: 1px solid rgba(236, 72, 153, 0.4);
+            margin-bottom: 16px;
+            border: 1px solid rgba(245, 158, 11, 0.4);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
 
-        .price-display {
-            font-size: 28px;
-            color: #4ade80;
-            font-weight: 900;
-            text-align: center;
-            margin: 12px 0;
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
-        ul { padding-left: 20px; font-size: 13px; color: #e2e8f0; line-height: 1.6; }
-        li { margin-bottom: 6px; }
-        
+        .product-card {
+            background: rgba(15, 7, 30, 0.85);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .product-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .product-price {
+            font-size: 14px;
+            font-weight: 900;
+            color: #4ade80;
+            margin-bottom: 8px;
+        }
+
         .btn {
             width: 100%;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6, #06b6d4);
+            background: linear-gradient(135deg, #f59e0b, #ec4899);
             color: white;
             border: none;
-            padding: 15px;
-            font-size: 15px;
+            padding: 12px;
+            font-size: 14px;
             font-weight: 800;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             transition: 0.2s ease;
-            margin-top: 10px;
-            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.4);
+            margin-top: 8px;
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
         }
         .btn:hover { transform: translateY(-2px); opacity: 0.95; }
-        .btn-danger { background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4); }
-        .btn-secondary { background: rgba(51, 41, 85, 0.9); border: 1px solid rgba(168, 85, 247, 0.5); }
-        .btn:disabled { background: #332b4a; cursor: not-allowed; opacity: 0.6; }
+        .btn-secondary { background: rgba(51, 41, 85, 0.9); border: 1px solid rgba(168, 85, 247, 0.5); box-shadow: none; }
 
         .hidden { display: none !important; }
 
-        label { font-size: 11px; color: #f472b6; display: block; margin-bottom: 5px; margin-top: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
-        input[type="text"], input[type="number"], input[type="date"], input[type="tel"], input[type="password"], select {
-            width: calc(100% - 24px);
-            padding: 13px;
+        label { font-size: 11px; color: #f472b6; display: block; margin-bottom: 4px; margin-top: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;}
+        input[type="text"], input[type="tel"], textarea {
+            width: calc(100% - 20px);
+            padding: 11px;
             background: rgba(15, 7, 30, 0.9);
             border: 1px solid rgba(168, 85, 247, 0.5);
             color: white;
-            border-radius: 12px;
-            margin-bottom: 6px;
+            border-radius: 10px;
+            margin-bottom: 4px;
             outline: none;
-            font-size: 14px;
+            font-size: 13px;
         }
-        input:focus, select:focus { border-color: #ec4899; }
-        select option { background: #1a0b35; color: white; }
+        input:focus, textarea:focus { border-color: #f59e0b; }
 
-        .top-dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--glass-card);
-            padding: 14px 18px;
-            border-radius: 18px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(236, 72, 153, 0.4);
-        }
-        .profile-avatar-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .profile-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink); }
-        .avatar-name { font-size: 15px; font-weight: 900; color: #ffffff; }
-        .avatar-sub { font-size: 11px; color: #4ade80; font-weight: 700; }
-
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(9, 2, 26, 0.95);
-            display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 10px;
-        }
-        .modal-card {
-            background: rgba(25, 12, 50, 0.98);
-            width: 100%; max-width: 480px; padding: 20px; border-radius: 24px;
-            border: 2px solid rgba(236, 72, 153, 0.8); max-height: 94vh; overflow-y: auto;
-        }
-        .modal-card h2 { color: #ec4899; text-align: center; margin-top: 0; font-size: 24px; font-weight: 900; }
-        
-        .profile-detail-row {
-            display: flex; justify-content: space-between; font-size: 13px; padding: 10px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .profile-detail-label { color: #f472b6; font-weight: 600; }
-        .profile-detail-val { color: #ffffff; font-weight: 700; text-align: right; }
-
-        .news-card {
-            background: var(--glass-card); border-left: 5px solid #ec4899; padding: 18px; border-radius: 16px; margin-bottom: 18px; font-size: 13px; color: #e2e8f0;
-        }
-        .news-card h4 { color: #ec4899; margin: 0 0 8px 0; font-size: 15px; font-weight: 900; }
-
-        .lesley-banner-card {
-            background: var(--glass-card); border: 2px solid rgba(236, 72, 153, 0.9); border-radius: 18px; padding: 18px; text-align: center; cursor: pointer; margin-bottom: 18px;
-        }
-        .lesley-hero-img { width: 100%; max-height: 220px; object-fit: contain; border-radius: 14px; background: rgba(0,0,0,0.5); margin-bottom: 12px; }
-
-        .ai-chat-header { display: flex; align-items: center; gap: 12px; background: rgba(45, 20, 75, 0.9); padding: 10px 14px; border-radius: 14px; margin-bottom: 12px; }
-        .ai-avatar-badge { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #06b6d4; }
-        .chat-box-container { background: rgba(12, 5, 25, 0.95); border-radius: 16px; height: 280px; overflow-y: auto; padding: 14px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
-        .chat-msg { padding: 10px 14px; border-radius: 12px; font-size: 13px; max-width: 85%; line-height: 1.5; }
-        .chat-msg.bot { background: rgba(35, 18, 68, 0.95); color: #f1f5f9; align-self: flex-start; border-left: 3px solid #06b6d4; }
-        .chat-msg.user { background: linear-gradient(135deg, #ec4899, #a855f7); color: white; align-self: flex-end; }
-
-        .ai-input-wrapper { display: flex; gap: 8px; background: rgba(15, 7, 30, 0.9); padding: 6px 10px; border-radius: 14px; align-items: center; }
-        .ai-input-wrapper input { background: transparent; border: none; padding: 8px; color: white; font-size: 13px; width: 100%; outline: none; }
-        .ai-send-btn { background: #06b6d4; color: white; border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-weight: bold; }
-
-        #video-box, #selfie-cam, #selfie-preview {
-            width: 100%; height: 200px; background: #000; border-radius: 14px; object-fit: cover; margin-bottom: 12px; border: 2px solid var(--neon-pink);
-        }
-        
-        /* Small Round Floating Camera for Active Questions */
-        #floating-cam {
-            width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #4ade80;
-            position: fixed; top: 15px; right: 15px; z-index: 999; box-shadow: 0 0 15px rgba(74,222,128,0.6);
-            background: #000;
+        .cart-badge {
+            background: #ef4444; color: white; border-radius: 50%; padding: 2px 8px; font-size: 11px; font-weight: bold;
         }
 
-        .timer-display {
-            font-size: 26px; font-weight: 900; color: #f59e0b; text-align: center; background: rgba(25, 12, 50, 0.9); padding: 12px; border-radius: 14px; margin-bottom: 16px; border: 1px solid rgba(245, 158, 11, 0.6);
+        .top-nav {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;
+            background: var(--glass-card); padding: 10px 16px; border-radius: 14px; border: 1px solid rgba(245,158,11,0.3);
         }
-        .question-box {
-            font-size: 15px; background: var(--glass-card); padding: 18px; border-radius: 14px; margin-bottom: 16px; border-left: 5px solid var(--neon-cyan);
-        }
-        .warning-box {
-            background: rgba(69, 26, 3, 0.9); border: 2px solid #ef4444; padding: 22px; border-radius: 18px; text-align: center; margin-bottom: 18px;
-            animation: heartbeatPulse 1s infinite ease-in-out;
-        }
-        .warning-box h3 { color: #f59e0b; margin-top: 0; font-size: 18px; font-weight: 900; }
-        .support-section { margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.15); padding-top: 16px; font-size: 12px; color: #cbd5e1; text-align: center; }
-        .support-section a { color: #38bdf8; text-decoration: none; font-weight: 800; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
 
-    <!-- CHOICE SCREEN -->
-    <div id="choice-view">
-        <h1 id="ui-title">Sikkim Exam Portal</h1>
-        <div class="subtitle">Next-Gen AI Proctored Infrastructure</div>
-        <div class="card" style="text-align: center;">
-            <p style="color: #e2e8f0; font-size: 14px;">Existing student? Login with your Unique ID. New student? Register your elite profile.</p>
+    <!-- STOREFRONT VIEW -->
+    <div id="store-view">
+        <div class="top-nav">
+            <div>
+                <h1 style="font-size: 18px; text-align: left; margin:0;">🔌 Rai Electronics</h1>
+                <span style="font-size: 10px; color: #4ade80; font-weight: bold;">Authorized Online Store</span>
+            </div>
+            <button class="btn btn-secondary" onclick="openCart()" style="width: auto; padding: 8px 14px; margin-top:0;">
+                🛒 Cart <span id="cart-count" class="cart-badge">0</span>
+            </button>
         </div>
-        <button class="btn" onclick="showLoginView()">Login to Profile</button>
-        <button class="btn btn-secondary" onclick="showRegisterView()">New Student Registration</button>
+
+        <div class="subtitle">Step 1: Core Electronic Catalog & Direct Checkout</div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=300" alt="Smartwatch">
+                    <div class="product-title">Pro AMOLED Smartwatch</div>
+                </div>
+                <div>
+                    <div class="product-price">₹1,499</div>
+                    <button class="btn" onclick="addToCart('Pro AMOLED Smartwatch', 1499)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300" alt="Headphones">
+                    <div class="product-title">Bass Boost Wireless Pods</div>
+                </div>
+                <div>
+                    <div class="product-price">₹899</div>
+                    <button class="btn" onclick="addToCart('Bass Boost Wireless Pods', 899)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=300" alt="Projector">
+                    <div class="product-title">Mini Home Cinema Projector</div>
+                </div>
+                <div>
+                    <div class="product-price">₹3,499</div>
+                    <button class="btn" onclick="addToCart('Mini Home Cinema Projector', 3499)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300" alt="Speaker">
+                    <div class="product-title">Party Rock Bluetooth Speaker</div>
+                </div>
+                <div>
+                    <div class="product-price">₹1,999</div>
+                    <button class="btn" onclick="addToCart('Party Rock Bluetooth Speaker', 1999)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- LOGIN SCREEN -->
-    <div id="login-view" class="hidden">
-        <h1>Student Login</h1>
-        <div class="subtitle">Access your secure profile dashboard</div>
-        <div class="card">
-            <label>Unique Student ID:</label>
-            <input type="text" id="login-uid" placeholder="e.g. SKM-94821">
-            <label>Password:</label>
-            <input type="password" id="login-pass" placeholder="Enter your password">
-        </div>
-        <button class="btn" onclick="handleLogin()">Login</button>
-        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
-    </div>
+    <!-- CART & CHECKOUT VIEW -->
+    <div id="cart-view" class="hidden">
+        <h1>Checkout & Delivery</h1>
+        <div class="subtitle">Enter your home address for direct shipping</div>
 
-    <!-- REGISTRATION SCREEN -->
-    <div id="register-view" class="hidden">
-        <h1>Student Registration</h1>
-        <div class="subtitle">Create your unique permanent student account</div>
         <div class="card">
-            <label>Preferred Language:</label>
-            <select id="reg-lang" onchange="changeAppLanguage(this.value)">
-                <option value="en">English</option>
-                <option value="hi">हिंदी (Hindi)</option>
-                <option value="ne">नेपाली (Nepali)</option>
-            </select>
-            <label>Student Full Name:</label>
-            <input type="text" id="reg-name" placeholder="e.g. Tenzin Norbu">
-            <label>Gender:</label>
-            <select id="reg-gender">
-                <option value="">-- Select Gender --</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-            </select>
+            <div id="cart-item-summary" style="font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #4ade80;">Cart is empty</div>
+            <div id="cart-total-display" style="font-size: 16px; font-weight: 900; margin-bottom: 14px;">Total: ₹0</div>
+
+            <label>Full Customer Name:</label>
+            <input type="text" id="ship-name" placeholder="e.g. Rahul Rai">
+
             <label>Mobile Number (10 Digits):</label>
-            <input type="tel" id="reg-phone" maxlength="10" placeholder="e.g. 9832000000">
-            <label>Mobile Number Belongs To:</label>
-            <select id="reg-relation">
-                <option value="">-- Select Option --</option>
-                <option value="Self">Self</option>
-                <option value="Father">Father</option>
-                <option value="Mother">Mother</option>
-            </select>
-            <label>Age:</label>
-            <input type="number" id="reg-age" placeholder="e.g. 17">
-            <label>Date of Birth:</label>
-            <input type="date" id="reg-dob">
-            <label>Class / Grade:</label>
-            <input type="text" id="reg-class" placeholder="e.g. Class 12">
-            <label>School / College Name:</label>
-            <input type="text" id="reg-school" placeholder="e.g. Tashi Namgyal Academy">
-            <label>Create Secure Password:</label>
-            <input type="password" id="reg-pass" placeholder="Create a strong password">
-            <label>Take Profile Selfie:</label>
-            <div id="camera-container">
-                <video id="selfie-cam" autoplay playsinline muted></video>
-                <button class="btn btn-secondary" type="button" onclick="captureSelfie()">Capture Selfie</button>
-            </div>
-            <div id="preview-container" class="hidden">
-                <img id="selfie-preview" alt="Captured Selfie Preview" style="width:100%; height:160px; border-radius:12px; object-fit:cover;">
-                <div style="display: flex; gap: 10px; margin-top:10px;">
-                    <button class="btn btn-danger" type="button" onclick="retakeSelfie()" style="margin-top:0;">Retake</button>
-                    <button class="btn" type="button" onclick="confirmSelfie()" style="margin-top:0;">Continue</button>
-                </div>
-            </div>
-            <div id="selfie-status" style="font-size:12px; color:#f59e0b; margin-top:8px; text-align:center; font-weight: 800;">Please capture your selfie photo</div>
-        </div>
-        <button class="btn" onclick="processRegistration()">Proceed to Exam Pass</button>
-        <button class="btn btn-secondary" onclick="showChoiceView()">Back</button>
-    </div>
+            <input type="tel" id="ship-phone" maxlength="10" placeholder="e.g. 9832000000">
 
-    <!-- WARNING SCREEN -->
-    <div id="warning-view" class="hidden">
-        <h1>IMPORTANT WARNING</h1>
-        <div class="warning-box">
-            <h3>SAVE YOUR CREDENTIALS!</h3>
-            <p style="font-size: 14px; color: #ffffff; line-height: 1.6;">
-                Your Unique Generated Student ID is:<br>
-                <strong id="display-generated-uid" style="font-size: 24px; color: #4ade80;"></strong><br><br>
-                You <strong>MUST</strong> write down this User ID and Password to log in next time!
-            </p>
-        </div>
-        <div class="timer-display" id="warning-timer" style="color: #ef4444;">10</div>
-        <button class="btn" id="proceed-warning-btn" disabled onclick="finishRegistrationAndLogin()">Please wait (10s) to proceed...</button>
-    </div>
-
-    <!-- MAIN DASHBOARD -->
-    <div id="paywall-view" class="hidden">
-        <div class="top-dashboard-header">
-            <div class="profile-avatar-container" onclick="openProfileModal()">
-                <img id="header-avatar-img" class="profile-avatar" src="" alt="Profile Selfie">
-                <div>
-                    <div id="header-student-name" class="avatar-name">Student</div>
-                    <div id="header-student-id" class="avatar-sub">SKM-00000 (Tap Profile)</div>
-                </div>
-            </div>
-            <button class="btn btn-secondary" style="width: auto; padding: 8px 14px; font-size: 12px; margin-top:0;" onclick="logoutSession()">Logout</button>
+            <label>Complete Delivery Address:</label>
+            <textarea id="ship-address" rows="3" placeholder="House No, Street, Landmark, City, Pincode"></textarea>
         </div>
 
-        <h1>Student Dashboard</h1>
-        <div class="subtitle" id="welcome-student-banner">AI Proctored Strict 30-Minute Challenge</div>
-
-        <div class="news-card">
-            <h4>🌐 Global Tech & Education News Update</h4>
-            <p style="margin: 0; line-height: 1.5;">
-                Global education boards are shifting toward strict AI-proctored examination environments. Answer as many hardcore questions as possible (up to 1500 points) to win vouchers, coupons, or a 2-day free trial!
-            </p>
-        </div>
-
-        <div class="lesley-banner-card" onclick="openAiChatModal()">
-            <img src="https://files.catbox.moe/qivn0s.jpg" class="lesley-hero-img" alt="Lesley">
-            <div style="font-weight: 900; color: #ec4899; font-size: 16px;">💬 Chat with Lesley Your Assistant</div>
-            <div style="font-size: 12px; color: #38bdf8; margin-top: 4px; font-weight: 700;">Tap here for student support & live search!</div>
-        </div>
-
-        <div class="support-section">
-            <p><strong>Customer Support Desk</strong></p>
-            <p>Email Support & Unblock Requests: <a href="mailto:workharddd18@gmail.com">workharddd18@gmail.com</a></p>
-        </div>
-    </div>
-
-    <!-- PROFILE MODAL -->
-    <div id="profile-modal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <h2>Student Profile Details</h2>
-            <div style="text-align: center; margin-bottom: 16px;">
-                <img id="modal-avatar-img" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon-pink);" src="" alt="Selfie">
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label">Full Name:</span>
-                <span class="profile-detail-val" id="mod-name">-</span>
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label">Unique Student ID:</span>
-                <span class="profile-detail-val" id="mod-uid" style="color: #4ade80;">-</span>
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label">Class / Grade:</span>
-                <span class="profile-detail-val" id="mod-class">-</span>
-            </div>
-            <div class="profile-detail-row">
-                <span class="profile-detail-label">Password:</span>
-                <span class="profile-detail-val" id="mod-pass" style="color: #f59e0b;">-</span>
-            </div>
-
-            <div style="margin-top: 18px; background: rgba(15, 7, 30, 0.9); padding: 16px; border-radius: 16px; border: 1px solid rgba(236, 72, 153, 0.4);">
-                <div class="price-display" id="trial-price-banner">1st Attempt FREE (Then ₹200 Day 1)</div>
-                <ul>
-                    <li><strong>Free Attempt:</strong> 1st 30-min hardcore exam is 100% free!</li>
-                    <li><strong>Scoring Challenge:</strong> Score 1500 points to unlock rewards & lucky spin wheel!</li>
-                </ul>
-                <button class="btn" id="ui-btn-trial" onclick="handleExamAttemptFlow()">Start Your Free Hardcore Attempt</button>
-            </div>
-            <button class="btn btn-secondary" onclick="closeProfileModal()" style="margin-top: 16px;">Close Profile</button>
-        </div>
-    </div>
-
-    <!-- LESLEY CHAT MODAL -->
-    <div id="ai-chat-modal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <div class="ai-chat-header">
-                <img src="https://files.catbox.moe/qivn0s.jpg" class="ai-avatar-badge" alt="Lesley">
-                <div>
-                    <h3 style="margin: 0; font-size: 15px;">Lesley AI Assistant</h3>
-                    <span style="font-size: 10px; color: #4ade80;">Live Search Active</span>
-                </div>
-            </div>
-            <div class="chat-box-container" id="chat-messages">
-                <div class="chat-msg bot">Hello! I am Lesley, your Gemini-powered web assistant. Ask me anything about the exam or general topics!</div>
-            </div>
-            <div class="ai-input-wrapper">
-                <input type="text" id="user-chat-input" placeholder="Ask Lesley anything..." onkeypress="handleChatKeyPress(event)">
-                <button class="ai-send-btn" onclick="sendChatMessage()">&#10148;</button>
-            </div>
-            <button class="btn btn-secondary" onclick="closeAiChatModal()" style="margin-top: 12px; padding: 10px;">Close Chat</button>
-        </div>
-    </div>
-
-    <!-- EXAM WORKSPACE (0-2 min video check + continuous hardcore questions) -->
-    <div id="exam-view" class="hidden">
-        <h1>Live Exam Session</h1>
-        <div class="timer-display" id="timer">30:00</div>
-
-        <!-- 0-2 Min Video Record Check Section -->
-        <div id="video-check-section" class="card" style="padding: 12px; text-align: center;">
-            <div style="font-size: 11px; color: #ef4444; margin-bottom: 6px; font-weight: 900;">● 0 - 2 MINUTE VIDEO RECORDING CHECK</div>
-            <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 10px;">Please record/verify your video feed for 0-2 minutes and submit to unlock exam questions.</p>
-            <video id="video-box" autoplay playsinline muted></video>
-            <button class="btn" id="btn-submit-video" onclick="submitVideoCheck()">Submit Video Feed (0-2 Min)</button>
-        </div>
-
-        <!-- Continuous Hardcore Questions Section (Hidden until video is submitted) -->
-        <div id="exam-question-container" class="hidden">
-            <video id="floating-cam" autoplay playsinline muted></video>
-            <div style="font-size: 13px; color: #4ade80; margin-bottom: 6px; font-weight: bold;">Current Score: <span id="current-score">0</span> / 1500 Points</div>
-            <div class="question-box" id="question-text">Generating hardcore question...</div>
-            <input type="text" id="user-answer" placeholder="Type your precise answer...">
-            <button class="btn" onclick="submitAnswer()">Submit Answer & Next</button>
-        </div>
-    </div>
-
-    <!-- 10 SEC WARNING & DISCLAIMER SCREEN BEFORE LUCKY WHEEL OR RESULTS -->
-    <div id="disclaimer-warning-view" class="hidden">
-        <h1>SESSION SUMMARY DISCLAIMER</h1>
-        <div class="warning-box">
-            <h3>⚠️ HARDCORE EVALUATION NOTICE</h3>
-            <p style="font-size: 13px; color: #ffffff; line-height: 1.5;">
-                Your session score has been computed. Answer accuracy determines your final score from 0 to 1500 points. Users scoring 1500/1500 automatically unlock our exclusive Lucky Spin Wheel for vouchers, coupons, and 2-day free trials!
-            </p>
-        </div>
-        <div class="timer-display" id="disclaimer-timer" style="color: #ef4444; animation: heartbeatPulse 1s infinite ease-in-out;">10</div>
-        <button class="btn" id="btn-proceed-results" disabled style="background:#332b4a;">Processing final results (10s)...</button>
-    </div>
-
-    <!-- LUCKY SPIN WHEEL VIEW (Triggered if 1500/1500) -->
-    <div id="wheel-view" class="hidden">
-        <h1>🎉 LUCKY SPIN WHEEL</h1>
-        <div class="card" style="text-align: center;">
-            <p style="color: #4ade80; font-weight: bold; font-size: 15px;">Perfect 1500/1500 Score Detected!</p>
-            <div id="wheel-display-box" style="font-size: 36px; margin: 20px 0; font-weight: 900; color: #f59e0b;">🎡 [ SPINNING... ]</div>
-            <p id="wheel-result-text" style="font-size: 14px; color: #e2e8f0; min-height: 40px;"></p>
-        </div>
-        <button class="btn" id="btn-claim-reward" onclick="claimWheelReward()" style="display:none;">Claim Reward & Finish</button>
-    </div>
-
-    <!-- PROFILE LOCKED SCREEN -->
-    <div id="locked-view" class="hidden">
-        <h1 style="color: #ef4444;">PROFILE LOCKED</h1>
-        <div class="card" style="text-align: center; border-color: rgba(239, 68, 68, 0.7);">
-            <p style="color: #fca5a5; font-size: 14px;">Tab-switch or background proctoring violation detected.</p>
-            <p style="font-size: 18px; font-weight: 900; color: #ef4444;">Unlock Options Available</p>
-            <p style="font-size: 12px; color: #cbd5e1; line-height: 1.6;">
-                Option 1: Pay ₹150 penalty fine below to unlock instantly.<br>
-                Option 2: Email your Student ID to <strong>workharddd18@gmail.com</strong>.
-            </p>
-        </div>
-        <button class="btn btn-danger" onclick="payFine()">Pay ₹150 Fine to Unlock Profile</button>
-        <button class="btn btn-secondary" onclick="requestEmailUnlock()" style="margin-top:10px;">Send Unlock Request via Email</button>
+        <button class="btn" id="btn-pay-order" onclick="payViaRazorpay()" disabled>Proceed to Secure Online Payment</button>
+        <button class="btn btn-secondary" onclick="backToStore()">Back to Store</button>
     </div>
 
 </div>
 
 <script>
-    let timeLeft = 1830;
-    let timerInterval;
-    let selfieCapturedData = "";
-    let isSelfieConfirmed = false;
-    let generatedUIDForWarning = "";
-    let selfieStream = null;
-    let examStream = null;
-    let currentLang = 'en';
-    let violationCount = 0;
-    let userScore = 0;
-    let questionCounter = 0;
+    let cart = { name: "", price: 0 };
 
-    const hardcoreQuestions = [
-        "Explain the deep thermodynamic implications of the Carnot cycle in closed quantum systems.",
-        "What are the precise geopolitical triggers that led to the constitutional integration of Sikkim in 1975?",
-        "Describe the algorithmic complexity trade-offs between asynchronous event-loops and multithreaded web workers.",
-        "Detail the structural biochemical role of collagen helices in high-altitude physiological endurance.",
-        "Analyze the encryption vulnerabilities present in legacy asymmetric RSA implementations under prime factorization attacks."
-    ];
-
-    function changeAppLanguage(lang) { currentLang = lang; }
-
-    function showChoiceView() {
-        stopSelfieCam();
-        stopExamCam();
-        document.getElementById('choice-view').classList.remove('hidden');
-        document.getElementById('login-view').classList.add('hidden');
-        document.getElementById('register-view').classList.add('hidden');
-        document.getElementById('warning-view').classList.add('hidden');
-        document.getElementById('paywall-view').classList.add('hidden');
-        document.getElementById('profile-modal').classList.add('hidden');
-        document.getElementById('ai-chat-modal').classList.add('hidden');
-        document.getElementById('exam-view').classList.add('hidden');
-        document.getElementById('disclaimer-warning-view').classList.add('hidden');
-        document.getElementById('wheel-view').classList.add('hidden');
-        document.getElementById('locked-view').classList.add('hidden');
+    function addToCart(itemName, itemPrice) {
+        cart = { name: itemName, price: itemPrice };
+        document.getElementById('cart-count').innerText = "1";
+        document.getElementById('cart-item-summary').innerText = `${cart.name} (1x)`;
+        document.getElementById('cart-total-display').innerText = `Total Amount: ₹${cart.price}`;
+        document.getElementById('btn-pay-order').disabled = false;
+        
+        document.getElementById('store-view').classList.add('hidden');
+        document.getElementById('cart-view').classList.remove('hidden');
     }
 
-    function showLoginView() {
-        document.getElementById('choice-view').classList.add('hidden');
-        document.getElementById('login-view').classList.remove('hidden');
+    function openCart() {
+        document.getElementById('store-view').classList.add('hidden');
+        document.getElementById('cart-view').classList.remove('hidden');
     }
 
-    function showRegisterView() {
-        document.getElementById('choice-view').classList.add('hidden');
-        document.getElementById('register-view').classList.remove('hidden');
-        isSelfieConfirmed = false;
-        selfieCapturedData = "";
-        document.getElementById('camera-container').classList.remove('hidden');
-        document.getElementById('preview-container').classList.add('hidden');
-        startSelfieCam();
+    function backToStore() {
+        document.getElementById('cart-view').classList.add('hidden');
+        document.getElementById('store-view').classList.remove('hidden');
     }
 
-    function startSelfieCam() {
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => { selfieStream = stream; document.getElementById('selfie-cam').srcObject = stream; })
-            .catch(e => console.log("Camera note"));
-    }
+    function payViaRazorpay() {
+        let name = document.getElementById('ship-name').value.trim();
+        let phone = document.getElementById('ship-phone').value.trim();
+        let address = document.getElementById('ship-address').value.trim();
 
-    function stopSelfieCam() {
-        if (selfieStream) { selfieStream.getTracks().forEach(t => t.stop()); selfieStream = null; }
-    }
-
-    function stopExamCam() {
-        if (examStream) { examStream.getTracks().forEach(t => t.stop()); examStream = null; }
-    }
-
-    function captureSelfie() {
-        let videoEl = document.getElementById('selfie-cam');
-        let canvas = document.createElement('canvas');
-        canvas.width = videoEl.videoWidth || 300;
-        canvas.height = videoEl.videoHeight || 200;
-        canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height);
-        selfieCapturedData = canvas.toDataURL('image/png');
-        stopSelfieCam();
-        document.getElementById('selfie-preview').src = selfieCapturedData;
-        document.getElementById('camera-container').classList.add('hidden');
-        document.getElementById('preview-container').classList.remove('hidden');
-        document.getElementById('selfie-status').innerText = "✓ Selfie captured! Click Continue.";
-    }
-
-    function retakeSelfie() {
-        selfieCapturedData = "";
-        isSelfieConfirmed = false;
-        document.getElementById('preview-container').classList.add('hidden');
-        document.getElementById('camera-container').classList.remove('hidden');
-        startSelfieCam();
-    }
-
-    function confirmSelfie() {
-        if (!selfieCapturedData) return alert("Please capture a selfie first.");
-        isSelfieConfirmed = true;
-        document.getElementById('selfie-status').innerText = "✓ Selfie confirmed successfully!";
-    }
-
-    async function processRegistration() {
-        let name = document.getElementById('reg-name').value.trim();
-        let gender = document.getElementById('reg-gender').value;
-        let phone = document.getElementById('reg-phone').value.trim();
-        let relation = document.getElementById('reg-relation').value;
-        let age = document.getElementById('reg-age').value.trim();
-        let dob = document.getElementById('reg-dob').value.trim();
-        let studentClass = document.getElementById('reg-class').value.trim();
-        let school = document.getElementById('reg-school').value.trim();
-        let password = document.getElementById('reg-pass').value.trim();
-
-        if (!name || !gender || !phone || phone.length !== 10 || !relation || !age || !dob || !studentClass || !school || !password || !isSelfieConfirmed) {
-            alert("Please fill all fields and confirm your selfie.");
+        if (!name || !phone || phone.length !== 10 || !address) {
+            alert("Please fill in your name, 10-digit mobile number, and complete delivery address.");
             return;
         }
 
-        let uniqueID = 'SKM-' + Math.floor(10000 + Math.random() * 90000);
-        let studentProfile = { uid: uniqueID, name, gender, phone, relation, age, dob, class: studentClass, school, password, selfie: selfieCapturedData, freeAttemptUsed: false, paidDaysCount: 0 };
+        let amountInPaise = cart.price * 100;
 
-        try {
-            await window.firebaseFns.setDoc(window.firebaseFns.doc(window.db, "students", uniqueID), studentProfile);
-        } catch (e) { console.log("Cloud sync note"); }
-
-        localStorage.setItem('student_' + uniqueID, JSON.stringify(studentProfile));
-        stopSelfieCam();
-        generatedUIDForWarning = uniqueID;
-
-        document.getElementById('register-view').classList.add('hidden');
-        document.getElementById('warning-view').classList.remove('hidden');
-        startWarningCountdown();
-    }
-
-    function startWarningCountdown() {
-        document.getElementById('display-generated-uid').innerText = generatedUIDForWarning;
-        let count = 10;
-        let timerEl = document.getElementById('warning-timer');
-        let btnEl = document.getElementById('proceed-warning-btn');
-        btnEl.disabled = true;
-
-        let interval = setInterval(() => {
-            count--;
-            timerEl.innerText = count;
-            btnEl.innerText = `Please wait (${count}s) to proceed...`;
-            if (count <= 0) {
-                clearInterval(interval);
-                timerEl.innerText = "Ready!";
-                btnEl.disabled = false;
-                btnEl.innerText = "I Have Saved My ID & Password - Proceed";
-            }
-        }, 1000);
-    }
-
-    function finishRegistrationAndLogin() {
-        document.getElementById('warning-view').classList.add('hidden');
-        showLoginView();
-        alert("Registration complete! Please login with your ID and Password.");
-    }
-
-    async function handleLogin() {
-        let uid = document.getElementById('login-uid').value.trim();
-        let pass = document.getElementById('login-pass').value.trim();
-        let profile = null;
-
-        try {
-            let docSnap = await window.firebaseFns.getDoc(window.firebaseFns.doc(window.db, "students", uid));
-            if (docSnap.exists()) profile = docSnap.data();
-        } catch (e) { console.log("Cloud fetch fallback"); }
-
-        if (!profile) {
-            let stored = localStorage.getItem('student_' + uid);
-            if (stored) profile = JSON.parse(stored);
-        }
-
-        if (!profile) return alert("Student ID not found.");
-        if (profile.password !== pass) return alert("Incorrect password.");
-
-        localStorage.setItem('active_student_uid', uid);
-        document.getElementById('login-view').classList.add('hidden');
-        document.getElementById('paywall-view').classList.remove('hidden');
-        loadStudentDashboard();
-    }
-
-    function loadStudentDashboard() {
-        let activeUid = localStorage.getItem('active_student_uid');
-        if (activeUid) {
-            let profile = JSON.parse(localStorage.getItem('student_' + activeUid));
-            if (profile) {
-                document.getElementById('welcome-student-banner').innerText = `Welcome back, ${profile.name}!`;
-                document.getElementById('header-student-name').innerText = profile.name;
-                document.getElementById('header-student-id').innerText = profile.uid + " (Tap Profile)";
-                if (profile.selfie) {
-                    document.getElementById('header-avatar-img').src = profile.selfie;
-                    document.getElementById('modal-avatar-img').src = profile.selfie;
-                }
-            }
-        }
-    }
-
-    function openProfileModal() { document.getElementById('profile-modal').classList.remove('hidden'); }
-    function closeProfileModal() { document.getElementById('profile-modal').classList.add('hidden'); }
-    function openAiChatModal() { document.getElementById('ai-chat-modal').classList.remove('hidden'); }
-    function closeAiChatModal() { window.speechSynthesis.cancel(); document.getElementById('ai-chat-modal').classList.add('hidden'); }
-
-    function handleChatKeyPress(e) { if (e.key === 'Enter') sendChatMessage(); }
-
-    async function sendChatMessage() {
-        let inputEl = document.getElementById('user-chat-input');
-        let msg = inputEl.value.trim();
-        if (!msg) return;
-        let container = document.getElementById('chat-messages');
-
-        let userDiv = document.createElement('div');
-        userDiv.className = 'chat-msg user';
-        userDiv.innerText = msg;
-        container.appendChild(userDiv);
-        inputEl.value = "";
-
-        let botDiv = document.createElement('div');
-        botDiv.className = 'chat-msg bot';
-        botDiv.innerText = "Lesley is searching & analyzing...";
-        container.appendChild(botDiv);
-
-        try {
-            let res = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(msg)}&format=json&no_html=1&skip_disambig=1`);
-            let data = await res.json();
-            botDiv.innerText = data.AbstractText || `Regarding "${msg}": Verified via Sikkim AI Knowledge base.`;
-        } catch(e) {
-            botDiv.innerText = `Regarding "${msg}": AI Proctored Assistant is ready to help!`;
-        }
-        container.scrollTop = container.scrollHeight;
-    }
-
-    function logoutSession() {
-        localStorage.removeItem('active_student_uid');
-        showChoiceView();
-    }
-
-    function handleExamAttemptFlow() {
-        closeProfileModal();
-        startExamSession();
-    }
-
-    function startExamSession() {
-        violationCount = 0;
-        userScore = 0;
-        questionCounter = 0;
-        document.getElementById('paywall-view').classList.add('hidden');
-        document.getElementById('exam-view').classList.remove('hidden');
-        document.getElementById('video-check-section').classList.remove('hidden');
-        document.getElementById('exam-question-container').classList.add('hidden');
-        
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => {
-                examStream = stream;
-                document.getElementById('video-box').srcObject = stream;
-                document.getElementById('floating-cam').srcObject = stream;
-            })
-            .catch(err => alert("Camera permission is mandatory for proctoring."));
-        
-        timerInterval = setInterval(updateTimer, 1000);
-    }
-
-    function submitVideoCheck() {
-        // Hides video check section after 0-2 minute check, reveals questions & small round floating cam
-        document.getElementById('video-check-section').classList.add('hidden');
-        document.getElementById('exam-question-container').classList.remove('hidden');
-        loadNextQuestion();
-    }
-
-    function loadNextQuestion() {
-        if (questionCounter < hardcoreQuestions.length) {
-            document.getElementById('question-text').innerText = hardcoreQuestions[questionCounter];
-        } else {
-            document.getElementById('question-text').innerText = `Advanced Core Analysis #${questionCounter + 1}: Synthesize system parameters for high-altitude resilience.`;
-        }
-        questionCounter++;
-    }
-
-    function submitAnswer() {
-        let ans = document.getElementById('user-answer').value.trim();
-        if (!ans) return alert("Please enter an answer.");
-        
-        userScore = Math.min(1500, userScore + 150);
-        document.getElementById('current-score').innerText = userScore;
-        document.getElementById('user-answer').value = "";
-        loadNextQuestion();
-    }
-
-    function updateTimer() {
-        let minutes = Math.floor(timeLeft / 60);
-        let seconds = timeLeft % 60;
-        document.getElementById('timer').innerText = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-        
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            triggerDisclaimerScreen();
-        }
-        timeLeft--;
-    }
-
-    function triggerDisclaimerScreen() {
-        stopExamCam();
-        document.getElementById('exam-view').classList.add('hidden');
-        document.getElementById('disclaimer-warning-view').classList.remove('hidden');
-        
-        let count = 10;
-        let timerEl = document.getElementById('disclaimer-timer');
-        let btn = document.getElementById('btn-proceed-results');
-        
-        let interval = setInterval(() => {
-            count--;
-            timerEl.innerText = count;
-            if (count <= 0) {
-                clearInterval(interval);
-                timerEl.innerText = "Ready!";
-                btn.disabled = false;
-                btn.className = "btn";
-                btn.innerText = "View Final Results & Rewards";
-                btn.onclick = evaluateFinalResults;
-            }
-        }, 1000);
-    }
-
-    function evaluateFinalResults() {
-        document.getElementById('disclaimer-warning-view').classList.add('hidden');
-        
-        if (userScore >= 1500) {
-            document.getElementById('wheel-view').classList.remove('hidden');
-            startLuckyWheel();
-        } else {
-            alert(`Exam Session Finished! Final Score: ${userScore} / 1500 Points.`);
-            showChoiceView();
-        }
-    }
-
-    function startLuckyWheel() {
-        let display = document.getElementById('wheel-display-box');
-        let resultText = document.getElementById('wheel-result-text');
-        let claimBtn = document.getElementById('btn-claim-reward');
-        
-        display.innerText = "🎡 [ SPINNING WHEEL... ]";
-        
-        setTimeout(() => {
-            let rand = Math.random();
-            let prize = "5% Discount Voucher";
-            
-            if (rand < 0.02) {
-                prize = "✨ RARE! 2 Days No-Money Free Trial Unlocked!";
-            } else if (rand < 0.07) {
-                prize = "🔥 1 Day Free Trial Voucher!";
-            } else if (rand < 0.25) {
-                prize = "⭐ 35% Discount Coupon!";
-            } else if (rand < 0.50) {
-                prize = "💎 10% Discount Coupon!";
-            }
-            
-            display.innerText = "🎁 RESULT:";
-            resultText.innerText = prize;
-            claimBtn.style.display = 'block';
-        }, 2500);
-    }
-
-    function claimWheelReward() {
-        alert("Reward successfully claimed and saved to your student profile!");
-        showChoiceView();
-    }
-
-    // Strict Proctoring Tab Switch & Background Listeners
-    document.addEventListener("visibilitychange", function() {
-        if (document.hidden && !document.getElementById('exam-view').classList.contains('hidden')) {
-            handleViolation();
-        }
-    });
-    window.addEventListener("blur", function() {
-        if (!document.getElementById('exam-view').classList.contains('hidden')) {
-            handleViolation();
-        }
-    });
-
-    function handleViolation() {
-        violationCount++;
-        if (violationCount === 1) {
-            alert("⚠️ PROCTOR WARNING #1: Tab switch or background activity detected! Next violation locks profile.");
-        } else {
-            clearInterval(timerInterval);
-            stopExamCam();
-            document.getElementById('exam-view').classList.add('hidden');
-            document.getElementById('locked-view').classList.remove('hidden');
-        }
-    }
-
-    function payFine() {
         var options = {
             "key": "rzp_live_TiN6t3iQ0poa9O",
-            "amount": 15000,
+            "amount": amountInPaise,
             "currency": "INR",
-            "name": "Sikkim Exam Prep - Fine",
-            "description": "Anti-Cheat Penalty Unlock",
-            "handler": function (response){
-                alert("Fine cleared. Profile unlocked!");
-                location.reload();
+            "name": "Rai Electronics",
+            "description": `Order: ${cart.name}`,
+            "handler": function (response) {
+                alert(`Order Placed Successfully! Payment ID: ${response.razorpay_payment_id}\nYour item will be shipped to: ${address}`);
+                cart = { name: "", price: 0 };
+                document.getElementById('cart-count').innerText = "0";
+                backToStore();
             },
-            "theme": { "color": "#dc2626" }
+            "prefill": {
+                "name": name,
+                "contact": phone,
+                "email": "raielectronics@sikkimcloud.auth"
+            },
+            "theme": {
+                "color": "#f59e0b"
+            }
         };
-        new Razorpay(options).open();
-    }
-
-    function requestEmailUnlock() {
-        let activeUid = localStorage.getItem('active_student_uid') || "Student";
-        window.location.href = `mailto:workharddd18@gmail.com?subject=Unlock Request - ${activeUid}&body=Please unlock my profile.`;
+        var rzp = new Razorpay(options);
+        rzp.open();
     }
 </script>
 

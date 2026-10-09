@@ -63,10 +63,20 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes colorFlicker {
+            0% { color: #ffff00; }   /* Yellow */
+            16% { color: #00ff66; }  /* Green */
+            33% { color: #00ccff; }  /* Blue */
+            50% { color: #ff3333; }  /* Red */
+            66% { color: #ff9900; }  /* Orange */
+            83% { color: #cc33ff; }  /* Purple */
+            100% { color: #ffff00; } /* Yellow */
+        }
+
         .rain-char {
             display: inline-block;
             opacity: 0;
-            animation: smoothDrop 0.25s ease-out forwards;
+            animation: smoothDrop 0.25s ease-out forwards, colorFlicker 3.5s infinite linear;
         }
 
         .btn {
@@ -109,9 +119,6 @@
         ["Founder", ":", "Uttam", "Rai"]
     ];
 
-    // Natural solid color rotation (Red, Green, Yellow) without glow or shine
-    const naturalColors = ["#ff3333", "#33cc66", "#ffcc00"];
-
     function startRainIntro() {
         let container = document.getElementById('rain-text-output');
         container.innerHTML = "";
@@ -129,11 +136,8 @@
                     charSpan.className = 'rain-char';
                     charSpan.innerText = char;
                     
-                    // Assign natural solid color conditionally per character
-                    charSpan.style.color = naturalColors[globalCharIndex % naturalColors.length];
-                    
-                    // 1.8x accelerated smooth staggering delay
-                    charSpan.style.animationDelay = `${globalCharIndex * 0.022}s`;
+                    // Stagger drop delay + slight color animation offset so they flicker organically
+                    charSpan.style.animationDelay = `${globalCharIndex * 0.022}s, ${globalCharIndex * 0.1}s`;
                     
                     wordSpan.appendChild(charSpan);
                     globalCharIndex++;
@@ -148,7 +152,7 @@
             }
         });
 
-        // Calculate total animation time based on character count and reveal button exactly when done
+        // Calculate total animation time and reveal button exactly when done
         let totalCharacters = globalCharIndex;
         let totalAnimationTimeMs = (totalCharacters * 22) + 250;
 

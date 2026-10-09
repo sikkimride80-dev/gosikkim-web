@@ -47,7 +47,7 @@
             white-space: pre-line;
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
         }
 
         .intro-text-box.visible {
@@ -79,7 +79,7 @@
             border-radius: 16px;
             cursor: pointer;
             transition: 0.3s ease;
-            margin-top: 30px;
+            margin-top: 25px;
             box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
             letter-spacing: 0.5px;
         }
@@ -104,25 +104,35 @@
         🌹 🙏 Founder : Uttam Rai 🙏 🌹
     </div>
 
-    <!-- Enter Button (Appears after animation and voice trigger) -->
+    <!-- Enter Button (Appears after presentation finishes) -->
     <button class="btn hidden" id="btn-next-step" onclick="alert('Step 1 Intro Complete! Ready for Step 2.')">Enter Rai Electronics 🚀</button>
 </div>
 
 <script>
-    function startCinematicIntro() {
-        // Trigger smooth fade-in animation
+    function startAutoPresentation() {
         let introBox = document.getElementById('intro-box');
         setTimeout(() => {
             introBox.classList.add('visible');
         }, 100);
 
-        // Trigger synthesized voice greeting
+        // Auto Speech Synthesis Execution
         if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel(); // Clear any queued speech
-            let utterance = new SpeechSynthesisUtterance("Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.");
-            utterance.rate = 0.9; // Smooth natural speaking rate
-            utterance.pitch = 1.0;
-            window.speechSynthesis.speak(utterance);
+            let speakNow = () => {
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance("Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.");
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+                window.speechSynthesis.speak(utterance);
+            };
+
+            // Some mobile browsers require voices to be loaded first
+            if (window.speechSynthesis.getVoices().length > 0) {
+                speakNow();
+            } else {
+                window.speechSynthesis.onvoiceschanged = speakNow;
+                // Fallback direct execution trigger
+                setTimeout(speakNow, 200);
+            }
         }
 
         // Reveal the enter button after the intro presentation finishes (~4.5 seconds)
@@ -132,7 +142,7 @@
     }
 
     window.onload = function() {
-        startCinematicIntro();
+        startAutoPresentation();
     };
 </script>
 

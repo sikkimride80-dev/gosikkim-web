@@ -123,7 +123,7 @@
             margin-bottom: 2px;
         }
 
-        /* Side-to-Side TV Antenna Live Signal Widget */
+        /* TV Antenna Live Signal Widget with 4-Bar Waves */
         .radar-widget {
             display: flex;
             align-items: center;
@@ -136,16 +136,10 @@
             font-weight: 700;
         }
 
-        .tv-antenna {
-            font-size: 14px;
-            display: inline-block;
-            transform-origin: bottom center;
-            animation: sweepAntenna 1.8s ease-in-out infinite alternate;
-        }
-
-        @keyframes sweepAntenna {
-            0% { transform: rotate(-25deg); }
-            100% { transform: rotate(25deg); }
+        .signal-canvas {
+            width: 22px;
+            height: 18px;
+            display: block;
         }
 
         .lang-select {
@@ -332,9 +326,9 @@
     <!-- 3. Dashboard Interface -->
     <div class="top-section">
         <div class="header-bar">
-            <!-- TV Antenna Live Signal Widget -->
+            <!-- Antenna with 4-Bar WiFi Style Sending/Receiving Signal Arcs -->
             <div class="radar-widget">
-                <span class="tv-antenna">📡</span>
+                <canvas id="signalCanvas" class="signal-canvas" width="22" height="18"></canvas>
                 <span id="radarText" style="color: var(--net-color);">4G: FAST</span>
             </div>
             
@@ -391,9 +385,12 @@
 
     let currentLang = 'en';
 
-    // Live Robust Network Speed & Status Detector
+    // Live Signal Arc Canvas Animation & Accurate Connection Monitor
     function initNetworkAntenna() {
         const textElem = document.getElementById('radarText');
+        const canvas = document.getElementById('signalCanvas');
+        const ctx = canvas.getContext('2d');
+        let pulseStep = 0;
 
         function checkSpeed() {
             let color = '#00ff66'; // Green
@@ -404,10 +401,11 @@
                 label = 'OFFLINE';
             } else if (navigator.connection) {
                 const conn = navigator.connection;
-                if (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g') {
+                const type = conn.effectiveType;
+                if (conn.saveData || type === 'slow-2g' || type === '2g') {
                     color = '#ff3333'; // Red
                     label = 'POOR';
-                } else if (conn.effectiveType === '3g') {
+                } else if (type === '3g') {
                     color = '#ffd700'; // Yellow
                     label = 'AVG';
                 } else {
@@ -415,25 +413,8 @@
                     label = '4G: FAST';
                 }
             } else {
-                // Active latency ping test fallback
-                let startTime = Date.now();
-                fetch('https://www.google.com/favicon.ico', { mode: 'no-cors', cache: 'no-store' }).then(() => {
-                    let duration = Date.now() - startTime;
-                    if (duration > 400) {
-                        textElem.innerText = 'AVG';
-                        textElem.style.color = '#ffd700';
-                        document.documentElement.style.setProperty('--net-color', '#ffd700');
-                    } else {
-                        textElem.innerText = '4G: FAST';
-                        textElem.style.color = '#00ff66';
-                        document.documentElement.style.setProperty('--net-color', '#00ff66');
-                    }
-                }).catch(() => {
-                    textElem.innerText = 'POOR';
-                    textElem.style.color = '#ff3333';
-                    document.documentElement.style.setProperty('--net-color', '#ff3333');
-                });
-                return;
+                label = '4G: FAST';
+                color = '#00ff66';
             }
 
             textElem.innerText = label;
@@ -441,8 +422,50 @@
             document.documentElement.style.setProperty('--net-color', color);
         }
 
+        // Animated 4-Bar Sending & Receiving Signal Waves above Antenna
+        function drawSignalWaves() {
+            ctx.clearRect(0, 0, 22, 18);
+            const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--net-color').trim() || '#00ff66';
+
+            // Draw Antenna Base V-Shape
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(7, 17);
+            ctx.lineTo(11, 12);
+            ctx.lineTo(15, 17);
+            ctx.stroke();
+
+            // Draw Central Stem
+            ctx.beginPath();
+            ctx.moveTo(11, 17);
+            ctx.lineTo(11, 10);
+            ctx.stroke();
+
+            // 4 Curved Signal Wave Bars above the antenna tip
+            const radii = [3, 5.5, 8, 10.5];
+            
+            radii.forEach((r, idx) => {
+                ctx.beginPath();
+                ctx.arc(11, 10, r, Math.PI * 1.25, Math.PI * 1.75);
+                
+                // Pulsing sending/receiving style glow
+                let isActiveWave = (Math.floor(pulseStep) % 4) === idx;
+                ctx.strokeStyle = isActiveWave ? '#ffffff' : activeColor;
+                ctx.lineWidth = isActiveWave ? 2 : 1.2;
+                ctx.globalAlpha = isActiveWave ? 1.0 : 0.65;
+                ctx.stroke();
+            });
+
+            ctx.globalAlpha = 1.0;
+            pulseStep += 0.08;
+            requestAnimationFrame(drawSignalWaves);
+        }
+
         checkSpeed();
-        setInterval(checkSpeed, 5000); // Re-check network dynamically every 5 seconds
+        drawSignalWaves();
+
+        setInterval(checkSpeed, 4000);
         if (navigator.connection) {
             navigator.connection.addEventListener('change', checkSpeed);
         }

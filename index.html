@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rai Electronics - Cinematic Intro</title>
+    <!-- Cross-Platform Multilingual TTS Voice Engine -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE_KEY"></script>
     <style>
         :root {
             --bg-deep: #050110;
@@ -35,7 +37,7 @@
             text-align: center;
         }
 
-        /* Press GO Gate Styling */
+        /* GO Gate Overlay */
         #go-gate {
             position: fixed;
             inset: 0;
@@ -47,6 +49,7 @@
             align-items: center;
             padding: 25px;
             text-align: center;
+            transition: opacity 0.3s ease;
         }
 
         .go-btn {
@@ -73,7 +76,7 @@
             box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
         }
 
-        /* Language Selection Gate Styling */
+        /* Language Selection Gate Overlay */
         #lang-gate {
             position: fixed;
             inset: 0;
@@ -85,6 +88,7 @@
             align-items: center;
             padding: 25px;
             text-align: center;
+            transition: opacity 0.3s ease;
         }
 
         .rain-text-container {
@@ -181,10 +185,10 @@
 </head>
 <body>
 
-<!-- 1. Mandatory "GO" Gate -->
+<!-- 1. Mandatory "GO" Entry Gate -->
 <div id="go-gate">
     <div style="font-size: 24px; font-weight: 900; color: #ffff00; margin-bottom: 8px;">🔌 Rai Electronics</div>
-    <div style="font-size: 14px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Press GO to enter the experience</div>
+    <div style="font-size: 14px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Press GO to enter experience</div>
     <button class="go-btn" onclick="pressGo()">GO</button>
 </div>
 
@@ -200,7 +204,7 @@
     </div>
 </div>
 
-<!-- 3. Main Application Dashboard -->
+<!-- 3. Main Dashboard -->
 <div class="app-container">
     <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
         <select id="switcher" onchange="switchAppLanguage(this.value)" style="background: rgba(255,255,255,0.15); color: #ffff00; border: 1px solid #ffff00; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">
@@ -218,7 +222,7 @@
     const translations = {
         en: {
             speech: "Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.",
-            langCode: "en-US",
+            voiceName: "US English Female",
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Intro Complete! Ready for Step 2.",
             lines: [
@@ -236,7 +240,7 @@
         },
         ne: {
             speech: "राई इलेक्ट्रोनिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
-            langCode: "ne-NP",
+            voiceName: "Hindi Female",
             btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार.",
             lines: [
@@ -254,7 +258,7 @@
         },
         hi: {
             speech: "राई इलेक्ट्रॉनिक्स में आपका स्वागत है। हम आपको सबसे कम कीमत पर सामान प्रदान करते हैं। आप यहाँ हर इलेक्ट्रॉनिक सामान खरीद सकते हैं। कृपया अपनी यात्रा का आनंद लें। संस्थापक उत्तम राय।",
-            langCode: "hi-IN",
+            voiceName: "Hindi Female",
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 परिचय पूर्ण! चरण 2 के लिए तैयार.",
             lines: [
@@ -275,11 +279,6 @@
     let currentLang = 'en';
 
     function pressGo() {
-        // Unlock browser audio context via user interaction
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.resume();
-        }
-
         let goGate = document.getElementById('go-gate');
         goGate.style.opacity = '0';
         setTimeout(() => { 
@@ -312,30 +311,34 @@
     function switchAppLanguage(lang) {
         currentLang = lang;
         localStorage.setItem('rai_preferred_lang', lang);
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        stopSpeech();
         startExperience();
     }
 
-    function speakInSelectedLanguage() {
-        if (!('speechSynthesis' in window)) return;
+    function stopSpeech() {
+        if (window.responsiveVoice && typeof window.responsiveVoice.cancel === 'function') {
+            window.responsiveVoice.cancel();
+        }
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+    }
 
-        window.speechSynthesis.cancel();
+    function speakInSelectedLanguage() {
+        stopSpeech();
 
         let textToSpeak = translations[currentLang].speech;
-        let langCode = translations[currentLang].langCode;
+        let voiceName = translations[currentLang].voiceName;
 
-        let utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = langCode;
-        utterance.rate = 0.9;
-        utterance.pitch = 1.0;
-
-        let voices = window.speechSynthesis.getVoices();
-        let targetVoice = voices.find(v => v.lang === langCode || v.lang.startsWith(langCode.substring(0, 2)));
-        if (targetVoice) {
-            utterance.voice = targetVoice;
+        // Guaranteed speech execution via ResponsiveVoice
+        if (window.responsiveVoice && typeof window.responsiveVoice.speak === 'function') {
+            window.responsiveVoice.speak(textToSpeak, voiceName, { rate: 0.95 });
+        } else if ('speechSynthesis' in window) {
+            let utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = currentLang === 'ne' ? 'ne-NP' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
         }
-
-        window.speechSynthesis.speak(utterance);
     }
 
     function startExperience() {

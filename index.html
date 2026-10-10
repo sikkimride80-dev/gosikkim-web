@@ -123,7 +123,7 @@
             margin-bottom: 2px;
         }
 
-        /* Middle-Left Floating Classic TV Antenna Live Signal Widget */
+        /* Middle-Left Floating Modern Digital TV Antenna Live Signal Widget */
         .radar-widget {
             position: absolute;
             top: 45%;
@@ -321,7 +321,7 @@
     <div class="sticker s7">🔥</div>
     <div class="sticker s8">🚀</div>
 
-    <!-- Middle-Left Classic TV Antenna Live Signal Widget -->
+    <!-- Middle-Left Modern Digital TV Antenna Live Signal Widget -->
     <div class="radar-widget">
         <div class="antenna-container">
             <canvas id="signalCanvas" class="signal-canvas" width="34" height="30"></canvas>
@@ -411,7 +411,7 @@
 
     let currentLang = 'en';
 
-    // Classic TV Antenna with Live Animated Signal Arcs & Speed Monitor
+    // Modern Digital TV Antenna with Live Animated Signal Arcs & Speed Monitor
     function initNetworkAntenna() {
         const textElem = document.getElementById('radarText');
         const canvas = document.getElementById('signalCanvas');
@@ -448,29 +448,34 @@
             document.documentElement.style.setProperty('--net-color', color);
         }
 
-        // Draw Classic Rooftop TV Antenna + Live WiFi Arcs
+        // Draw Modern Flat Panel Digital TV Antenna + Live WiFi Arcs
         function drawSignalWaves() {
             ctx.clearRect(0, 0, 34, 30);
             const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--net-color').trim() || '#00ff66';
 
-            // Classic Rooftop TV Antenna Crossbars & Mast
+            // Modern Digital Flat Antenna Panel (Rectangle/Grid) & Stand
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 1.8;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            
+            // Stand Base & Pole
             ctx.beginPath();
-            // Mast
-            ctx.moveTo(17, 28);
-            ctx.lineTo(17, 14);
-            // Horizontal dipole elements
-            ctx.moveTo(10, 18); ctx.lineTo(24, 18);
-            ctx.moveTo(13, 22); ctx.lineTo(21, 22);
+            ctx.moveTo(11, 28); ctx.lineTo(23, 28);
+            ctx.moveTo(17, 28); ctx.lineTo(17, 20);
             ctx.stroke();
 
-            // 4 Live Curved WiFi Signal Arcs above antenna mast
+            // Flat Panel Head (Rounded Box)
+            ctx.beginPath();
+            ctx.roundRect(11, 13, 12, 9, 3);
+            ctx.fill();
+            ctx.stroke();
+
+            // 4 Live Curved WiFi Signal Arcs above modern antenna panel
             const radii = [4, 7, 10, 13];
             
             radii.forEach((r, idx) => {
                 ctx.beginPath();
-                ctx.arc(17, 14, r, Math.PI * 1.25, Math.PI * 1.75);
+                ctx.arc(17, 12, r, Math.PI * 1.25, Math.PI * 1.75);
                 
                 let isActiveWave = (Math.floor(pulseStep) % 4) === idx;
                 ctx.strokeStyle = isActiveWave ? '#ffffff' : activeColor;

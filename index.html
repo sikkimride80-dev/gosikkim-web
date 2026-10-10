@@ -52,7 +52,6 @@
         .s2 { top: 75px; right: 10%; animation-delay: 0.3s; }
         .s3 { top: 120px; left: 3%; animation-delay: 0.6s; }
         .s4 { top: 130px; right: 4%; animation-delay: 0.9s; }
-        .s5 { top: 56%; left: 4%; animation-delay: 0.5s; }
         .s6 { top: 52%; right: 2%; animation-delay: 0.8s; }
         .s7 { bottom: 130px; left: 6%; animation-delay: 1.1s; }
         .s8 { bottom: 140px; right: 8%; animation-delay: 0.4s; }
@@ -111,28 +110,35 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            margin-top: auto; /* Pushes text below image frame */
+            margin-top: auto;
         }
 
         .header-bar {
             width: 100%;
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
             margin-bottom: 2px;
         }
 
-        /* TV Antenna Live Signal Widget with 4-Bar Waves & Side-to-Side Motion */
+        /* Middle-Left Floating TV Antenna Live Signal Widget */
         .radar-widget {
+            position: absolute;
+            top: 45%;
+            left: 12px;
+            transform: translateY(-50%);
+            z-index: 20;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 6px;
-            background: rgba(15, 15, 15, 0.9);
-            padding: 3px 10px;
+            gap: 4px;
+            background: rgba(15, 15, 15, 0.92);
+            padding: 8px 12px;
             border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1.5px solid rgba(255, 255, 255, 0.35);
             font-size: 11px;
             font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
         }
 
         .antenna-container {
@@ -140,17 +146,17 @@
             align-items: center;
             justify-content: center;
             transform-origin: bottom center;
-            animation: sweepSideToSide 2s ease-in-out infinite alternate;
+            animation: sweepSideToSide 1.8s ease-in-out infinite alternate;
         }
 
         @keyframes sweepSideToSide {
-            0% { transform: rotate(-20deg); }
-            100% { transform: rotate(20deg); }
+            0% { transform: rotate(-18deg); }
+            100% { transform: rotate(18deg); }
         }
 
         .signal-canvas {
-            width: 24px;
-            height: 20px;
+            width: 32px;
+            height: 28px;
             display: block;
         }
 
@@ -176,6 +182,8 @@
             font-weight: 900;
             color: var(--accent-gold);
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+            width: 100%;
+            text-align: center;
         }
 
         .gate-overlay {
@@ -309,10 +317,17 @@
     <div class="sticker s2">😂</div>
     <div class="sticker s3">⚡</div>
     <div class="sticker s4">⭐</div>
-    <div class="sticker s5">🤡</div>
     <div class="sticker s6">😎</div>
     <div class="sticker s7">🔥</div>
     <div class="sticker s8">🚀</div>
+
+    <!-- Middle-Left TV Antenna Live Signal Widget -->
+    <div class="radar-widget">
+        <div class="antenna-container">
+            <canvas id="signalCanvas" class="signal-canvas" width="32" height="28"></canvas>
+        </div>
+        <span id="radarText" style="color: var(--net-color);">4G: FAST</span>
+    </div>
 
     <!-- Central Background Image with Live Motion -->
     <div class="center-bg-image"></div>
@@ -342,20 +357,13 @@
     <!-- 3. Dashboard Interface -->
     <div class="top-section">
         <div class="header-bar">
-            <!-- TV Antenna Sweeping Side-to-Side with 4-Bar Signal Canvas -->
-            <div class="radar-widget">
-                <div class="antenna-container">
-                    <canvas id="signalCanvas" class="signal-canvas" width="24" height="20"></canvas>
-                </div>
-                <span id="radarText" style="color: var(--net-color);">4G: FAST</span>
-            </div>
-            
             <select id="switcher" class="lang-select" onchange="switchAppLanguage(this.value)">
                 <option value="en">English</option>
                 <option value="ne">नेपाली</option>
                 <option value="hi">हिन्दी</option>
             </select>
         </div>
+        <div class="header-title">🔌 RAI ELECTRONICS</div>
         <div id="text-top-output" class="text-top-container"></div>
     </div>
 
@@ -403,7 +411,7 @@
 
     let currentLang = 'en';
 
-    // TV Antenna with 4 Live Animated Signal Arcs & Speed Monitor
+    // TV Antenna with Live Animated Signal Arcs & Speed Monitor
     function initNetworkAntenna() {
         const textElem = document.getElementById('radarText');
         const canvas = document.getElementById('signalCanvas');
@@ -440,36 +448,36 @@
             document.documentElement.style.setProperty('--net-color', color);
         }
 
-        // Draw Classic Antenna Base + 4 Wave Signal Arcs
+        // Draw Classic Antenna Base + Live WiFi Arcs
         function drawSignalWaves() {
-            ctx.clearRect(0, 0, 24, 20);
+            ctx.clearRect(0, 0, 32, 28);
             const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--net-color').trim() || '#00ff66';
 
-            // TV Antenna Rabbit Ear V-Stems
+            // TV Antenna V-Stems
             ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 1.6;
+            ctx.lineWidth = 2;
             ctx.beginPath();
-            ctx.moveTo(8, 19);
-            ctx.lineTo(12, 13);
-            ctx.lineTo(16, 19);
+            ctx.moveTo(10, 26);
+            ctx.lineTo(16, 17);
+            ctx.lineTo(22, 26);
             ctx.stroke();
 
             // Central Stand
             ctx.beginPath();
-            ctx.moveTo(12, 19);
-            ctx.lineTo(12, 11);
+            ctx.moveTo(16, 26);
+            ctx.lineTo(16, 15);
             ctx.stroke();
 
             // 4 Live Curved WiFi Signal Arcs above antenna head
-            const radii = [3.5, 6, 8.5, 11];
+            const radii = [4, 7, 10, 13];
             
             radii.forEach((r, idx) => {
                 ctx.beginPath();
-                ctx.arc(12, 11, r, Math.PI * 1.25, Math.PI * 1.75);
+                ctx.arc(16, 15, r, Math.PI * 1.25, Math.PI * 1.75);
                 
                 let isActiveWave = (Math.floor(pulseStep) % 4) === idx;
                 ctx.strokeStyle = isActiveWave ? '#ffffff' : activeColor;
-                ctx.lineWidth = isActiveWave ? 2 : 1.2;
+                ctx.lineWidth = isActiveWave ? 2.2 : 1.4;
                 ctx.globalAlpha = isActiveWave ? 1.0 : 0.6;
                 ctx.stroke();
             });

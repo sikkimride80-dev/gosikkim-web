@@ -22,7 +22,8 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: #000000;
             color: #ffffff;
-            min-height: 100vh;
+            height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -31,12 +32,11 @@
             position: relative;
         }
 
-        /* Fixed Background Image in Screen Center */
+        /* Perfectly Contained Background Image */
         .center-bg-image {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             background: url('https://files.catbox.moe/lcxrp2.jpg') no-repeat center center;
@@ -45,17 +45,18 @@
             pointer-events: none;
         }
 
-        /* Positioned right above and below the image edges */
+        /* Locked strictly to the top and bottom bleed zones */
         .top-section {
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 480px;
-            padding: 4px 12px 0 12px;
+            padding: 6px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .bottom-section {
@@ -63,14 +64,14 @@
             z-index: 10;
             width: 100%;
             max-width: 480px;
-            padding: 0 12px 4px 12px;
+            padding: 6px 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
+            background: rgba(0, 0, 0, 0.4);
         }
 
-        /* Top Header & Radar Bar */
         .header-bar {
             width: 100%;
             display: flex;
@@ -79,29 +80,27 @@
             margin-bottom: 2px;
         }
 
-        /* Live Radar Antenna Widget */
         .radar-widget {
             display: flex;
             align-items: center;
             gap: 5px;
-            background: rgba(10, 10, 10, 0.85);
+            background: rgba(15, 15, 15, 0.9);
             padding: 3px 8px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             font-size: 10px;
             font-weight: 700;
-            letter-spacing: 0.5px;
         }
 
         .radar-canvas {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
         }
 
         .lang-select {
-            background: rgba(10, 10, 10, 0.85);
+            background: rgba(15, 15, 15, 0.9);
             color: var(--accent-gold);
-            border: 1px solid rgba(255, 215, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.7);
             padding: 4px 8px;
             border-radius: 8px;
             font-size: 11px;
@@ -116,13 +115,12 @@
         }
 
         .header-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
             color: var(--accent-gold);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
         }
 
-        /* GO Gate Overlay */
         .gate-overlay {
             position: fixed;
             inset: 0;
@@ -131,7 +129,7 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 12px;
+            background: rgba(0,0,0,0.85);
             transition: opacity 0.3s ease;
         }
 
@@ -158,22 +156,20 @@
             transform: scale(0.92);
         }
 
-        /* Tightened Text Container Styles */
         .text-top-container {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             line-height: 1.2;
-            min-height: 24px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: var(--accent-gold);
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+            text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
         }
 
         .text-bottom-container {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             line-height: 1.3;
             width: 100%;
@@ -205,8 +201,8 @@
 
         .founder-line {
             color: var(--accent-cyan);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
-            font-size: 13px;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.7);
+            font-size: 12px;
             margin-bottom: 4px;
         }
 
@@ -223,15 +219,10 @@
             box-shadow: 0 5px 15px rgba(255, 0, 85, 0.5);
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: opacity 0.3s ease, transform 0.2s ease;
-        }
-
-        .btn-action:active {
-            transform: scale(0.98);
         }
 
         .lang-btn {
-            background: rgba(10, 10, 10, 0.9);
+            background: rgba(20, 20, 20, 0.95);
             border: 1.5px solid var(--accent-gold);
             color: #ffffff;
             padding: 10px;
@@ -240,7 +231,7 @@
             border-radius: 10px;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .hidden {
@@ -252,7 +243,7 @@
 </head>
 <body>
 
-    <!-- Central Image (Unblocked) -->
+    <!-- Central Background Image -->
     <div class="center-bg-image"></div>
 
     <!-- 1. GO Gate -->
@@ -268,7 +259,7 @@
     <!-- 2. Language Gate -->
     <div id="lang-gate" class="gate-overlay hidden">
         <div class="top-section">
-            <div class="header-title" style="font-size: 16px;">Select Language</div>
+            <div class="header-title">Select Language</div>
         </div>
         <div class="bottom-section" style="max-width: 280px;">
             <button class="lang-btn" onclick="setLanguage('en')">English</button>
@@ -280,9 +271,9 @@
     <!-- 3. Dashboard Interface -->
     <div class="top-section">
         <div class="header-bar">
-            <!-- Live Satellite Network Radar Widget -->
+            <!-- Satellite Network Radar Widget -->
             <div class="radar-widget">
-                <canvas id="radarCanvas" class="radar-canvas" width="16" height="16"></canvas>
+                <canvas id="radarCanvas" class="radar-canvas" width="14" height="14"></canvas>
                 <span id="radarText" style="color: var(--net-color);">4G: OK</span>
             </div>
             
@@ -327,9 +318,6 @@
         hi: {
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 पूर्ण! चरण 2 के लिए तैयार।",
-            lines: [
-                "राई इलेक्ट्रॉनिक्स में स्वागत है"
-            ],
             topLines: ["राई इलेक्ट्रॉनिक्स में स्वागत है"],
             bottomLines: [
                 "हम आपको सबसे अच्छी छूट पर सामान देते हैं",
@@ -342,7 +330,6 @@
 
     let currentLang = 'en';
 
-    // Live Satellite Network Radar Simulation & Connection Detection
     function initNetworkRadar() {
         const canvas = document.getElementById('radarCanvas');
         const ctx = canvas.getContext('2d');
@@ -351,16 +338,16 @@
 
         function updateNetworkStatus() {
             let label = '4G: FAST';
-            let color = '#00ff66'; // Green
+            let color = '#00ff66';
 
             if (navigator.connection) {
                 const conn = navigator.connection;
                 if (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g') {
                     label = 'POOR';
-                    color = '#ff3333'; // Red
+                    color = '#ff3333';
                 } else if (conn.effectiveType === '3g') {
                     label = 'AVG';
-                    color = '#ffd700'; // Yellow
+                    color = '#ffd700';
                 }
             }
             textElem.innerText = label;
@@ -374,17 +361,16 @@
         }
 
         function drawRadar() {
-            ctx.clearRect(0, 0, 16, 16);
-            
+            ctx.clearRect(0, 0, 14, 14);
             ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--net-color');
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.arc(8, 8, 6.5, 0, Math.PI * 2);
+            ctx.arc(7, 7, 5.5, 0, Math.PI * 2);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.moveTo(8, 8);
-            ctx.lineTo(8 + 6.5 * Math.cos(angle), 8 + 6.5 * Math.sin(angle));
+            ctx.moveTo(7, 7);
+            ctx.lineTo(7 + 5.5 * Math.cos(angle), 7 + 5.5 * Math.sin(angle));
             ctx.stroke();
 
             angle += 0.15;

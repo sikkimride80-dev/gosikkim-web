@@ -6,10 +6,10 @@
     <title>Rai Electronics - Flagship Experience</title>
     <style>
         :root {
-            --bg-void: #020008;
             --accent-gold: #ffd700;
             --accent-cyan: #00f3ff;
-            --glass-bg: rgba(12, 6, 28, 0.92);
+            --glass-bg: rgba(10, 5, 25, 0.65);
+            --glass-border: rgba(255, 215, 0, 0.75);
         }
 
         * {
@@ -21,7 +21,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-void);
+            background: #020008 url('https://files.catbox.moe/lcxrp2.jpg') no-repeat center center fixed;
+            background-size: cover;
             color: #ffffff;
             min-height: 100vh;
             display: flex;
@@ -31,19 +32,21 @@
             position: relative;
         }
 
-        .ambient-bg {
+        /* Overlay tint to ensure text contrast */
+        .bg-overlay {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at 50% 20%, #1a0b36 0%, #05010d 60%, var(--bg-void) 100%);
+            background: rgba(2, 0, 8, 0.45);
             z-index: 0;
         }
 
+        /* Gate Layers */
         .gate-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(2, 0, 8, 0.96);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(2, 0, 8, 0.82);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             z-index: 100;
             display: flex;
             flex-direction: column;
@@ -64,8 +67,8 @@
             inset: -4px;
             border-radius: 50%;
             background: linear-gradient(45deg, #ffd700, #ff0055, #00f3ff);
-            filter: blur(10px);
-            opacity: 0.8;
+            filter: blur(12px);
+            opacity: 0.9;
         }
 
         .go-btn {
@@ -73,18 +76,24 @@
             width: 110px;
             height: 110px;
             border-radius: 50%;
-            background: #090317;
+            background: rgba(9, 3, 23, 0.9);
             color: #ffffff;
             font-size: 28px;
             font-weight: 900;
-            border: 2px solid rgba(255, 215, 0, 0.8);
+            border: 2px solid rgba(255, 215, 0, 0.9);
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             letter-spacing: 2px;
+            transition: transform 0.2s ease;
         }
 
+        .go-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Main Glass Card */
         .app-container {
             position: relative;
             z-index: 10;
@@ -95,8 +104,8 @@
             -webkit-backdrop-filter: blur(20px);
             padding: 32px 20px;
             border-radius: 28px;
-            border: 2px solid rgba(255, 215, 0, 0.8);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.15), 0 20px 40px rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--glass-border);
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.25), inset 0 0 15px rgba(255, 255, 255, 0.1);
             text-align: center;
             margin: 16px;
         }
@@ -108,9 +117,9 @@
         }
 
         .lang-select {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.4);
             color: var(--accent-gold);
-            border: 1px solid rgba(255, 215, 0, 0.4);
+            border: 1px solid rgba(255, 215, 0, 0.6);
             padding: 6px 12px;
             border-radius: 12px;
             font-size: 13px;
@@ -124,7 +133,7 @@
             color: #ffffff;
         }
 
-        /* Zero-Lag Line Reveal Container */
+        /* Glass Text Container */
         .text-container {
             font-size: 19px;
             font-weight: 800;
@@ -152,13 +161,13 @@
             will-change: transform, opacity;
             animation: smoothLineReveal 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
             margin-bottom: 8px;
-            color: #ffd700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 215, 0, 0.5);
         }
 
         .founder-line {
             color: #00f3ff;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 243, 255, 0.6);
         }
 
         .btn-action {
@@ -172,15 +181,19 @@
             border-radius: 16px;
             cursor: pointer;
             margin-top: 24px;
-            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.35);
+            box-shadow: 0 8px 25px rgba(255, 0, 85, 0.45);
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-action:active {
+            transform: scale(0.98);
         }
 
         .lang-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.6);
             color: #ffffff;
             padding: 15px;
             font-size: 15px;
@@ -189,6 +202,7 @@
             cursor: pointer;
             width: 100%;
             margin-bottom: 12px;
+            backdrop-filter: blur(10px);
         }
 
         .hidden {
@@ -200,7 +214,7 @@
 </head>
 <body>
 
-    <div class="ambient-bg"></div>
+    <div class="bg-overlay"></div>
 
     <!-- 1. GO Gate -->
     <div id="go-gate" class="gate-overlay">
@@ -225,7 +239,7 @@
         </div>
     </div>
 
-    <!-- 3. Main Dashboard -->
+    <!-- 3. Glassmorphism Card -->
     <div class="app-container">
         <div class="top-bar">
             <select id="switcher" class="lang-select" onchange="switchAppLanguage(this.value)">
@@ -328,14 +342,12 @@
             let div = document.createElement('div');
             div.className = index === lines.length - 1 ? 'intro-line founder-line' : 'intro-line';
             div.innerText = lineText;
-            // Staggered GPU animation per line for instant zero-lag loading
             div.style.animationDelay = `${index * 0.2}s`;
             fragment.appendChild(div);
         });
 
         container.appendChild(fragment);
 
-        // Reveal enter button smoothly right after the lines finish appearing
         let totalTimeMs = (lines.length * 200) + 150;
         setTimeout(() => {
             btn.classList.remove('hidden');

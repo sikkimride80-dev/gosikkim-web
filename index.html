@@ -8,6 +8,7 @@
         :root {
             --accent-gold: #ffd700;
             --accent-cyan: #00f3ff;
+            --accent-green: #00ff66;
         }
 
         * {
@@ -19,107 +20,70 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #000000 url('https://files.catbox.moe/lcxrp2.jpg') no-repeat center center fixed;
-            background-size: contain;
+            background-color: #000000;
             color: #ffffff;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
             overflow: hidden;
             position: relative;
         }
 
-        .gate-overlay {
+        /* Fixed Background Image in Screen Center */
+        .center-bg-image {
             position: fixed;
-            inset: 0;
-            background: transparent;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-            text-align: center;
-            transition: opacity 0.3s ease;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: url('https://files.catbox.moe/lcxrp2.jpg') no-repeat center center;
+            background-size: contain;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .gate-card {
-            background: transparent;
-            border: none;
-            padding: 0;
-            box-shadow: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .watermark-title {
-            font-size: 26px;
-            font-weight: 900;
-            color: rgba(255, 215, 0, 0.45);
-            mix-blend-mode: overlay;
-            text-shadow: 0 0 1px rgba(0, 0, 0, 0.8);
-        }
-
-        .watermark-subtitle {
-            font-size: 13px;
-            color: rgba(0, 243, 255, 0.45);
-            margin-top: 6px;
-            font-weight: 600;
-            mix-blend-mode: overlay;
-        }
-
-        .go-btn {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: rgba(255, 215, 0, 0.25);
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 26px;
-            font-weight: 900;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            letter-spacing: 2px;
-            margin-top: 25px;
-            backdrop-filter: blur(2px);
-            mix-blend-mode: overlay;
-            transition: transform 0.2s ease;
-        }
-
-        .go-btn:active {
-            transform: scale(0.92);
-        }
-
-        .app-container {
+        /* Content Containers Positioned Above and Below Image */
+        .top-section {
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 480px;
-            background: transparent;
-            padding: 20px 16px;
-            border: none;
-            box-shadow: none;
+            padding: 16px 20px 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
-            margin: 16px;
         }
 
+        .bottom-section {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 0 20px 24px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Language Switcher Bar */
         .top-bar {
+            width: 100%;
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
         }
 
         .lang-select {
-            background: rgba(0, 0, 0, 0.3);
-            color: rgba(255, 215, 0, 0.6);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            padding: 8px 14px;
-            border-radius: 12px;
+            background: rgba(20, 20, 20, 0.9);
+            color: var(--accent-gold);
+            border: 1px solid rgba(255, 215, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 10px;
             font-size: 13px;
             font-weight: 700;
             outline: none;
@@ -131,11 +95,79 @@
             color: #ffffff;
         }
 
-        .text-container {
-            font-size: 19px;
+        /* Header Title above Image */
+        .header-title {
+            font-size: 24px;
             font-weight: 900;
-            line-height: 2.2;
-            min-height: 260px;
+            color: var(--accent-gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .header-subtitle {
+            font-size: 12px;
+            color: var(--accent-cyan);
+            font-weight: 600;
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+
+        /* GO Gate overlay placed strictly in the top/bottom bleeding zones */
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px 24px 20px;
+            transition: opacity 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .go-btn {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ff0055, #00f3ff);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 900;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 2px;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.6);
+            transition: transform 0.2s ease;
+        }
+
+        .go-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Text container above & below image */
+        .text-top-container {
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1.5;
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+        }
+
+        .text-bottom-container {
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.6;
+            width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -145,10 +177,10 @@
         @keyframes smoothLineReveal {
             0% {
                 opacity: 0;
-                transform: translate3d(0, 15px, 0);
+                transform: translate3d(0, 10px, 0);
             }
             100% {
-                opacity: 0.38;
+                opacity: 1;
                 transform: translate3d(0, 0, 0);
             }
         }
@@ -157,31 +189,30 @@
             opacity: 0;
             will-change: transform, opacity;
             animation: smoothLineReveal 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.38);
-            mix-blend-mode: overlay;
-            text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+            margin-bottom: 4px;
+            color: #ffffff;
         }
 
         .founder-line {
-            color: rgba(0, 243, 255, 0.55);
-            mix-blend-mode: overlay;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+            font-size: 15px;
+            margin-bottom: 12px;
         }
 
         .btn-action {
             width: 100%;
-            background: rgba(255, 255, 255, 0.15);
-            color: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 16px;
-            font-size: 15px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff0055 50%, #00f3ff 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            font-size: 14px;
             font-weight: 900;
-            border-radius: 16px;
+            border-radius: 14px;
             cursor: pointer;
-            margin-top: 24px;
+            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.5);
             letter-spacing: 1px;
             text-transform: uppercase;
-            mix-blend-mode: overlay;
             transition: opacity 0.3s ease, transform 0.2s ease;
         }
 
@@ -190,17 +221,16 @@
         }
 
         .lang-btn {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            color: rgba(255, 255, 255, 0.7);
-            padding: 15px;
-            font-size: 15px;
+            background: rgba(20, 20, 20, 0.9);
+            border: 1.5px solid var(--accent-gold);
+            color: #ffffff;
+            padding: 12px;
+            font-size: 14px;
             font-weight: 700;
-            border-radius: 16px;
+            border-radius: 14px;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 12px;
-            mix-blend-mode: overlay;
+            margin-bottom: 8px;
         }
 
         .hidden {
@@ -212,30 +242,35 @@
 </head>
 <body>
 
-    <!-- 1. GO Gate -->
+    <!-- Central Image (Unblocked) -->
+    <div class="center-bg-image"></div>
+
+    <!-- 1. GO Gate (Outside Image Area) -->
     <div id="go-gate" class="gate-overlay">
-        <div class="gate-card">
-            <div class="watermark-title">🔌 RAI ELECTRONICS</div>
-            <div class="watermark-subtitle">Flagship Digital Experience</div>
-            
+        <div class="top-section">
+            <div class="header-title">🔌 RAI ELECTRONICS</div>
+            <div class="header-subtitle">Flagship Digital Experience</div>
+        </div>
+        <div class="bottom-section">
             <button class="go-btn" onclick="pressGo()">GO</button>
         </div>
     </div>
 
-    <!-- 2. Language Selection Gate -->
+    <!-- 2. Language Gate (Outside Image Area) -->
     <div id="lang-gate" class="gate-overlay hidden">
-        <div class="gate-card" style="width: 100%; max-width: 320px;">
-            <div class="watermark-title" style="font-size: 22px; margin-bottom: 6px;">Select Language</div>
-            <div style="font-size: 13px; color: rgba(0, 255, 102, 0.5); margin-bottom: 20px; font-weight: 600; mix-blend-mode: overlay;">कृपया भाषा चयन गर्नुहोस् / भाषा चुनें</div>
-            
+        <div class="top-section">
+            <div class="header-title" style="font-size: 20px;">Select Language</div>
+            <div class="header-subtitle" style="color: var(--accent-green); font-size: 12px; margin-top: 4px;">कृपया भाषा चयन गर्नुहोस् / भाषा चुनें</div>
+        </div>
+        <div class="bottom-section" style="max-width: 320px;">
             <button class="lang-btn" onclick="setLanguage('en')">English</button>
             <button class="lang-btn" onclick="setLanguage('ne')">नेपाली (Nepali)</button>
             <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी (Hindi)</button>
         </div>
     </div>
 
-    <!-- 3. Floating Watermark Application Interface -->
-    <div class="app-container">
+    <!-- 3. Dashboard Interface (Above and Below Image) -->
+    <div class="top-section">
         <div class="top-bar">
             <select id="switcher" class="lang-select" onchange="switchAppLanguage(this.value)">
                 <option value="en">English</option>
@@ -243,8 +278,11 @@
                 <option value="hi">हिन्दी</option>
             </select>
         </div>
+        <div id="text-top-output" class="text-top-container"></div>
+    </div>
 
-        <div id="text-output" class="text-container"></div>
+    <div class="bottom-section">
+        <div id="text-bottom-output" class="text-bottom-container"></div>
         <button class="btn-action hidden" id="btn-next-step" onclick="alert(translations[currentLang].alertText)">Enter Rai Electronics 🚀</button>
     </div>
 
@@ -253,8 +291,10 @@
         en: {
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Complete! Ready for Step 2.",
-            lines: [
-                "Welcome to Rai Electronics",
+            topLines: [
+                "Welcome to Rai Electronics"
+            ],
+            bottomLines: [
                 "We offer you the most discounted prices",
                 "You can buy every electronic item here",
                 "Please Enjoy Your Visit",
@@ -264,8 +304,10 @@
         ne: {
             btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार।",
-            lines: [
-                "राई इलेक्ट्रोनिक्समा स्वागत छ",
+            topLines: [
+                "राई इलेक्ट्रोनिक्समा स्वागत छ"
+            ],
+            bottomLines: [
                 "हामी तपाईंलाई सहुलियत मूल्यमा सामान दिन्छौं",
                 "तपाईं यहाँ सबै इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ",
                 "कृपया तपाईंको भ्रमणको आनन्द लिनुहोस्",
@@ -275,8 +317,10 @@
         hi: {
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 पूर्ण! चरण 2 के लिए तैयार।",
-            lines: [
-                "राई इलेक्ट्रॉनिक्स में स्वागत है",
+            topLines: [
+                "राई इलेक्ट्रॉनिक्स में स्वागत है"
+            ],
+            bottomLines: [
                 "हम आपको सबसे अच्छी छूट पर सामान देते हैं",
                 "आप यहाँ हर इलेक्ट्रॉनिक आइटम खरीद सकते हैं",
                 "कृपया अपनी यात्रा का आनंद लें",
@@ -323,27 +367,38 @@
     }
 
     function startExperience() {
-        let container = document.getElementById('text-output');
+        let topContainer = document.getElementById('text-top-output');
+        let bottomContainer = document.getElementById('text-bottom-output');
         let btn = document.getElementById('btn-next-step');
         
-        container.innerHTML = "";
+        topContainer.innerHTML = "";
+        bottomContainer.innerHTML = "";
         btn.classList.add('hidden');
         btn.innerText = translations[currentLang].btnText;
 
-        let lines = translations[currentLang].lines;
-        let fragment = document.createDocumentFragment();
+        let topLines = translations[currentLang].topLines;
+        let bottomLines = translations[currentLang].bottomLines;
 
-        lines.forEach((lineText, index) => {
+        // Render Top Lines above image
+        topLines.forEach((lineText, index) => {
             let div = document.createElement('div');
-            div.className = index === lines.length - 1 ? 'intro-line founder-line' : 'intro-line';
+            div.className = 'intro-line';
+            div.style.color = '#ffd700';
             div.innerText = lineText;
-            div.style.animationDelay = `${index * 0.2}s`;
-            fragment.appendChild(div);
+            div.style.animationDelay = `${index * 0.15}s`;
+            topContainer.appendChild(div);
         });
 
-        container.appendChild(fragment);
+        // Render Bottom Lines below image
+        bottomLines.forEach((lineText, index) => {
+            let div = document.createElement('div');
+            div.className = index === bottomLines.length - 1 ? 'intro-line founder-line' : 'intro-line';
+            div.innerText = lineText;
+            div.style.animationDelay = `${(topLines.length + index) * 0.15}s`;
+            bottomContainer.appendChild(div);
+        });
 
-        let totalTimeMs = (lines.length * 200) + 150;
+        let totalTimeMs = ((topLines.length + bottomLines.length) * 150) + 150;
         setTimeout(() => {
             btn.classList.remove('hidden');
         }, totalTimeMs);

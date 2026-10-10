@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* Original Center-Positioned Background Image (Jethalal & Daya Thumbs Up) */
+        /* Animated Alive Character Photo Frame */
         .center-bg-image {
             position: absolute;
             top: 50%;
@@ -44,6 +44,27 @@
             background-size: contain;
             z-index: 1;
             pointer-events: none;
+            will-change: transform;
+            /* Dynamic smooth animation loop: turn toward each other, bounce thumbs-up, and return */
+            animation: characterBounceTurn 5s ease-in-out infinite;
+        }
+
+        @keyframes characterBounceTurn {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+            25% {
+                /* Turn towards each other & slight zoom */
+                transform: translate(-50%, -51%) scale(1.025) rotate(-1.2deg);
+            }
+            50% {
+                /* Thumbs-up emphasis peak */
+                transform: translate(-50%, -49.5%) scale(1.035) rotate(0.8deg);
+            }
+            75% {
+                /* Return sway */
+                transform: translate(-50%, -50.5%) scale(1.015) rotate(-0.5deg);
+            }
         }
 
         /* Locked strictly to top and bottom bleed zones */
@@ -244,7 +265,7 @@
 </head>
 <body>
 
-    <!-- Central Background Image -->
+    <!-- Central Background Image with Dynamic Alive Motion -->
     <div class="center-bg-image"></div>
 
     <!-- 1. GO Gate -->

@@ -31,7 +31,7 @@
             position: relative;
         }
 
-        /* 100% Completely Transparent Overlay Layers - NO Dark Box */
+        /* 100% Transparent Overlay Layers */
         .gate-overlay {
             position: fixed;
             inset: 0;
@@ -46,7 +46,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Transparent Floating Content Wrapper */
         .gate-card {
             background: transparent;
             border: none;
@@ -67,14 +66,14 @@
             color: #ffffff;
             font-size: 26px;
             font-weight: 900;
-            border: 3px solid #ffffff;
+            border: 3px solid rgba(255, 255, 255, 0.8);
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
             letter-spacing: 2px;
             margin-top: 25px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
             transition: transform 0.2s ease;
         }
 
@@ -103,16 +102,17 @@
         }
 
         .lang-select {
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.5);
             color: var(--accent-gold);
-            border: 1px solid rgba(255, 215, 0, 0.8);
+            border: 1px solid rgba(255, 215, 0, 0.6);
             padding: 8px 14px;
             border-radius: 12px;
             font-size: 13px;
             font-weight: 700;
             outline: none;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
         .lang-select option {
@@ -120,10 +120,10 @@
             color: #ffffff;
         }
 
-        /* High-Performance Text Container with Strong Drop Shadows for High Contrast */
+        /* Watermark-Style Text Container (Blending over background image) */
         .text-container {
             font-size: 19px;
-            font-weight: 800;
+            font-weight: 900;
             line-height: 2.2;
             min-height: 260px;
             display: flex;
@@ -138,7 +138,7 @@
                 transform: translate3d(0, 15px, 0);
             }
             100% {
-                opacity: 1;
+                opacity: 0.9;
                 transform: translate3d(0, 0, 0);
             }
         }
@@ -148,30 +148,34 @@
             will-change: transform, opacity;
             animation: smoothLineReveal 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
             margin-bottom: 8px;
-            color: #ffffff;
-            /* Strong multi-layered drop shadow ensures readability over the bright background photo */
-            text-shadow: 0 2px 4px #000000, 0 0 10px #000000, 0 0 16px #000000;
+            color: rgba(255, 255, 255, 0.92);
+            mix-blend-mode: luminosity;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
         .founder-line {
-            color: #00f3ff;
-            text-shadow: 0 2px 4px #000000, 0 0 10px #000000, 0 0 16px #000000;
+            color: rgba(0, 243, 255, 0.95);
+            mix-blend-mode: normal;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 243, 255, 0.8);
         }
 
+        /* Watermark-style transparent action button */
         .btn-action {
             width: 100%;
-            background: linear-gradient(135deg, #ffd700 0%, #ff0055 50%, #00f3ff 100%);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.85) 0%, rgba(255, 0, 85, 0.85) 50%, rgba(0, 243, 255, 0.85) 100%);
             color: #ffffff;
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.5);
             padding: 16px;
             font-size: 15px;
             font-weight: 900;
             border-radius: 16px;
             cursor: pointer;
             margin-top: 24px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
             letter-spacing: 1px;
             text-transform: uppercase;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             transition: opacity 0.3s ease, transform 0.2s ease;
         }
 
@@ -180,8 +184,8 @@
         }
 
         .lang-btn {
-            background: rgba(0, 0, 0, 0.85);
-            border: 2px solid rgba(255, 215, 0, 0.85);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 215, 0, 0.7);
             color: #ffffff;
             padding: 15px;
             font-size: 15px;
@@ -190,7 +194,9 @@
             cursor: pointer;
             width: 100%;
             margin-bottom: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
         }
 
         .hidden {
@@ -205,8 +211,8 @@
     <!-- 1. GO Gate -->
     <div id="go-gate" class="gate-overlay">
         <div class="gate-card">
-            <div style="font-size: 26px; font-weight: 900; color: var(--accent-gold); text-shadow: 0 2px 6px #000, 0 0 12px #000;">🔌 RAI ELECTRONICS</div>
-            <div style="font-size: 13px; color: var(--accent-cyan); margin-top: 6px; font-weight: 600; text-shadow: 0 2px 6px #000, 0 0 12px #000;">Flagship Digital Experience</div>
+            <div style="font-size: 26px; font-weight: 900; color: var(--accent-gold); text-shadow: 0 2px 6px rgba(0,0,0,0.9), 0 0 10px rgba(255,215,0,0.6);">🔌 RAI ELECTRONICS</div>
+            <div style="font-size: 13px; color: var(--accent-cyan); margin-top: 6px; font-weight: 600; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">Flagship Digital Experience</div>
             
             <button class="go-btn" onclick="pressGo()">GO</button>
         </div>
@@ -215,8 +221,8 @@
     <!-- 2. Language Selection Gate -->
     <div id="lang-gate" class="gate-overlay hidden">
         <div class="gate-card" style="width: 100%; max-width: 320px;">
-            <div style="font-size: 22px; font-weight: 900; color: var(--accent-gold); margin-bottom: 6px; text-shadow: 0 2px 6px #000;">Select Language</div>
-            <div style="font-size: 13px; color: #00ff66; margin-bottom: 20px; font-weight: 600; text-shadow: 0 2px 6px #000;">कृपया भाषा चयन गर्नुहोस् / भाषा चुनें</div>
+            <div style="font-size: 22px; font-weight: 900; color: var(--accent-gold); margin-bottom: 6px; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">Select Language</div>
+            <div style="font-size: 13px; color: #00ff66; margin-bottom: 20px; font-weight: 600; text-shadow: 0 2px 6px rgba(0,0,0,0.9);">कृपया भाषा चयन गर्नुहोस् / भाषा चुनें</div>
             
             <button class="lang-btn" onclick="setLanguage('en')">English</button>
             <button class="lang-btn" onclick="setLanguage('ne')">नेपाली (Nepali)</button>

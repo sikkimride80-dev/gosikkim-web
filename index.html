@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rai Electronics - Multilingual Intro</title>
-    
-    <!-- High-Performance Responsive Multilingual Text-To-Speech Engine -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE_KEY"></script>
-
+    <title>Rai Electronics - Multilingual Cinematic Intro</title>
     <style>
         :root {
             --bg-deep: #050110;
@@ -130,7 +126,7 @@
 </head>
 <body>
 
-<!-- Language Selection Gate -->
+<!-- Language Selection Gateway -->
 <div id="lang-gate" style="position: fixed; inset: 0; background: rgba(5,1,16,0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; text-align: center;">
     <div style="font-size: 22px; font-weight: 900; color: #ffff00; margin-bottom: 8px;">🔌 Rai Electronics</div>
     <div style="font-size: 14px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Please select your preferred language / भाषा छान्नुहोस्</div>
@@ -142,7 +138,7 @@
     </div>
 </div>
 
-<!-- Main Container -->
+<!-- Main App Container -->
 <div class="app-container">
     <!-- Switcher Bar inside dashboard -->
     <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
@@ -161,7 +157,7 @@
     const translations = {
         en: {
             speech: "Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.",
-            rvVoice: "US English Female",
+            langCode: "en-US",
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Intro Complete! Ready for Step 2.",
             lines: [
@@ -179,7 +175,7 @@
         },
         ne: {
             speech: "राई इलेक्ट्रोनिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
-            rvVoice: "Hindi Female", // Nepali renders with high fidelity through Hindi accent speech engine
+            langCode: "ne-NP",
             btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार.",
             lines: [
@@ -197,7 +193,7 @@
         },
         hi: {
             speech: "राई इलेक्ट्रॉनिक्स में आपका स्वागत है। हम आपको सबसे कम कीमत पर सामान प्रदान करते हैं। आप यहाँ हर इलेक्ट्रॉनिक सामान खरीद सकते हैं। कृपया अपनी यात्रा का आनंद लें। संस्थापक उत्तम राय।",
-            rvVoice: "Hindi Female",
+            langCode: "hi-IN",
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 परिचय पूर्ण! चरण 2 के लिए तैयार.",
             lines: [
@@ -242,33 +238,36 @@
     function switchAppLanguage(lang) {
         currentLang = lang;
         localStorage.setItem('rai_preferred_lang', lang);
-        if (window.responsiveVoice) window.responsiveVoice.cancel();
         if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         startExperience();
     }
 
-    function triggerVoiceNarration() {
-        let textToSpeak = translations[currentLang].speech;
-        let voiceName = translations[currentLang].rvVoice;
+    function speakInSelectedLanguage() {
+        if (!('speechSynthesis' in window)) return;
 
-        // Try ResponsiveVoice engine first
-        if (window.responsiveVoice && typeof window.responsiveVoice.speak === 'function') {
-            window.responsiveVoice.cancel();
-            window.responsiveVoice.speak(textToSpeak, voiceName, { rate: 0.95 });
-        } 
-        // Fallback to Native Speech Synthesis
-        else if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            let utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = currentLang === 'en' ? 'en-US' : (currentLang === 'ne' ? 'ne-NP' : 'hi-IN');
-            utterance.rate = 0.95;
-            window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.cancel();
+
+        let textToSpeak = translations[currentLang].speech;
+        let langCode = translations[currentLang].langCode;
+
+        let utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = langCode;
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+
+        // Fetch voices and assign best match if available
+        let voices = window.speechSynthesis.getVoices();
+        let targetVoice = voices.find(v => v.lang === langCode || v.lang.startsWith(langCode.substring(0, 2)));
+        if (targetVoice) {
+            utterance.voice = targetVoice;
         }
+
+        window.speechSynthesis.speak(utterance);
     }
 
     function startExperience() {
         // Trigger voice narration
-        triggerVoiceNarration();
+        speakInSelectedLanguage();
 
         // Render localized fast letter rain
         let container = document.getElementById('rain-text-output');

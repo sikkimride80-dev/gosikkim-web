@@ -98,6 +98,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .bottom-section {
@@ -110,6 +111,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
+            background: rgba(0, 0, 0, 0.4);
             margin-top: auto;
         }
 
@@ -121,7 +123,7 @@
             margin-bottom: 2px;
         }
 
-        /* Middle-Left Floating TV Antenna Live Signal Widget */
+        /* Middle-Left Floating Classic TV Antenna Live Signal Widget */
         .radar-widget {
             position: absolute;
             top: 45%;
@@ -155,8 +157,8 @@
         }
 
         .signal-canvas {
-            width: 32px;
-            height: 28px;
+            width: 34px;
+            height: 30px;
             display: block;
         }
 
@@ -182,8 +184,9 @@
             font-weight: 900;
             color: var(--accent-gold);
             text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
-            width: 100%;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .gate-overlay {
@@ -242,9 +245,6 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.65);
-            padding: 4px 8px;
-            border-radius: 8px;
         }
 
         @keyframes smoothLineReveal {
@@ -321,10 +321,10 @@
     <div class="sticker s7">🔥</div>
     <div class="sticker s8">🚀</div>
 
-    <!-- Middle-Left TV Antenna Live Signal Widget -->
+    <!-- Middle-Left Classic TV Antenna Live Signal Widget -->
     <div class="radar-widget">
         <div class="antenna-container">
-            <canvas id="signalCanvas" class="signal-canvas" width="32" height="28"></canvas>
+            <canvas id="signalCanvas" class="signal-canvas" width="34" height="30"></canvas>
         </div>
         <span id="radarText" style="color: var(--net-color);">4G: FAST</span>
     </div>
@@ -411,7 +411,7 @@
 
     let currentLang = 'en';
 
-    // TV Antenna with Live Animated Signal Arcs & Speed Monitor
+    // Classic TV Antenna with Live Animated Signal Arcs & Speed Monitor
     function initNetworkAntenna() {
         const textElem = document.getElementById('radarText');
         const canvas = document.getElementById('signalCanvas');
@@ -448,32 +448,29 @@
             document.documentElement.style.setProperty('--net-color', color);
         }
 
-        // Draw Classic Antenna Base + Live WiFi Arcs
+        // Draw Classic Rooftop TV Antenna + Live WiFi Arcs
         function drawSignalWaves() {
-            ctx.clearRect(0, 0, 32, 28);
+            ctx.clearRect(0, 0, 34, 30);
             const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--net-color').trim() || '#00ff66';
 
-            // TV Antenna V-Stems
+            // Classic Rooftop TV Antenna Crossbars & Mast
             ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 1.8;
             ctx.beginPath();
-            ctx.moveTo(10, 26);
-            ctx.lineTo(16, 17);
-            ctx.lineTo(22, 26);
+            // Mast
+            ctx.moveTo(17, 28);
+            ctx.lineTo(17, 14);
+            // Horizontal dipole elements
+            ctx.moveTo(10, 18); ctx.lineTo(24, 18);
+            ctx.moveTo(13, 22); ctx.lineTo(21, 22);
             ctx.stroke();
 
-            // Central Stand
-            ctx.beginPath();
-            ctx.moveTo(16, 26);
-            ctx.lineTo(16, 15);
-            ctx.stroke();
-
-            // 4 Live Curved WiFi Signal Arcs above antenna head
+            // 4 Live Curved WiFi Signal Arcs above antenna mast
             const radii = [4, 7, 10, 13];
             
             radii.forEach((r, idx) => {
                 ctx.beginPath();
-                ctx.arc(16, 15, r, Math.PI * 1.25, Math.PI * 1.75);
+                ctx.arc(17, 14, r, Math.PI * 1.25, Math.PI * 1.75);
                 
                 let isActiveWave = (Math.floor(pulseStep) % 4) === idx;
                 ctx.strokeStyle = isActiveWave ? '#ffffff' : activeColor;

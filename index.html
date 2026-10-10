@@ -2,224 +2,499 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rai Electronics - Gateway</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Rai Electronics - Flagship Experience</title>
     <style>
-        body, html {
+        :root {
+            --accent-gold: #ffd700;
+            --accent-cyan: #00f3ff;
+            --net-color: #00ff66;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            height: 100%;
-            background-color: black;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .phone-frame {
-            width: 375px; /* Adjust width as needed for frame */
-            height: 812px; /* Adjust height as needed for frame */
-            background: #000;
-            border-radius: 40px;
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
-        }
-
-        /* Phone Header */
-        .phone-header {
-            height: 50px;
-            padding: 0 16px;
-            display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: black;
-            color: white;
-            position: relative;
-            z-index: 10;
-        }
-        .time { font-size: 14px; font-weight: 600; }
-        .battery { font-size: 12px; }
-
-        /* Browser Header */
-        .browser-header {
-            height: 50px;
-            padding: 0 16px;
-            background-color: #1a1a1a;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #333;
-            position: relative;
-            z-index: 10;
-        }
-        .url-bar { font-size: 14px; color: #aaa; text-align: center; flex: 1; }
-        .control-btns { display: flex; gap: 10px; font-size: 16px; color: #fff; }
-
-        /* Content Area */
-        .content-area {
-            flex: 1;
-            background-color: #111;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative; /* Base for content absolute positioning */
-        }
-
-        /* Poor Signal Bar */
-        .poor-signal {
-            font-size: 12px;
-            color: #ff6b6b;
-            text-align: left;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-bottom: 8px;
-        }
-        .poor-signal::before { content: '⏱️'; }
-
-        /* Site Header */
-        .site-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 24px;
-            color: white;
-        }
-        .brand-name {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 18px;
-            font-weight: 700;
-            text-shadow: 0 0 10px gold;
-        }
-        .brand-name img { width: 24px; height: 24px; }
-        .language-selector { font-size: 12px; color: gold; display: flex; align-items: center; gap: 4px; }
-
-        /* Image Display */
-        .main-image-display {
-            width: 100%;
-            max-width: 343px;
-            border-radius: 12px;
             overflow: hidden;
-            margin-bottom: 300px; /* Space for the bottom zone */
             position: relative;
         }
-        .main-image-display img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .starburst-icon {
-            position: absolute;
-            bottom: 16px;
-            right: 16px;
-            width: 32px;
-            height: 32px;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-        }
 
-        /* Go Button Container */
-        .go-button-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            position: relative; /* for centering the button over black zone */
-            z-index: 5; /* Above black zone content */
-        }
-        .go-button {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff6b6b, #4dabf7, #69db7c);
-            color: white;
-            font-size: 24px;
-            font-weight: 800;
-            border: 4px solid white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            transition: transform 0.1s;
-        }
-        .go-button:active { transform: scale(0.95); }
-
-        /* === Funny Stickers ONLY in Black Zone Area === */
-        /* These are placed behind the center card, in the black space */
+        /* Funny Stickers in the Black Zones ONLY */
         .sticker {
             position: absolute;
-            font-size: 40px; /* Fun size */
-            opacity: 0.9;
-            z-index: 0; /* Behind other content elements like headers and images */
+            font-size: 32px;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.85;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
         }
 
-        /* Specific positions for stickers in the black zone */
-        .sticker-1 { top: 70px; left: 10%; } /* Near poor signal */
-        .sticker-2 { top: 120px; right: 5%; } /* Near site header */
-        .sticker-3 { top: 200px; left: 5%; } /* Mid-left */
-        .sticker-4 { top: 300px; right: 10%; } /* Mid-right */
-        .sticker-5 { bottom: 180px; left: 10%; } /* Bottom-left of card space */
-        .sticker-6 { bottom: 220px; right: 5%; } /* Bottom-right of card space */
-        .sticker-7 { bottom: 70px; left: 15%; } /* Below card, left of button */
-        .sticker-8 { bottom: 100px; right: 15%; } /* Below card, right of button */
+        .st-1 { top: 65px; left: 6%; }
+        .st-2 { top: 80px; right: 8%; }
+        .st-3 { top: 48%; left: 4%; transform: translateY(-50%); }
+        .st-4 { top: 48%; right: 4%; transform: translateY(-50%); }
+        .st-5 { bottom: 85px; left: 8%; }
+        .st-6 { bottom: 95px; right: 8%; }
 
+        /* Animated Alive Character Photo Frame */
+        .center-bg-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: url('https://files.catbox.moe/lcxrp2.jpg') no-repeat center center;
+            background-size: contain;
+            z-index: 5;
+            pointer-events: none;
+            will-change: transform;
+            animation: characterBounceTurn 5s ease-in-out infinite;
+        }
+
+        @keyframes characterBounceTurn {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            }
+            25% {
+                transform: translate(-50%, -51%) scale(1.025) rotate(-1.2deg);
+            }
+            50% {
+                transform: translate(-50%, -49.5%) scale(1.035) rotate(0.8deg);
+            }
+            75% {
+                transform: translate(-50%, -50.5%) scale(1.015) rotate(-0.5deg);
+            }
+        }
+
+        /* Top and Bottom Sections */
+        .top-section {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 6px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .bottom-section {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            padding: 6px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .header-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2px;
+        }
+
+        .radar-widget {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(15, 15, 15, 0.9);
+            padding: 3px 8px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .radar-canvas {
+            width: 14px;
+            height: 14px;
+        }
+
+        .lang-select {
+            background: rgba(15, 15, 15, 0.9);
+            color: var(--accent-gold);
+            border: 1px solid rgba(255, 215, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .lang-select option {
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--accent-gold);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        }
+
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.85);
+            transition: opacity 0.3s ease;
+        }
+
+        .go-btn {
+            position: relative;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ff0055, #00f3ff);
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 900;
+            border: 2px solid #ffffff;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.6);
+            transition: transform 0.2s ease;
+        }
+
+        .go-btn:active {
+            transform: scale(0.92);
+        }
+
+        .text-top-container {
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--accent-gold);
+            text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+        }
+
+        .text-bottom-container {
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.3;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes smoothLineReveal {
+            0% {
+                opacity: 0;
+                transform: translate3d(0, 6px, 0);
+            }
+            100% {
+                opacity: 1;
+                transform: translate3d(0, 0, 0);
+            }
+        }
+
+        .intro-line {
+            opacity: 0;
+            will-change: transform, opacity;
+            animation: smoothLineReveal 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+            margin-bottom: 2px;
+            color: #ffffff;
+            text-shadow: 0 2px 6px #000000;
+        }
+
+        .founder-line {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.7);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .btn-action {
+            width: 100%;
+            background: linear-gradient(135deg, #ffd700 0%, #ff0055 50%, #00f3ff 100%);
+            color: #ffffff;
+            border: none;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 900;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.5);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .lang-btn {
+            background: rgba(20, 20, 20, 0.95);
+            border: 1.5px solid var(--accent-gold);
+            color: #ffffff;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+
+        .hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+        }
     </style>
 </head>
 <body>
-    <div class="phone-frame">
-        <div class="phone-header">
-            <span class="time">9:41 AM</span>
-            <span class="battery">100% 🔋</span>
+
+    <!-- Funny Stickers in Black Zones ONLY -->
+    <div class="sticker st-1">🤪</div>
+    <div class="sticker st-2">😂</div>
+    <div class="sticker st-3">🤡</div>
+    <div class="sticker st-4">😎</div>
+    <div class="sticker st-5">🔥</div>
+    <div class="sticker st-6">🚀</div>
+
+    <!-- Central Background Image with Dynamic Alive Motion -->
+    <div class="center-bg-image"></div>
+
+    <!-- 1. GO Gate -->
+    <div id="go-gate" class="gate-overlay">
+        <div class="top-section">
+            <div class="header-title">🔌 RAI ELECTRONICS</div>
         </div>
-        <div class="browser-header">
-            <span class="url-bar">gosikkim-web.vercel.app</span>
-            <div class="control-btns">
-                <span>⊕</span>
-                <span>⑧</span>
-                <span>⁝</span>
-            </div>
-        </div>
-        <div class="content-area">
-            <!-- Funny Stickers added in the background black zone -->
-            <div class="sticker sticker-1">🤪</div>
-            <div class="sticker sticker-2">😂</div>
-            <div class="sticker sticker-3">🤡</div>
-            <div class="sticker sticker-4">👀</div>
-            <div class="sticker sticker-5">💃</div>
-            <div class="sticker sticker-6">🚀</div>
-            <div class="sticker sticker-7">💥</div>
-            <div class="sticker sticker-8">🤔</div>
-
-            <div class="poor-signal">POOR</div>
-
-            <div class="site-header">
-                <div class="brand-name">
-                    <img src="https://img.icons8.com/plasticine/100/null/electrical-plug.png" alt="plug icon">
-                    RAI ELECTRONICS
-                </div>
-                <div class="language-selector">English <span>▼</span></div>
-            </div>
-
-            <div class="main-image-display">
-                <!-- Main scene card image with starburst icon -->
-                <img src="https://catbox.moe/k2r8b4.jpg" alt="Rai Electronics Image Display">
-                <img src="https://img.icons8.com/fluency/100/null/starburst.png" class="starburst-icon" alt="starburst icon">
-            </div>
-
-            <div class="go-button-container">
-                <button class="go-button">GO</button>
-            </div>
+        <div class="bottom-section">
+            <button class="go-btn" onclick="pressGo()">GO</button>
         </div>
     </div>
+
+    <!-- 2. Language Gate -->
+    <div id="lang-gate" class="gate-overlay hidden">
+        <div class="top-section">
+            <div class="header-title">Select Language</div>
+        </div>
+        <div class="bottom-section" style="max-width: 280px;">
+            <button class="lang-btn" onclick="setLanguage('en')">English</button>
+            <button class="lang-btn" onclick="setLanguage('ne')">नेपाली (Nepali)</button>
+            <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी (Hindi)</button>
+        </div>
+    </div>
+
+    <!-- 3. Dashboard Interface -->
+    <div class="top-section">
+        <div class="header-bar">
+            <!-- Satellite Network Radar Widget -->
+            <div class="radar-widget">
+                <canvas id="radarCanvas" class="radar-canvas" width="14" height="14"></canvas>
+                <span id="radarText" style="color: var(--net-color);">4G: OK</span>
+            </div>
+            
+            <select id="switcher" class="lang-select" onchange="switchAppLanguage(this.value)">
+                <option value="en">English</option>
+                <option value="ne">नेपाली</option>
+                <option value="hi">हिन्दी</option>
+            </select>
+        </div>
+        <div id="text-top-output" class="text-top-container"></div>
+    </div>
+
+    <div class="bottom-section">
+        <div id="text-bottom-output" class="text-bottom-container"></div>
+        <button class="btn-action hidden" id="btn-next-step" onclick="alert(translations[currentLang].alertText)">Enter Rai Electronics 🚀</button>
+    </div>
+
+<script>
+    const translations = {
+        en: {
+            btnText: "Enter Rai Electronics 🚀",
+            alertText: "Step 1 Complete! Ready for Step 2.",
+            topLines: ["Welcome to Rai Electronics"],
+            bottomLines: [
+                "We offer you the most discounted prices",
+                "You can buy every electronic item here",
+                "Please Enjoy Your Visit",
+                "🌹 🙏 Founder : Uttam Rai 🙏 🌹"
+            ]
+        },
+        ne: {
+            btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
+            alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार।",
+            topLines: ["राई इलेक्ट्रोनिक्समा स्वागत छ"],
+            bottomLines: [
+                "हामी तपाईंलाई सहुलियत मूल्यमा सामान दिन्छौं",
+                "तपाईं यहाँ सबै इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ",
+                "कृपया तपाईंको भ्रमणको आनन्द लिनुहोस्",
+                "🌹 🙏 संस्थापक : उत्तम राई 🙏 🌹"
+            ]
+        },
+        hi: {
+            btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
+            alertText: "चरण 1 पूर्ण! चरण 2 के लिए तैयार।",
+            topLines: ["राई इलेक्ट्रॉनिक्स में स्वागत है"],
+            bottomLines: [
+                "हम आपको सबसे अच्छी छूट पर सामान देते हैं",
+                "आप यहाँ हर इलेक्ट्रॉनिक आइटम खरीद सकते हैं",
+                "कृपया अपनी यात्रा का आनंद लें",
+                "🌹 🙏 संस्थापक : उत्तम राय 🙏 🌹"
+            ]
+        }
+    };
+
+    let currentLang = 'en';
+
+    function initNetworkRadar() {
+        const canvas = document.getElementById('radarCanvas');
+        const ctx = canvas.getContext('2d');
+        const textElem = document.getElementById('radarText');
+        let angle = 0;
+
+        function updateNetworkStatus() {
+            let label = '4G: FAST';
+            let color = '#00ff66';
+
+            if (navigator.connection) {
+                const conn = navigator.connection;
+                if (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g') {
+                    label = 'POOR';
+                    color = '#ff3333';
+                } else if (conn.effectiveType === '3g') {
+                    label = 'AVG';
+                    color = '#ffd700';
+                }
+            }
+            textElem.innerText = label;
+            textElem.style.color = color;
+            document.documentElement.style.setProperty('--net-color', color);
+        }
+
+        updateNetworkStatus();
+        if (navigator.connection) {
+            navigator.connection.addEventListener('change', updateNetworkStatus);
+        }
+
+        function drawRadar() {
+            ctx.clearRect(0, 0, 14, 14);
+            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--net-color');
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(7, 7, 5.5, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(7, 7);
+            ctx.lineTo(7 + 5.5 * Math.cos(angle), 7 + 5.5 * Math.sin(angle));
+            ctx.stroke();
+
+            angle += 0.15;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    }
+
+    window.addEventListener('DOMContentLoaded', initNetworkRadar);
+
+    function pressGo() {
+        let goGate = document.getElementById('go-gate');
+        goGate.classList.add('hidden');
+
+        setTimeout(() => {
+            let savedLang = localStorage.getItem('rai_preferred_lang');
+            if (savedLang && translations[savedLang]) {
+                currentLang = savedLang;
+                document.getElementById('switcher').value = currentLang;
+                startExperience();
+            } else {
+                document.getElementById('lang-gate').classList.remove('hidden');
+            }
+        }, 200);
+    }
+
+    function setLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('rai_preferred_lang', lang);
+        document.getElementById('switcher').value = lang;
+        
+        let langGate = document.getElementById('lang-gate');
+        langGate.classList.add('hidden');
+
+        setTimeout(() => {
+            startExperience();
+        }, 200);
+    }
+
+    function switchAppLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('rai_preferred_lang', lang);
+        startExperience();
+    }
+
+    function startExperience() {
+        let topContainer = document.getElementById('text-top-output');
+        let bottomContainer = document.getElementById('text-bottom-output');
+        let btn = document.getElementById('btn-next-step');
+        
+        topContainer.innerHTML = "";
+        bottomContainer.innerHTML = "";
+        btn.classList.add('hidden');
+        btn.innerText = translations[currentLang].btnText;
+
+        let topLines = translations[currentLang].topLines;
+        let bottomLines = translations[currentLang].bottomLines;
+
+        topLines.forEach((lineText, index) => {
+            let div = document.createElement('div');
+            div.className = 'intro-line';
+            div.style.color = '#ffd700';
+            div.innerText = lineText;
+            div.style.animationDelay = `${index * 0.15}s`;
+            topContainer.appendChild(div);
+        });
+
+        bottomLines.forEach((lineText, index) => {
+            let div = document.createElement('div');
+            div.className = index === bottomLines.length - 1 ? 'intro-line founder-line' : 'intro-line';
+            div.innerText = lineText;
+            div.style.animationDelay = `${(topLines.length + index) * 0.15}s`;
+            bottomContainer.appendChild(div);
+        });
+
+        let totalTimeMs = ((topLines.length + bottomLines.length) * 150) + 150;
+        setTimeout(() => {
+            btn.classList.remove('hidden');
+        }, totalTimeMs);
+    }
+</script>
+
 </body>
 </html>

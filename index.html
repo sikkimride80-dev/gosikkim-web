@@ -1,423 +1,616 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rai Electronics - Multilingual Intro</title>
+    <title>Rai Electronics — Premier Global Flagship</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800;900&family=Cinzel:wght@600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Cinzel"', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            300: '#ffe885',
+                            400: '#ffd700',
+                            500: '#e6c200',
+                            600: '#b39700',
+                        },
+                        obsidian: '#030208',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         :root {
-            --bg-deep: #050110;
-            --glass-bg: rgba(15, 8, 35, 0.98);
+            --gold-glow: rgba(255, 215, 0, 0.35);
+            --cyan-glow: rgba(0, 243, 255, 0.25);
+            --magenta-glow: rgba(255, 0, 128, 0.3);
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1a1042, var(--bg-deep) 75%);
+            background-color: #030208;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             color: #ffffff;
-            margin: 0;
-            padding: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow-x: hidden;
             min-height: 100vh;
-            overflow: hidden;
         }
 
-        .app-container {
-            width: 100%;
-            max-width: 520px;
-            background: var(--glass-bg);
-            padding: 35px 24px;
-            border-radius: 32px;
-            border: 3px solid #ffff00;
-            box-shadow: 0 0 30px rgba(255, 255, 0, 0.3);
-            position: relative;
-            text-align: center;
-        }
-
-        /* GO Gate Overlay */
-        #go-gate {
+        /* Ambient Dynamic Luxury Background Gradients */
+        .ambient-bg {
             position: fixed;
             inset: 0;
-            background: rgba(5, 1, 16, 0.98);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-            text-align: center;
-            transition: opacity 0.3s ease;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.07) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(138, 43, 226, 0.05) 0%, transparent 70%),
+                radial-gradient(circle at 50% 0%, #0c0821 0%, #030208 80%);
+            pointer-events: none;
         }
 
-        .go-btn {
-            width: 120px;
-            height: 120px;
+        /* Glassmorphism Multibillion Container */
+        .glass-panel {
+            background: rgba(13, 10, 28, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            box-shadow: 
+                0 0 50px rgba(0, 0, 0, 0.9),
+                inset 0 0 20px rgba(255, 215, 0, 0.05),
+                0 10px 40px -10px rgba(255, 215, 0, 0.15);
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #ffe885 50%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border-glow {
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.35);
+        }
+
+        /* Floating Background Particles Canvas */
+        #particles-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* GO Gate Ultra Luxury Button */
+        .go-button-wrapper {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .go-button-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -8px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #ffff00, #ff0055);
-            color: #ffffff;
-            font-size: 32px;
-            font-weight: 900;
-            border: 4px solid #ffffff;
-            cursor: pointer;
-            box-shadow: 0 0 35px rgba(255, 0, 85, 0.7);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            letter-spacing: 1px;
-            margin-top: 15px;
+            background: linear-gradient(45deg, #ffd700, #00f3ff, #ff0080, #ffd700);
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: gradientBorder 6s ease infinite, pulseGlow 2s ease-in-out infinite alternate;
+            filter: blur(8px);
         }
 
-        .go-btn:active {
-            transform: scale(0.92);
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+        @keyframes gradientBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        /* Language Selection Gate Overlay */
-        #lang-gate {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 1, 16, 0.98);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 25px;
-            text-align: center;
-            transition: opacity 0.3s ease;
+        @keyframes pulseGlow {
+            0% { transform: scale(0.96); opacity: 0.7; }
+            100% { transform: scale(1.06); opacity: 1; }
         }
 
-        .rain-text-container {
-            position: relative;
-            z-index: 2;
-            font-size: 19px;
-            font-weight: 800;
-            line-height: 2.2;
-            max-width: 460px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .word-wrapper {
-            display: inline-block;
-            white-space: nowrap;
-            margin-right: 6px;
-        }
-
-        .line-break {
-            display: block;
-            height: 10px;
-        }
-
+        /* Letter Rain Fast Drop Animation */
         @keyframes fastDrop {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { 
+                opacity: 0; 
+                transform: translateY(-25px) scale(1.1); 
+                filter: blur(4px);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+                filter: blur(0px);
+            }
         }
 
+        /* Continuous Vibrant Color Flickering Animation */
         @keyframes colorFlickerFast {
-            0% { color: #ffff00; }   /* Yellow */
-            20% { color: #00ff66; }  /* Green */
-            40% { color: #00ccff; }  /* Blue */
-            60% { color: #ff3333; }  /* Red */
-            80% { color: #ff9900; }  /* Orange */
-            100% { color: #cc33ff; } /* Purple */
+            0% { color: #ffd700; text-shadow: 0 0 12px rgba(255, 215, 0, 0.8); }     /* Gold / Yellow */
+            20% { color: #00ff88; text-shadow: 0 0 12px rgba(0, 255, 136, 0.8); }    /* Emerald Green */
+            40% { color: #00e1ff; text-shadow: 0 0 12px rgba(0, 225, 255, 0.8); }    /* Cyan Blue */
+            60% { color: #ff3366; text-shadow: 0 0 12px rgba(255, 51, 102, 0.8); }   /* Vivid Crimson */
+            80% { color: #ff9900; text-shadow: 0 0 12px rgba(255, 153, 0, 0.8); }   /* Amber Orange */
+            100% { color: #d044ff; text-shadow: 0 0 12px rgba(208, 68, 255, 0.8); }  /* Neon Purple */
         }
 
         .rain-char {
             display: inline-block;
             opacity: 0;
-            will-change: transform, opacity;
-            animation: fastDrop 0.15s ease-out forwards, colorFlickerFast 0.8s infinite linear;
+            will-change: transform, opacity, color;
+            animation: fastDrop 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards, colorFlickerFast 0.9s infinite linear;
+            font-weight: 800;
         }
 
         .icon-item {
             display: inline-flex;
             align-items: center;
             vertical-align: middle;
-            margin: 0 4px;
+            margin: 0 6px;
             opacity: 0;
             will-change: transform, opacity;
-            animation: fastDrop 0.15s ease-out forwards;
-            font-size: 22px;
+            animation: fastDrop 0.2s ease-out forwards;
+            font-size: 1.35em;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
         }
 
-        .btn {
-            width: 100%;
-            background: linear-gradient(135deg, #ffff00, #ff0055);
-            color: white;
-            border: none;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 900;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: 0.3s ease;
-            margin-top: 25px;
-            box-shadow: 0 6px 20px rgba(255, 0, 85, 0.4);
-            letter-spacing: 0.5px;
+        .word-wrapper {
+            display: inline-block;
+            white-space: nowrap;
+            margin-right: 8px;
         }
 
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid #ffff00;
-            color: white;
-            padding: 14px;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 14px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 12px;
-            transition: 0.2s;
+        .line-break {
+            display: block;
+            height: 14px;
         }
 
-        .lang-btn:hover {
-            background: #ffff00;
-            color: #050110;
+        /* Glass Language Selector Pill */
+        .lang-card-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .hidden { display: none !important; }
+        .lang-card-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(0, 243, 255, 0.1) 100%);
+            border-color: #ffd700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Enter Button Luxury Gradient & Shine */
+        .btn-enter {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ff0055 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            box-shadow: 0 10px 30px rgba(255, 0, 85, 0.4), 0 0 20px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-enter:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 0, 85, 0.6), 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Utility Hide Smooth Fade */
+        .gate-screen {
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s ease;
+        }
+        .gate-hidden {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            transform: scale(0.96) !important;
+            display: none !important;
+        }
     </style>
 </head>
-<body>
+<body class="flex items-center justify-center p-4 sm:p-6 relative">
 
-<!-- 1. Mandatory "GO" Entry Gate -->
-<div id="go-gate">
-    <div style="font-size: 24px; font-weight: 900; color: #ffff00; margin-bottom: 8px;">🔌 Rai Electronics</div>
-    <div style="font-size: 14px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Press GO to enter experience</div>
-    <button class="go-btn" onclick="pressGo()">GO</button>
-</div>
+    <div class="ambient-bg"></div>
+    <canvas id="particles-canvas"></canvas>
 
-<!-- 2. Language Selection Gate -->
-<div id="lang-gate" class="hidden">
-    <div style="font-size: 22px; font-weight: 900; color: #ffff00; margin-bottom: 8px;">🔌 Rai Electronics</div>
-    <div style="font-size: 14px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Please select your preferred language / भाषा छान्नुहोस्</div>
-    
-    <div style="width: 100%; max-width: 300px;">
-        <button class="lang-btn" onclick="setLanguage('en')">English</button>
-        <button class="lang-btn" onclick="setLanguage('ne')">नेपाली (Nepali)</button>
-        <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी (Hindi)</button>
+    <!-- ==========================================
+         SCREEN 1: MANDATORY "GO" GATE OVERLAY
+         ========================================== -->
+    <div id="go-gate" class="gate-screen fixed inset-0 z-[200] flex flex-col items-center justify-center p-6 bg-[#030208]/95 backdrop-blur-2xl">
+        <div class="text-center max-w-md mx-auto space-y-6">
+            <!-- Brand Badge Header -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-xs tracking-[0.25em] uppercase font-bold">
+                <span class="w-2 h-2 rounded-full bg-yellow-400 animate-ping"></span>
+                Ultra Luxury Flagship
+            </div>
+
+            <!-- Title & Subtitle -->
+            <div class="space-y-2">
+                <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-black tracking-wider gold-gradient-text uppercase">
+                    Rai Electronics
+                </h1>
+                <p class="text-gray-400 text-sm sm:text-base font-medium tracking-wide">
+                    Touch the gateway core to initialize the portal experience
+                </p>
+            </div>
+
+            <!-- Interactive Core GO Button -->
+            <div class="py-8">
+                <div class="go-button-wrapper">
+                    <button onclick="pressGo()" class="w-32 h-32 sm:w-36 sm:h-36 rounded-full bg-gradient-to-br from-[#120c2e] via-[#080518] to-[#1c1240] text-white font-serif font-black text-3xl sm:text-4xl tracking-widest border-2 border-yellow-400/80 shadow-2xl flex flex-col items-center justify-center transition-transform active:scale-95 group">
+                        <span class="gold-gradient-text group-hover:scale-110 transition-transform duration-300">GO</span>
+                        <span class="text-[10px] tracking-[0.3em] font-sans text-cyan-400 font-semibold uppercase mt-1 opacity-80">START</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footnote Status -->
+            <p class="text-xs text-gray-500 font-mono tracking-widest uppercase">
+                System Status: <span class="text-emerald-400 font-bold">Ready</span>
+            </p>
+        </div>
     </div>
-</div>
 
-<!-- 3. Main Dashboard -->
-<div class="app-container">
-    <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
-        <select id="switcher" onchange="switchAppLanguage(this.value)" style="background: rgba(255,255,255,0.15); color: #ffff00; border: 1px solid #ffff00; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">
-            <option value="en" style="background:#050110;">English</option>
-            <option value="ne" style="background:#050110;">नेपाली</option>
-            <option value="hi" style="background:#050110;">हिन्दी</option>
-        </select>
+    <!-- ==========================================
+         SCREEN 2: LANGUAGE SELECTION GATE OVERLAY
+         ========================================== -->
+    <div id="lang-gate" class="gate-screen gate-hidden fixed inset-0 z-[100] flex flex-col items-center justify-center p-6 bg-[#030208]/95 backdrop-blur-2xl">
+        <div class="glass-panel w-full max-w-md p-8 sm:p-10 rounded-3xl text-center space-y-8 relative overflow-hidden">
+            <!-- Decorative Inner Glow Corner -->
+            <div class="absolute -top-12 -right-12 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl"></div>
+
+            <div class="space-y-3">
+                <div class="text-2xl">🔌</div>
+                <h2 class="font-serif text-2xl sm:text-3xl font-extrabold gold-gradient-text">
+                    Select Language
+                </h2>
+                <p class="text-gray-300 text-xs sm:text-sm font-medium tracking-wide">
+                    कृपया आफ्नो मनपर्ने भाषा छान्नुहोस् / कृपया अपनी भाषा चुनें
+                </p>
+            </div>
+
+            <!-- Language Buttons Grid -->
+            <div class="space-y-3 pt-2">
+                <button onclick="setLanguage('en')" class="lang-card-btn w-full p-4 rounded-2xl flex items-center justify-between group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 flex items-center justify-center font-bold text-xs">EN</span>
+                        <span class="font-bold text-white group-hover:text-yellow-300 transition-colors">English</span>
+                    </div>
+                    <span class="text-xs text-gray-400 group-hover:text-yellow-400 tracking-wider">Select →</span>
+                </button>
+
+                <button onclick="setLanguage('ne')" class="lang-card-btn w-full p-4 rounded-2xl flex items-center justify-between group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-cyan-400/10 border border-cyan-400/30 text-cyan-400 flex items-center justify-center font-bold text-xs">NE</span>
+                        <span class="font-bold text-white group-hover:text-cyan-300 transition-colors">नेपाली (Nepali)</span>
+                    </div>
+                    <span class="text-xs text-gray-400 group-hover:text-cyan-400 tracking-wider">छान्नुहोस् →</span>
+                </button>
+
+                <button onclick="setLanguage('hi')" class="lang-card-btn w-full p-4 rounded-2xl flex items-center justify-between group">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-pink-400/10 border border-pink-400/30 text-pink-400 flex items-center justify-center font-bold text-xs">HI</span>
+                        <span class="font-bold text-white group-hover:text-pink-300 transition-colors">हिन्दी (Hindi)</span>
+                    </div>
+                    <span class="text-xs text-gray-400 group-hover:text-pink-400 tracking-wider">चुनें →</span>
+                </button>
+            </div>
+        </div>
     </div>
 
-    <div id="rain-text-output" class="rain-text-container"></div>
-    <button class="btn hidden" id="btn-next-step" onclick="alert(translations[currentLang].alertText)">Enter Rai Electronics 🚀</button>
-</div>
+    <!-- ==========================================
+         SCREEN 3: MAIN CINEMATIC INTRO DASHBOARD
+         ========================================== -->
+    <main class="w-full max-w-xl glass-panel p-6 sm:p-10 rounded-3xl relative z-10 my-auto shadow-2xl border border-yellow-500/30">
+        <!-- Dashboard Top Header Bar -->
+        <header class="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-yellow-500 to-amber-300 flex items-center justify-center text-black font-black font-serif text-lg shadow-lg shadow-yellow-500/20">
+                    R
+                </div>
+                <div>
+                    <h3 class="font-serif text-base sm:text-lg font-extrabold tracking-wider text-white">RAI ELECTRONICS</h3>
+                    <p class="text-[10px] text-cyan-400 font-mono tracking-widest uppercase">MULTIBILLION GATEWAY</p>
+                </div>
+            </div>
 
-<script>
-    const translations = {
-        en: {
-            speech: "Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.",
-            langCodes: ["en-US", "en-GB", "en"],
-            btnText: "Enter Rai Electronics 🚀",
-            alertText: "Step 1 Intro Complete! Ready for Step 2.",
-            lines: [
-                ["Welcome", "to", "Rai", "Electronics"],
-                ["We", "offer", "you", "the", "most", "discounted", "prices"],
-                ["You", "can", "buy", "every", "electronic", "item", "here"],
-                ["Please", "Enjoy", "Your", "Visit"],
-                { type: "founder", items: [
-                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
-                    { type: "word", text: "Founder" }, { type: "word", text: ":" },
-                    { type: "word", text: "Uttam" }, { type: "word", text: "Rai" },
-                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
-                ]}
-            ]
-        },
-        ne: {
-            speech: "राई इलेक्ट्रोनिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
-            langCodes: ["ne-NP", "ne", "hi-IN", "hi"],
-            btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
-            alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार.",
-            lines: [
-                ["राई", "इलेक्ट्रोनिक्समा", "स्वागत", "छ"],
-                ["हामी", "तपाईंलाई", "सहुलियत", "मूल्यमा", "सामान", "दिन्छौं"],
-                ["तपाईं", "यहाँ", "सबै", "इलेक्ट्रोनिक", "सामान", "किन्न", "सक्नुहुन्छ"],
-                ["कृपया", "तपाईंको", "भ्रमणको", "आनन्द", "लिनुहोस्"],
-                { type: "founder", items: [
-                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
-                    { type: "word", text: "संस्थापक" }, { type: "word", text: ":" },
-                    { type: "word", text: "उत्तम" }, { type: "word", text: "राई" },
-                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
-                ]}
-            ]
-        },
-        hi: {
-            speech: "राई इलेक्ट्रॉनिक्स में आपका स्वागत है। हम आपको सबसे कम कीमत पर सामान प्रदान करते हैं। आप यहाँ हर इलेक्ट्रॉनिक सामान खरीद सकते हैं। कृपया अपनी यात्रा का आनंद लें। संस्थापक उत्तम राय।",
-            langCodes: ["hi-IN", "hi", "ne-NP"],
-            btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
-            alertText: "चरण 1 परिचय पूर्ण! चरण 2 के लिए तैयार.",
-            lines: [
-                ["राई", "इलेक्ट्रॉनिक्स", "में", "स्वागत", "है"],
-                ["हम", "आपको", "सबसे", "अच्छी", "छूट", "पर", "सामान", "देते", "हैं"],
-                ["आप", "यहाँ", "हर", "इलेक्ट्रॉनिक", "आइटम", "खरीद", "सकते", "हैं"],
-                ["कृपया", "अपनी", "यात्रा", "का", "आनंद", "लें"],
-                { type: "founder", items: [
-                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
-                    { type: "word", text: "संस्थापक" }, { type: "word", text: ":" },
-                    { type: "word", text: "उत्तम" }, { type: "word", text: "राय" },
-                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
-                ]}
-            ]
-        }
-    };
+            <!-- Persistent Header Language Switcher -->
+            <div class="relative">
+                <select id="switcher" onchange="switchAppLanguage(this.value)" class="bg-[#120c2e] text-yellow-300 border border-yellow-500/40 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold cursor-pointer focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400/30 transition-all shadow-inner">
+                    <option value="en" class="bg-[#030208] text-white">English</option>
+                    <option value="ne" class="bg-[#030208] text-white">नेपाली</option>
+                    <option value="hi" class="bg-[#030208] text-white">हिन्दी</option>
+                </select>
+            </div>
+        </header>
 
-    let currentLang = 'en';
+        <!-- Fast Cascading Letter Rain Canvas Area -->
+        <section class="min-h-[260px] sm:min-h-[300px] flex items-center justify-center py-4">
+            <div id="rain-text-output" class="text-center font-extrabold text-base sm:text-lg md:text-xl leading-relaxed sm:leading-loose tracking-wide max-w-md mx-auto">
+                <!-- Dynamic Animated Letters Spawn Here -->
+            </div>
+        </section>
 
-    function pressGo() {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.resume();
-        }
+        <!-- Timed Action Button (Reveals gracefully after letter drop ends) -->
+        <footer class="pt-6 border-t border-white/10">
+            <button id="btn-next-step" onclick="handleEnterClick()" class="btn-enter w-full py-4 sm:py-5 px-6 rounded-2xl font-black text-sm sm:text-base tracking-wider uppercase text-white cursor-pointer hidden">
+                Enter Rai Electronics 🚀
+            </button>
+        </footer>
+    </main>
 
-        let goGate = document.getElementById('go-gate');
-        goGate.style.opacity = '0';
-        setTimeout(() => { 
-            goGate.classList.add('hidden'); 
-
-            let savedLang = localStorage.getItem('rai_preferred_lang');
-            if (savedLang && translations[savedLang]) {
-                currentLang = savedLang;
-                document.getElementById('switcher').value = currentLang;
-                startExperience();
-            } else {
-                document.getElementById('lang-gate').classList.remove('hidden');
-            }
-        }, 300);
-    }
-
-    function setLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem('rai_preferred_lang', lang);
-        document.getElementById('switcher').value = lang;
-        
-        let langGate = document.getElementById('lang-gate');
-        langGate.style.opacity = '0';
-        setTimeout(() => { 
-            langGate.classList.add('hidden'); 
-            startExperience();
-        }, 300);
-    }
-
-    function switchAppLanguage(lang) {
-        currentLang = lang;
-        localStorage.setItem('rai_preferred_lang', lang);
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-        startExperience();
-    }
-
-    function speakInSelectedLanguage() {
-        if (!('speechSynthesis' in window)) return;
-
-        window.speechSynthesis.cancel();
-
-        let textToSpeak = translations[currentLang].speech;
-        let langCodes = translations[currentLang].langCodes;
-
-        let utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.rate = 0.85;
-        utterance.pitch = 1.0;
-
-        let voices = window.speechSynthesis.getVoices();
-        let targetVoice = null;
-
-        for (let code of langCodes) {
-            targetVoice = voices.find(v => v.lang.toLowerCase() === code.toLowerCase() || v.lang.toLowerCase().startsWith(code.substring(0, 2).toLowerCase()));
-            if (targetVoice) {
-                utterance.voice = targetVoice;
-                utterance.lang = targetVoice.lang;
-                break;
-            }
-        }
-
-        if (!targetVoice) {
-            utterance.lang = langCodes[0];
-        }
-
-        window.speechSynthesis.speak(utterance);
-    }
-
-    // Pre-load voices for browsers
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.onvoiceschanged = () => {
-            window.speechSynthesis.getVoices();
-        };
-    }
-
-    function startExperience() {
-        speakInSelectedLanguage();
-
-        let container = document.getElementById('rain-text-output');
-        container.innerHTML = "";
-        let globalIndex = 0;
-        let dataLines = translations[currentLang].lines;
-
-        dataLines.forEach((lineData, lineIndex) => {
-            let wordsInLine = [];
-            if (Array.isArray(lineData)) {
-                wordsInLine = lineData.map(w => ({ type: "word", text: w }));
-            } else if (lineData.type === "founder") {
-                wordsInLine = lineData.items;
-            }
-
-            let wordSpan = document.createElement('span');
-            wordSpan.className = 'word-wrapper';
-
-            wordsInLine.forEach((item) => {
-                if (item.type === "icon") {
-                    let iconSpan = document.createElement('span');
-                    iconSpan.className = 'icon-item';
-                    iconSpan.innerText = item.text;
-                    iconSpan.style.animationDelay = `${globalIndex * 0.03}s`;
-                    container.appendChild(iconSpan);
-                    globalIndex++;
-                } else {
-                    let wordInnerSpan = document.createElement('span');
-                    wordInnerSpan.className = 'word-wrapper';
-                    
-                    let word = item.text;
-                    for (let i = 0; i < word.length; i++) {
-                        let char = word.charAt(i);
-                        let charSpan = document.createElement('span');
-                        charSpan.className = 'rain-char';
-                        charSpan.innerText = char;
-                        charSpan.style.animationDelay = `${globalIndex * 0.03}s, ${globalIndex * 0.05}s`;
-                        
-                        wordInnerSpan.appendChild(charSpan);
-                        globalIndex++;
+    <script>
+        /* Multi-language Content Catalog */
+        const translations = {
+            en: {
+                btnText: "Enter Rai Electronics 🚀",
+                alertText: "Welcome to Rai Electronics Step 1 Gateway!",
+                lines: [
+                    ["Welcome", "to", "Rai", "Electronics"],
+                    ["We", "offer", "you", "the", "most", "discounted", "prices"],
+                    ["You", "can", "buy", "every", "electronic", "item", "here"],
+                    ["Please", "Enjoy", "Your", "Visit"],
+                    { 
+                        type: "founder", 
+                        items: [
+                            { type: "icon", text: "🌹" },
+                            { type: "icon", text: "🙏" },
+                            { type: "word", text: "Founder" },
+                            { type: "word", text: ":" },
+                            { type: "word", text: "Uttam" },
+                            { type: "word", text: "Rai" },
+                            { type: "icon", text: "🙏" },
+                            { type: "icon", text: "🌹" }
+                        ]
                     }
-                    container.appendChild(wordInnerSpan);
+                ]
+            },
+            ne: {
+                btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
+                alertText: "राई इलेक्ट्रोनिक्स गेटवेमा स्वागत छ!",
+                lines: [
+                    ["राई", "इलेक्ट्रोनिक्समा", "स्वागत", "छ"],
+                    ["हामी", "तपाईंलाई", "सबैभन्दा", "बढी", "छुट", "मूल्यहरू", "प्रदान", "गर्दछौं"],
+                    ["तपाईं", "यहाँ", "हरेक", "इलेक्ट्रोनिक", "सामान", "किन्न", "सक्नुहुन्छ"],
+                    ["कृपया", "तपाईंको", "भ्रमणको", "आनन्द", "लिनुहोस्"],
+                    { 
+                        type: "founder", 
+                        items: [
+                            { type: "icon", text: "🌹" },
+                            { type: "icon", text: "🙏" },
+                            { type: "word", text: "संस्थापक" },
+                            { type: "word", text: ":" },
+                            { type: "word", text: "उत्तम" },
+                            { type: "word", text: "राई" },
+                            { type: "icon", text: "🙏" },
+                            { type: "icon", text: "🌹" }
+                        ]
+                    }
+                ]
+            },
+            hi: {
+                btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
+                alertText: "राई इलेक्ट्रॉनिक्स गेटवे में आपका स्वागत है!",
+                lines: [
+                    ["राई", "इलेक्ट्रॉनिक्स", "में", "आपका", "स्वागत", "है"],
+                    ["हम", "आपको", "सबसे", "कम", "कीमत", "पर", "सामान", "प्रदान", "करते", "हैं"],
+                    ["आप", "यहाँ", "हर", "इलेक्ट्रॉनिक", "सामान", "खरीद", "सकते", "हैं"],
+                    ["कृपया", "अपनी", "यात्रा", "का", "आनंद", "लें"],
+                    { 
+                        type: "founder", 
+                        items: [
+                            { type: "icon", text: "🌹" },
+                            { type: "icon", text: "🙏" },
+                            { type: "word", text: "संस्थापक" },
+                            { type: "word", text: ":" },
+                            { type: "word", text: "उत्तम" },
+                            { type: "word", text: "राय" },
+                            { type: "icon", text: "🙏" },
+                            { type: "icon", text: "🌹" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentLang = 'en';
+        let animationTimeoutId = null;
+
+        /* Step 1: Press GO Action */
+        function pressGo() {
+            const goGate = document.getElementById('go-gate');
+            goGate.style.opacity = '0';
+            
+            setTimeout(() => { 
+                goGate.classList.add('gate-hidden'); 
+
+                // Check stored language preference
+                const savedLang = localStorage.getItem('rai_preferred_lang');
+                if (savedLang && translations[savedLang]) {
+                    currentLang = savedLang;
+                    document.getElementById('switcher').value = currentLang;
+                    startExperience();
+                } else {
+                    const langGate = document.getElementById('lang-gate');
+                    langGate.classList.remove('gate-hidden');
+                    langGate.style.opacity = '1';
+                }
+            }, 350);
+        }
+
+        /* Step 2: Language Selection Action */
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('rai_preferred_lang', lang);
+            document.getElementById('switcher').value = lang;
+            
+            const langGate = document.getElementById('lang-gate');
+            langGate.style.opacity = '0';
+            setTimeout(() => { 
+                langGate.classList.add('gate-hidden'); 
+                startExperience();
+            }, 350);
+        }
+
+        /* Header Language Switcher Handler */
+        function switchAppLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('rai_preferred_lang', lang);
+            startExperience();
+        }
+
+        /* Step 3: Start Letter Rain Experience */
+        function startExperience() {
+            if (animationTimeoutId) {
+                clearTimeout(animationTimeoutId);
+            }
+
+            const container = document.getElementById('rain-text-output');
+            container.innerHTML = "";
+            let globalIndex = 0;
+            const dataLines = translations[currentLang].lines;
+
+            dataLines.forEach((lineData, lineIndex) => {
+                let itemsInLine = [];
+                if (Array.isArray(lineData)) {
+                    itemsInLine = lineData.map(w => ({ type: "word", text: w }));
+                } else if (lineData.type === "founder") {
+                    itemsInLine = lineData.items;
+                }
+
+                itemsInLine.forEach((item) => {
+                    if (item.type === "icon") {
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = 'icon-item';
+                        iconSpan.innerText = item.text;
+                        iconSpan.style.animationDelay = `${globalIndex * 0.025}s`;
+                        container.appendChild(iconSpan);
+                        globalIndex++;
+                    } else {
+                        const wordInnerSpan = document.createElement('span');
+                        wordInnerSpan.className = 'word-wrapper';
+                        
+                        const word = item.text;
+                        for (let i = 0; i < word.length; i++) {
+                            const char = word.charAt(i);
+                            const charSpan = document.createElement('span');
+                            charSpan.className = 'rain-char';
+                            charSpan.innerText = char;
+                            // Fast cascading stagger animation
+                            charSpan.style.animationDelay = `${globalIndex * 0.025}s, ${globalIndex * 0.04}s`;
+                            
+                            wordInnerSpan.appendChild(charSpan);
+                            globalIndex++;
+                        }
+                        container.appendChild(wordInnerSpan);
+                    }
+                });
+
+                if (lineIndex < dataLines.length - 1) {
+                    const br = document.createElement('div');
+                    br.className = 'line-break';
+                    container.appendChild(br);
                 }
             });
 
-            if (lineIndex < dataLines.length - 1) {
-                let br = document.createElement('div');
-                br.className = 'line-break';
-                container.appendChild(br);
+            // Update Action Button Text and Schedule Graceful Fade In
+            const btn = document.getElementById('btn-next-step');
+            btn.innerText = translations[currentLang].btnText;
+            btn.classList.add('hidden');
+            btn.style.opacity = '0';
+
+            const totalTimeMs = (globalIndex * 25) + 200;
+            animationTimeoutId = setTimeout(() => {
+                btn.classList.remove('hidden');
+                setTimeout(() => {
+                    btn.style.opacity = '1';
+                }, 50);
+            }, totalTimeMs);
+        }
+
+        function handleEnterClick() {
+            const currentObj = translations[currentLang];
+            // Display rich styled modal feedback or custom step handler
+            const banner = document.createElement('div');
+            banner.className = 'fixed top-6 left-1/2 -translate-x-1/2 z-[300] bg-yellow-400 text-black px-6 py-3 rounded-full font-black text-sm shadow-2xl tracking-wide flex items-center gap-2 border-2 border-white animate-bounce';
+            banner.innerHTML = `<span>✨</span> ${currentObj.alertText}`;
+            document.body.appendChild(banner);
+
+            setTimeout(() => {
+                banner.remove();
+            }, 3000);
+        }
+
+        function initFloatingParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
-        });
+            resize();
+            window.addEventListener('resize', resize);
 
-        let btn = document.getElementById('btn-next-step');
-        btn.innerText = translations[currentLang].btnText;
-        btn.classList.add('hidden');
+            const particles = [];
+            const particleCount = 45;
 
-        let totalTimeMs = (globalIndex * 30) + 300;
-        setTimeout(() => {
-            btn.classList.remove('hidden');
-        }, totalTimeMs);
-    }
-</script>
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    color: Math.random() > 0.5 ? 'rgba(255, 215, 0, ' : 'rgba(0, 243, 255, ',
+                    alpha: Math.random() * 0.5 + 0.1,
+                    vy: -(Math.random() * 0.4 + 0.1),
+                    vx: (Math.random() - 0.5) * 0.2
+                });
+            }
 
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.y += p.vy;
+                    p.x += p.vx;
+
+                    if (p.y < 0) {
+                        p.y = canvas.height;
+                        p.x = Math.random() * canvas.width;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color + p.alpha + ')';
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = p.color + '0.8)';
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animateParticles);
+            }
+
+            animateParticles();
+        }
+
+        window.onload = function() {
+            initFloatingParticles();
+        };
+    </script>
 </body>
 </html>
+```

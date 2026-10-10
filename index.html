@@ -8,7 +8,7 @@
         :root {
             --accent-gold: #ffd700;
             --accent-cyan: #00f3ff;
-            --accent-green: #00ff66;
+            --net-color: #00ff66;
         }
 
         * {
@@ -45,13 +45,13 @@
             pointer-events: none;
         }
 
-        /* Content Containers Positioned Above and Below Image */
+        /* Spacing for Above and Below Image */
         .top-section {
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 480px;
-            padding: 16px 20px 0 20px;
+            padding: 12px 16px 0 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -63,28 +63,48 @@
             z-index: 10;
             width: 100%;
             max-width: 480px;
-            padding: 0 20px 24px 20px;
+            padding: 0 16px 16px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
         }
 
-        /* Language Switcher Bar */
-        .top-bar {
+        /* Top Header & Radar Bar */
+        .header-bar {
             width: 100%;
             display: flex;
-            justify-content: flex-end;
-            margin-bottom: 8px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        /* Live Radar Antenna Widget */
+        .radar-widget {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(15, 15, 15, 0.85);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .radar-canvas {
+            width: 18px;
+            height: 18px;
         }
 
         .lang-select {
-            background: rgba(20, 20, 20, 0.9);
+            background: rgba(15, 15, 15, 0.85);
             color: var(--accent-gold);
             border: 1px solid rgba(255, 215, 0, 0.6);
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 10px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             outline: none;
             cursor: pointer;
@@ -95,24 +115,14 @@
             color: #ffffff;
         }
 
-        /* Header Title above Image */
         .header-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
             color: var(--accent-gold);
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            letter-spacing: 1px;
         }
 
-        .header-subtitle {
-            font-size: 12px;
-            color: var(--accent-cyan);
-            font-weight: 600;
-            margin-top: 2px;
-            letter-spacing: 0.5px;
-        }
-
-        /* GO Gate overlay placed strictly in the top/bottom bleeding zones */
+        /* GO Gate Overlay */
         .gate-overlay {
             position: fixed;
             inset: 0;
@@ -121,19 +131,18 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 20px 24px 20px;
+            padding: 16px;
             transition: opacity 0.3s ease;
-            pointer-events: auto;
         }
 
         .go-btn {
             position: relative;
-            width: 90px;
-            height: 90px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
             background: linear-gradient(135deg, #ffd700, #ff0055, #00f3ff);
             color: #ffffff;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             border: 2px solid #ffffff;
             cursor: pointer;
@@ -149,24 +158,24 @@
             transform: scale(0.92);
         }
 
-        /* Text container above & below image */
+        /* Text Container Styles */
         .text-top-container {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
-            line-height: 1.5;
-            min-height: 50px;
+            line-height: 1.4;
+            min-height: 35px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #ffffff;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+            color: var(--accent-gold);
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
         }
 
         .text-bottom-container {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
-            line-height: 1.6;
+            line-height: 1.5;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -177,7 +186,7 @@
         @keyframes smoothLineReveal {
             0% {
                 opacity: 0;
-                transform: translate3d(0, 10px, 0);
+                transform: translate3d(0, 8px, 0);
             }
             100% {
                 opacity: 1;
@@ -189,15 +198,16 @@
             opacity: 0;
             will-change: transform, opacity;
             animation: smoothLineReveal 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             color: #ffffff;
+            text-shadow: 0 2px 6px #000000;
         }
 
         .founder-line {
             color: var(--accent-cyan);
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
-            font-size: 15px;
-            margin-bottom: 12px;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 8px;
         }
 
         .btn-action {
@@ -205,10 +215,10 @@
             background: linear-gradient(135deg, #ffd700 0%, #ff0055 50%, #00f3ff 100%);
             color: #ffffff;
             border: none;
-            padding: 14px;
-            font-size: 14px;
+            padding: 12px;
+            font-size: 13px;
             font-weight: 900;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             box-shadow: 0 6px 20px rgba(255, 0, 85, 0.5);
             letter-spacing: 1px;
@@ -221,16 +231,16 @@
         }
 
         .lang-btn {
-            background: rgba(20, 20, 20, 0.9);
+            background: rgba(15, 15, 15, 0.9);
             border: 1.5px solid var(--accent-gold);
             color: #ffffff;
-            padding: 12px;
-            font-size: 14px;
+            padding: 11px;
+            font-size: 13px;
             font-weight: 700;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .hidden {
@@ -245,33 +255,37 @@
     <!-- Central Image (Unblocked) -->
     <div class="center-bg-image"></div>
 
-    <!-- 1. GO Gate (Outside Image Area) -->
+    <!-- 1. GO Gate -->
     <div id="go-gate" class="gate-overlay">
         <div class="top-section">
             <div class="header-title">🔌 RAI ELECTRONICS</div>
-            <div class="header-subtitle">Flagship Digital Experience</div>
         </div>
         <div class="bottom-section">
             <button class="go-btn" onclick="pressGo()">GO</button>
         </div>
     </div>
 
-    <!-- 2. Language Gate (Outside Image Area) -->
+    <!-- 2. Language Gate -->
     <div id="lang-gate" class="gate-overlay hidden">
         <div class="top-section">
-            <div class="header-title" style="font-size: 20px;">Select Language</div>
-            <div class="header-subtitle" style="color: var(--accent-green); font-size: 12px; margin-top: 4px;">कृपया भाषा चयन गर्नुहोस् / भाषा चुनें</div>
+            <div class="header-title" style="font-size: 18px;">Select Language</div>
         </div>
-        <div class="bottom-section" style="max-width: 320px;">
+        <div class="bottom-section" style="max-width: 300px;">
             <button class="lang-btn" onclick="setLanguage('en')">English</button>
             <button class="lang-btn" onclick="setLanguage('ne')">नेपाली (Nepali)</button>
             <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी (Hindi)</button>
         </div>
     </div>
 
-    <!-- 3. Dashboard Interface (Above and Below Image) -->
+    <!-- 3. Dashboard Interface -->
     <div class="top-section">
-        <div class="top-bar">
+        <div class="header-bar">
+            <!-- Satellite Network Radar Widget -->
+            <div class="radar-widget">
+                <canvas id="radarCanvas" class="radar-canvas" width="18" height="18"></canvas>
+                <span id="radarText" style="color: var(--net-color);">4G: OK</span>
+            </div>
+            
             <select id="switcher" class="lang-select" onchange="switchAppLanguage(this.value)">
                 <option value="en">English</option>
                 <option value="ne">नेपाली</option>
@@ -291,9 +305,7 @@
         en: {
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Complete! Ready for Step 2.",
-            topLines: [
-                "Welcome to Rai Electronics"
-            ],
+            topLines: ["Welcome to Rai Electronics"],
             bottomLines: [
                 "We offer you the most discounted prices",
                 "You can buy every electronic item here",
@@ -304,9 +316,7 @@
         ne: {
             btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार।",
-            topLines: [
-                "राई इलेक्ट्रोनिक्समा स्वागत छ"
-            ],
+            topLines: ["राई इलेक्ट्रोनिक्समा स्वागत छ"],
             bottomLines: [
                 "हामी तपाईंलाई सहुलियत मूल्यमा सामान दिन्छौं",
                 "तपाईं यहाँ सबै इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ",
@@ -317,9 +327,7 @@
         hi: {
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 पूर्ण! चरण 2 के लिए तैयार।",
-            topLines: [
-                "राई इलेक्ट्रॉनिक्स में स्वागत है"
-            ],
+            topLines: ["राई इलेक्ट्रॉनिक्स में स्वागत है"],
             bottomLines: [
                 "हम आपको सबसे अच्छी छूट पर सामान देते हैं",
                 "आप यहाँ हर इलेक्ट्रॉनिक आइटम खरीद सकते हैं",
@@ -330,6 +338,64 @@
     };
 
     let currentLang = 'en';
+
+    // Live Satellite Network Radar Simulation & Connection Detection
+    function initNetworkRadar() {
+        const canvas = document.getElementById('radarCanvas');
+        const ctx = canvas.getContext('2d');
+        const textElem = document.getElementById('radarText');
+        let angle = 0;
+
+        function updateNetworkStatus() {
+            let status = 'good';
+            let label = '4G: FAST';
+            let color = '#00ff66'; // Green
+
+            if (navigator.connection) {
+                const conn = navigator.connection;
+                if (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g') {
+                    status = 'bad';
+                    label = 'POOR';
+                    color = '#ff3333'; // Red
+                } else if (conn.effectiveType === '3g') {
+                    status = 'avg';
+                    label = 'AVG';
+                    color = '#ffd700'; // Yellow
+                }
+            }
+            textElem.innerText = label;
+            textElem.style.color = color;
+            document.documentElement.style.setProperty('--net-color', color);
+        }
+
+        updateNetworkStatus();
+        if (navigator.connection) {
+            navigator.connection.addEventListener('change', updateNetworkStatus);
+        }
+
+        function drawRadar() {
+            ctx.clearRect(0, 0, 18, 18);
+            
+            // Outer ring
+            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--net-color');
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(9, 9, 7.5, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Spinning Sweep Line
+            ctx.beginPath();
+            ctx.moveTo(9, 9);
+            ctx.lineTo(9 + 7.5 * Math.cos(angle), 9 + 7.5 * Math.sin(angle));
+            ctx.stroke();
+
+            angle += 0.15;
+            requestAnimationFrame(drawRadar);
+        }
+        drawRadar();
+    }
+
+    window.addEventListener('DOMContentLoaded', initNetworkRadar);
 
     function pressGo() {
         let goGate = document.getElementById('go-gate');
@@ -379,7 +445,6 @@
         let topLines = translations[currentLang].topLines;
         let bottomLines = translations[currentLang].bottomLines;
 
-        // Render Top Lines above image
         topLines.forEach((lineText, index) => {
             let div = document.createElement('div');
             div.className = 'intro-line';
@@ -389,7 +454,6 @@
             topContainer.appendChild(div);
         });
 
-        // Render Bottom Lines below image
         bottomLines.forEach((lineText, index) => {
             let div = document.createElement('div');
             div.className = index === bottomLines.length - 1 ? 'intro-line founder-line' : 'intro-line';

@@ -32,11 +32,12 @@
             position: relative;
         }
 
-        /* Perfectly Contained Background Image */
+        /* Original Center-Positioned Background Image (Jethalal & Daya Thumbs Up) */
         .center-bg-image {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             width: 100%;
             height: 100%;
             background: url('https://files.catbox.moe/lcxrp2.jpg') no-repeat center center;
@@ -45,7 +46,7 @@
             pointer-events: none;
         }
 
-        /* Locked strictly to the top and bottom bleed zones */
+        /* Locked strictly to top and bottom bleed zones */
         .top-section {
             position: relative;
             z-index: 10;
@@ -56,7 +57,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.45);
         }
 
         .bottom-section {
@@ -69,7 +70,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.45);
         }
 
         .header-bar {

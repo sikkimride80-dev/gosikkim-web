@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +33,6 @@
             position: relative;
         }
 
-        /* Scattered Funny Stickers in Outside Black Zones */
         .sticker {
             position: absolute;
             font-size: 26px;
@@ -57,7 +57,6 @@
         .s7 { bottom: 130px; left: 6%; animation-delay: 1.1s; }
         .s8 { bottom: 140px; right: 8%; animation-delay: 0.4s; }
 
-        /* Animated Alive Character Photo Frame */
         .center-bg-image {
             position: absolute;
             top: 50%;
@@ -88,7 +87,6 @@
             }
         }
 
-        /* Top and Bottom Bleed Zone Containers */
         .top-section {
             position: relative;
             z-index: 10;
@@ -123,23 +121,52 @@
             margin-bottom: 2px;
         }
 
-        /* TV Antenna Live Signal Widget with 4-Bar Waves */
         .radar-widget {
             display: flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(15, 15, 15, 0.9);
-            padding: 3px 10px;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-size: 11px;
-            font-weight: 700;
+            gap: 8px;
+            background: rgba(15, 15, 15, 0.95);
+            padding: 4px 12px;
+            border-radius: 16px;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            font-weight: 800;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
 
+        .antenna-container {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        /* Classic TV Antenna Dish / V-Poles Icon */
+        .tv-antenna-icon {
+            font-size: 20px;
+            line-height: 1;
+            z-index: 2;
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+            transform-origin: bottom center;
+            animation: gentleAntennaSway 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes gentleAntennaSway {
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+
+        /* Live Canvas for WiFi Signal Waves */
         .signal-canvas {
-            width: 22px;
-            height: 18px;
-            display: block;
+            position: absolute;
+            top: -6px;
+            left: 0;
+            width: 32px;
+            height: 32px;
+            z-index: 3;
+            pointer-events: none;
         }
 
         .lang-select {
@@ -326,9 +353,12 @@
     <!-- 3. Dashboard Interface -->
     <div class="top-section">
         <div class="header-bar">
-            <!-- Antenna with 4-Bar WiFi Style Sending/Receiving Signal Arcs -->
+            <!-- TV Antenna with 4 Live WiFi Signal Sending/Receiving Arcs Canvas -->
             <div class="radar-widget">
-                <canvas id="signalCanvas" class="signal-canvas" width="22" height="18"></canvas>
+                <div class="antenna-container">
+                    <span class="tv-antenna-icon">📡</span>
+                    <canvas id="signalCanvas" class="signal-canvas" width="32" height="32"></canvas>
+                </div>
                 <span id="radarText" style="color: var(--net-color);">4G: FAST</span>
             </div>
             
@@ -385,12 +415,11 @@
 
     let currentLang = 'en';
 
-    // Live Signal Arc Canvas Animation & Accurate Connection Monitor
     function initNetworkAntenna() {
         const textElem = document.getElementById('radarText');
         const canvas = document.getElementById('signalCanvas');
         const ctx = canvas.getContext('2d');
-        let pulseStep = 0;
+        let wavePhase = 0;
 
         function checkSpeed() {
             let color = '#00ff66'; // Green
@@ -407,7 +436,7 @@
                     label = 'POOR';
                 } else if (type === '3g') {
                     color = '#ffd700'; // Yellow
-                    label = 'AVG';
+                    label = '3G: AVG';
                 } else {
                     color = '#00ff66'; // Green
                     label = '4G: FAST';
@@ -422,43 +451,33 @@
             document.documentElement.style.setProperty('--net-color', color);
         }
 
-        // Animated 4-Bar Sending & Receiving Signal Waves above Antenna
+        // Draw 4 WiFi Arc Bars broadcasting above the TV Antenna icon
         function drawSignalWaves() {
-            ctx.clearRect(0, 0, 22, 18);
+            ctx.clearRect(0, 0, 32, 32);
             const activeColor = getComputedStyle(document.documentElement).getPropertyValue('--net-color').trim() || '#00ff66';
 
-            // Draw Antenna Base V-Shape
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 1.5;
-            ctx.beginPath();
-            ctx.moveTo(7, 17);
-            ctx.lineTo(11, 12);
-            ctx.lineTo(15, 17);
-            ctx.stroke();
+            const centerX = 16;
+            const centerY = 24;
+            const radii = [4, 8, 12, 16]; // 4 distinct arcs
 
-            // Draw Central Stem
-            ctx.beginPath();
-            ctx.moveTo(11, 17);
-            ctx.lineTo(11, 10);
-            ctx.stroke();
-
-            // 4 Curved Signal Wave Bars above the antenna tip
-            const radii = [3, 5.5, 8, 10.5];
-            
             radii.forEach((r, idx) => {
                 ctx.beginPath();
-                ctx.arc(11, 10, r, Math.PI * 1.25, Math.PI * 1.75);
+                // Draw arc above the antenna dish top
+                ctx.arc(centerX, centerY, r, Math.PI * 1.2, Math.PI * 1.8);
                 
-                // Pulsing sending/receiving style glow
-                let isActiveWave = (Math.floor(pulseStep) % 4) === idx;
+                // Pulsing wave sequence to depict sending & receiving
+                let waveIndex = Math.floor(wavePhase) % 4;
+                let isActiveWave = waveIndex === idx;
+
                 ctx.strokeStyle = isActiveWave ? '#ffffff' : activeColor;
-                ctx.lineWidth = isActiveWave ? 2 : 1.2;
-                ctx.globalAlpha = isActiveWave ? 1.0 : 0.65;
+                ctx.lineWidth = isActiveWave ? 2.5 : 1.5;
+                ctx.globalAlpha = isActiveWave ? 1.0 : 0.6;
+                ctx.lineCap = 'round';
                 ctx.stroke();
             });
 
             ctx.globalAlpha = 1.0;
-            pulseStep += 0.08;
+            wavePhase += 0.07;
             requestAnimationFrame(drawSignalWaves);
         }
 
@@ -549,3 +568,4 @@
 
 </body>
 </html>
+```

@@ -32,30 +32,37 @@
             position: relative;
         }
 
-        /* Stickers filled strictly in the outside black zone */
-        .sticker-field {
+        /* Randomly Scattered Stickers in Outside Black Zones */
+        .sticker {
             position: absolute;
-            inset: 0;
+            font-size: 26px;
             z-index: 2;
             pointer-events: none;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-content: space-between;
-            padding: 40px 10px;
-        }
-
-        .sticker {
-            font-size: 26px;
-            opacity: 0.85;
+            opacity: 0.9;
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.9));
             animation: floatSticker 3s ease-in-out infinite alternate;
         }
 
         @keyframes floatSticker {
             0% { transform: translateY(0px) scale(1); }
-            100% { transform: translateY(-6px) scale(1.1); }
+            100% { transform: translateY(-5px) scale(1.08); }
         }
+
+        /* Exact scattered placement across top, sides, and bottom black zones */
+        .s1 { top: 60px; left: 8%; animation-delay: 0s; }
+        .s2 { top: 75px; right: 10%; animation-delay: 0.3s; }
+        .s3 { top: 120px; left: 3%; animation-delay: 0.6s; }
+        .s4 { top: 130px; right: 4%; animation-delay: 0.9s; }
+        .s5 { top: 38%لیس: left: 2%; animation-delay: 1.2s; }
+        .s6 { top: 44%; right: 3%; animation-delay: 0.2s; }
+        .s7 { top: 56%; left: 4%; animation-delay: 0.5s; }
+        .s8 { top: 52%; right: 2%; animation-delay: 0.8s; }
+        .s9 { bottom: 130px; left: 6%; animation-delay: 1.1s; }
+        .s10 { bottom: 140px; right: 8%; animation-delay: 0.4s; }
+        .s11 { bottom: 85px; left: 15%; animation-delay: 0.7s; }
+        .s12 { bottom: 90px; right: 16%; animation-delay: 1.0s; }
+        .s13 { bottom: 110px; left: 38%; animation-delay: 0.2s; }
+        .s14 { bottom: 75px; right: 40%; animation-delay: 0.5s; }
 
         /* Animated Alive Character Photo Frame */
         .center-bg-image {
@@ -286,29 +293,21 @@
 </head>
 <body>
 
-    <!-- Dense Funny Stickers Filled in Black Space -->
-    <div class="sticker-field">
-        <span class="sticker" style="animation-delay: 0s;">🤪</span>
-        <span class="sticker" style="animation-delay: 0.3s;">⚡</span>
-        <span class="sticker" style="animation-delay: 0.6s;">😂</span>
-        <span class="sticker" style="animation-delay: 0.9s;">⭐</span>
-        <span class="sticker" style="animation-delay: 1.2s;">🤡</span>
-        <span class="sticker" style="animation-delay: 0.2s;">😜</span>
-        <span class="sticker" style="animation-delay: 0.5s;">🎉</span>
-        <span class="sticker" style="animation-delay: 0.8s;">😎</span>
-        <span class="sticker" style="animation-delay: 1.1s;">🥳</span>
-        <span class="sticker" style="animation-delay: 0.4s;">✨</span>
-        <span class="sticker" style="animation-delay: 0.7s;">🔥</span>
-        <span class="sticker" style="animation-delay: 1.0s;">🚀</span>
-        <span class="sticker" style="animation-delay: 0.1s;">👍</span>
-        <span class="sticker" style="animation-delay: 0.5s;">💥</span>
-        <span class="sticker" style="animation-delay: 0.9s;">🤖</span>
-        <span class="sticker" style="animation-delay: 1.3s;">📺</span>
-        <span class="sticker" style="animation-delay: 0.4s;">💡</span>
-        <span class="sticker" style="animation-delay: 0.8s;">📱</span>
-        <span class="sticker" style="animation-delay: 1.2s;">🎁</span>
-        <span class="sticker" style="animation-delay: 0.3s;">👑</span>
-    </div>
+    <!-- Scattered Funny Stickers in Outside Black Zones -->
+    <div class="sticker s1">🤪</div>
+    <div class="sticker s2">😂</div>
+    <div class="sticker s3">⚡</div>
+    <div class="sticker s4">⭐</div>
+    <div class="sticker s5">🤡</div>
+    <div class="sticker s6">😜</div>
+    <div class="sticker s7">🎉</div>
+    <div class="sticker s8">😎</div>
+    <div class="sticker s9">🥳</div>
+    <div class="sticker s10">🔥</div>
+    <div class="sticker s11">🚀</div>
+    <div class="sticker s12">👍</div>
+    <div class="sticker s13">📺</div>
+    <div class="sticker s14">👑</div>
 
     <!-- Central Background Image with Live Motion -->
     <div class="center-bg-image"></div>

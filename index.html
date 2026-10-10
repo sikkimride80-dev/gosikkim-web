@@ -157,7 +157,7 @@
     const translations = {
         en: {
             speech: "Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.",
-            langCode: "en-US",
+            langCode: "en",
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Intro Complete! Ready for Step 2.",
             lines: [
@@ -174,9 +174,9 @@
             ]
         },
         ne: {
-            speech: "राई इलेक्ट्रोडिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
-            langCode: "ne-NP",
-            btnText: "राई इलेक्ट्रोडिक्समा प्रवेश गर्नुहोस् 🚀",
+            speech: "राई इलेक्ट्रोनिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
+            langCode: "ne",
+            btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार.",
             lines: [
                 ["राई", "इलेक्ट्रोनिक्समा", "स्वागत", "छ"],
@@ -193,7 +193,7 @@
         },
         hi: {
             speech: "राई इलेक्ट्रॉनिक्स में आपका स्वागत है। हम आपको सबसे कम कीमत पर सामान प्रदान करते हैं। आप यहाँ हर इलेक्ट्रॉनिक सामान खरीद सकते हैं। कृपया अपनी यात्रा का आनंद लें। संस्थापक उत्तम राय।",
-            langCode: "hi-IN",
+            langCode: "hi",
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 परिचय पूर्ण! चरण 2 के लिए तैयार.",
             lines: [
@@ -212,6 +212,7 @@
     };
 
     let currentLang = 'en';
+    let currentAudio = null;
 
     window.onload = function() {
         let savedLang = localStorage.getItem('rai_preferred_lang');
@@ -238,40 +239,52 @@
     function switchAppLanguage(lang) {
         currentLang = lang;
         localStorage.setItem('rai_preferred_lang', lang);
-        window.speechSynthesis.cancel();
+        stopAllSpeech();
         startExperience();
     }
 
-    function speakText(text, langCode) {
-        if (!('speechSynthesis' in window)) return;
-        
-        window.speechSynthesis.cancel();
-        let utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.95;
-
-        // Force proper voice matching for Nepali, Hindi, or English
-        let voices = window.speechSynthesis.getVoices();
-        let targetVoice = voices.find(v => v.lang === langCode || v.lang.startsWith(langCode.substring(0, 2)));
-        if (targetVoice) {
-            utterance.voice = targetVoice;
+    function stopAllSpeech() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
         }
-        utterance.lang = langCode;
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio = null;
+        }
+    }
 
-        window.speechSynthesis.speak(utterance);
+    function playMultilingualSpeech(text, langCode) {
+        stopAllSpeech();
+
+        let fullLangCode = langCode === 'ne' ? 'ne-NP' : (langCode === 'hi' ? 'hi-IN' : 'en-US');
+
+        // Check if browser has native speech voice for the requested language
+        let voices = ('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : [];
+        let hasNativeVoice = voices.some(v => v.lang.startsWith(langCode));
+
+        if ('speechSynthesis' in window && hasNativeVoice) {
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.95;
+            let targetVoice = voices.find(v => v.lang.startsWith(langCode));
+            if (targetVoice) utterance.voice = targetVoice;
+            utterance.lang = fullLangCode;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            // Guaranteed Fallback Audio Stream for Nepali, Hindi, or English
+            let encodedText = encodeURIComponent(text);
+            let audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${langCode}&client=tw-ob`;
+            
+            currentAudio = new Audio(audioUrl);
+            currentAudio.play().catch(e => console.log("Audio playback error:", e));
+        }
     }
 
     function startExperience() {
-        // Trigger voice narration with proper voice matching
         let textToSpeak = translations[currentLang].speech;
         let langCode = translations[currentLang].langCode;
 
-        if ('speechSynthesis' in window) {
-            speakText(textToSpeak, langCode);
-            // Ensure voices are preloaded for mobile browsers
-            window.speechSynthesis.onvoiceschanged = () => {
-                speakText(textToSpeak, langCode);
-            };
-        }
+        // Play authentic speech audio
+        playMultilingualSpeech(textToSpeak, langCode);
 
         // Render localized fast letter rain
         let container = document.getElementById('rain-text-output');

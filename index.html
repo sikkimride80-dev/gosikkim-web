@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rai Electronics - Multilingual Cinematic Intro</title>
+    <title>Rai Electronics - Multilingual Intro</title>
+    
+    <!-- High-Performance Responsive Multilingual Text-To-Speech Engine -->
+    <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE_KEY"></script>
+
     <style>
         :root {
             --bg-deep: #050110;
@@ -126,8 +130,8 @@
 </head>
 <body>
 
-<!-- Language Selection Gateway -->
-<div id="lang-gate" style="position: fixed; inset: 0; background: rgba(5,1,16,0.97); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; text-align: center;">
+<!-- Language Selection Gate -->
+<div id="lang-gate" style="position: fixed; inset: 0; background: rgba(5,1,16,0.98); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 25px; text-align: center;">
     <div style="font-size: 22px; font-weight: 900; color: #ffff00; margin-bottom: 8px;">🔌 Rai Electronics</div>
     <div style="font-size: 14px; color: #00ff66; margin-bottom: 25px; font-weight: 600;">Please select your preferred language / भाषा छान्नुहोस्</div>
     
@@ -138,9 +142,9 @@
     </div>
 </div>
 
-<!-- Main App Container -->
+<!-- Main Container -->
 <div class="app-container">
-    <!-- Top Bar with Language Switcher -->
+    <!-- Switcher Bar inside dashboard -->
     <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
         <select id="switcher" onchange="switchAppLanguage(this.value)" style="background: rgba(255,255,255,0.15); color: #ffff00; border: 1px solid #ffff00; padding: 6px 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">
             <option value="en" style="background:#050110;">English</option>
@@ -157,7 +161,7 @@
     const translations = {
         en: {
             speech: "Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.",
-            langCode: "en",
+            rvVoice: "US English Female",
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Intro Complete! Ready for Step 2.",
             lines: [
@@ -175,7 +179,7 @@
         },
         ne: {
             speech: "राई इलेक्ट्रोनिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
-            langCode: "ne",
+            rvVoice: "Hindi Female", // Nepali renders with high fidelity through Hindi accent speech engine
             btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार.",
             lines: [
@@ -193,7 +197,7 @@
         },
         hi: {
             speech: "राई इलेक्ट्रॉनिक्स में आपका स्वागत है। हम आपको सबसे कम कीमत पर सामान प्रदान करते हैं। आप यहाँ हर इलेक्ट्रॉनिक सामान खरीद सकते हैं। कृपया अपनी यात्रा का आनंद लें। संस्थापक उत्तम राय।",
-            langCode: "hi",
+            rvVoice: "Hindi Female",
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 परिचय पूर्ण! चरण 2 के लिए तैयार.",
             lines: [
@@ -212,7 +216,6 @@
     };
 
     let currentLang = 'en';
-    let currentAudio = null;
 
     window.onload = function() {
         let savedLang = localStorage.getItem('rai_preferred_lang');
@@ -239,52 +242,33 @@
     function switchAppLanguage(lang) {
         currentLang = lang;
         localStorage.setItem('rai_preferred_lang', lang);
-        stopAllSpeech();
+        if (window.responsiveVoice) window.responsiveVoice.cancel();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         startExperience();
     }
 
-    function stopAllSpeech() {
-        if ('speechSynthesis' in window) {
+    function triggerVoiceNarration() {
+        let textToSpeak = translations[currentLang].speech;
+        let voiceName = translations[currentLang].rvVoice;
+
+        // Try ResponsiveVoice engine first
+        if (window.responsiveVoice && typeof window.responsiveVoice.speak === 'function') {
+            window.responsiveVoice.cancel();
+            window.responsiveVoice.speak(textToSpeak, voiceName, { rate: 0.95 });
+        } 
+        // Fallback to Native Speech Synthesis
+        else if ('speechSynthesis' in window) {
             window.speechSynthesis.cancel();
-        }
-        if (currentAudio) {
-            currentAudio.pause();
-            currentAudio = null;
-        }
-    }
-
-    function playMultilingualSpeech(text, langCode) {
-        stopAllSpeech();
-
-        let fullLangCode = langCode === 'ne' ? 'ne-NP' : (langCode === 'hi' ? 'hi-IN' : 'en-US');
-
-        // Check if browser has native speech voice for the requested language
-        let voices = ('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : [];
-        let hasNativeVoice = voices.some(v => v.lang.startsWith(langCode));
-
-        if ('speechSynthesis' in window && hasNativeVoice) {
-            let utterance = new SpeechSynthesisUtterance(text);
+            let utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = currentLang === 'en' ? 'en-US' : (currentLang === 'ne' ? 'ne-NP' : 'hi-IN');
             utterance.rate = 0.95;
-            let targetVoice = voices.find(v => v.lang.startsWith(langCode));
-            if (targetVoice) utterance.voice = targetVoice;
-            utterance.lang = fullLangCode;
             window.speechSynthesis.speak(utterance);
-        } else {
-            // Guaranteed Fallback Audio Stream for Nepali, Hindi, or English
-            let encodedText = encodeURIComponent(text);
-            let audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedText}&tl=${langCode}&client=tw-ob`;
-            
-            currentAudio = new Audio(audioUrl);
-            currentAudio.play().catch(e => console.log("Audio playback error:", e));
         }
     }
 
     function startExperience() {
-        let textToSpeak = translations[currentLang].speech;
-        let langCode = translations[currentLang].langCode;
-
-        // Play authentic speech audio
-        playMultilingualSpeech(textToSpeak, langCode);
+        // Trigger voice narration
+        triggerVoiceNarration();
 
         // Render localized fast letter rain
         let container = document.getElementById('rain-text-output');
@@ -337,7 +321,7 @@
             }
         });
 
-        // Update button text and reveal after animation
+        // Reveal enter button strictly after letters drop
         let btn = document.getElementById('btn-next-step');
         btn.innerText = translations[currentLang].btnText;
         btn.classList.add('hidden');

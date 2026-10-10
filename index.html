@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rai Electronics - Cinematic Intro</title>
-    <!-- Cross-Platform Multilingual TTS Voice Engine -->
-    <script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE_KEY"></script>
+    <title>Rai Electronics - Multilingual Intro</title>
     <style>
         :root {
             --bg-deep: #050110;
@@ -222,7 +220,7 @@
     const translations = {
         en: {
             speech: "Welcome to Rai Electronics. We offer you the most discounted prices. You can buy every electronic item here. Please enjoy your visit. Founder Uttam Rai.",
-            voiceName: "US English Female",
+            langCodes: ["en-US", "en-GB", "en"],
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Intro Complete! Ready for Step 2.",
             lines: [
@@ -240,7 +238,7 @@
         },
         ne: {
             speech: "राई इलेक्ट्रोनिक्समा स्वागत छ। हामी तपाईंलाई सबैभन्दा बढी छुट मूल्यहरू प्रदान गर्दछौं। तपाईं यहाँ हरेक इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ। तपाईंको भ्रमणको आनन्द लिनुहोस्। संस्थापक उत्तम राई।",
-            voiceName: "Hindi Female",
+            langCodes: ["ne-NP", "ne", "hi-IN", "hi"],
             btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार.",
             lines: [
@@ -258,7 +256,7 @@
         },
         hi: {
             speech: "राई इलेक्ट्रॉनिक्स में आपका स्वागत है। हम आपको सबसे कम कीमत पर सामान प्रदान करते हैं। आप यहाँ हर इलेक्ट्रॉनिक सामान खरीद सकते हैं। कृपया अपनी यात्रा का आनंद लें। संस्थापक उत्तम राय।",
-            voiceName: "Hindi Female",
+            langCodes: ["hi-IN", "hi", "ne-NP"],
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 परिचय पूर्ण! चरण 2 के लिए तैयार.",
             lines: [
@@ -279,6 +277,10 @@
     let currentLang = 'en';
 
     function pressGo() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.resume();
+        }
+
         let goGate = document.getElementById('go-gate');
         goGate.style.opacity = '0';
         setTimeout(() => { 
@@ -311,34 +313,46 @@
     function switchAppLanguage(lang) {
         currentLang = lang;
         localStorage.setItem('rai_preferred_lang', lang);
-        stopSpeech();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
         startExperience();
     }
 
-    function stopSpeech() {
-        if (window.responsiveVoice && typeof window.responsiveVoice.cancel === 'function') {
-            window.responsiveVoice.cancel();
-        }
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-        }
-    }
-
     function speakInSelectedLanguage() {
-        stopSpeech();
+        if (!('speechSynthesis' in window)) return;
+
+        window.speechSynthesis.cancel();
 
         let textToSpeak = translations[currentLang].speech;
-        let voiceName = translations[currentLang].voiceName;
+        let langCodes = translations[currentLang].langCodes;
 
-        // Guaranteed speech execution via ResponsiveVoice
-        if (window.responsiveVoice && typeof window.responsiveVoice.speak === 'function') {
-            window.responsiveVoice.speak(textToSpeak, voiceName, { rate: 0.95 });
-        } else if ('speechSynthesis' in window) {
-            let utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = currentLang === 'ne' ? 'ne-NP' : (currentLang === 'hi' ? 'hi-IN' : 'en-US');
-            utterance.rate = 0.9;
-            window.speechSynthesis.speak(utterance);
+        let utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.rate = 0.85;
+        utterance.pitch = 1.0;
+
+        let voices = window.speechSynthesis.getVoices();
+        let targetVoice = null;
+
+        for (let code of langCodes) {
+            targetVoice = voices.find(v => v.lang.toLowerCase() === code.toLowerCase() || v.lang.toLowerCase().startsWith(code.substring(0, 2).toLowerCase()));
+            if (targetVoice) {
+                utterance.voice = targetVoice;
+                utterance.lang = targetVoice.lang;
+                break;
+            }
         }
+
+        if (!targetVoice) {
+            utterance.lang = langCodes[0];
+        }
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Pre-load voices for browsers
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.getVoices();
+        };
     }
 
     function startExperience() {

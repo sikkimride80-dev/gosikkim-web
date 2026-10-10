@@ -9,8 +9,7 @@
             --bg-void: #020008;
             --accent-gold: #ffd700;
             --accent-cyan: #00f3ff;
-            --glass-bg: rgba(12, 6, 28, 0.88);
-            --border-glow: linear-gradient(135deg, #ffd700, #ff0055, #00f3ff);
+            --glass-bg: rgba(12, 6, 28, 0.92);
         }
 
         * {
@@ -32,7 +31,6 @@
             position: relative;
         }
 
-        /* Ambient Background Mesh */
         .ambient-bg {
             position: fixed;
             inset: 0;
@@ -40,27 +38,12 @@
             z-index: 0;
         }
 
-        .ambient-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate3d(-50%, -50%, 0);
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle, rgba(255, 0, 85, 0.15) 0%, rgba(0, 243, 255, 0.1) 50%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(50px);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Overlay Gate Layer */
         .gate-overlay {
             position: fixed;
             inset: 0;
             background: rgba(2, 0, 8, 0.96);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             z-index: 100;
             display: flex;
             flex-direction: column;
@@ -68,10 +51,9 @@
             align-items: center;
             padding: 24px;
             text-align: center;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: opacity 0.3s ease;
         }
 
-        /* GO Button Ring */
         .go-btn-wrapper {
             position: relative;
             margin-top: 30px;
@@ -81,15 +63,9 @@
             position: absolute;
             inset: -4px;
             border-radius: 50%;
-            background: linear-gradient(45deg, #ffd700, #ff0055, #00f3ff, #00ff66);
-            filter: blur(12px);
+            background: linear-gradient(45deg, #ffd700, #ff0055, #00f3ff);
+            filter: blur(10px);
             opacity: 0.8;
-            animation: pulseGlow 2s infinite alternate ease-in-out;
-        }
-
-        @keyframes pulseGlow {
-            0% { opacity: 0.5; transform: scale(0.98); }
-            100% { opacity: 1; transform: scale(1.05); }
         }
 
         .go-btn {
@@ -101,38 +77,30 @@
             color: #ffffff;
             font-size: 28px;
             font-weight: 900;
-            border: 2px solid rgba(255, 215, 0, 0.6);
+            border: 2px solid rgba(255, 215, 0, 0.8);
             cursor: pointer;
-            box-shadow: inset 0 0 20px rgba(255, 215, 0, 0.2);
             display: flex;
             justify-content: center;
             align-items: center;
             letter-spacing: 2px;
-            transition: transform 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
 
-        .go-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* Main Container Card */
         .app-container {
             position: relative;
             z-index: 10;
             width: 100%;
             max-width: 480px;
             background: var(--glass-bg);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             padding: 32px 20px;
             border-radius: 28px;
             border: 2px solid rgba(255, 215, 0, 0.8);
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.15), 0 20px 50px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.15), 0 20px 40px rgba(0, 0, 0, 0.8);
             text-align: center;
             margin: 16px;
         }
 
-        /* Top Language Bar */
         .top-bar {
             display: flex;
             justify-content: flex-end;
@@ -156,35 +124,22 @@
             color: #ffffff;
         }
 
-        /* Letter Rain Container */
-        .rain-text-container {
-            font-size: 18px;
+        /* Zero-Lag Line Reveal Container */
+        .text-container {
+            font-size: 19px;
             font-weight: 800;
-            line-height: 2.1;
-            min-height: 280px;
+            line-height: 2.2;
+            min-height: 260px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        .word-wrapper {
-            display: inline-block;
-            white-space: nowrap;
-            margin-right: 5px;
-        }
-
-        .line-break {
-            display: block;
-            height: 12px;
-            width: 100%;
-        }
-
-        /* GPU-Accelerated Letter Drop Animation */
-        @keyframes fastDropHardware {
+        @keyframes smoothLineReveal {
             0% {
                 opacity: 0;
-                transform: translate3d(0, -25px, 0);
+                transform: translate3d(0, 15px, 0);
             }
             100% {
                 opacity: 1;
@@ -192,39 +147,23 @@
             }
         }
 
-        @keyframes colorFlickerFast {
-            0% { color: #ffff00; }   /* Yellow */
-            16% { color: #00ff66; }  /* Green */
-            33% { color: #00f3ff; }  /* Blue */
-            50% { color: #ff3333; }  /* Red */
-            66% { color: #ff9900; }  /* Orange */
-            83% { color: #cc33ff; }  /* Purple */
-            100% { color: #ffff00; } /* Yellow */
-        }
-
-        .rain-char {
-            display: inline-block;
+        .intro-line {
             opacity: 0;
             will-change: transform, opacity;
-            animation: fastDropHardware 0.12s cubic-bezier(0, 0, 0.2, 1) forwards, colorFlickerFast 0.9s infinite linear;
+            animation: smoothLineReveal 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+            margin-bottom: 8px;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
         }
 
-        .icon-item {
-            display: inline-flex;
-            align-items: center;
-            margin: 0 3px;
-            opacity: 0;
-            will-change: transform, opacity;
-            animation: fastDropHardware 0.12s cubic-bezier(0, 0, 0.2, 1) forwards;
-            font-size: 20px;
-            vertical-align: middle;
+        .founder-line {
+            color: #00f3ff;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
         }
 
-        /* Action Buttons */
         .btn-action {
             width: 100%;
             background: linear-gradient(135deg, #ffd700 0%, #ff0055 50%, #00f3ff 100%);
-            background-size: 200% 200%;
             color: #ffffff;
             border: none;
             padding: 16px;
@@ -236,11 +175,7 @@
             box-shadow: 0 8px 25px rgba(255, 0, 85, 0.35);
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: transform 0.2s ease, opacity 0.3s ease;
-        }
-
-        .btn-action:active {
-            transform: scale(0.98);
+            transition: opacity 0.3s ease;
         }
 
         .lang-btn {
@@ -254,13 +189,6 @@
             cursor: pointer;
             width: 100%;
             margin-bottom: 12px;
-            transition: background 0.2s ease, transform 0.2s ease;
-        }
-
-        .lang-btn:active {
-            background: var(--accent-gold);
-            color: #000000;
-            transform: scale(0.98);
         }
 
         .hidden {
@@ -273,12 +201,11 @@
 <body>
 
     <div class="ambient-bg"></div>
-    <div class="ambient-glow"></div>
 
-    <!-- 1. Mandatory GO Entry Gate -->
+    <!-- 1. GO Gate -->
     <div id="go-gate" class="gate-overlay">
-        <div style="font-size: 26px; font-weight: 900; color: var(--accent-gold); letter-spacing: 1px;">🔌 RAI ELECTRONICS</div>
-        <div style="font-size: 13px; color: var(--accent-cyan); margin-top: 6px; font-weight: 600; letter-spacing: 0.5px;">Flagship Digital Experience</div>
+        <div style="font-size: 26px; font-weight: 900; color: var(--accent-gold);">🔌 RAI ELECTRONICS</div>
+        <div style="font-size: 13px; color: var(--accent-cyan); margin-top: 6px; font-weight: 600;">Flagship Digital Experience</div>
         
         <div class="go-btn-wrapper" onclick="pressGo()">
             <div class="go-btn-glow"></div>
@@ -286,7 +213,7 @@
         </div>
     </div>
 
-    <!-- 2. Language Selection Gate -->
+    <!-- 2. Language Gate -->
     <div id="lang-gate" class="gate-overlay hidden">
         <div style="font-size: 22px; font-weight: 900; color: var(--accent-gold); margin-bottom: 6px;">Select Language</div>
         <div style="font-size: 13px; color: #00ff66; margin-bottom: 24px; font-weight: 600;">कृपया भाषा चयन गर्नुहोस् / भाषा चुनें</div>
@@ -298,7 +225,7 @@
         </div>
     </div>
 
-    <!-- 3. Main Dashboard Card -->
+    <!-- 3. Main Dashboard -->
     <div class="app-container">
         <div class="top-bar">
             <select id="switcher" class="lang-select" onchange="switchAppLanguage(this.value)">
@@ -308,7 +235,7 @@
             </select>
         </div>
 
-        <div id="rain-text-output" class="rain-text-container"></div>
+        <div id="text-output" class="text-container"></div>
         <button class="btn-action hidden" id="btn-next-step" onclick="alert(translations[currentLang].alertText)">Enter Rai Electronics 🚀</button>
     </div>
 
@@ -318,48 +245,33 @@
             btnText: "Enter Rai Electronics 🚀",
             alertText: "Step 1 Complete! Ready for Step 2.",
             lines: [
-                ["Welcome", "to", "Rai", "Electronics"],
-                ["We", "offer", "you", "the", "most", "discounted", "prices"],
-                ["You", "can", "buy", "every", "electronic", "item", "here"],
-                ["Please", "Enjoy", "Your", "Visit"],
-                { type: "founder", items: [
-                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
-                    { type: "word", text: "Founder" }, { type: "word", text: ":" },
-                    { type: "word", text: "Uttam" }, { type: "word", text: "Rai" },
-                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
-                ]}
+                "Welcome to Rai Electronics",
+                "We offer you the most discounted prices",
+                "You can buy every electronic item here",
+                "Please Enjoy Your Visit",
+                "🌹 🙏 Founder : Uttam Rai 🙏 🌹"
             ]
         },
         ne: {
             btnText: "राई इलेक्ट्रोनिक्समा प्रवेश गर्नुहोस् 🚀",
             alertText: "चरण १ पूरा भयो! चरण २ का लागि तयार।",
             lines: [
-                ["राई", "इलेक्ट्रोनिक्समा", "स्वागत", "छ"],
-                ["हामी", "तपाईंलाई", "सहुलियत", "मूल्यमा", "सामान", "दिन्छौं"],
-                ["तपाईं", "यहाँ", "सबै", "इलेक्ट्रोनिक", "सामान", "किन्न", "सक्नुहुन्छ"],
-                ["कृपया", "तपाईंको", "भ्रमणको", "आनन्द", "लिनुहोस्"],
-                { type: "founder", items: [
-                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
-                    { type: "word", text: "संस्थापक" }, { type: "word", text: ":" },
-                    { type: "word", text: "उत्तम" }, { type: "word", text: "राई" },
-                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
-                ]}
+                "राई इलेक्ट्रोनिक्समा स्वागत छ",
+                "हामी तपाईंलाई सहुलियत मूल्यमा सामान दिन्छौं",
+                "तपाईं यहाँ सबै इलेक्ट्रोनिक सामान किन्न सक्नुहुन्छ",
+                "कृपया तपाईंको भ्रमणको आनन्द लिनुहोस्",
+                "🌹 🙏 संस्थापक : उत्तम राई 🙏 🌹"
             ]
         },
         hi: {
             btnText: "राई इलेक्ट्रॉनिक्स स्टोर में प्रवेश करें 🚀",
             alertText: "चरण 1 पूर्ण! चरण 2 के लिए तैयार।",
             lines: [
-                ["राई", "इलेक्ट्रॉनिक्स", "में", "स्वागत", "है"],
-                ["हम", "आपको", "सबसे", "अच्छी", "छूट", "पर", "सामान", "देते", "हैं"],
-                ["आप", "यहाँ", "हर", "इलेक्ट्रॉनिक", "आइटम", "खरीद", "सकते", "हैं"],
-                ["कृपया", "अपनी", "यात्रा", "का", "आनंद", "लें"],
-                { type: "founder", items: [
-                    { type: "icon", text: "🌹" }, { type: "icon", text: "🙏" },
-                    { type: "word", text: "संस्थापक" }, { type: "word", text: ":" },
-                    { type: "word", text: "उत्तम" }, { type: "word", text: "राय" },
-                    { type: "icon", text: "🙏" }, { type: "icon", text: "🌹" }
-                ]}
+                "राई इलेक्ट्रॉनिक्स में स्वागत है",
+                "हम आपको सबसे अच्छी छूट पर सामान देते हैं",
+                "आप यहाँ हर इलेक्ट्रॉनिक आइटम खरीद सकते हैं",
+                "कृपया अपनी यात्रा का आनंद लें",
+                "🌹 🙏 संस्थापक : उत्तम राय 🙏 🌹"
             ]
         }
     };
@@ -402,59 +314,29 @@
     }
 
     function startExperience() {
-        let container = document.getElementById('rain-text-output');
+        let container = document.getElementById('text-output');
         let btn = document.getElementById('btn-next-step');
         
         container.innerHTML = "";
         btn.classList.add('hidden');
         btn.innerText = translations[currentLang].btnText;
 
-        let globalIndex = 0;
-        let dataLines = translations[currentLang].lines;
+        let lines = translations[currentLang].lines;
         let fragment = document.createDocumentFragment();
 
-        dataLines.forEach((lineData, lineIndex) => {
-            let wordsInLine = Array.isArray(lineData) 
-                ? lineData.map(w => ({ type: "word", text: w }))
-                : lineData.items;
-
-            wordsInLine.forEach((item) => {
-                let wordSpan = document.createElement('span');
-                wordSpan.className = 'word-wrapper';
-
-                if (item.type === "icon") {
-                    let iconSpan = document.createElement('span');
-                    iconSpan.className = 'icon-item';
-                    iconSpan.innerText = item.text;
-                    iconSpan.style.animationDelay = `${globalIndex * 0.02}s`;
-                    wordSpan.appendChild(iconSpan);
-                    globalIndex++;
-                } else {
-                    let word = item.text;
-                    for (let i = 0; i < word.length; i++) {
-                        let charSpan = document.createElement('span');
-                        charSpan.className = 'rain-char';
-                        charSpan.innerText = word.charAt(i);
-                        // Stagger delay optimized to 0.02s per character for buttery 60fps drops
-                        charSpan.style.animationDelay = `${globalIndex * 0.02}s, ${globalIndex * 0.03}s`;
-                        wordSpan.appendChild(charSpan);
-                        globalIndex++;
-                    }
-                }
-                fragment.appendChild(wordSpan);
-            });
-
-            if (lineIndex < dataLines.length - 1) {
-                let br = document.createElement('div');
-                br.className = 'line-break';
-                fragment.appendChild(br);
-            }
+        lines.forEach((lineText, index) => {
+            let div = document.createElement('div');
+            div.className = index === lines.length - 1 ? 'intro-line founder-line' : 'intro-line';
+            div.innerText = lineText;
+            // Staggered GPU animation per line for instant zero-lag loading
+            div.style.animationDelay = `${index * 0.2}s`;
+            fragment.appendChild(div);
         });
 
         container.appendChild(fragment);
 
-        // Reveal enter button right as letter animation completes
-        let totalTimeMs = (globalIndex * 20) + 200;
+        // Reveal enter button smoothly right after the lines finish appearing
+        let totalTimeMs = (lines.length * 200) + 150;
         setTimeout(() => {
             btn.classList.remove('hidden');
         }, totalTimeMs);

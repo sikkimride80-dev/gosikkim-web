@@ -8,6 +8,7 @@
         :root {
             --accent-gold: #ffd700;
             --accent-cyan: #00f3ff;
+            /* Using slight opacity to enhance UTF-8 text contrast */
             --glass-bg: rgba(10, 5, 25, 0.55);
             --glass-border: rgba(255, 215, 0, 0.85);
         }
@@ -21,8 +22,11 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            /* Image set to CONTAIN to fit the full picture without zooming/cropping */
             background: url('https://files.catbox.moe/lcxrp2.jpg') no-repeat center center fixed;
-            background-size: cover;
+            background-size: contain;
+            /* Optional background color for padding areas if the image aspect ratio doesn't match the screen */
+            background-color: #020008; 
             color: #ffffff;
             min-height: 100vh;
             display: flex;
@@ -32,13 +36,19 @@
             position: relative;
         }
 
-        /* Fully Transparent Gate Overlay to keep image 100% visible */
-        .gate-overlay {
+        /* TINT OVERLAY to make text pop against the bright picture */
+        .tint-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.25);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Fully Transparent Gate Overlay, keeping image 100% visible */
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
             z-index: 100;
             display: flex;
             flex-direction: column;
@@ -49,15 +59,15 @@
             transition: opacity 0.3s ease;
         }
 
-        /* Glassmorphism Card for GO Gate Title */
+        /* Compact Glassmorphism Card for Gates to preserve background view */
         .gate-card {
-            background: rgba(10, 5, 25, 0.65);
+            background: rgba(10, 5, 25, 0.7);
             border: 2px solid var(--glass-border);
             padding: 24px;
             border-radius: 24px;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .go-btn-wrapper {
@@ -96,7 +106,7 @@
             transform: scale(0.92);
         }
 
-        /* Main Glass Card */
+        /* Main Glass Card - Optimized padding to save background real estate */
         .app-container {
             position: relative;
             z-index: 10;
@@ -105,10 +115,10 @@
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            padding: 32px 20px;
+            padding: 30px 18px;
             border-radius: 28px;
             border: 2px solid var(--glass-border);
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.15);
             text-align: center;
             margin: 16px;
         }
@@ -136,7 +146,7 @@
             color: #ffffff;
         }
 
-        /* Glass Text Container */
+        /* High-Performance Text Container (Line Reveal) */
         .text-container {
             font-size: 19px;
             font-weight: 800;
@@ -165,6 +175,7 @@
             animation: smoothLineReveal 0.4s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
             margin-bottom: 8px;
             color: #ffffff;
+            /* Dark shadows enhance contrast for UTF-8 over complex bg image */
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 215, 0, 0.8);
         }
 
@@ -173,6 +184,7 @@
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9), 0 0 12px rgba(0, 243, 255, 0.8);
         }
 
+        /* Luxury Enter Button */
         .btn-action {
             width: 100%;
             background: linear-gradient(135deg, #ffd700 0%, #ff0055 50%, #00f3ff 100%);
@@ -184,7 +196,7 @@
             border-radius: 16px;
             cursor: pointer;
             margin-top: 24px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
             letter-spacing: 1px;
             text-transform: uppercase;
             transition: opacity 0.3s ease, transform 0.2s ease;
@@ -217,7 +229,9 @@
 </head>
 <body>
 
-    <!-- 1. GO Gate -->
+    <div class="tint-overlay"></div>
+
+    <!-- 1. GO Gate (Mandatory user tap to allow future audio if needed) -->
     <div id="go-gate" class="gate-overlay">
         <div class="gate-card">
             <div style="font-size: 26px; font-weight: 900; color: var(--accent-gold);">🔌 RAI ELECTRONICS</div>
@@ -230,7 +244,7 @@
         </div>
     </div>
 
-    <!-- 2. Language Gate -->
+    <!-- 2. Language Selection Gate -->
     <div id="lang-gate" class="gate-overlay hidden">
         <div class="gate-card" style="width: 100%; max-width: 320px;">
             <div style="font-size: 22px; font-weight: 900; color: var(--accent-gold); margin-bottom: 6px;">Select Language</div>
@@ -242,7 +256,7 @@
         </div>
     </div>
 
-    <!-- 3. Glassmorphism Card -->
+    <!-- 3. Main Glassmorphism Card (Step 1 Complete) -->
     <div class="app-container">
         <div class="top-bar">
             <select id="switcher" class="lang-select" onchange="switchAppLanguage(this.value)">
@@ -299,6 +313,7 @@
         let goGate = document.getElementById('go-gate');
         goGate.classList.add('hidden');
 
+        // Check for persistent language setting, else show lang-gate
         setTimeout(() => {
             let savedLang = localStorage.getItem('rai_preferred_lang');
             if (savedLang && translations[savedLang]) {
@@ -343,14 +358,17 @@
 
         lines.forEach((lineText, index) => {
             let div = document.createElement('div');
+            // Last line is stylized as the founder signature
             div.className = index === lines.length - 1 ? 'intro-line founder-line' : 'intro-line';
             div.innerText = lineText;
+            // 0.2s staggered delay per line for smooth GPU render
             div.style.animationDelay = `${index * 0.2}s`;
             fragment.appendChild(div);
         });
 
         container.appendChild(fragment);
 
+        // Smoothly reveal action button after the last line appears
         let totalTimeMs = (lines.length * 200) + 150;
         setTimeout(() => {
             btn.classList.remove('hidden');

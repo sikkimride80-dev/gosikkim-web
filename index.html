@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SikExcel - Excel to PDF Exact | Secure</title>
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#107c41">
+<link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/888/888879.png">
 <script>
 // ===== SECURITY LAYER - DOMAIN LOCK - FIXED FOR VERCEL + CLOUDFLARE =====
 (function(){
@@ -15,10 +18,8 @@
     document.documentElement.innerHTML = `<div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;text-align:center;padding:20px"><h1 style="color:#dc2626">⚠️ Unauthorized Domain</h1><p>This application is licensed only for gosikkim-web.vercel.app</p><p style="font-size:12px;color:#666;margin-top:10px">IP: ${host} blocked</p><button onclick="window.location.href='https://gosikkim-web.vercel.app'" style="margin-top:15px;padding:10px 20px;background:#107c41;color:#fff;border:none;border-radius:8px">Go to Official Site</button></div>`;
     throw new Error("Domain not authorized");
   }
-  // Block iframe cloning
   if(window.top!== window.self){ window.top.location = window.self.location; }
 })();
-// Disable right click + basic devtools deterrent (not crash, just warning)
 document.addEventListener('contextmenu', e => { if(e.target.closest('#excelPreview')) return; e.preventDefault(); });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
@@ -53,7 +54,7 @@ body{background:#f6f8fb;color:#0f172a;-webkit-user-select:none;user-select:none}
 <body>
 <div class="header">
 <div class="logo">Sik<b>Excel</b> - Exact PDF</div>
-<div class="badge">🔒 Secured • 100% Offline</div>
+<div class="badge">🔒 Secured • 100% Offline App</div>
 </div>
 <div class="container">
 <div class="hero">
@@ -78,11 +79,10 @@ body{background:#f6f8fb;color:#0f172a;-webkit-user-select:none;user-select:none}
 <div id="status" class="status"></div>
 <div id="previewWrap"><table id="excelPreview"></table></div>
 </div>
-<div class="footer">gosikkim-web.vercel.app • Secured Build • Built in Sikkim<br>All processing in browser. We don't store files.<br><span style="font-size:10px">Protected by Domain Lock & CSP</span></div>
+<div class="footer">gosikkim-web.vercel.app • Secured Build • Built in Sikkim<br>All processing in browser. We don't store files.<br><span style="font-size:10px">Protected by Domain Lock & CSP • PWA Ready</span></div>
 </div>
 <script>
-// Anti-tamper: detect if code modified in other domain - FIXED FOR BOTH DOMAINS
-let tamperCount = 0;
+// Anti-tamper - FIXED FOR BOTH DOMAINS
 setInterval(()=>{
   const h = window.location.hostname;
   const allowedCheck = ["vercel.app", "pages.dev", "localhost", "127.0.0.1"].some(d => h.includes(d));
@@ -156,6 +156,26 @@ document.getElementById('downloadBtn').addEventListener('click', async ()=>{
  while(hLeft>0){ pos=hLeft-pdfH; pdf.addPage(); pdf.addImage(imgData,'PNG',0,pos,pdfW,pdfH); hLeft-=pdf.internal.pageSize.getHeight(); }
  pdf.save((currentSheet.name||'Excel')+'_Exact_Secured.pdf');
  statusEl.innerText='✅ PDF Downloaded Securely';
+});
+</script>
+<script>
+// PWA Install + Offline Base
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').then(()=>console.log('SW Ready'));
+}
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault(); deferredPrompt=e;
+  let btn=document.createElement('button');
+  btn.innerText='📲 Install App - Works Offline';
+  btn.id='installBtn';
+  btn.style='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#107c41;color:#fff;padding:14px 22px;border-radius:30px;font-weight:800;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.3);border:none;cursor:pointer';
+  btn.onclick=async()=>{
+    deferredPrompt.prompt();
+    const {outcome}=await deferredPrompt.userChoice;
+    if(outcome==='accepted'){btn.remove(); alert('✅ App Installed! Check home screen');}
+  };
+  if(!document.getElementById('installBtn')) document.body.appendChild(btn);
 });
 </script>
 </body>

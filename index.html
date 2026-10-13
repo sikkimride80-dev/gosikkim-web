@@ -6,9 +6,9 @@
 <title>SikExcel - Excel to PDF Exact | Secure</title>
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <script>
-// ===== SECURITY LAYER - DOMAIN LOCK =====
+// ===== SECURITY LAYER - DOMAIN LOCK - FIXED FOR VERCEL + CLOUDFLARE =====
 (function(){
-  const ALLOWED = ["gosikkim-web.vercel.app", "localhost", "127.0.0.1"];
+  const ALLOWED = ["gosikkim-web.vercel.app", "gosikkim-web.pages.dev", "localhost", "127.0.0.1"];
   const host = window.location.hostname;
   const isAllowed = ALLOWED.some(d => host.includes(d)) || host === "";
   if(!isAllowed && host!== ""){
@@ -81,10 +81,12 @@ body{background:#f6f8fb;color:#0f172a;-webkit-user-select:none;user-select:none}
 <div class="footer">gosikkim-web.vercel.app • Secured Build • Built in Sikkim<br>All processing in browser. We don't store files.<br><span style="font-size:10px">Protected by Domain Lock & CSP</span></div>
 </div>
 <script>
-// Anti-tamper: detect if code modified in other domain
+// Anti-tamper: detect if code modified in other domain - FIXED FOR BOTH DOMAINS
 let tamperCount = 0;
 setInterval(()=>{
-  if(window.location.hostname &&!window.location.hostname.includes("vercel.app") &&!window.location.hostname.includes("localhost") && window.location.hostname!== ""){
+  const h = window.location.hostname;
+  const allowedCheck = ["vercel.app", "pages.dev", "localhost", "127.0.0.1"].some(d => h.includes(d));
+  if(h &&!allowedCheck && h!== ""){
     document.getElementById('hackAlert').style.display='block';
     document.getElementById('drop').style.pointerEvents='none';
     document.getElementById('drop').style.opacity='0.3';

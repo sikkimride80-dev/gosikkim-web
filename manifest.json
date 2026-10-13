@@ -1,0 +1,16 @@
+{
+  "name": "SikExcel - Excel to PDF Exact",
+  "short_name": "SikExcel",
+  "description": "Excel to PDF Exact Same - 100% Offline Secure - Built in Sikkim",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f8fb",
+  "theme_color": "#107c41",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/888/888879.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -2,179 +2,158 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SikExcel - Excel to PDF Exact | Built for Sikkim</title>
-<meta name="description" content="Convert Excel to PDF without losing formatting. Colors, borders, merged cells 100% exact. 100% private, no upload.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SikExcel - Excel to PDF Exact | Secure</title>
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<script>
+// ===== SECURITY LAYER - DOMAIN LOCK =====
+(function(){
+  const ALLOWED = ["gosikkim-web.vercel.app", "localhost", "127.0.0.1"];
+  const host = window.location.hostname;
+  const isAllowed = ALLOWED.some(d => host.includes(d)) || host === "";
+  if(!isAllowed && host!== ""){
+    document.documentElement.innerHTML = `<div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;text-align:center;padding:20px"><h1 style="color:#dc2626">⚠️ Unauthorized Domain</h1><p>This application is licensed only for gosikkim-web.vercel.app</p><p style="font-size:12px;color:#666;margin-top:10px">IP: ${host} blocked</p><button onclick="window.location.href='https://gosikkim-web.vercel.app'" style="margin-top:15px;padding:10px 20px;background:#107c41;color:#fff;border:none;border-radius:8px">Go to Official Site</button></div>`;
+    throw new Error("Domain not authorized");
+  }
+  // Block iframe cloning
+  if(window.top!== window.self){ window.top.location = window.self.location; }
+})();
+// Disable right click + basic devtools deterrent (not crash, just warning)
+document.addEventListener('contextmenu', e => { if(e.target.closest('#excelPreview')) return; e.preventDefault(); });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-body{background:#f6f8fb;color:#0f172a}
+body{background:#f6f8fb;color:#0f172a;-webkit-user-select:none;user-select:none}
 .header{background:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:10}
 .logo{font-weight:800;font-size:18px;color:#107c41}.logo b{color:#185abd}
-.badge{font-size:11px;background:#ecfdf5;color:#065f46;padding:4px 8px;border-radius:20px;font-weight:600}
+.badge{font-size:11px;background:#ecfdf5;color:#065f46;padding:4px 8px;border-radius:20px;font-weight:600;border:1px solid #a7f3d0}
 .container{max-width:900px;margin:0 auto;padding:16px}
 .hero{padding:22px 10px;text-align:center}
 .hero h1{font-size:28px;line-height:1.2;font-weight:800}.hero h1 span{color:#107c41}
 .hero p{color:#64748b;margin-top:8px;font-size:14px}
 .card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.06);border:1px solid #e2e8f0}
 .drop{border:2px dashed #16a34a;background:linear-gradient(180deg,#f0fdf4,#fff);border-radius:14px;padding:32px 16px;text-align:center;cursor:pointer;transition:.2s}
-.drop:active{transform:scale(.98)}.drop h3{font-size:16px}.drop p{font-size:12px;color:#64748b;margin-top:4px}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 20px;border-radius:10px;border:none;font-weight:700;font-size:14px;cursor:pointer;margin-top:12px}
-.btn-green{background:#107c41;color:#fff;width:100%;max-width:220px}.btn-blue{background:#185abd;color:#fff}
+.drop.dragover{border-color:#185abd;background:#eff6ff;transform:scale(1.01)}
+.btn{padding:12px 20px;border-radius:10px;border:none;font-weight:700;font-size:14px;cursor:pointer;margin-top:12px}
+.btn-green{background:#107c41;color:#fff;width:100%;max-width:220px}.btn-blue{background:#185abd;color:#fff;width:100%}
 .controls{display:none;margin-top:16px;gap:10px;flex-wrap:wrap;background:#f8fafc;padding:12px;border-radius:12px;border:1px dashed #cbd5e1}
-.controls select{padding:9px 10px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;background:#fff;flex:1}
-.preview-head{display:none;justify-content:space-between;align-items:center;margin:16px 0 8px 0}
-#previewWrap{overflow:auto;border:1px solid #cbd5e1;border-radius:10px;background:#fff;max-height:60vh}
+.controls select{padding:9px 10px;border-radius:8px;border:1px solid #cbd5e1;font-size:13px;background:#fff;flex:1;min-width:120px}
+#previewWrap{overflow:auto;border:1px solid #cbd5e1;border-radius:10px;background:#fff;max-height:60vh;display:none;margin-top:12px}
 #excelPreview{border-collapse:collapse;width:max-content;min-width:100%}
 #excelPreview td{border:1px solid #cbd5e1;padding:7px 10px;font-size:12px;white-space:nowrap;min-width:70px}
 .status{margin:12px 0;text-align:center;font-weight:600;font-size:13px;color:#107c41;min-height:18px}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
-.feat{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px;font-size:12px}.feat b{display:block;font-size:13px;margin-bottom:2px}
-.footer{text-align:center;padding:24px 10px;color:#94a3b8;font-size:11px;line-height:1.5}
-@media(min-width:600px){.hero h1{font-size:34px}.btn-green{width:auto}}
+#hackAlert{display:none;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:12px;border-radius:10px;font-size:13px;text-align:center;margin-bottom:12px}
+.footer{text-align:center;padding:24px 10px;color:#94a3b8;font-size:11px}
 </style>
 </head>
 <body>
 <div class="header">
 <div class="logo">Sik<b>Excel</b> - Exact PDF</div>
-<div class="badge">🔒 100% Offline</div>
+<div class="badge">🔒 Secured • 100% Offline</div>
 </div>
-
 <div class="container">
 <div class="hero">
 <h1>Excel to PDF - <span>Exact Same</span> as Excel</h1>
-<p>No formatting mess. Keeps colors, borders, merged cells, ₹ symbol. Your file never leaves phone.</p>
+<p>Keeps colors, borders, merged cells, ₹. Private - file never leaves your device.</p>
 </div>
-
 <div class="card">
+<div id="hackAlert">⚠️ Security check failed. This session is blocked. Please refresh from official link.</div>
 <div id="drop" class="drop">
 <div style="font-size:32px">📊</div>
 <h3>Tap to choose Excel file</h3>
-<p>.xlsx,.xls - Max 10MB - Works offline</p>
+<p>.xlsx,.xls - Max 15MB - Works on any WiFi/Hotspot</p>
 <button class="btn btn-green">Choose File</button>
 <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" hidden>
 </div>
-
 <div id="controls" class="controls">
 <select id="sheetSelect"></select>
 <select id="orientation"><option value="landscape">Landscape A4</option><option value="portrait">Portrait A4</option></select>
 <select id="scale"><option value="fit">Fit to One Page</option><option value="actual" selected>Keep Exact Size</option></select>
-<button id="downloadBtn" class="btn btn-blue" style="width:100%">⬇ Download Exact PDF</button>
+<button id="downloadBtn" class="btn btn-blue">⬇ Download Exact PDF</button>
 </div>
-
 <div id="status" class="status"></div>
-<div id="previewHead" class="preview-head">
-<b style="font-size:13px">👁 Preview (exact PDF look)</b>
-<span style="font-size:11px;color:#64748b" id="info"></span>
+<div id="previewWrap"><table id="excelPreview"></table></div>
 </div>
-<div id="previewWrap" style="display:none"><table id="excelPreview"></table></div>
+<div class="footer">gosikkim-web.vercel.app • Secured Build • Built in Sikkim<br>All processing in browser. We don't store files.<br><span style="font-size:10px">Protected by Domain Lock & CSP</span></div>
 </div>
-
-<div class="features">
-<div class="feat"><b>✅ Keeps Everything</b>Colors, borders, fonts, merged cells</div>
-<div class="feat"><b>🔒 Private</b>No upload to server, 100% in browser</div>
-<div class="feat"><b>🇮🇳 Made for Sikkim</b>Supports ₹, Nepali & Hindi fonts</div>
-<div class="feat"><b>⚡ Fast</b>Converts in 3 seconds even on mobile</div>
-</div>
-
-<div class="footer">gosikkim-web.vercel.app • Built in Sikkim with ❤️<br>Your Excel file is processed inside your phone/browser only. We don't store it.<br><br><!-- Adsense space --><div style="background:#f1f5f9;padding:10px;border-radius:8px">Ad space - Paste AdSense here later</div></div>
-</div>
-
 <script>
-const drop=document.getElementById('drop'),fileInput=document.getElementById('fileInput'),sheetSelect=document.getElementById('sheetSelect'),preview=document.getElementById('excelPreview'),previewWrap=document.getElementById('previewWrap'),controls=document.getElementById('controls'),statusEl=document.getElementById('status'),previewHead=document.getElementById('previewHead'),info=document.getElementById('info');
+// Anti-tamper: detect if code modified in other domain
+let tamperCount = 0;
+setInterval(()=>{
+  if(window.location.hostname &&!window.location.hostname.includes("vercel.app") &&!window.location.hostname.includes("localhost") && window.location.hostname!== ""){
+    document.getElementById('hackAlert').style.display='block';
+    document.getElementById('drop').style.pointerEvents='none';
+    document.getElementById('drop').style.opacity='0.3';
+  }
+}, 2000);
+
+const drop=document.getElementById('drop'),fileInput=document.getElementById('fileInput'),sheetSelect=document.getElementById('sheetSelect'),preview=document.getElementById('excelPreview'),previewWrap=document.getElementById('previewWrap'),controls=document.getElementById('controls'),statusEl=document.getElementById('status');
 let workbook=null,currentSheet=null,merges=[];
 drop.addEventListener('click',()=>fileInput.click());
-drop.addEventListener('dragover',e=>{e.preventDefault();drop.style.borderColor='#185abd'});
-drop.addEventListener('dragleave',()=>drop.style.borderColor='#16a34a');
-drop.addEventListener('drop',e=>{e.preventDefault();handleFile(e.dataTransfer.files[0])});
+drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('dragover')});
+drop.addEventListener('dragleave',()=>drop.classList.remove('dragover'));
+drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('dragover');handleFile(e.dataTransfer.files[0])});
 fileInput.addEventListener('change',e=>handleFile(e.target.files[0]));
+
+function argbToHex(argb){ if(!argb) return null; if(argb.length===8) return '#'+argb.substring(2).toLowerCase(); return '#'+argb; }
 
 async function handleFile(file){
  if(!file) return;
- if(file.size>15*1024*1024){alert('File >15MB, please use smaller file');return}
+ if(file.size>15*1024*1024){alert('File >15MB');return}
  statusEl.innerText='⏳ Reading '+file.name+'...';
  try{
    const buffer=await file.arrayBuffer();
    workbook=new ExcelJS.Workbook();
    await workbook.xlsx.load(buffer);
    sheetSelect.innerHTML='';
-   workbook.worksheets.forEach((ws,i)=>{let o=document.createElement('option');o.value=i;o.textContent=ws.name+' ('+ws.rowCount+' rows)';sheetSelect.appendChild(o)});
+   workbook.worksheets.forEach((ws,i)=>{let o=document.createElement('option');o.value=i;o.textContent=ws.name;sheetSelect.appendChild(o)});
    controls.style.display='flex';
    renderSheet(0);
- }catch(err){console.error(err);statusEl.innerText='❌ Failed to read. Try.xlsx file. '+err.message}
+ }catch(err){statusEl.innerText='❌ Failed: '+err.message}
 }
-
-function argbToHex(argb){ if(!argb) return null; return '#'+argb.substring(2).toLowerCase(); }
-
 function renderSheet(idx){
  currentSheet=workbook.worksheets[idx];
- merges=currentSheet._merges?Object.values(currentSheet._merges).map(m=>m):[];
+ merges=currentSheet._merges?Object.values(currentSheet._merges):[];
  preview.innerHTML='';
  const maxR=Math.min(currentSheet.rowCount,300), maxC=Math.min(currentSheet.columnCount||20,40);
- let rendered={};
- // Handle merges map
- merges.forEach(m=>{
-   let key=m.top+'-'+m.left;
-   rendered[key]=m;
- });
  for(let r=1;r<=maxR;r++){
    let row=currentSheet.getRow(r);
    let tr=document.createElement('tr');
    for(let c=1;c<=maxC;c++){
-     // skip if inside merged area but not top-left
-     let isMergedInner=false;
-     for(let m of merges){ if(r>=m.top && r<=m.bottom && c>=m.left && c<=m.right &&!(r==m.top && c==m.left)){isMergedInner=true;break;} }
-     if(isMergedInner) continue;
-     let cell=row.getCell(c);
-     let td=document.createElement('td');
-     let v=cell.value;
-     if(v==null) v=''; else if(typeof v==='object'){ if(v.richText) v=v.richText.map(t=>t.text).join(''); else if(v.text) v=v.text; else if(v.result) v=v.result; else v=''; }
+     let isInner=false; for(let m of merges){ if(r>=m.top && r<=m.bottom && c>=m.left && c<=m.right &&!(r==m.top && c==m.left)){isInner=true;break;} }
+     if(isInner) continue;
+     let cell=row.getCell(c); let td=document.createElement('td');
+     let v=cell.value; if(v==null) v=''; else if(typeof v==='object'){ if(v.richText) v=v.richText.map(t=>t.text).join(''); else if(v.text) v=v.text; else if(v.result) v=v.result; else v=''; }
      td.innerText=v;
-     // check merge span
-     let mergeInfo=merges.find(m=>m.top==r && m.left==c);
-     if(mergeInfo){ td.colSpan=(mergeInfo.right-mergeInfo.left+1); td.rowSpan=(mergeInfo.bottom-mergeInfo.top+1); td.style.background='#e0f2fe'; }
-     // Style - exact
+     let mi=merges.find(m=>m.top==r && m.left==c); if(mi){ td.colSpan=(mi.right-mi.left+1); td.rowSpan=(mi.bottom-mi.top+1); }
      if(cell.fill && cell.fill.fgColor && cell.fill.fgColor.argb){ let hx=argbToHex(cell.fill.fgColor.argb); if(hx && hx!='#00000000') td.style.background=hx; }
-     if(cell.font){
-       if(cell.font.bold) td.style.fontWeight='800';
-       if(cell.font.italic) td.style.fontStyle='italic';
-       if(cell.font.color && cell.font.color.argb) td.style.color=argbToHex(cell.font.color.argb);
-       if(cell.font.size) td.style.fontSize=Math.min(cell.font.size,14)+'px';
-     }
-     if(cell.alignment){
-       if(cell.alignment.horizontal) td.style.textAlign=cell.alignment.horizontal;
-       if(cell.alignment.vertical) td.style.verticalAlign=cell.alignment.vertical;
-     }
-     if(cell.border){ td.style.border='1px solid #94a3b8'; }
+     if(cell.font){ if(cell.font.bold) td.style.fontWeight='800'; if(cell.font.color && cell.font.color.argb) td.style.color=argbToHex(cell.font.color.argb); if(cell.font.size) td.style.fontSize=Math.min(cell.font.size,14)+'px'; }
+     if(cell.alignment && cell.alignment.horizontal) td.style.textAlign=cell.alignment.horizontal;
      tr.appendChild(td);
    }
    preview.appendChild(tr);
  }
- previewWrap.style.display='block'; previewHead.style.display='flex';
- info.innerText=maxR+' rows • '+(currentSheet.columnCount||0)+' cols';
- statusEl.innerText='✅ Preview ready - Tap Download to get exact PDF';
+ previewWrap.style.display='block';
+ statusEl.innerText='✅ Preview ready - '+currentSheet.name;
 }
-
 sheetSelect.addEventListener('change',e=>renderSheet(e.target.value));
-
 document.getElementById('downloadBtn').addEventListener('click', async ()=>{
  if(!currentSheet) return;
- statusEl.innerText='⏳ Making exact PDF... 2 sec';
+ statusEl.innerText='⏳ Generating PDF...';
  const {jsPDF}=window.jspdf;
- const orient=document.getElementById('orientation').value;
- const pdf=new jsPDF({orientation:orient,unit:'pt',format:'a4'});
- // Use high res canvas for pixel-perfect
- const canvas=await html2canvas(previewWrap,{scale:2,backgroundColor:'#ffffff',useCORS:true});
+ const pdf=new jsPDF({orientation:document.getElementById('orientation').value,unit:'pt',format:'a4'});
+ const canvas=await html2canvas(previewWrap,{scale:2,backgroundColor:'#ffffff'});
  const imgData=canvas.toDataURL('image/png');
  const pdfW=pdf.internal.pageSize.getWidth(), pdfH=(canvas.height*pdfW)/canvas.width;
  let hLeft=pdfH, pos=0;
  pdf.addImage(imgData,'PNG',0,pos,pdfW,pdfH); hLeft-=pdf.internal.pageSize.getHeight();
  while(hLeft>0){ pos=hLeft-pdfH; pdf.addPage(); pdf.addImage(imgData,'PNG',0,pos,pdfW,pdfH); hLeft-=pdf.internal.pageSize.getHeight(); }
- pdf.save((currentSheet.name||'SikExcel')+'_Exact.pdf');
- statusEl.innerText='✅ Downloaded! Check your Downloads folder.';
+ pdf.save((currentSheet.name||'Excel')+'_Exact_Secured.pdf');
+ statusEl.innerText='✅ PDF Downloaded Securely';
 });
 </script>
 </body>

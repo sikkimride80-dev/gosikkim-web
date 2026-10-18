@@ -3,23 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edit Text - Number Pins on Photo</title>
+<title>Replace Existing Text Only</title>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
 body{background:#0e0e0e;color:#fff}
-header{padding:10px;display:flex;gap:6px;justify-content:space-between;background:#111;position:sticky;top:0;z-index:99}
+header{padding:10px;display:flex;gap:6px;justify-content:space-between;background:#111;position:sticky;top:0;z-index:100}
 .btn{padding:10px 14px;border-radius:10px;border:none;font-weight:700}
 .white{background:#fff;color:#000}
 .dark{background:#2a2a2a;color:#fff}
 #uploadBox{border:2px dashed #444;padding:25px;text-align:center;border-radius:14px;margin:10px}
 #wrap{position:relative;margin:10px;background:#000;border-radius:12px;overflow:hidden}
 #canvas{display:block;width:100%}
-.pin{position:absolute;width:26px;height:26px;background:#ff2a2a;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;border:2px solid #fff;cursor:pointer;transform:translate(-50%,-50%);box-shadow:0 2px 8px rgba(0,0,0,.6)}
-.pin.active{background:#fff;color:#ff2a2a;scale:1.2}
+.pin{position:absolute;width:24px;height:24px;background:#ff2a2a;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid #fff;transform:translate(-50%,-50%);cursor:pointer}
 .text-line{background:#1e1e1e;border:1px solid #333;padding:8px 10px;border-radius:12px;display:flex;gap:8px;margin:6px 10px;align-items:center}
-.text-line input{flex:1;background:#000;color:#fff;border:1px solid #444;padding:8px;border-radius:8px}
-.small{padding:7px 10px;border-radius:8px;border:none;font-weight:700;font-size:11px}
+.text-line input{flex:1;background:#111;color:#fff;border:1px solid #555;padding:9px;border-radius:8px;font-size:14px}
+.small{padding:7px 12px;border-radius:8px;border:none;font-weight:700;font-size:12px}
 .edit{background:#fff;color:#000}
 .del{background:#ff3b3b;color:#fff}
 .save{margin:10px;width:calc(100% - 20px);padding:14px;background:#fff;color:#000;border-radius:12px;font-weight:800;border:none}
@@ -28,29 +27,25 @@ header{padding:10px;display:flex;gap:6px;justify-content:space-between;backgroun
 </head>
 <body>
 <header>
-<div style="font-size:13px">✏️ Edit Text • Pins on Photo</div>
+<div style="font-size:13px">✏️ Replace Existing Text</div>
 <button class="btn dark" onclick="file.click()">Upload</button>
-<button class="btn white" onclick="saveImg()">Save to Gallery</button>
+<button class="btn white" onclick="saveImg()">Save</button>
 </header>
 
 <div id="uploadBox" onclick="file.click()">
 <input type="file" id="file" accept="image/*" hidden>
-<b>+ Upload Photo Max 19MB</b><br><small>JPG PNG WEBP</small>
-<div id="status">Tap Detect to auto-scan pins 1,2,3... on photo</div>
+<b>+ Upload Photo Max 19MB</b><br><small>Auto scans existing text inside photo</small>
+<div id="status">Upload your MLBB screenshot</div>
 </div>
 
-<div id="wrap" style="display:none">
-<canvas id="canvas"></canvas>
-</div>
-
-<button id="detectBtn" class="btn dark" style="margin:10px;width:calc(100% - 20px);display:none" onclick="detectText()">🔍 Auto Detect & Pin Numbers 1,2,3... on Photo</button>
-
+<div id="wrap" style="display:none"><canvas id="canvas"></canvas></div>
+<button id="detectBtn" class="btn dark" style="margin:10px;width:calc(100% - 20px);display:none" onclick="detectText()">🔍 SCAN existing text & pin 1,2,3... on photo</button>
 <div id="list"></div>
-<button class="save" id="saveBtn" style="display:none" onclick="saveImg()">💾 Save Edited Photo to Phone</button>
+<button class="save" id="saveBtn" style="display:none" onclick="saveImg()">💾 Save Edited Photo to Phone Storage</button>
 
 <script>
 const file=document.getElementById('file'), canvas=document.getElementById('canvas'), ctx=canvas.getContext('2d'), wrap=document.getElementById('wrap'), listEl=document.getElementById('list'), statusEl=document.getElementById('status');
-let img=null, texts=[];
+let img=null, texts=[], originalData=null;
 
 file.addEventListener('change',e=>{
  const f=e.target.files[0];
@@ -61,8 +56,9 @@ file.addEventListener('change',e=>{
   im.onload=()=>{
    img=im; canvas.width=im.width; canvas.height=im.height;
    wrap.style.display='block'; detectBtn.style.display='block'; saveBtn.style.display='block';
-   ctx.drawImage(im,0,0); texts=[]; drawPins(); renderList();
-   statusEl.innerText='Photo loaded. Click Detect to pin numbers.';
+   ctx.drawImage(im,0,0);
+   originalData=ctx.getImageData(0,0,canvas.width,canvas.height);
+   texts=[]; drawPins(); renderList();
   };
   im.src=ev.target.result;
  };
@@ -70,48 +66,50 @@ file.addEventListener('change',e=>{
 });
 
 async function detectText(){
- if(!img) return;
- statusEl.innerText='Scanning text... 10 sec please wait';
- // clear old pins
+ statusEl.innerText='Scanning existing text inside photo... 10 sec';
  document.querySelectorAll('.pin').forEach(p=>p.remove());
  try{
-  const {data}=await Tesseract.recognize(canvas.toDataURL(),'eng');
-  texts = data.lines.filter(l=>l.text.trim().length>1).map(l=>({
+  const {data}=await Tesseract.recognize(canvas.toDataURL(),'eng', {logger:m=>{if(m.status==='recognizing text') statusEl.innerText=`Scanning ${Math.round(m.progress*100)}%`}});
+  texts = data.lines.filter(l=>l.text.trim().length>2).map(l=>({
    x:l.bbox.x0, y:l.bbox.y0, w:l.bbox.x1-l.bbox.x0, h:l.bbox.y1-l.bbox.y0,
-   newText:l.text.trim(), oldText:l.text.trim()
+   newText:l.text.trim(), oldText:l.text.trim(), color:'#ffffff'
   }));
-  if(texts.length==0) texts = data.words.filter(w=>w.text.trim().length>2).map(w=>({
-   x:w.bbox.x0, y:w.bbox.y0, w:w.bbox.x1-w.bbox.x0, h:w.bbox.y1-w.bbox.y0,
-   newText:w.text.trim(), oldText:w.text.trim()
-  }));
-  statusEl.innerText=`Found ${texts.length} texts → Pinned as 1,2,3... on photo`;
+  if(texts.length<3){
+   // fallback to words for small chat
+   texts = data.words.filter(w=>w.confidence>40 && w.text.trim().length>1).map(w=>({
+    x:w.bbox.x0, y:w.bbox.y0, w:w.bbox.x1-w.bbox.x0, h:w.bbox.y1-w.bbox.y0,
+    newText:w.text.trim(), oldText:w.text.trim(), color:'#ffffff'
+   }));
+  }
+  // sample original color for each
+  texts.forEach(t=>{
+   try{
+    const px=ctx.getImageData(t.x+2,t.y+2,1,1).data;
+    t.color=`rgb(${px[0]},${px[1]},${px[2]})`;
+   }catch(e){t.color='#aaffaa'}
+  });
+  statusEl.innerText=`Found ${texts.length} existing texts → Now pinned as 1,2,3 on photo. Click Edit to CHANGE it.`;
   redraw(); drawPins(); renderList();
- }catch(err){
-  statusEl.innerText='Auto failed, tap on photo to manually pin numbers';
- }
+ }catch(e){statusEl.innerText='Scan failed, tap directly on chat text in photo to select it';}
 }
 
 function drawPins(){
  document.querySelectorAll('.pin').forEach(p=>p.remove());
  const rect=canvas.getBoundingClientRect();
  texts.forEach((t,i)=>{
-   const pin=document.createElement('div');
-   pin.className='pin';
-   pin.innerText=i+1;
-   // position based on canvas scale
-   const scaleX=rect.width/canvas.width;
-   const scaleY=rect.height/canvas.height;
-   pin.style.left=(t.x*scaleX)+'px';
-   pin.style.top=(t.y*scaleY)+'px';
-   pin.onclick=()=>editIdx(i);
-   wrap.appendChild(pin);
+  const pin=document.createElement('div');
+  pin.className='pin'; pin.innerText=i+1;
+  pin.style.left=(t.x*rect.width/canvas.width)+'px';
+  pin.style.top=(t.y*rect.height/canvas.height)+'px';
+  pin.onclick=()=>editIdx(i);
+  wrap.appendChild(pin);
  });
 }
 
 function renderList(){
  listEl.innerHTML=texts.map((t,i)=>`
-  <div class="text-line" id="line${i}">
-   <div style="min-width:20px;font-weight:800;color:#ff2a2a">${i+1}.</div>
+  <div class="text-line">
+   <div style="color:#ff2a2a;font-weight:800">${i+1}.</div>
    <input value="${t.newText.replace(/"/g,'&quot;')}" oninput="texts[${i}].newText=this.value; redraw()">
    <button class="small edit" onclick="editIdx(${i})">Edit</button>
    <button class="small del" onclick="delIdx(${i})">Delete</button>
@@ -120,56 +118,50 @@ function renderList(){
 }
 
 function editIdx(i){
- const v=prompt(`Edit Text #${i+1}:`,texts[i].newText);
- if(v!==null){texts[i].newText=v; renderList(); redraw();}
- document.querySelectorAll('.pin').forEach((p,idx)=>p.classList.toggle('active',idx==i));
- setTimeout(()=>document.querySelectorAll('.pin').forEach(p=>p.classList.remove('active')),800);
+ const v=prompt(`CHANGE existing text #${i+1}:\nOld: ${texts[i].oldText}\nNew:`,texts[i].newText);
+ if(v!==null){texts[i].newText=v; renderList(); redraw(); drawPins();}
 }
-function delIdx(i){texts.splice(i,1); redraw(); drawPins(); renderList();}
+function delIdx(i){
+ if(confirm(`Delete existing text #${i+1} "${texts[i].oldText}" from photo?`)){
+  // erase completely
+  texts[i].newText='';
+  redraw(); 
+ }
+}
 
 function redraw(){
- if(!img) return;
- ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.drawImage(img,0,0);
+ if(!img || !originalData) return;
+ // restore original then erase all old texts
+ ctx.putImageData(originalData,0,0);
  texts.forEach(t=>{
-   // erase
-   try{
-    const data=ctx.getImageData(t.x,t.y,1,1).data;
-    ctx.fillStyle=`rgb(${data[0]},${data[1]},${data[2]})`;
-   }catch(e){ctx.fillStyle='#000'}
-   ctx.fillRect(t.x-2,t.y-2,t.w+6,t.h+6);
-   // new text
-   ctx.fillStyle='#fff';
-   // if chat text was small, keep small
-   let fs=Math.max(12,t.h*0.85);
-   ctx.font=`bold ${fs}px Arial`;
-   while(ctx.measureText(t.newText).width>t.w+30 && fs>8){fs--;ctx.font=`bold ${fs}px Arial`;}
-   ctx.fillText(t.newText,t.x,t.y+t.h*0.8);
+  // PROPER ERASE: fill with background from left & right of text box
+  let bgLeft, bgRight;
+  try{
+   bgLeft=ctx.getImageData(Math.max(0,t.x-10),t.y,1,1).data;
+   bgRight=ctx.getImageData(Math.min(canvas.width-1,t.x+t.w+10),t.y,1,1).data;
+  }catch(e){bgLeft=[10,20,40]; bgRight=[10,20,40];}
+  // fill with dark blue like MLBB chat bg
+  const avgR=Math.round((bgLeft[0]+bgRight[0])/2);
+  const avgG=Math.round((bgLeft[1]+bgRight[1])/2);
+  const avgB=Math.round((bgLeft[2]+bgRight[2])/2);
+  ctx.fillStyle=`rgb(${avgR},${avgG},${avgB})`;
+  ctx.fillRect(t.x-3,t.y-2,t.w+6,t.h+4);
+  // draw new text in same place
+  if(t.newText!==''){
+   ctx.fillStyle=t.color;
+   // keep original small size
+   let fs=Math.max(10, t.h*0.9);
+   ctx.font=`${fs}px Arial`;
+   ctx.textBaseline='top';
+   ctx.fillText(t.newText,t.x,t.y);
+  }
  });
- // re-position pins after redraw
- setTimeout(drawPins,50);
 }
-
-// manual tap to add pin number
-canvas.addEventListener('click',e=>{
- if(!img) return;
- const rect=canvas.getBoundingClientRect();
- const x=(e.clientX-rect.left)*(canvas.width/rect.width);
- const y=(e.clientY-rect.top)*(canvas.height/rect.height);
- // if near existing pin, edit it
- const hit=texts.findIndex(t=>Math.abs(t.x-x)<30 && Math.abs(t.y-y)<30);
- if(hit>=0){editIdx(hit); return;}
- const txt=prompt(`Add Text #${texts.length+1} at this spot:`,'');
- if(!txt) return;
- texts.push({x,y,w:150,h:20,newText:txt,oldText:''});
- redraw(); drawPins(); renderList();
-});
 
 window.addEventListener('resize',()=>{if(texts.length) drawPins();});
 
 function saveImg(){
  if(!img){alert('Upload first');return;}
- // hide pins for save
  document.querySelectorAll('.pin').forEach(p=>p.style.display='none');
  redraw();
  setTimeout(()=>{
@@ -178,9 +170,19 @@ function saveImg(){
   a.href=canvas.toDataURL('image/jpeg',0.92);
   a.click();
   document.querySelectorAll('.pin').forEach(p=>p.style.display='flex');
-  statusEl.innerText='Saved to Gallery / Downloads';
- },200);
+  statusEl.innerText='Saved to Phone Storage / Downloads';
+ },150);
 }
+
+// tap on photo to pick existing text to change
+canvas.addEventListener('click',e=>{
+ if(!img || texts.length==0) return;
+ const rect=canvas.getBoundingClientRect();
+ const x=(e.clientX-rect.left)*(canvas.width/rect.width);
+ const y=(e.clientY-rect.top)*(canvas.height/rect.height);
+ const hit=texts.findIndex(t=> x>=t.x-10 && x<=t.x+t.w+10 && y>=t.y-10 && y<=t.y+t.h+10);
+ if(hit>=0) editIdx(hit);
+});
 </script>
 </body>
 </html>

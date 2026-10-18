@@ -1,219 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Text Only Photo Editor</title>
+<title>Edit Text Only</title>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
 body{background:#0e0e0e;color:#fff}
-header{padding:14px 20px;background:#181818;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.btn{background:#fff;color:#000;padding:10px 16px;border-radius:12px;border:none;font-weight:700;cursor:pointer}
-.btn-dark{background:#262626;color:#fff}
-.main{display:grid;grid-template-columns:340px 1fr;height:calc(100vh - 56px)}
-.left{background:#151515;padding:16px;overflow-y:auto;border-right:1px solid #222}
-.right{background:#080808;display:flex;align-items:center;justify-content:center;position:relative;padding:20px;overflow:auto}
-#uploadBox{border:2px dashed #333;padding:30px;border-radius:16px;text-align:center;cursor:pointer}
-#canvas{max-width:100%;box-shadow:0 10px 40px rgba(0,0,0,.7);border-radius:8px;display:none}
-.text-item{background:#1e1e1e;padding:10px;border-radius:10px;margin-bottom:8px;border:1px solid #2a2a2a}
-.text-item input{width:100%;background:#111;border:1px solid #333;color:#fff;padding:8px 10px;border-radius:8px;margin-top:6px}
-.text-item small{opacity:.5}
-#status{font-size:12px;opacity:.7;margin:10px 0}
-.gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid #222}
-@media(max-width:900px){.main{grid-template-columns:1fr}.right{order:-1;min-height:50vh}}
+header{padding:12px;background:#1a1a1a;display:flex;gap:8px;justify-content:space-between;align-items:center;position:sticky;top:0}
+.btn{padding:10px 16px;border-radius:12px;border:none;font-weight:700;cursor:pointer}
+.btn-white{background:#fff;color:#000}
+.btn-dark{background:#2a2a2a;color:#fff}
+.main{padding:15px;max-width:900px;margin:auto}
+#canvas{width:100%;border-radius:12px;display:none;background:#000;margin:15px 0}
+#uploadBox{border:2px dashed #333;padding:40px;border-radius:16px;text-align:center;cursor:pointer}
+.text-line{background:#1c1c1c;border:1px solid #2a2a2a;padding:10px 12px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px}
+.text-line span{flex:1;font-size:14px;word-break:break-all}
+.small-btn{padding:6px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700;font-size:12px}
+.edit{background:#fff;color:#000}
+.del{background:#ff2a2a;color:#fff}
+.save-big{width:100%;padding:14px;background:#fff;color:#000;border-radius:14px;font-weight:800;font-size:16px;margin-top:15px;border:none}
+#status{font-size:12px;opacity:.6;margin-top:8px;text-align:center}
 </style>
 </head>
 <body>
 <header>
-<h3>✏️ Edit Text Only • 19MB</h3>
-<div style="display:flex;gap:8px">
+<div>✏️ Edit Text Only • 19MB</div>
+<div style="display:flex;gap:6px">
 <button class="btn btn-dark" onclick="document.getElementById('file').click()">Upload</button>
-<button class="btn" onclick="saveImage()">Save to Gallery</button>
+<button class="btn btn-white" onclick="saveToPhone()">Save to Gallery</button>
 </div>
 </header>
 
 <div class="main">
-<div class="left">
 <div id="uploadBox" onclick="document.getElementById('file').click()">
 <input type="file" id="file" accept="image/*" hidden>
-<div style="font-size:28px">+</div>
-<b>Upload Photo</b><br><small>Max 19MB - JPG PNG WEBP</small>
++<br><b>Upload Photo</b><br><small>Max 19MB - JPG PNG WEBP</small>
 <div id="status"></div>
 </div>
 
-<div id="controls" style="display:none;margin-top:16px">
-<button class="btn btn-dark" style="width:100%" onclick="detectText()">🔍 Detect Text in Photo</button>
-<div id="textList" style="margin-top:16px"></div>
-<h4 style="margin-top:20px">My Files</h4>
-<div id="gallery" class="gallery"></div>
-<button class="btn btn-dark" style="width:100%;margin-top:10px" onclick="clearGallery()">Clear Gallery</button>
-</div>
-</div>
-
-<div class="right">
 <canvas id="canvas"></canvas>
-<p id="placeholder" style="opacity:.4">Upload any image to start</p>
-</div>
+
+<button id="detectBtn" style="display:none;width:100%;padding:12px;background:#2a2a2a;color:#fff;border-radius:12px;border:none;margin-bottom:12px" onclick="detectText()">🔍 Detect Text in Photo</button>
+
+<div id="textList"></div>
+
+<button id="saveBtn" class="save-big" style="display:none" onclick="saveToPhone()">💾 Save Edited Photo to Phone</button>
 </div>
 
 <script>
 const fileInput=document.getElementById('file');
 const canvas=document.getElementById('canvas');
 const ctx=canvas.getContext('2d');
-const statusEl=document.getElementById('status');
-let originalImg=null;
-let words=[]; // {text, x,y,w,h, fontSize, newText}
-let imgDataW, imgDataH;
+const textList=document.getElementById('textList');
+let img=null;
+let texts=[];
 
-fileInput.addEventListener('change', handle);
-function handle(e){
- const file=e.target.files[0];
- if(!file) return;
- if(file.size > 19*1024*1024){ alert('Max 19MB allowed!'); return; }
- statusEl.textContent=`${file.name} ${(file.size/1024/1024).toFixed(2)}MB`;
- const reader=new FileReader();
- reader.onload=ev=>{
-   const img=new Image();
-   img.onload=()=>{
-     originalImg=img;
-     canvas.width=img.width;
-     canvas.height=img.height;
-     imgDataW=img.width; imgDataH=img.height;
-     canvas.style.display='block';
-     document.getElementById('placeholder').style.display='none';
-     document.getElementById('controls').style.display='block';
-     ctx.drawImage(img,0,0);
-     words=[];
-     document.getElementById('textList').innerHTML='<p style="opacity:.5;font-size:13px">Click Detect Text to edit text only</p>';
-   };
-   img.src=ev.target.result;
+fileInput.addEventListener('change',e=>{
+ const f=e.target.files[0];
+ if(!f) return;
+ if(f.size>19*1024*1024){alert('Max 19MB');return;}
+ const r=new FileReader();
+ r.onload=ev=>{
+  const im=new Image();
+  im.onload=()=>{
+   img=im;
+   canvas.width=im.width;
+   canvas.height=im.height;
+   canvas.style.display='block';
+   document.getElementById('detectBtn').style.display='block';
+   document.getElementById('saveBtn').style.display='block';
+   ctx.drawImage(im,0,0);
+   texts=[];
+   textList.innerHTML='';
+   document.getElementById('status').innerHTML=f.name+' '+(f.size/1024/1024).toFixed(2)+'MB';
+  };
+  im.src=ev.target.result;
  };
- reader.readAsDataURL(file);
-}
+ r.readAsDataURL(f);
+});
 
 async function detectText(){
- if(!originalImg){ alert('Upload first'); return; }
- statusEl.textContent='Detecting text... please wait 5-10s';
- const { data } = await Tesseract.recognize(canvas.toDataURL(), 'eng', { logger: m => {
-   if(m.status==='recognizing text') statusEl.textContent=`Detecting ${Math.round(m.progress*100)}%`;
- }});
- words = data.words.map(w=>({
-   text: w.text,
-   x: w.bbox.x0,
-   y: w.bbox.y0,
-   w: w.bbox.x1 - w.bbox.x0,
-   h: w.bbox.y1 - w.bbox.y0,
-   newText: w.text,
-   conf: w.confidence
- })).filter(w=>w.conf>50 && w.text.trim().length>0);
- 
- if(words.length==0){ statusEl.textContent='No text found. Try clearer image.'; return; }
- statusEl.textContent=`Found ${words.length} text items - edit below`;
- renderList();
- drawAll();
+ if(!img){alert('Upload first');return;}
+ document.getElementById('status').innerText='Detecting text... wait 5-10 sec';
+ const {data} = await Tesseract.recognize(canvas.toDataURL(),'eng');
+ texts = data.lines.map(l=>({
+  text:l.text.trim(),
+  x:l.bbox.x0, y:l.bbox.y0, w:l.bbox.x1-l.bbox.x0, h:l.bbox.y1-l.bbox.y0,
+  newText:l.text.trim()
+ })).filter(t=>t.text.length>1);
+ if(texts.length==0){document.getElementById('status').innerText='No text found';return;}
+ document.getElementById('status').innerText=`Found ${texts.length} text lines`;
+ render();
+ redraw();
 }
 
-function renderList(){
- const list=document.getElementById('textList');
- list.innerHTML=words.map((w,i)=>`
-  <div class="text-item">
-   <small>Text #${i+1} • ${w.w}x${w.h}px</small>
-   <input value="${escapeHtml(w.newText)}" oninput="updateText(${i}, this.value)" placeholder="Edit text">
+function render(){
+ textList.innerHTML=texts.map((t,i)=>`
+  <div class="text-line">
+   <span><b>${i+1}.</b> ${t.newText}</span>
+   <button class="small-btn edit" onclick="editLine(${i})">Edit</button>
+   <button class="small-btn del" onclick="deleteLine(${i})">Delete</button>
   </div>
  `).join('');
 }
-function escapeHtml(s){ return s.replace(/"/g,'&quot;'); }
-function updateText(i, val){
- words[i].newText = val;
- drawAll();
+
+function editLine(i){
+ const val=prompt('Edit text:',texts[i].newText);
+ if(val!==null){texts[i].newText=val; render(); redraw();}
+}
+function deleteLine(i){
+ if(confirm('Delete this text from photo?')){texts.splice(i,1); render(); redraw();}
 }
 
-function drawAll(){
- if(!originalImg) return;
- // redraw original
+function redraw(){
+ if(!img) return;
  ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.drawImage(originalImg,0,0);
- // for each word, cover old text with sampled background + write new
- words.forEach(w=>{
-   // sample background color around text
-   const sampleX = Math.max(0, w.x-5);
-   const sampleY = Math.max(0, w.y-5);
-   const sampleW = Math.min(canvas.width-sampleX, w.w+10);
-   const sampleH = Math.min(canvas.height-sampleY, w.h+10);
-   // get average background by blurring area
-   ctx.save();
-   // inpaint: fill with blurred patch from nearby
-   ctx.fillStyle='#000';
-   // simple inpaint: fill with surrounding color
-   const imgData = ctx.getImageData(sampleX, sampleY, sampleW, sampleH);
-   // fill white-ish to erase
-   ctx.fillStyle = getDominantColor(sampleX, sampleY, sampleW, sampleH);
-   ctx.fillRect(w.x-2, w.y-2, w.w+4, w.h+4);
-   // write new text
-   ctx.fillStyle='#000';
-   ctx.font=`${w.h*0.9}px Arial, sans-serif`;
-   ctx.textBaseline='top';
-   // auto fit
-   ctx.fillStyle = '#000000';
-   // try to detect original color - use black, user can change if needed
-   // If image is light, use black, if dark use white (simple)
-   const isDark = isDarkArea(w.x, w.y, w.w, w.h);
-   ctx.fillStyle = isDark ? '#ffffff' : '#000000';
-   // scale text to fit width
-   let fontSize = w.h * 0.85;
-   ctx.font=`bold ${fontSize}px Inter, Arial`;
-   let textW = ctx.measureText(w.newText).width;
-   while(textW > w.w && fontSize>8){
-     fontSize-=1;
-     ctx.font=`bold ${fontSize}px Inter, Arial`;
-     textW = ctx.measureText(w.newText).width;
-   }
-   ctx.fillText(w.newText, w.x, w.y);
-   ctx.restore();
+ ctx.drawImage(img,0,0);
+ texts.forEach(t=>{
+  // erase old with background color
+  const bg = getBg(t.x,t.y);
+  ctx.fillStyle=bg;
+  ctx.fillRect(t.x-4,t.y-4,t.w+8,t.h+8);
+  // write new
+  ctx.fillStyle= isDark(bg)?'#fff':'#000';
+  let fs = t.h*0.8;
+  ctx.font=`bold ${fs}px Arial`;
+  while(ctx.measureText(t.newText).width > t.w+20 && fs>10){fs--;ctx.font=`bold ${fs}px Arial`;}
+  ctx.textBaseline='top';
+  ctx.fillText(t.newText,t.x,t.y);
  });
 }
 
-function getDominantColor(x,y,w,h){
- // sample corners for background
+function getBg(x,y){
  try{
-   const d1 = ctx.getImageData(Math.max(0,x-10), y, 1, 1).data;
-   const d2 = ctx.getImageData(x+w+5, y, 1, 1).data;
-   return `rgb(${d1[0]},${d1[1]},${d1[2]})`;
- }catch(e){ return '#ffffff'; }
+  const d=ctx.getImageData(Math.max(0,x-5),Math.max(0,y-5),1,1).data;
+  return `rgb(${d[0]},${d[1]},${d[2]})`;
+ }catch(e){return '#000'}
 }
-function isDarkArea(x,y,w,h){
- try{
-   const data = ctx.getImageData(x,y,Math.min(5,w),Math.min(5,h)).data;
-   const avg = (data[0]+data[1]+data[2])/3;
-   return avg < 100;
- }catch(e){ return false; }
-}
+function isDark(c){ const m=c.match(/\d+/g); if(!m) return false; return (parseInt(m[0])+parseInt(m[1])+parseInt(m[2]))/3 < 120; }
 
-function saveImage(){
- if(!originalImg){ alert('Upload first'); return; }
- const dataURL=canvas.toDataURL('image/png');
- const gallery=JSON.parse(localStorage.getItem('textEditGallery')||'[]');
- gallery.unshift({id:Date.now(), src:dataURL});
- localStorage.setItem('textEditGallery', JSON.stringify(gallery.slice(0,100)));
- renderGallery();
- alert('Saved to My Files / Gallery!');
- // also trigger download
- const a=document.createElement('a'); a.href=dataURL; a.download=`text-edited-${Date.now()}.png`; a.click();
+function saveToPhone(){
+ if(!img){alert('Upload first');return;}
+ const link=document.createElement('a');
+ link.download=`edited_${Date.now()}.png`;
+ link.href=canvas.toDataURL('image/png');
+ link.click();
+ // also save to localStorage gallery
+ const gal=JSON.parse(localStorage.getItem('gallery')||'[]');
+ gal.unshift(link.href);
+ localStorage.setItem('gallery',JSON.stringify(gal.slice(0,20)));
+ document.getElementById('status').innerText='Saved to phone gallery / Downloads';
 }
-function renderGallery(){
- const g=JSON.parse(localStorage.getItem('textEditGallery')||'[]');
- document.getElementById('gallery').innerHTML=g.map(i=>`<img src="${i.src}" onclick="loadGallery('${i.id}')">`).join('');
-}
-function loadGallery(id){
- const g=JSON.parse(localStorage.getItem('textEditGallery')||'[]');
- const item=g.find(x=>String(x.id)===id);
- if(!item) return;
- const img=new Image(); img.onload=()=>{ originalImg=img; canvas.width=img.width; canvas.height=img.height; canvas.style.display='block'; ctx.drawImage(img,0,0); }; img.src=item.src;
-}
-function clearGallery(){ localStorage.removeItem('textEditGallery'); renderGallery(); }
-renderGallery();
 </script>
 </body>
 </html>

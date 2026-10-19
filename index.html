@@ -11,7 +11,7 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            --card-bg: rgba(15, 15, 25, 0.55);
+            --card-bg: rgba(15, 15, 25, 0.65);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -26,6 +26,12 @@
 
         body {
             background-color: var(--bg-dark);
+            /* Direct CSS Background Image with Dark Overlay Gradient */
+            background-image: linear-gradient(rgba(5, 5, 12, 0.5), rgba(5, 5, 12, 0.65)), url('https://files.catbox.moe/51v7rf.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: var(--text-light);
             min-height: 100vh;
             min-height: 100dvh;
@@ -35,27 +41,6 @@
             justify-content: center;
             overflow-x: hidden;
             position: relative;
-        }
-
-        /* Full Screen Fixed Background Image */
-        .page-bg-image {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -2;
-        }
-
-        /* Glassmorphism Tint Overlay to make front letters stand out */
-        .bg-glow {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 5, 12, 0.45);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            z-index: -1;
-            pointer-events: none;
         }
 
         .social-icons-bg {
@@ -174,7 +159,7 @@
 
         input, select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.55);
             border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 10px 12px;
             border-radius: 10px;
@@ -216,7 +201,7 @@
         }
 
         .user-card {
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             border-radius: 14px;
             padding: 14px;
@@ -276,7 +261,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             z-index: 200;
@@ -306,7 +291,7 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 8px;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.55);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 10px;
@@ -326,7 +311,7 @@
         }
 
         .guide-box {
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 12px;
             padding: 14px;
             border-left: 3px solid var(--accent-cyan);
@@ -353,10 +338,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Background Image Layer -->
-    <img src="https://files.catbox.moe/51v7rf.jpg" class="page-bg-image" alt="Background">
-    <div class="bg-glow"></div>
 
     <div class="social-icons-bg">
         <span>▶️</span><span>📷</span><span>👍</span><span>🐦</span><span>💬</span><span>✈️</span>

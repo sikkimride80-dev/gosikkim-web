@@ -11,7 +11,7 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            --card-bg: rgba(15, 15, 25, 0.65);
+            --card-bg: rgba(15, 15, 25, 0.55);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -37,7 +37,7 @@
             position: relative;
         }
 
-        /* Absolute Fixed Background Image Layer to Guarantee Rendering */
+        /* Full Screen Fixed Background Image */
         .page-bg-image {
             position: fixed;
             inset: 0;
@@ -47,11 +47,11 @@
             z-index: -2;
         }
 
-        /* Dark overlay tint for readability */
+        /* Glassmorphism Tint Overlay to make front letters stand out */
         .bg-glow {
             position: fixed;
             inset: 0;
-            background: rgba(5, 5, 10, 0.55);
+            background: rgba(5, 5, 12, 0.45);
             backdrop-filter: blur(2px);
             -webkit-backdrop-filter: blur(2px);
             z-index: -1;
@@ -71,7 +71,7 @@
             pointer-events: none;
         }
 
-        /* Glassmorphic Transparent Container */
+        /* Transparent Glass Container */
         .app-container {
             position: relative;
             z-index: 10;
@@ -174,7 +174,7 @@
 
         input, select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 10px 12px;
             border-radius: 10px;
@@ -216,7 +216,7 @@
         }
 
         .user-card {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(10px);
             border-radius: 14px;
             padding: 14px;
@@ -276,7 +276,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             z-index: 200;
@@ -306,7 +306,7 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 8px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 10px;
@@ -326,7 +326,7 @@
         }
 
         .guide-box {
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.55);
             border-radius: 12px;
             padding: 14px;
             border-left: 3px solid var(--accent-cyan);
@@ -354,7 +354,7 @@
 </head>
 <body>
 
-    <!-- Absolute Background Image Layer -->
+    <!-- Background Image Layer -->
     <img src="https://files.catbox.moe/51v7rf.jpg" class="page-bg-image" alt="Background">
     <div class="bg-glow"></div>
 

@@ -11,7 +11,7 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            --card-bg: rgba(15, 15, 25, 0.65);
+            --card-bg: rgba(15, 15, 25, 0.60);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -26,6 +26,12 @@
 
         body {
             background-color: var(--bg-dark);
+            /* Pulls background directly from your uploaded repository file */
+            background-image: linear-gradient(rgba(7, 7, 12, 0.4), rgba(7, 7, 12, 0.6)), url('./IMG-20261020-WA8328.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: var(--text-light);
             min-height: 100vh;
             min-height: 100dvh;
@@ -35,30 +41,6 @@
             justify-content: center;
             overflow-x: hidden;
             position: relative;
-        }
-
-        /* Forced Fullscreen Image Layer */
-        .bg-image-wrapper {
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        .bg-image-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .bg-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 5, 12, 0.45);
-            z-index: -1;
-            pointer-events: none;
         }
 
         .social-icons-bg {
@@ -356,12 +338,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Forced Image HTML Element to bypass background blocks -->
-    <div class="bg-image-wrapper">
-        <img src="https://imglink.cc/cdn/DZNYUnWd8V.jpg" alt="Background">
-    </div>
-    <div class="bg-overlay"></div>
 
     <div class="social-icons-bg">
         <span>▶️</span><span>📷</span><span>👍</span><span>🐦</span><span>💬</span><span>✈️</span>

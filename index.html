@@ -1,188 +1,375 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Replace Existing Text Only</title>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui}
-body{background:#0e0e0e;color:#fff}
-header{padding:10px;display:flex;gap:6px;justify-content:space-between;background:#111;position:sticky;top:0;z-index:100}
-.btn{padding:10px 14px;border-radius:10px;border:none;font-weight:700}
-.white{background:#fff;color:#000}
-.dark{background:#2a2a2a;color:#fff}
-#uploadBox{border:2px dashed #444;padding:25px;text-align:center;border-radius:14px;margin:10px}
-#wrap{position:relative;margin:10px;background:#000;border-radius:12px;overflow:hidden}
-#canvas{display:block;width:100%}
-.pin{position:absolute;width:24px;height:24px;background:#ff2a2a;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid #fff;transform:translate(-50%,-50%);cursor:pointer}
-.text-line{background:#1e1e1e;border:1px solid #333;padding:8px 10px;border-radius:12px;display:flex;gap:8px;margin:6px 10px;align-items:center}
-.text-line input{flex:1;background:#111;color:#fff;border:1px solid #555;padding:9px;border-radius:8px;font-size:14px}
-.small{padding:7px 12px;border-radius:8px;border:none;font-weight:700;font-size:12px}
-.edit{background:#fff;color:#000}
-.del{background:#ff3b3b;color:#fff}
-.save{margin:10px;width:calc(100% - 20px);padding:14px;background:#fff;color:#000;border-radius:12px;font-weight:800;border:none}
-#status{text-align:center;font-size:12px;opacity:.7;margin:6px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WatchMeex18 - Social Bridge Hub</title>
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --accent-cyan: #00f3ff;
+            --accent-pink: #ff007f;
+            --bg-dark: #0a0a0f;
+            --card-bg: rgba(18, 18, 28, 0.85);
+            --text-light: #ffffff;
+            --text-dim: #a0a0c0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Social Media Bridge Background */
+        .bg-glow {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(138, 43, 226, 0.25), transparent 70%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.15), transparent 50%),
+                        radial-gradient(circle at 20% 80%, rgba(255, 0, 127, 0.15), transparent 50%);
+            z-index: 1;
+        }
+
+        .social-icons-bg {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            opacity: 0.12;
+            font-size: 32px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .app-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 420px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 28px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8),
+                        0 0 20px rgba(138, 43, 226, 0.3);
+            text-align: center;
+        }
+
+        .brand-title {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+        }
+
+        .brand-subtitle {
+            font-size: 12px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* Scanning Animation Card */
+        .scanner-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .radar-circle {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .radar-sweep {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border-top: 2px solid var(--accent-cyan);
+            border-right: 2px solid transparent;
+            animation: spin 1.2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .scan-status {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            margin-bottom: 6px;
+        }
+
+        .scan-detail {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-family: monospace;
+        }
+
+        /* Form Controls */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-size: 12px;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 14px;
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+        }
+
+        .btn-submit {
+            margin-top: 15px;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-pink));
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .user-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .badge-verified {
+            display: inline-block;
+            background: rgba(0, 255, 102, 0.15);
+            color: #00ff66;
+            border: 1px solid #00ff66;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .info-label { color: var(--text-dim); }
+        .info-value { font-weight: 700; color: #ffffff; }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
-<header>
-<div style="font-size:13px">✏️ Replace Existing Text</div>
-<button class="btn dark" onclick="file.click()">Upload</button>
-<button class="btn white" onclick="saveImg()">Save</button>
-</header>
 
-<div id="uploadBox" onclick="file.click()">
-<input type="file" id="file" accept="image/*" hidden>
-<b>+ Upload Photo Max 19MB</b><br><small>Auto scans existing text inside photo</small>
-<div id="status">Upload your MLBB screenshot</div>
-</div>
+    <div class="bg-glow"></div>
+    <div class="social-icons-bg">
+        <span>▶️</span><span>📷</span><span>👍</span><span>🐦</span><span>💬</span><span>✈️</span>
+    </div>
 
-<div id="wrap" style="display:none"><canvas id="canvas"></canvas></div>
-<button id="detectBtn" class="btn dark" style="margin:10px;width:calc(100% - 20px);display:none" onclick="detectText()">🔍 SCAN existing text & pin 1,2,3... on photo</button>
-<div id="list"></div>
-<button class="save" id="saveBtn" style="display:none" onclick="saveImg()">💾 Save Edited Photo to Phone Storage</button>
+    <div class="app-container">
+        <div class="brand-title">WatchMeex18</div>
+        <div class="brand-subtitle">Social Bridge Platform</div>
+
+        <!-- Scanning State -->
+        <div id="scan-view" class="scanner-box">
+            <div class="radar-circle">
+                <div class="radar-sweep"></div>
+                <span style="font-size: 24px;">🔍</span>
+            </div>
+            <div class="scan-status" id="scan-text">SCANNING USER DEVICE...</div>
+            <div class="scan-detail" id="scan-ip">IP & Fingerprint Checking...</div>
+        </div>
+
+        <!-- Existing User Recognized View -->
+        <div id="existing-user-view" class="hidden">
+            <div class="badge-verified">✓ EXISTING USER RECOGNIZED</div>
+            <div class="user-card">
+                <div class="info-row">
+                    <span class="info-label">Name:</span>
+                    <span class="info-value" id="user-name-val">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Mobile:</span>
+                    <span class="info-value" id="user-phone-val">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Device Fingerprint:</span>
+                    <span class="info-value" id="user-fp-val">-</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">IP Address:</span>
+                    <span class="info-value" id="user-ip-val">-</span>
+                </div>
+            </div>
+            <button class="btn-submit" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
+        </div>
+
+        <!-- New User Registration Form -->
+        <div id="new-user-view" class="hidden">
+            <div style="font-size: 13px; color: var(--accent-pink); font-weight: 700; margin-bottom: 10px;">
+                NEW USER DETECTED — REGISTER TO CONTINUE
+            </div>
+            <form id="regForm" onsubmit="handleRegistration(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="regName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input type="tel" id="regPhone" placeholder="Enter mobile number" required pattern="[0-9]{10}">
+                </div>
+                <button type="submit" class="btn-submit">REGISTER & SAVE DEVICE</button>
+            </form>
+        </div>
+    </div>
 
 <script>
-const file=document.getElementById('file'), canvas=document.getElementById('canvas'), ctx=canvas.getContext('2d'), wrap=document.getElementById('wrap'), listEl=document.getElementById('list'), statusEl=document.getElementById('status');
-let img=null, texts=[], originalData=null;
+    let currentIP = "127.0.0.1";
+    let deviceFingerprint = "";
 
-file.addEventListener('change',e=>{
- const f=e.target.files[0];
- if(f.size>19*1024*1024){alert('Max 19MB');return;}
- const r=new FileReader();
- r.onload=ev=>{
-  const im=new Image();
-  im.onload=()=>{
-   img=im; canvas.width=im.width; canvas.height=im.height;
-   wrap.style.display='block'; detectBtn.style.display='block'; saveBtn.style.display='block';
-   ctx.drawImage(im,0,0);
-   originalData=ctx.getImageData(0,0,canvas.width,canvas.height);
-   texts=[]; drawPins(); renderList();
-  };
-  im.src=ev.target.result;
- };
- r.readAsDataURL(f);
-});
+    // Generate unique browser fingerprint
+    function generateFingerprint() {
+        const nav = window.navigator;
+        const str = nav.userAgent + nav.language + screen.width + "x" + screen.height;
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return "WMX-" + Math.abs(hash).toString(16).toUpperCase();
+    }
 
-async function detectText(){
- statusEl.innerText='Scanning existing text inside photo... 10 sec';
- document.querySelectorAll('.pin').forEach(p=>p.remove());
- try{
-  const {data}=await Tesseract.recognize(canvas.toDataURL(),'eng', {logger:m=>{if(m.status==='recognizing text') statusEl.innerText=`Scanning ${Math.round(m.progress*100)}%`}});
-  texts = data.lines.filter(l=>l.text.trim().length>2).map(l=>({
-   x:l.bbox.x0, y:l.bbox.y0, w:l.bbox.x1-l.bbox.x0, h:l.bbox.y1-l.bbox.y0,
-   newText:l.text.trim(), oldText:l.text.trim(), color:'#ffffff'
-  }));
-  if(texts.length<3){
-   // fallback to words for small chat
-   texts = data.words.filter(w=>w.confidence>40 && w.text.trim().length>1).map(w=>({
-    x:w.bbox.x0, y:w.bbox.y0, w:w.bbox.x1-w.bbox.x0, h:w.bbox.y1-w.bbox.y0,
-    newText:w.text.trim(), oldText:w.text.trim(), color:'#ffffff'
-   }));
-  }
-  // sample original color for each
-  texts.forEach(t=>{
-   try{
-    const px=ctx.getImageData(t.x+2,t.y+2,1,1).data;
-    t.color=`rgb(${px[0]},${px[1]},${px[2]})`;
-   }catch(e){t.color='#aaffaa'}
-  });
-  statusEl.innerText=`Found ${texts.length} existing texts → Now pinned as 1,2,3 on photo. Click Edit to CHANGE it.`;
-  redraw(); drawPins(); renderList();
- }catch(e){statusEl.innerText='Scan failed, tap directly on chat text in photo to select it';}
-}
+    async function fetchUserIP() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            currentIP = data.ip || "103.22.180.12";
+        } catch (e) {
+            currentIP = "103.22.180.12"; // Fallback IP
+        }
+    }
 
-function drawPins(){
- document.querySelectorAll('.pin').forEach(p=>p.remove());
- const rect=canvas.getBoundingClientRect();
- texts.forEach((t,i)=>{
-  const pin=document.createElement('div');
-  pin.className='pin'; pin.innerText=i+1;
-  pin.style.left=(t.x*rect.width/canvas.width)+'px';
-  pin.style.top=(t.y*rect.height/canvas.height)+'px';
-  pin.onclick=()=>editIdx(i);
-  wrap.appendChild(pin);
- });
-}
+    async function startScan() {
+        deviceFingerprint = generateFingerprint();
+        await fetchUserIP();
 
-function renderList(){
- listEl.innerHTML=texts.map((t,i)=>`
-  <div class="text-line">
-   <div style="color:#ff2a2a;font-weight:800">${i+1}.</div>
-   <input value="${t.newText.replace(/"/g,'&quot;')}" oninput="texts[${i}].newText=this.value; redraw()">
-   <button class="small edit" onclick="editIdx(${i})">Edit</button>
-   <button class="small del" onclick="delIdx(${i})">Delete</button>
-  </div>
- `).join('');
-}
+        document.getElementById('scan-ip').innerText = `IP: ${currentIP} | FP: ${deviceFingerprint}`;
 
-function editIdx(i){
- const v=prompt(`CHANGE existing text #${i+1}:\nOld: ${texts[i].oldText}\nNew:`,texts[i].newText);
- if(v!==null){texts[i].newText=v; renderList(); redraw(); drawPins();}
-}
-function delIdx(i){
- if(confirm(`Delete existing text #${i+1} "${texts[i].oldText}" from photo?`)){
-  // erase completely
-  texts[i].newText='';
-  redraw(); 
- }
-}
+        setTimeout(() => {
+            document.getElementById('scan-view').classList.add('hidden');
 
-function redraw(){
- if(!img || !originalData) return;
- // restore original then erase all old texts
- ctx.putImageData(originalData,0,0);
- texts.forEach(t=>{
-  // PROPER ERASE: fill with background from left & right of text box
-  let bgLeft, bgRight;
-  try{
-   bgLeft=ctx.getImageData(Math.max(0,t.x-10),t.y,1,1).data;
-   bgRight=ctx.getImageData(Math.min(canvas.width-1,t.x+t.w+10),t.y,1,1).data;
-  }catch(e){bgLeft=[10,20,40]; bgRight=[10,20,40];}
-  // fill with dark blue like MLBB chat bg
-  const avgR=Math.round((bgLeft[0]+bgRight[0])/2);
-  const avgG=Math.round((bgLeft[1]+bgRight[1])/2);
-  const avgB=Math.round((bgLeft[2]+bgRight[2])/2);
-  ctx.fillStyle=`rgb(${avgR},${avgG},${avgB})`;
-  ctx.fillRect(t.x-3,t.y-2,t.w+6,t.h+4);
-  // draw new text in same place
-  if(t.newText!==''){
-   ctx.fillStyle=t.color;
-   // keep original small size
-   let fs=Math.max(10, t.h*0.9);
-   ctx.font=`${fs}px Arial`;
-   ctx.textBaseline='top';
-   ctx.fillText(t.newText,t.x,t.y);
-  }
- });
-}
+            // Check if device or user exists in system storage
+            const storedUser = localStorage.getItem('watchmeex18_user');
 
-window.addEventListener('resize',()=>{if(texts.length) drawPins();});
+            if (storedUser) {
+                const userData = JSON.parse(storedUser);
+                
+                // Existing user identified
+                document.getElementById('user-name-val').innerText = userData.name;
+                document.getElementById('user-phone-val').innerText = userData.phone;
+                document.getElementById('user-fp-val').innerText = deviceFingerprint;
+                document.getElementById('user-ip-val').innerText = currentIP;
 
-function saveImg(){
- if(!img){alert('Upload first');return;}
- document.querySelectorAll('.pin').forEach(p=>p.style.display='none');
- redraw();
- setTimeout(()=>{
-  const a=document.createElement('a');
-  a.download=`edited_${Date.now()}.jpg`;
-  a.href=canvas.toDataURL('image/jpeg',0.92);
-  a.click();
-  document.querySelectorAll('.pin').forEach(p=>p.style.display='flex');
-  statusEl.innerText='Saved to Phone Storage / Downloads';
- },150);
-}
+                document.getElementById('existing-user-view').classList.remove('hidden');
+            } else {
+                // New user requires registration
+                document.getElementById('new-user-view').classList.remove('hidden');
+            }
+        }, 2200);
+    }
 
-// tap on photo to pick existing text to change
-canvas.addEventListener('click',e=>{
- if(!img || texts.length==0) return;
- const rect=canvas.getBoundingClientRect();
- const x=(e.clientX-rect.left)*(canvas.width/rect.width);
- const y=(e.clientY-rect.top)*(canvas.height/rect.height);
- const hit=texts.findIndex(t=> x>=t.x-10 && x<=t.x+t.w+10 && y>=t.y-10 && y<=t.y+t.h+10);
- if(hit>=0) editIdx(hit);
-});
+    function handleRegistration(e) {
+        e.preventDefault();
+        const name = document.getElementById('regName').value;
+        const phone = document.getElementById('regPhone').value;
+
+        const newUser = {
+            name: name,
+            phone: phone,
+            fingerprint: deviceFingerprint,
+            ip: currentIP,
+            registeredAt: new Date().toISOString()
+        };
+
+        // Save to system memory (backend emulation)
+        localStorage.setItem('watchmeex18_user', JSON.stringify(newUser));
+
+        alert("Registration Successful! Your device fingerprint has been mapped.");
+        location.reload();
+    }
+
+    function proceedToStep2() {
+        alert("Step 1 Complete! Ready to proceed to Step 2.");
+    }
+
+    window.addEventListener('DOMContentLoaded', startScan);
 </script>
+
 </body>
 </html>

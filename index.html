@@ -26,12 +26,6 @@
 
         body {
             background-color: var(--bg-dark);
-            /* Pulls background directly from your uploaded repository file */
-            background-image: linear-gradient(rgba(7, 7, 12, 0.4), rgba(7, 7, 12, 0.6)), url('./IMG-20261020-WA8328.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
             color: var(--text-light);
             min-height: 100vh;
             min-height: 100dvh;
@@ -41,6 +35,54 @@
             justify-content: center;
             overflow-x: hidden;
             position: relative;
+        }
+
+        /* Cinematic Pan & Scan Background Animation */
+        .page-bg-container {
+            position: fixed;
+            inset: -10px;
+            width: 120vw;
+            height: 120vh;
+            z-index: -3;
+            overflow: hidden;
+            background-image: linear-gradient(rgba(7, 7, 12, 0.45), rgba(7, 7, 12, 0.65)), url('./IMG-20261020-WA8328.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            animation: panBackground 18s ease-in-out infinite alternate;
+        }
+
+        @keyframes panBackground {
+            0% { transform: scale(1.05) translate(-3%, -2%); }
+            50% { transform: scale(1.12) translate(3%, 2%); }
+            100% { transform: scale(1.05) translate(-3%, -2%); }
+        }
+
+        /* Lightning Flash Simulation Layer */
+        .lightning-flash {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 243, 255, 0.05);
+            z-index: -2;
+            pointer-events: none;
+            opacity: 0;
+            animation: flashLightning 7s infinite;
+        }
+
+        @keyframes flashLightning {
+            0%, 90%, 94%, 100% { opacity: 0; }
+            91%, 95% { opacity: 0.6; }
+            92% { opacity: 0.2; }
+        }
+
+        /* Rain Canvas Layer */
+        #rain-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .social-icons-bg {
@@ -339,6 +381,11 @@
 </head>
 <body>
 
+    <!-- Live Animated Background & Storm FX -->
+    <div class="page-bg-container"></div>
+    <div class="lightning-flash"></div>
+    <canvas id="rain-canvas"></canvas>
+
     <div class="social-icons-bg">
         <span>▶️</span><span>📷</span><span>👍</span><span>🐦</span><span>💬</span><span>✈️</span>
     </div>
@@ -540,6 +587,53 @@
     </div>
 
 <script>
+    /* Live Rain Simulation Engine */
+    const canvas = document.getElementById('rain-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    const raindrops = [];
+    const maxDrops = 100;
+
+    for (let i = 0; i < maxDrops; i++) {
+        raindrops.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            length: Math.random() * 20 + 10,
+            speed: Math.random() * 12 + 8,
+            opacity: Math.random() * 0.4 + 0.2
+        });
+    }
+
+    function animateRain() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.lineWidth = 1.2;
+        
+        for (let drop of raindrops) {
+            ctx.strokeStyle = `rgba(174, 219, 242, ${drop.opacity})`;
+            ctx.beginPath();
+            ctx.moveTo(drop.x, drop.y);
+            ctx.lineTo(drop.x - 1, drop.y + drop.length);
+            ctx.stroke();
+
+            drop.y += drop.speed;
+            drop.x -= 0.5;
+
+            if (drop.y > height) {
+                drop.y = -20;
+                drop.x = Math.random() * width;
+            }
+        }
+        requestAnimationFrame(animateRain);
+    }
+    animateRain();
+
     let currentIP = "103.22.180.12";
     let deviceFingerprint = "";
     let realBiometricVerified = false;

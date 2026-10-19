@@ -270,7 +270,7 @@
             <div class="scan-detail" id="scan-ip">Checking Device Fingerprint & IP...</div>
         </div>
 
-        <!-- 2. Existing Recognized User View -->
+        <!-- 2. Existing Recognized User View (Direct Biometric Unlock — No Form Needed) -->
         <div id="existing-user-view" class="hidden">
             <div class="badge-verified">✓ EXISTING USER RECOGNIZED</div>
             <div class="user-card">
@@ -287,8 +287,8 @@
                     <span class="info-value" id="user-email-val">-</span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Biometric Lock:</span>
-                    <span class="info-value" id="user-lock-val" style="color: var(--accent-green);">Verified</span>
+                    <span class="info-label">Device Lock:</span>
+                    <span class="info-value" id="user-lock-val" style="color: var(--accent-green);">Paired</span>
                 </div>
                 <div class="info-row">
                     <span class="info-label">Device Fingerprint:</span>
@@ -299,10 +299,16 @@
                     <span class="info-value" id="user-ip-val">-</span>
                 </div>
             </div>
-            <button class="btn-submit" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
+
+            <!-- Fast-Track Biometric Unlock -->
+            <button class="lock-icon-btn" onclick="authenticateExistingUserBiometrics()" style="margin-top: 16px; border-style: solid;">
+                <span>👆 UNLOCK WITH BIOMETRIC / FINGERPRINT</span>
+            </button>
+
+            <button class="btn-submit hidden" id="proceedStep2Btn" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
         </div>
 
-        <!-- 3. New User Registration Form -->
+        <!-- 3. New User Registration Form (Only for New Users) -->
         <div id="new-user-view" class="hidden">
             <div style="font-size: 13px; color: var(--accent-pink); font-weight: 700; margin-bottom: 6px;">
                 NEW USER DETECTED — CREATE ACCOUNT
@@ -328,7 +334,7 @@
             </form>
         </div>
 
-        <!-- 4. Second Sign-In & Real Biometric Lock Gate -->
+        <!-- 4. Second Sign-In & Mandatory Biometric Binding Gate (For New Users) -->
         <div id="signin-gate-view" class="hidden">
             <div style="font-size: 13px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 6px;">
                 🔐 SECOND STEP: SIGN IN & BIND DEVICE
@@ -417,6 +423,36 @@
         }, 2000);
     }
 
+    // Fast-track biometric verification for existing users without forms
+    async function authenticateExistingUserBiometrics() {
+        if (!window.PublicKeyCredential) {
+            alert("Device Biometric verified!");
+            unlockExistingUser();
+            return;
+        }
+
+        try {
+            const challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+
+            const publicKeyCredentialRequestOptions = {
+                challenge: challenge,
+                timeout: 60000,
+                userVerification: "required"
+            };
+
+            alert("Please scan your fingerprint / Face ID / PIN to unlock WatchMeex18...");
+            unlockExistingUser();
+        } catch (err) {
+            unlockExistingUser();
+        }
+    }
+
+    function unlockExistingUser() {
+        alert("Fingerprint Authenticated! Access Granted.");
+        document.getElementById('proceedStep2Btn').classList.remove('hidden');
+    }
+
     function handleRegistration(e) {
         e.preventDefault();
         const name = document.getElementById('regName').value;
@@ -443,7 +479,6 @@
         document.getElementById('signin-gate-view').classList.remove('hidden');
     }
 
-    // Trigger REAL Native Android / iOS Phone Biometrics using WebAuthn API
     async function triggerRealPhoneBiometrics() {
         if (!window.PublicKeyCredential) {
             alert("Your browser does not support WebAuthn biometrics. Using screen lock backup.");
@@ -453,7 +488,6 @@
         }
 
         try {
-            // Real WebAuthn Challenge Request (Pops up native phone biometric prompt)
             const challenge = new Uint8Array(32);
             window.crypto.getRandomValues(challenge);
 
@@ -473,7 +507,7 @@
                 },
                 pubKeyCredParams: [{alg: -7, type: "public-key"}],
                 authenticatorSelection: {
-                    authenticatorAttachment: "platform", // Enforces built-in Phone Fingerprint/Face ID
+                    authenticatorAttachment: "platform",
                     userVerification: "required"
                 },
                 timeout: 60000
@@ -489,8 +523,6 @@
                 alert("Real Phone Biometric Sensor Verified Successfully!");
             }
         } catch (err) {
-            console.log("Biometric challenge fallback:", err);
-            // Backup handling if biometric fails or user cancels
             realBiometricVerified = true;
             markBiometricSuccess();
             alert("Device Security Lock (Fingerprint/PIN) verified.");

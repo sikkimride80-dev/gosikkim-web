@@ -11,7 +11,7 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #0a0a0f;
-            --card-bg: rgba(18, 18, 28, 0.9);
+            --card-bg: rgba(18, 18, 28, 0.92);
             --text-light: #ffffff;
             --text-dim: #a0a0c0;
         }
@@ -69,7 +69,7 @@
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 24px;
-            padding: 28px 20px;
+            padding: 24px 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8),
                         0 0 20px rgba(138, 43, 226, 0.3);
             text-align: center;
@@ -90,7 +90,7 @@
             color: var(--text-dim);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         /* Scanner */
@@ -144,13 +144,13 @@
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            margin-top: 12px;
+            gap: 5px;
+            margin-top: 10px;
             text-align: left;
         }
 
         label {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-dim);
             font-weight: 600;
         }
@@ -159,10 +159,10 @@
             width: 100%;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 12px 14px;
-            border-radius: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
             transition: border-color 0.2s;
         }
@@ -173,14 +173,14 @@
         }
 
         .btn-submit {
-            margin-top: 16px;
+            margin-top: 14px;
             width: 100%;
-            padding: 14px;
+            padding: 13px;
             border: none;
             border-radius: 12px;
             background: linear-gradient(135deg, var(--primary), var(--accent-pink));
             color: #ffffff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
@@ -193,11 +193,11 @@
 
         .user-card {
             background: rgba(255, 255, 255, 0.04);
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 14px;
             border: 1px solid rgba(0, 243, 255, 0.2);
             text-align: left;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .badge-verified {
@@ -228,7 +228,7 @@
             align-items: center;
             justify-content: space-between;
             background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
+            padding: 10px 12px;
             border-radius: 12px;
             margin-top: 10px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -291,14 +291,49 @@
             color: #ffffff;
             padding: 10px;
             border-radius: 10px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            width: 100%;
+        }
+
+        /* System Settings Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .settings-card {
+            background: #181824;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 360px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .settings-header {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 8px;
         }
 
         .hidden { display: none !important; }
@@ -338,6 +373,10 @@
                     <span class="info-value" id="user-phone-val">-</span>
                 </div>
                 <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value" id="user-email-val">-</span>
+                </div>
+                <div class="info-row">
                     <span class="info-label">Device Lock:</span>
                     <span class="info-value" id="user-lock-val" style="color: var(--accent-green);">Active</span>
                 </div>
@@ -354,12 +393,12 @@
                     <span class="info-value" id="user-ip-val">-</span>
                 </div>
             </div>
-            <button class="btn-submit" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
+            <button class="btn-action btn-submit" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
         </div>
 
         <!-- 3. New User Registration Form -->
         <div id="new-user-view" class="hidden">
-            <div style="font-size: 13px; color: var(--accent-pink); font-weight: 700; margin-bottom: 8px;">
+            <div style="font-size: 13px; color: var(--accent-pink); font-weight: 700; margin-bottom: 6px;">
                 NEW USER DETECTED — CREATE ACCOUNT
             </div>
             <form id="regForm" onsubmit="handleRegistration(event)">
@@ -372,20 +411,24 @@
                     <input type="tel" id="regPhone" placeholder="Enter 10-digit mobile number" required pattern="[0-9]{10}">
                 </div>
                 <div class="form-group">
-                    <label>Set Access Password</label>
-                    <input type="password" id="regPass" placeholder="Create password for sign-in" required minlength="4">
+                    <label>Email Address</label>
+                    <input type="email" id="regEmail" placeholder="Enter email address" required>
+                </div>
+                <div class="form-group">
+                    <label>Set Password</label>
+                    <input type="password" id="regPass" placeholder="Create password" required minlength="4">
                 </div>
                 <button type="submit" class="btn-submit">COMPLETE REGISTRATION</button>
             </form>
         </div>
 
-        <!-- 4. Mandatory Second Sign-In & Permission Gate -->
+        <!-- 4. Second Sign-In & Device Binding Gate -->
         <div id="signin-gate-view" class="hidden">
-            <div style="font-size: 13px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 8px;">
+            <div style="font-size: 13px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 6px;">
                 🔐 SECOND STEP: SIGN IN & BIND DEVICE
             </div>
-            <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 12px;">
-                Verify your credentials once to lock this device for automatic direct access.
+            <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 10px;">
+                Verify credentials to lock this device for direct access on future visits.
             </div>
 
             <form onsubmit="handleSignIn(event)">
@@ -394,23 +437,27 @@
                     <input type="tel" id="loginPhone" placeholder="Enter mobile number" required>
                 </div>
                 <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="Enter email address" required>
+                </div>
+                <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="loginPass" placeholder="Enter password" required>
                 </div>
 
                 <!-- Device Lock Binding Toggle -->
                 <button type="button" class="lock-icon-btn" onclick="bindDeviceLock()">
-                    <span>🔒 Bind Current Device Lock (Fingerprint/PIN/Pattern)</span>
+                    <span>🔒 Bind Current Device Lock (Fingerprint/PIN)</span>
                 </button>
 
-                <!-- Usage Permission Authorization -->
+                <!-- Track Usage Access Toggle (Default OFF) -->
                 <div class="toggle-box">
                     <div class="toggle-text">
                         <strong>Track Usage Access</strong>
-                        Grant permission for bridge analytics & network logging
+                        Open system settings to permit bridge analytics
                     </div>
                     <label class="switch">
-                        <input type="checkbox" id="usagePermToggle" checked>
+                        <input type="checkbox" id="usagePermToggle" onchange="triggerSystemSettings(this)">
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -420,12 +467,36 @@
         </div>
     </div>
 
+    <!-- Interactive System Settings Modal for Usage Tracking -->
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="settings-card">
+            <div class="settings-header">
+                ⚙️ Device System Settings
+            </div>
+            <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.4;">
+                <strong style="color: #fff;">Usage Access Permission</strong><br>
+                To enable <strong>WatchMeex18 Social Bridge</strong> analytics, allow Usage Tracking in your device settings.
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; font-weight: 700; color: #fff;">Permit Usage Access</span>
+                <button onclick="confirmUsageAccess()" style="background: var(--accent-green); color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer;">
+                    ENABLE IN SETTINGS
+                </button>
+            </div>
+
+            <button onclick="closeSettingsModal()" style="width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer;">
+                Cancel / Keep Disabled
+            </button>
+        </div>
+    </div>
+
 <script>
     let currentIP = "103.22.180.12";
     let deviceFingerprint = "";
     let deviceLockActive = false;
+    let trackUsageGranted = false;
 
-    // Unique device fingerprint generator
     function generateFingerprint() {
         const nav = window.navigator;
         const str = nav.userAgent + nav.language + screen.width + "x" + screen.height;
@@ -460,21 +531,19 @@
             const signedIn = localStorage.getItem('watchmeex18_session_signed_in');
 
             if (storedUser && signedIn === 'true') {
-                // Existing user signed in and recognized
                 const userData = JSON.parse(storedUser);
                 document.getElementById('user-name-val').innerText = userData.name;
                 document.getElementById('user-phone-val').innerText = userData.phone;
+                document.getElementById('user-email-val').innerText = userData.email || "Not set";
                 document.getElementById('user-lock-val').innerText = userData.deviceLock ? "Active (Fingerprint/PIN)" : "Standard";
-                document.getElementById('user-track-val').innerText = userData.usagePermission ? "Authorized" : "Denied";
+                document.getElementById('user-track-val').innerText = userData.usagePermission ? "Granted (System Permitted)" : "Denied";
                 document.getElementById('user-fp-val').innerText = deviceFingerprint;
                 document.getElementById('user-ip-val').innerText = currentIP;
 
                 document.getElementById('existing-user-view').classList.remove('hidden');
             } else if (storedUser && signedIn !== 'true') {
-                // Registered user needing second sign-in
                 document.getElementById('signin-gate-view').classList.remove('hidden');
             } else {
-                // Completely new user
                 document.getElementById('new-user-view').classList.remove('hidden');
             }
         }, 2000);
@@ -484,28 +553,29 @@
         e.preventDefault();
         const name = document.getElementById('regName').value;
         const phone = document.getElementById('regPhone').value;
+        const email = document.getElementById('regEmail').value;
         const password = document.getElementById('regPass').value;
 
         const tempUser = {
             name: name,
             phone: phone,
+            email: email,
             password: password,
             fingerprint: deviceFingerprint,
             ip: currentIP,
             deviceLock: false,
-            usagePermission: true
+            usagePermission: false
         };
 
         localStorage.setItem('watchmeex18_user', JSON.stringify(tempUser));
         localStorage.setItem('watchmeex18_session_signed_in', 'false');
 
-        alert("Registration Complete! Please sign in once to bind your device lock & usage permissions.");
+        alert("Registration Complete! Please sign in once to bind your device lock & email credentials.");
         
         document.getElementById('new-user-view').classList.add('hidden');
         document.getElementById('signin-gate-view').classList.remove('hidden');
     }
 
-    // Native Biometric / Device Lock binding trigger
     async function bindDeviceLock() {
         if (window.PublicKeyCredential) {
             try {
@@ -522,17 +592,39 @@
         }
     }
 
+    // Opens System Settings Modal when user manually turns toggle on
+    function triggerSystemSettings(elem) {
+        if (elem.checked) {
+            elem.checked = false; // reset until confirmed
+            document.getElementById('settings-modal').classList.remove('hidden');
+        } else {
+            trackUsageGranted = false;
+        }
+    }
+
+    function confirmUsageAccess() {
+        trackUsageGranted = true;
+        document.getElementById('usagePermToggle').checked = true;
+        document.getElementById('settings-modal').classList.add('hidden');
+        alert("System Setting Updated: Usage Access Permission Granted!");
+    }
+
+    function closeSettingsModal() {
+        document.getElementById('usagePermToggle').checked = false;
+        document.getElementById('settings-modal').classList.add('hidden');
+    }
+
     function handleSignIn(e) {
         e.preventDefault();
         const phoneInput = document.getElementById('loginPhone').value;
+        const emailInput = document.getElementById('loginEmail').value;
         const passInput = document.getElementById('loginPass').value;
-        const usagePerm = document.getElementById('usagePermToggle').checked;
 
         const storedUser = JSON.parse(localStorage.getItem('watchmeex18_user'));
 
-        if (storedUser && storedUser.phone === phoneInput && storedUser.password === passInput) {
+        if (storedUser && storedUser.phone === phoneInput && storedUser.email === emailInput && storedUser.password === passInput) {
             storedUser.deviceLock = deviceLockActive || true;
-            storedUser.usagePermission = usagePerm;
+            storedUser.usagePermission = trackUsageGranted;
 
             localStorage.setItem('watchmeex18_user', JSON.stringify(storedUser));
             localStorage.setItem('watchmeex18_session_signed_in', 'true');
@@ -540,7 +632,7 @@
             alert("Device binding complete! You now have direct access on future visits.");
             location.reload();
         } else {
-            alert("Invalid Mobile Number or Password. Please try again.");
+            alert("Invalid Credentials! Please ensure Mobile, Email, and Password match.");
         }
     }
 

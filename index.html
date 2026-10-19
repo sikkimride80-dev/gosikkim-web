@@ -37,7 +37,7 @@
             position: relative;
         }
 
-        /* Exact Uncropped Image Mapping with Realistic Living Lightning Pulse */
+        /* Exact Uncropped Image Mapping with Realistic Lightning Flash Engine */
         .page-bg-container {
             position: fixed;
             inset: 0;
@@ -49,31 +49,31 @@
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
-            animation: imageLightningStrike 8s infinite;
+            animation: realLightningFlash 6s infinite ease-in-out;
         }
 
-        /* Makes the actual lightning and sky in the image pulse and flash organically */
-        @keyframes imageLightningStrike {
-            0%, 84%, 93%, 100% {
-                filter: brightness(1) contrast(1);
+        /* Authentic Realistic Lightning Flash Timing (Double-strike flash) */
+        @keyframes realLightningFlash {
+            0%, 78%, 84%, 90%, 100% {
+                filter: brightness(1) contrast(1) saturate(1);
             }
-            85% {
-                filter: brightness(1.6) contrast(1.25) drop-shadow(0 0 25px rgba(180, 230, 255, 0.8));
+            80% {
+                filter: brightness(2.2) contrast(1.4) saturate(1.2);
             }
-            86% {
+            81% {
                 filter: brightness(1.1) contrast(1.05);
             }
-            87% {
-                filter: brightness(1.85) contrast(1.35) drop-shadow(0 0 40px rgba(200, 245, 255, 0.95));
+            82% {
+                filter: brightness(2.8) contrast(1.6) saturate(1.3);
             }
-            89% {
-                filter: brightness(1.2) contrast(1.1);
+            83% {
+                filter: brightness(1.3) contrast(1.1);
             }
-            91% {
-                filter: brightness(1.5) contrast(1.2);
+            86% {
+                filter: brightness(1.9) contrast(1.3);
             }
-            92% {
-                filter: brightness(1.05) contrast(1);
+            88% {
+                filter: brightness(1.1) contrast(1);
             }
         }
 

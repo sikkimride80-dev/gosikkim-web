@@ -37,7 +37,23 @@
             position: relative;
         }
 
-        /* Exact Uncropped Image Mapping with Fully Randomized Erratic Lightning */
+        /* Top Right Branding */
+        .top-right-brand {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 50;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
+            text-transform: uppercase;
+        }
+
+        /* Exact Uncropped Image Mapping with Chaotic Thunderstorm Flash */
         .page-bg-container {
             position: fixed;
             inset: 0;
@@ -52,12 +68,10 @@
             animation: chaoticStormLightning 12s infinite steps(1, end);
         }
 
-        /* Completely mixed up, randomized, organic thunderstorm flash pattern */
         @keyframes chaoticStormLightning {
             0%, 14%, 18%, 21%, 52%, 56%, 78%, 81%, 84%, 100% {
                 filter: brightness(1) contrast(1) saturate(1);
             }
-            /* Quick double burst */
             15% {
                 filter: brightness(4.5) contrast(2.4) saturate(2.0) drop-shadow(0 0 130px rgba(240, 250, 255, 1));
             }
@@ -67,8 +81,6 @@
             19% {
                 filter: brightness(3.5) contrast(1.9);
             }
-            
-            /* Long erratic single flash */
             53% {
                 filter: brightness(5.0) contrast(2.6) saturate(2.2) drop-shadow(0 0 160px rgba(255, 255, 255, 1));
             }
@@ -78,8 +90,6 @@
             55% {
                 filter: brightness(3.0) contrast(1.7);
             }
-
-            /* Rapid erratic multi-strike sequence */
             79% {
                 filter: brightness(4.2) contrast(2.2) saturate(1.8) drop-shadow(0 0 140px rgba(230, 245, 255, 1));
             }
@@ -94,7 +104,6 @@
             }
         }
 
-        /* Slanted Rain and Body Drips Canvas Layer */
         #rain-canvas {
             position: fixed;
             inset: 0;
@@ -117,7 +126,6 @@
             pointer-events: none;
         }
 
-        /* Fully Transparent Merged Container Positioned at Clear Bottom */
         .app-container {
             position: relative;
             z-index: 10;
@@ -296,29 +304,54 @@
         .info-label { color: #d0d0f0; }
         .info-value { font-weight: 700; color: #ffffff; }
 
+        /* Lock Button Container with Continuous Pointing Finger Animation */
+        .lock-container-wrapper {
+            position: relative;
+            margin-top: 12px;
+            width: 100%;
+        }
+
         .lock-icon-btn {
-            background: rgba(138, 43, 226, 0.3);
-            border: 1px dashed var(--accent-cyan);
+            background: rgba(138, 43, 226, 0.4);
+            border: 2px solid var(--accent-cyan);
             color: #ffffff;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 12px;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 800;
             cursor: pointer;
-            margin-top: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
             width: 100%;
             text-shadow: 0 1px 3px rgba(10, 15, 25, 0.9);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
             transition: all 0.2s ease;
         }
 
         .lock-icon-btn.active {
             background: rgba(0, 255, 102, 0.3);
-            border: 1px solid var(--accent-green);
+            border: 2px solid var(--accent-green);
             color: var(--accent-green);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+
+        /* Animated Pointing Finger (First finger continually indicating button) */
+        .pointing-finger {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            animation: pointBounce 1s infinite ease-in-out;
+            pointer-events: none;
+            filter: drop-shadow(0 0 6px rgba(0, 243, 255, 0.8));
+        }
+
+        @keyframes pointBounce {
+            0%, 100% { transform: translateY(-50%) translateX(0); }
+            50% { transform: translateY(-50%) translateX(6px); }
         }
 
         .modal-overlay {
@@ -379,25 +412,19 @@
             color: #e0e0ff;
         }
 
-        .guide-box strong {
-            color: #ffffff;
-        }
-
-        .guide-box ol {
-            margin-left: 16px;
-            margin-top: 4px;
-        }
-
-        .guide-box li {
-            margin-bottom: 2px;
-        }
+        .guide-box strong { color: #ffffff; }
+        .guide-box ol { margin-left: 16px; margin-top: 4px; }
+        .guide-box li { margin-bottom: 2px; }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- Chaotic Thunderstorm Image & Slanted Rain FX -->
+    <!-- Top Right Branding -->
+    <div class="top-right-brand">WATCHMEEX18</div>
+
+    <!-- Chaotic Storm Lightning Image & Slanted Rain FX -->
     <div class="page-bg-container"></div>
     <canvas id="rain-canvas"></canvas>
 
@@ -482,35 +509,18 @@
             </form>
         </div>
 
-        <!-- 4. Second Sign-In & Mandatory Device Lock Gate -->
+        <!-- 4. Second Verification Gate (Clean & Minimized) -->
         <div id="signin-gate-view" class="hidden">
-            <div style="font-size: 11px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 4px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
-                🔐 SECOND STEP: SIGN IN & BIND DEVICE
-            </div>
-            <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-shadow: 0 1px 3px rgba(10, 15, 25, 0.95);">
-                Verify credentials and authenticate real phone biometrics to bind this device.
+            <div style="font-size: 11px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 6px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
+                Please choose your lock type and verify
             </div>
 
-            <form onsubmit="handleSignIn(event)">
-                <div class="form-group">
-                    <label>Registered Mobile Number</label>
-                    <input type="tel" id="loginPhone" placeholder="Enter mobile number" required>
-                </div>
-                <div class="form-group">
-                    <label>Registered Email Address</label>
-                    <input type="email" id="loginEmail" placeholder="Enter registered email" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPass" placeholder="Enter password" required>
-                </div>
-
+            <div class="lock-container-wrapper">
+                <span class="pointing-finger">👉</span>
                 <button type="button" id="biometricBtn" class="lock-icon-btn" onclick="openLockSelectionMenu()">
-                    <span>👆 Choose Lock Type or Setup New Lock</span>
+                    <span>CHOOSE LOCK TYPE & VERIFY</span>
                 </button>
-
-                <button type="submit" class="btn-submit">AUTHENTICATE & LOCK DEVICE</button>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -806,13 +816,14 @@
                 document.getElementById('lock-selection-modal').classList.add('hidden');
                 markBiometricSuccess();
 
-                const existingView = document.getElementById('existing-user-view');
-                if (!existingView.classList.contains('hidden')) {
-                    alert(`✓ Hardware Biometric Verified [${lockType}]! Access Granted.`);
-                    document.getElementById('proceedStep2Btn').classList.remove('hidden');
-                } else {
-                    alert(`✓ Hardware Sensor Verified [${lockType}]! Ready for authentication.`);
-                }
+                const storedUser = JSON.parse(localStorage.getItem('watchmeex18_user')) || { name: "User" };
+                storedUser.deviceLock = true;
+                storedUser.lockType = chosenLockType;
+                localStorage.setItem('watchmeex18_user', JSON.stringify(storedUser));
+                localStorage.setItem('watchmeex18_session_signed_in', 'true');
+
+                alert(`✓ Hardware Biometric Verified [${lockType}]! Device successfully bound.`);
+                location.reload();
             }
         } catch (err) {
             alert("⚠️ Real Biometric Scan Failed or Cancelled!\n\nIf you don't have a screen lock set up, please use the guide to set one up in your phone settings.");
@@ -918,37 +929,8 @@
         localStorage.setItem('watchmeex18_user', JSON.stringify(tempUser));
         localStorage.setItem('watchmeex18_session_signed_in', 'false');
 
-        alert("Registration Complete! Please sign in with Mobile & Email and complete device lock binding.");
-        
         document.getElementById('new-user-view').classList.add('hidden');
         document.getElementById('signin-gate-view').classList.remove('hidden');
-    }
-
-    function handleSignIn(e) {
-        e.preventDefault();
-        const phoneInput = document.getElementById('loginPhone').value;
-        const emailInput = document.getElementById('loginEmail').value;
-        const passInput = document.getElementById('loginPass').value;
-
-        const storedUser = JSON.parse(localStorage.getItem('watchmeex18_user'));
-
-        if (storedUser && storedUser.phone === phoneInput && storedUser.email === emailInput && storedUser.password === passInput) {
-            if (!realBiometricVerified) {
-                alert("Please select or configure your device lock before proceeding.");
-                openLockSelectionMenu();
-                return;
-            }
-
-            storedUser.deviceLock = true;
-            storedUser.lockType = chosenLockType;
-            localStorage.setItem('watchmeex18_user', JSON.stringify(storedUser));
-            localStorage.setItem('watchmeex18_session_signed_in', 'true');
-
-            alert("Device binding complete! You now have direct access on future visits.");
-            location.reload();
-        } else {
-            alert("Invalid Credentials! Please ensure Mobile Number, Email, and Password match.");
-        }
     }
 
     function proceedToStep2() {

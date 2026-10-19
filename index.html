@@ -319,29 +319,28 @@
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
         }
 
-        /* 1.0x Slow Live Pointing Hand Movement */
-        .live-pointing-hand {
-            width: 38px;
+        /* Slow 1.0x Speed Pointing Hand on the RIGHT side */
+        .live-pointing-hand-right {
+            width: 36px;
             height: auto;
-            transform: scaleX(-1);
-            animation: slowHandPoint 1.8s infinite ease-in-out;
+            animation: slowHandPointRight 1.8s infinite ease-in-out;
             filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
             flex-shrink: 0;
         }
 
-        @keyframes slowHandPoint {
+        @keyframes slowHandPointRight {
             0%, 100% {
-                transform: scaleX(-1) translateX(0);
+                transform: translateX(0);
             }
             50% {
-                transform: scaleX(-1) translateX(-10px);
+                transform: translateX(10px);
             }
         }
 
-        /* Pond Ripple Effect that ONLY triggers when finger touches forward */
-        .ripple-origin {
+        /* Pond Ripple Effect on the RIGHT side, syncing strictly when finger touches forward */
+        .ripple-origin-right {
             position: absolute;
-            left: 22px;
+            right: 24px;
             top: 50%;
             transform: translateY(-50%);
             width: 10px;
@@ -355,7 +354,7 @@
             border: 2px solid rgba(0, 243, 255, 0.9);
             border-radius: 50%;
             opacity: 0;
-            animation: touchRippleSync 1.8s infinite ease-out;
+            animation: touchRippleSyncRight 1.8s infinite ease-out;
         }
 
         .ripple-ring:nth-child(2) {
@@ -363,8 +362,7 @@
             border-color: rgba(255, 0, 127, 0.8);
         }
 
-        /* Synchronized so ripples ONLY emit when finger reaches forward (at 50% keyframe) */
-        @keyframes touchRippleSync {
+        @keyframes touchRippleSyncRight {
             0%, 45%, 100% {
                 transform: scale(0.2);
                 opacity: 0;
@@ -503,12 +501,14 @@
 
             <div class="lock-container-wrapper">
                 <button class="lock-icon-btn" onclick="openLockSelectionMenu()">
-                    <div class="ripple-origin">
+                    <span>UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
+                    <div class="ripple-origin-right">
                         <div class="ripple-ring"></div>
                         <div class="ripple-ring"></div>
                     </div>
-                    <img src="https://api.iconify.design/fluent-emoji-flat:backhand-index-pointing-right.svg" class="live-pointing-hand" alt="Pointing Hand">
-                    <span>UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
+                    <svg class="live-pointing-hand-right" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 45c0-4 3-7 7-7h30l-4-14c-1-4 1-8 5-9 3-1 7 1 8 4l12 21h15c4 0 7 3 7 7v25c0 4-3 7-7 7H52c-4 0-7-3-7-7v-3l-12 7c-3 2-7 0-8-3-1-3 0-6 3-8l10-6H22c-4 0-7-3-7-7z" fill="#e0ac69"/>
+                    </svg>
                 </button>
             </div>
 
@@ -541,7 +541,7 @@
             </form>
         </div>
 
-        <!-- 4. Verification Gate with Synchronized Touch Ripples -->
+        <!-- 4. Verification Gate with Hand & Ripples on the RIGHT Side -->
         <div id="signin-gate-view" class="hidden">
             <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
                 Please choose your lock type and verify
@@ -549,12 +549,16 @@
 
             <div class="lock-container-wrapper">
                 <button type="button" id="biometricBtn" class="lock-icon-btn" onclick="openLockSelectionMenu()">
-                    <div class="ripple-origin">
+                    <span>CHOOSE LOCK TYPE & VERIFY</span>
+                    <!-- Synchronized Pond Ripple Rings on the right -->
+                    <div class="ripple-origin-right">
                         <div class="ripple-ring"></div>
                         <div class="ripple-ring"></div>
                     </div>
-                    <img src="https://api.iconify.design/fluent-emoji-flat:backhand-index-pointing-right.svg" class="live-pointing-hand" alt="Pointing Hand">
-                    <span>CHOOSE LOCK TYPE & VERIFY</span>
+                    <!-- Clean Vector Hand pointing right -->
+                    <svg class="live-pointing-hand-right" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 45c0-4 3-7 7-7h30l-4-14c-1-4 1-8 5-9 3-1 7 1 8 4l12 21h15c4 0 7 3 7 7v25c0 4-3 7-7 7H52c-4 0-7-3-7-7v-3l-12 7c-3 2-7 0-8-3-1-3 0-6 3-8l10-6H22c-4 0-7-3-7-7z" fill="#e0ac69"/>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -940,7 +944,7 @@
         const btn = document.getElementById('biometricBtn');
         if (btn) {
             btn.classList.add('active');
-            btn.innerHTML = `<div class="ripple-origin"><div class="ripple-ring"></div><div class="ripple-ring"></div></div><img src="https://api.iconify.design/fluent-emoji-flat:backhand-index-pointing-right.svg" class="live-pointing-hand" alt="Pointing Hand"><span>✓ LOCK VERIFIED (${chosenLockType})</span>`;
+            btn.innerHTML = `<span>✓ LOCK VERIFIED (${chosenLockType})</span><div class="ripple-origin-right"><div class="ripple-ring"></div><div class="ripple-ring"></div></div><svg class="live-pointing-hand-right" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M15 45c0-4 3-7 7-7h30l-4-14c-1-4 1-8 5-9 3-1 7 1 8 4l12 21h15c4 0 7 3 7 7v25c0 4-3 7-7 7H52c-4 0-7-3-7-7v-3l-12 7c-3 2-7 0-8-3-1-3 0-6 3-8l10-6H22c-4 0-7-3-7-7z" fill="#00ff66"/></svg>`;
         }
     }
 

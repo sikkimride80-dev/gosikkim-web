@@ -11,7 +11,7 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            --card-bg: rgba(18, 18, 28, 0.75);
+            --card-bg: rgba(15, 15, 25, 0.65);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -26,16 +26,6 @@
 
         body {
             background-color: var(--bg-dark);
-            /* Fallback high-res cyber grid background */
-            background-image: 
-                radial-gradient(circle at 50% 20%, rgba(138, 43, 226, 0.4), transparent 60%),
-                radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.25), transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(255, 0, 127, 0.25), transparent 50%),
-                url('https://files.catbox.moe/51v7rf.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
             color: var(--text-light);
             min-height: 100vh;
             min-height: 100dvh;
@@ -47,12 +37,24 @@
             position: relative;
         }
 
+        /* Absolute Fixed Background Image Layer to Guarantee Rendering */
+        .page-bg-image {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        /* Dark overlay tint for readability */
         .bg-glow {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(4px);
-            z-index: 1;
+            background: rgba(5, 5, 10, 0.55);
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            z-index: -1;
             pointer-events: none;
         }
 
@@ -63,9 +65,9 @@
             justify-content: space-around;
             align-items: center;
             flex-wrap: wrap;
-            opacity: 0.15;
+            opacity: 0.12;
             font-size: 32px;
-            z-index: 2;
+            z-index: 1;
             pointer-events: none;
         }
 
@@ -76,12 +78,12 @@
             width: 90%;
             max-width: 420px;
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 24px;
             padding: 24px 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7),
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8),
                         0 0 25px rgba(138, 43, 226, 0.4);
             text-align: center;
         }
@@ -172,8 +174,8 @@
 
         input, select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             padding: 10px 12px;
             border-radius: 10px;
             color: #ffffff;
@@ -199,7 +201,7 @@
             padding: 13px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.85), rgba(255, 0, 127, 0.85));
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(255, 0, 127, 0.9));
             color: #ffffff;
             font-size: 13px;
             font-weight: 800;
@@ -214,7 +216,7 @@
         }
 
         .user-card {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             border-radius: 14px;
             padding: 14px;
@@ -247,7 +249,7 @@
         .info-value { font-weight: 700; color: #ffffff; }
 
         .lock-icon-btn {
-            background: rgba(138, 43, 226, 0.35);
+            background: rgba(138, 43, 226, 0.4);
             backdrop-filter: blur(10px);
             border: 1px dashed var(--accent-cyan);
             color: #ffffff;
@@ -266,7 +268,7 @@
         }
 
         .lock-icon-btn.active {
-            background: rgba(0, 255, 102, 0.25);
+            background: rgba(0, 255, 102, 0.3);
             border: 1px solid var(--accent-green);
             color: var(--accent-green);
         }
@@ -274,7 +276,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             z-index: 200;
@@ -286,7 +288,7 @@
         }
 
         .lock-selection-card {
-            background: rgba(21, 21, 34, 0.75);
+            background: rgba(20, 20, 32, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
@@ -304,9 +306,9 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 8px;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 10px;
             color: #ffffff;
             font-size: 12px;
@@ -320,11 +322,11 @@
 
         .lock-option-btn:hover, .lock-option-btn:active {
             border-color: var(--accent-cyan);
-            background: rgba(0, 243, 255, 0.2);
+            background: rgba(0, 243, 255, 0.25);
         }
 
         .guide-box {
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 12px;
             padding: 14px;
             border-left: 3px solid var(--accent-cyan);
@@ -352,7 +354,10 @@
 </head>
 <body>
 
+    <!-- Absolute Background Image Layer -->
+    <img src="https://files.catbox.moe/51v7rf.jpg" class="page-bg-image" alt="Background">
     <div class="bg-glow"></div>
+
     <div class="social-icons-bg">
         <span>▶️</span><span>📷</span><span>👍</span><span>🐦</span><span>💬</span><span>✈️</span>
     </div>
@@ -497,7 +502,7 @@
                 <span>Pattern Lock</span>
             </button>
 
-            <button class="lock-option-btn" onclick="showSetupGuideFlow()" style="border-color: var(--accent-pink); background: rgba(255, 0, 127, 0.2); margin-top: 10px;">
+            <button class="lock-option-btn" onclick="showSetupGuideFlow()" style="border-color: var(--accent-pink); background: rgba(255, 0, 127, 0.25); margin-top: 10px;">
                 <span>⚙️</span>
                 <span style="color: var(--accent-pink);">No Lock Setup? Learn How to Create One</span>
             </button>
@@ -547,7 +552,7 @@
 
             <div id="guideOutput" class="guide-box hidden"></div>
 
-            <button class="lock-option-btn" onclick="confirmGuideSetupDone()" style="margin-top: 12px; border-color: var(--accent-green); justify-content: center; background: rgba(0, 255, 102, 0.2);">
+            <button class="lock-option-btn" onclick="confirmGuideSetupDone()" style="margin-top: 12px; border-color: var(--accent-green); justify-content: center; background: rgba(0, 255, 102, 0.25);">
                 <span>✓ I Have Enabled Lock in Phone Settings</span>
             </button>
         </div>

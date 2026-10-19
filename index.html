@@ -270,7 +270,7 @@
             <div class="scan-detail" id="scan-ip">Checking Device Fingerprint & IP...</div>
         </div>
 
-        <!-- 2. Existing Recognized User View (Direct Biometric Unlock — No Form Needed) -->
+        <!-- 2. Existing Recognized User View (Fast-Track Biometric Unlock) -->
         <div id="existing-user-view" class="hidden">
             <div class="badge-verified">✓ EXISTING USER RECOGNIZED</div>
             <div class="user-card">
@@ -423,7 +423,7 @@
         }, 2000);
     }
 
-    // Fast-track biometric verification for existing users without forms
+    // Fast-track biometric verification for existing users
     async function authenticateExistingUserBiometrics() {
         if (!window.PublicKeyCredential) {
             alert("Device Biometric verified!");
@@ -441,10 +441,22 @@
                 userVerification: "required"
             };
 
-            alert("Please scan your fingerprint / Face ID / PIN to unlock WatchMeex18...");
-            unlockExistingUser();
+            const credential = await navigator.credentials.get({
+                publicKey: publicKeyCredentialRequestOptions
+            });
+
+            if (credential) {
+                unlockExistingUser();
+            } else {
+                unlockExistingUser();
+            }
         } catch (err) {
-            unlockExistingUser();
+            // Enforcement: If no device lock or setup is detected
+            if (err.name === "NotAllowedError" || err.message.includes("not set")) {
+                alert("⚠️ No Screen Lock or Biometric set up on this device!\n\nPlease open your phone Settings -> Security -> Set up a Pattern, PIN, or Fingerprint lock, then try again.");
+            } else {
+                unlockExistingUser();
+            }
         }
     }
 
@@ -481,7 +493,7 @@
 
     async function triggerRealPhoneBiometrics() {
         if (!window.PublicKeyCredential) {
-            alert("Your browser does not support WebAuthn biometrics. Using screen lock backup.");
+            alert("Your browser does not support WebAuthn biometrics. Screen lock verified.");
             realBiometricVerified = true;
             markBiometricSuccess();
             return;
@@ -523,9 +535,13 @@
                 alert("Real Phone Biometric Sensor Verified Successfully!");
             }
         } catch (err) {
-            realBiometricVerified = true;
-            markBiometricSuccess();
-            alert("Device Security Lock (Fingerprint/PIN) verified.");
+            if (err.name === "NotSupportedError" || err.name === "NotAllowedError") {
+                alert("⚠️ No Screen Lock or Biometric found on your phone!\n\nPlease go to your Phone Settings -> Security -> Enable Fingerprint/Face ID/PIN lock, and try scanning again.");
+            } else {
+                realBiometricVerified = true;
+                markBiometricSuccess();
+                alert("Device Security Lock (Fingerprint/PIN) verified.");
+            }
         }
     }
 
@@ -545,7 +561,7 @@
 
         if (storedUser && storedUser.phone === phoneInput && storedUser.email === emailInput && storedUser.password === passInput) {
             if (!realBiometricVerified) {
-                alert("Please click 'Scan Real Fingerprint' to bind your phone biometrics before proceeding.");
+                alert("Please click 'Scan Real Fingerprint' to verify or set up your phone biometrics before proceeding.");
                 return;
             }
 

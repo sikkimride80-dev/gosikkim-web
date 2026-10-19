@@ -445,32 +445,30 @@
                 🔐 SELECT ACTIVE DEVICE LOCK
             </div>
             <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">
-                Choose an option if already set up on your phone, or create one:
+                Select an option to scan your phone's real biometric hardware sensor:
             </div>
 
-            <!-- Existing Lock Options -->
-            <button class="lock-option-btn" onclick="selectLockOption('Fingerprint / Touch ID')">
+            <button class="lock-option-btn" onclick="triggerHardwareBiometricScan('Fingerprint / Touch ID')">
                 <span>👆</span>
                 <span>Fingerprint / Touch ID</span>
             </button>
-            <button class="lock-option-btn" onclick="selectLockOption('Face Lock / Face ID')">
+            <button class="lock-option-btn" onclick="triggerHardwareBiometricScan('Face Lock / Face ID')">
                 <span>👤</span>
                 <span>Face Lock / Face ID</span>
             </button>
-            <button class="lock-option-btn" onclick="selectLockOption('PIN Code')">
+            <button class="lock-option-btn" onclick="triggerHardwareBiometricScan('PIN Code')">
                 <span>🔢</span>
                 <span>PIN Code</span>
             </button>
-            <button class="lock-option-btn" onclick="selectLockOption('Password Lock')">
+            <button class="lock-option-btn" onclick="triggerHardwareBiometricScan('Password Lock')">
                 <span>🔤</span>
                 <span>Password Lock</span>
             </button>
-            <button class="lock-option-btn" onclick="selectLockOption('Pattern Lock')">
+            <button class="lock-option-btn" onclick="triggerHardwareBiometricScan('Pattern Lock')">
                 <span>🔲</span>
                 <span>Pattern Lock</span>
             </button>
 
-            <!-- Guide Trigger for Users Without Lock -->
             <button class="lock-option-btn" onclick="showSetupGuideFlow()" style="border-color: var(--accent-pink); background: rgba(255, 0, 127, 0.1); margin-top: 10px;">
                 <span>⚙️</span>
                 <span style="color: var(--accent-pink);">No Lock Setup? Learn How to Create One</span>
@@ -512,7 +510,6 @@
             <div class="form-group">
                 <label>Device Model / Series</label>
                 <select id="modelSelect">
-                    <!-- Populated Dynamically -->
                 </select>
             </div>
 
@@ -520,7 +517,6 @@
                 SHOW SETUP INSTRUCTIONS
             </button>
 
-            <!-- Fast 1-Second Display -->
             <div id="guideOutput" class="guide-box hidden"></div>
 
             <button class="lock-option-btn" onclick="confirmGuideSetupDone()" style="margin-top: 12px; border-color: var(--accent-green); justify-content: center; background: rgba(0, 255, 102, 0.1);">
@@ -613,18 +609,62 @@
         document.getElementById('lock-selection-modal').classList.remove('hidden');
     }
 
-    function selectLockOption(type) {
-        chosenLockType = type;
-        realBiometricVerified = true;
-        document.getElementById('lock-selection-modal').classList.add('hidden');
-        markBiometricSuccess();
+    // Real Native WebAuthn Phone Sensor Biometric Hardware Scan
+    async function triggerHardwareBiometricScan(lockType) {
+        chosenLockType = lockType;
+        
+        if (!window.PublicKeyCredential) {
+            alert("WebAuthn Biometrics hardware API is not supported in this browser.");
+            showSetupGuideFlow();
+            return;
+        }
 
-        const existingView = document.getElementById('existing-user-view');
-        if (!existingView.classList.contains('hidden')) {
-            alert(`Verified [${type}]! Direct unlock granted.`);
-            document.getElementById('proceedStep2Btn').classList.remove('hidden');
-        } else {
-            alert(`Selected Lock Type: [${type}]. Ready for authentication.`);
+        try {
+            const challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+
+            const userId = new Uint8Array(16);
+            window.crypto.getRandomValues(userId);
+
+            const publicKeyCredentialCreationOptions = {
+                challenge: challenge,
+                rp: {
+                    name: "WatchMeex18 Social Bridge",
+                    id: window.location.hostname || "localhost"
+                },
+                user: {
+                    id: userId,
+                    name: "user@watchmeex18.com",
+                    displayName: "WatchMeex18 Hardware Binding"
+                },
+                pubKeyCredParams: [{alg: -7, type: "public-key"}],
+                authenticatorSelection: {
+                    authenticatorAttachment: "platform",
+                    userVerification: "required"
+                },
+                timeout: 60000
+            };
+
+            const credential = await navigator.credentials.create({
+                publicKey: publicKeyCredentialCreationOptions
+            });
+
+            if (credential) {
+                realBiometricVerified = true;
+                document.getElementById('lock-selection-modal').classList.add('hidden');
+                markBiometricSuccess();
+
+                const existingView = document.getElementById('existing-user-view');
+                if (!existingView.classList.contains('hidden')) {
+                    alert(`✓ Hardware Biometric Verified [${lockType}]! Access Granted.`);
+                    document.getElementById('proceedStep2Btn').classList.remove('hidden');
+                } else {
+                    alert(`✓ Hardware Sensor Verified [${lockType}]! Ready for authentication.`);
+                }
+            }
+        } catch (err) {
+            alert("⚠️ Real Biometric Scan Failed or Cancelled!\n\nIf you don't have a screen lock set up, please use the guide to set one up in your phone settings.");
+            showSetupGuideFlow();
         }
     }
 
@@ -633,7 +673,6 @@
         document.getElementById('setup-guide-modal').classList.remove('hidden');
     }
 
-    // Updated timing to 1 Second
     function generateGoogleSetupGuide() {
         const brand = document.getElementById('brandSelect').value;
         const version = document.getElementById('versionSelect').value;
@@ -694,16 +733,8 @@
     }
 
     function confirmGuideSetupDone() {
-        realBiometricVerified = true;
-        chosenLockType = "Verified Phone Lock";
         document.getElementById('setup-guide-modal').classList.add('hidden');
-        markBiometricSuccess();
-        alert("Device Security Verified! You can now proceed with sign-in.");
-
-        const existingView = document.getElementById('existing-user-view');
-        if (!existingView.classList.contains('hidden')) {
-            document.getElementById('proceedStep2Btn').classList.remove('hidden');
-        }
+        openLockSelectionMenu();
     }
 
     function markBiometricSuccess() {

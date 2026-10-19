@@ -11,7 +11,8 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            --card-bg: rgba(15, 15, 25, 0.60);
+            /* Ultra-transparent glass card for background integration */
+            --card-bg: rgba(10, 10, 18, 0.38);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -37,43 +38,43 @@
             position: relative;
         }
 
-        /* Fully Visible Uncropped Image with 0.8x Slow Pan */
+        /* Fully Visible Uncropped Background with Smooth 0.8x Slow Pan */
         .page-bg-container {
             position: fixed;
-            inset: -20px;
-            width: 110vw;
-            height: 110vh;
+            inset: -15px;
+            width: 105vw;
+            height: 105vh;
             z-index: -3;
             overflow: hidden;
-            background-image: linear-gradient(rgba(7, 7, 12, 0.45), rgba(7, 7, 12, 0.65)), url('./IMG-20261020-WA8328.jpg');
-            background-size: contain;
+            background-image: linear-gradient(rgba(5, 5, 10, 0.3), rgba(5, 5, 10, 0.5)), url('./IMG-20261020-WA8328.jpg');
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            animation: panBackground 25s ease-in-out infinite alternate;
+            animation: panBackground 28s ease-in-out infinite alternate;
         }
 
         @keyframes panBackground {
-            0% { transform: scale(1.02) translate(-2%, -1%); }
-            50% { transform: scale(1.08) translate(2%, 1%); }
-            100% { transform: scale(1.02) translate(-2%, -1%); }
+            0% { transform: scale(1.02) translate(-1%, -1%); }
+            50% { transform: scale(1.06) translate(1%, 1%); }
+            100% { transform: scale(1.02) translate(-1%, -1%); }
         }
 
         /* Lightning Flash Simulation Layer */
         .lightning-flash {
             position: fixed;
             inset: 0;
-            background: rgba(0, 243, 255, 0.05);
+            background: rgba(0, 243, 255, 0.06);
             z-index: -2;
             pointer-events: none;
             opacity: 0;
-            animation: flashLightning 7s infinite;
+            animation: flashLightning 8s infinite;
         }
 
         @keyframes flashLightning {
-            0%, 90%, 94%, 100% { opacity: 0; }
-            91%, 95% { opacity: 0.6; }
-            92% { opacity: 0.2; }
+            0%, 88%, 92%, 100% { opacity: 0; }
+            89%, 93% { opacity: 0.7; }
+            90% { opacity: 0.3; }
         }
 
         /* Rain Canvas Layer */
@@ -106,13 +107,13 @@
             width: 90%;
             max-width: 420px;
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
             padding: 24px 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8),
-                        0 0 25px rgba(138, 43, 226, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
+                        0 0 25px rgba(138, 43, 226, 0.3);
             text-align: center;
         }
 
@@ -153,7 +154,7 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 16px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.2);
         }
 
         .radar-sweep {
@@ -202,8 +203,8 @@
 
         input, select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             padding: 10px 12px;
             border-radius: 10px;
             color: #ffffff;
@@ -229,7 +230,7 @@
             padding: 13px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(255, 0, 127, 0.9));
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.85), rgba(255, 0, 127, 0.85));
             color: #ffffff;
             font-size: 13px;
             font-weight: 800;
@@ -244,7 +245,7 @@
         }
 
         .user-card {
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(10px);
             border-radius: 14px;
             padding: 14px;
@@ -277,7 +278,7 @@
         .info-value { font-weight: 700; color: #ffffff; }
 
         .lock-icon-btn {
-            background: rgba(138, 43, 226, 0.4);
+            background: rgba(138, 43, 226, 0.35);
             backdrop-filter: blur(10px);
             border: 1px dashed var(--accent-cyan);
             color: #ffffff;
@@ -304,9 +305,9 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 200;
             display: flex;
             align-items: center;
@@ -316,7 +317,7 @@
         }
 
         .lock-selection-card {
-            background: rgba(20, 20, 32, 0.85);
+            background: rgba(20, 20, 32, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
@@ -334,7 +335,7 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 8px;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 10px;
@@ -354,7 +355,7 @@
         }
 
         .guide-box {
-            background: rgba(0, 0, 0, 0.55);
+            background: rgba(0, 0, 0, 0.45);
             border-radius: 12px;
             padding: 14px;
             border-left: 3px solid var(--accent-cyan);

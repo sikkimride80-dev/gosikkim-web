@@ -306,7 +306,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.88);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -393,7 +393,7 @@
                     <span class="info-value" id="user-ip-val">-</span>
                 </div>
             </div>
-            <button class="btn-action btn-submit" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
+            <button class="btn-submit" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
         </div>
 
         <!-- 3. New User Registration Form -->
@@ -437,8 +437,8 @@
                     <input type="tel" id="loginPhone" placeholder="Enter mobile number" required>
                 </div>
                 <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="loginEmail" placeholder="Enter email address" required>
+                    <label>Registered Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="Enter registered email" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
@@ -450,11 +450,11 @@
                     <span>🔒 Bind Current Device Lock (Fingerprint/PIN)</span>
                 </button>
 
-                <!-- Track Usage Access Toggle (Default OFF) -->
+                <!-- Track Usage Access Toggle -->
                 <div class="toggle-box">
                     <div class="toggle-text">
                         <strong>Track Usage Access</strong>
-                        Open system settings to permit bridge analytics
+                        Grant phone system settings & web permission
                     </div>
                     <label class="switch">
                         <input type="checkbox" id="usagePermToggle" onchange="triggerSystemSettings(this)">
@@ -467,27 +467,30 @@
         </div>
     </div>
 
-    <!-- Interactive System Settings Modal for Usage Tracking -->
+    <!-- Mandatory System Settings Modal for Dual Permissions -->
     <div id="settings-modal" class="modal-overlay hidden">
         <div class="settings-card">
             <div class="settings-header">
-                ⚙️ Device System Settings
+                ⚙️ Device & Web Settings Required
             </div>
             <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.4;">
-                <strong style="color: #fff;">Usage Access Permission</strong><br>
-                To enable <strong>WatchMeex18 Social Bridge</strong> analytics, allow Usage Tracking in your device settings.
+                <strong style="color: #fff;">Usage Access Permissions</strong><br>
+                To enable <strong>WatchMeex18 Social Bridge</strong> analytics, you must permit both <strong>Phone System Access</strong> and <strong>Web Tracking Settings</strong>.
             </div>
             
-            <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 10px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 12px; font-weight: 700; color: #fff;">Permit Usage Access</span>
-                <button onclick="confirmUsageAccess()" style="background: var(--accent-green); color: #000; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer;">
-                    ENABLE IN SETTINGS
+            <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 10px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 11px; font-weight: 700; color: #fff;">1. Phone Device Settings</span>
+                    <span id="phone-perm-status" style="font-size: 10px; color: var(--accent-pink); font-weight: 800;">PENDING</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 11px; font-weight: 700; color: #fff;">2. Web Usage Permission</span>
+                    <span id="web-perm-status" style="font-size: 10px; color: var(--accent-pink); font-weight: 800;">PENDING</span>
+                </div>
+                <button onclick="confirmDualPermissions()" style="width: 100%; margin-top: 6px; background: var(--accent-green); color: #000; border: none; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;">
+                    ENABLE ALL PERMISSIONS
                 </button>
             </div>
-
-            <button onclick="closeSettingsModal()" style="width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 8px; border-radius: 8px; font-size: 11px; cursor: pointer;">
-                Cancel / Keep Disabled
-            </button>
         </div>
     </div>
 
@@ -536,7 +539,7 @@
                 document.getElementById('user-phone-val').innerText = userData.phone;
                 document.getElementById('user-email-val').innerText = userData.email || "Not set";
                 document.getElementById('user-lock-val').innerText = userData.deviceLock ? "Active (Fingerprint/PIN)" : "Standard";
-                document.getElementById('user-track-val').innerText = userData.usagePermission ? "Granted (System Permitted)" : "Denied";
+                document.getElementById('user-track-val').innerText = userData.usagePermission ? "Granted (Phone & Web Permitted)" : "Denied";
                 document.getElementById('user-fp-val').innerText = deviceFingerprint;
                 document.getElementById('user-ip-val').innerText = currentIP;
 
@@ -570,7 +573,7 @@
         localStorage.setItem('watchmeex18_user', JSON.stringify(tempUser));
         localStorage.setItem('watchmeex18_session_signed_in', 'false');
 
-        alert("Registration Complete! Please sign in once to bind your device lock & email credentials.");
+        alert("Registration Complete! Please sign in with your Phone & Email to bind your device lock.");
         
         document.getElementById('new-user-view').classList.add('hidden');
         document.getElementById('signin-gate-view').classList.remove('hidden');
@@ -592,26 +595,30 @@
         }
     }
 
-    // Opens System Settings Modal when user manually turns toggle on
     function triggerSystemSettings(elem) {
         if (elem.checked) {
-            elem.checked = false; // reset until confirmed
+            elem.checked = false;
             document.getElementById('settings-modal').classList.remove('hidden');
         } else {
             trackUsageGranted = false;
         }
     }
 
-    function confirmUsageAccess() {
-        trackUsageGranted = true;
-        document.getElementById('usagePermToggle').checked = true;
-        document.getElementById('settings-modal').classList.add('hidden');
-        alert("System Setting Updated: Usage Access Permission Granted!");
-    }
+    function confirmDualPermissions() {
+        document.getElementById('phone-perm-status').innerText = "GRANTED ✓";
+        document.getElementById('phone-perm-status').style.color = "var(--accent-green)";
 
-    function closeSettingsModal() {
-        document.getElementById('usagePermToggle').checked = false;
-        document.getElementById('settings-modal').classList.add('hidden');
+        setTimeout(() => {
+            document.getElementById('web-perm-status').innerText = "GRANTED ✓";
+            document.getElementById('web-perm-status').style.color = "var(--accent-green)";
+
+            setTimeout(() => {
+                trackUsageGranted = true;
+                document.getElementById('usagePermToggle').checked = true;
+                document.getElementById('settings-modal').classList.add('hidden');
+                alert("All Phone Settings & Web Permissions Granted!");
+            }, 600);
+        }, 600);
     }
 
     function handleSignIn(e) {
@@ -632,7 +639,7 @@
             alert("Device binding complete! You now have direct access on future visits.");
             location.reload();
         } else {
-            alert("Invalid Credentials! Please ensure Mobile, Email, and Password match.");
+            alert("Invalid Credentials! Please ensure Mobile Number, Email, and Password match.");
         }
     }
 

@@ -319,16 +319,16 @@
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
         }
 
-        /* Slow 1.0x Speed Pointing Hand on the RIGHT side */
-        .live-pointing-hand-right {
-            width: 36px;
-            height: auto;
-            animation: slowHandPointRight 1.8s infinite ease-in-out;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
+        /* Slightly Bigger Hand Emojis 🫵🏻👈🏼 with Smooth 1.0x Live Animation */
+        .live-emojis-right {
+            font-size: 22px;
+            display: inline-block;
+            animation: slowEmojiPointRight 1.8s infinite ease-in-out;
+            filter: drop-shadow(0 0 6px rgba(0, 243, 255, 0.8));
             flex-shrink: 0;
         }
 
-        @keyframes slowHandPointRight {
+        @keyframes slowEmojiPointRight {
             0%, 100% {
                 transform: translateX(0);
             }
@@ -340,7 +340,7 @@
         /* Pond Ripple Effect on the RIGHT side, syncing strictly when finger touches forward */
         .ripple-origin-right {
             position: absolute;
-            right: 24px;
+            right: 28px;
             top: 50%;
             transform: translateY(-50%);
             width: 10px;
@@ -506,9 +506,7 @@
                         <div class="ripple-ring"></div>
                         <div class="ripple-ring"></div>
                     </div>
-                    <svg class="live-pointing-hand-right" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 45c0-4 3-7 7-7h30l-4-14c-1-4 1-8 5-9 3-1 7 1 8 4l12 21h15c4 0 7 3 7 7v25c0 4-3 7-7 7H52c-4 0-7-3-7-7v-3l-12 7c-3 2-7 0-8-3-1-3 0-6 3-8l10-6H22c-4 0-7-3-7-7z" fill="#e0ac69"/>
-                    </svg>
+                    <span class="live-emojis-right">🫵🏻👈🏼</span>
                 </button>
             </div>
 
@@ -541,7 +539,7 @@
             </form>
         </div>
 
-        <!-- 4. Verification Gate with Hand & Ripples on the RIGHT Side -->
+        <!-- 4. Verification Gate with Right-Side Hand Emojis & Pond Ripples -->
         <div id="signin-gate-view" class="hidden">
             <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
                 Please choose your lock type and verify
@@ -555,10 +553,8 @@
                         <div class="ripple-ring"></div>
                         <div class="ripple-ring"></div>
                     </div>
-                    <!-- Clean Vector Hand pointing right -->
-                    <svg class="live-pointing-hand-right" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 45c0-4 3-7 7-7h30l-4-14c-1-4 1-8 5-9 3-1 7 1 8 4l12 21h15c4 0 7 3 7 7v25c0 4-3 7-7 7H52c-4 0-7-3-7-7v-3l-12 7c-3 2-7 0-8-3-1-3 0-6 3-8l10-6H22c-4 0-7-3-7-7z" fill="#e0ac69"/>
-                    </svg>
+                    <!-- Bigger Hand Emojis 🫵🏻👈🏼 -->
+                    <span class="live-emojis-right">🫵🏻👈🏼</span>
                 </button>
             </div>
         </div>
@@ -944,7 +940,7 @@
         const btn = document.getElementById('biometricBtn');
         if (btn) {
             btn.classList.add('active');
-            btn.innerHTML = `<span>✓ LOCK VERIFIED (${chosenLockType})</span><div class="ripple-origin-right"><div class="ripple-ring"></div><div class="ripple-ring"></div></div><svg class="live-pointing-hand-right" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M15 45c0-4 3-7 7-7h30l-4-14c-1-4 1-8 5-9 3-1 7 1 8 4l12 21h15c4 0 7 3 7 7v25c0 4-3 7-7 7H52c-4 0-7-3-7-7v-3l-12 7c-3 2-7 0-8-3-1-3 0-6 3-8l10-6H22c-4 0-7-3-7-7z" fill="#00ff66"/></svg>`;
+            btn.innerHTML = `<span>✓ LOCK VERIFIED (${chosenLockType})</span><div class="ripple-origin-right"><div class="ripple-ring"></div><div class="ripple-ring"></div></div><span class="live-emojis-right">🫵🏻👈🏼</span>`;
         }
     }
 

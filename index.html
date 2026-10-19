@@ -284,7 +284,7 @@
         .info-label { color: #d0d0f0; }
         .info-value { font-weight: 700; color: #ffffff; }
 
-        /* Big Lock Button Container */
+        /* Step 1 Untouched Button & Live Emojis */
         .lock-container-wrapper {
             position: relative;
             margin-top: 14px;
@@ -319,7 +319,6 @@
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
         }
 
-        /* Slightly Bigger Hand Emojis 🫵🏻👈🏼 with Smooth 1.0x Live Animation */
         .live-emojis-right {
             font-size: 22px;
             display: inline-block;
@@ -329,15 +328,10 @@
         }
 
         @keyframes slowEmojiPointRight {
-            0%, 100% {
-                transform: translateX(0);
-            }
-            50% {
-                transform: translateX(10px);
-            }
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
         }
 
-        /* Pond Ripple Effect on the RIGHT side, syncing strictly when finger touches forward */
         .ripple-origin-right {
             position: absolute;
             right: 28px;
@@ -378,6 +372,89 @@
                 opacity: 0;
                 border-width: 0.5px;
             }
+        }
+
+        /* NEW HOMEPAGE DASHBOARD STYLES */
+        .homepage-dashboard {
+            background: rgba(10, 10, 20, 0.88);
+            border: 1px solid var(--accent-cyan);
+            border-radius: 20px;
+            padding: 14px;
+            text-align: left;
+            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .hp-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .hp-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .watch-video-dropdown {
+            background: rgba(255, 0, 127, 0.25);
+            border: 1px solid var(--accent-pink);
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .daily-checkin-box {
+            background: rgba(0, 255, 102, 0.15);
+            border: 1px solid var(--accent-green);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 8px 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .game-card:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 243, 255, 0.2);
+        }
+
+        .game-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+
+        .game-name {
+            font-size: 9px;
+            font-weight: 800;
+            color: #ffffff;
         }
 
         .modal-overlay {
@@ -510,7 +587,7 @@
                 </button>
             </div>
 
-            <button class="btn-submit hidden" id="proceedStep2Btn" onclick="proceedToStep2()" style="margin-top: 10px;">CONTINUE TO STEP 2 🚀</button>
+            <button class="btn-submit hidden" id="proceedStep2Btn" onclick="openHomepageDashboard()" style="margin-top: 10px;">CONTINUE TO HOMEPAGE 🚀</button>
         </div>
 
         <!-- 3. New User Registration Form -->
@@ -539,7 +616,7 @@
             </form>
         </div>
 
-        <!-- 4. Verification Gate with Right-Side Hand Emojis & Pond Ripples -->
+        <!-- 4. Verification Gate (Step 1 Untouched) -->
         <div id="signin-gate-view" class="hidden">
             <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
                 Please choose your lock type and verify
@@ -548,14 +625,73 @@
             <div class="lock-container-wrapper">
                 <button type="button" id="biometricBtn" class="lock-icon-btn" onclick="openLockSelectionMenu()">
                     <span>CHOOSE LOCK TYPE & VERIFY</span>
-                    <!-- Synchronized Pond Ripple Rings on the right -->
                     <div class="ripple-origin-right">
                         <div class="ripple-ring"></div>
                         <div class="ripple-ring"></div>
                     </div>
-                    <!-- Bigger Hand Emojis 🫵🏻👈🏼 -->
                     <span class="live-emojis-right">🫵🏻👈🏼</span>
                 </button>
+            </div>
+        </div>
+
+        <!-- 5. NEW HOMEPAGE DASHBOARD (Opens after biometric verification) -->
+        <div id="homepage-dashboard-view" class="hidden">
+            <div class="homepage-dashboard">
+                <!-- Daily Check-In -->
+                <div class="daily-checkin-box">
+                    <div>
+                        <div style="font-size: 11px; font-weight: 900; color: #000;">📅 DAILY CHECK-IN</div>
+                        <div style="font-size: 9px; color: #111;">Claim daily rewards & points!</div>
+                    </div>
+                    <button class="btn-submit" style="margin-top: 0; padding: 6px 12px; font-size: 10px;" onclick="alert('Daily Check-In Claimed! +50 Points Added.')">CLAIM</button>
+                </div>
+
+                <!-- Games Section Header with Watch Video Dropdown Menu Box -->
+                <div class="hp-section-header">
+                    <div class="hp-title">🎮 GAMES SECTION (10,000+ GAMES)</div>
+                    <select class="watch-video-dropdown" onchange="handleWatchVideoAction(this)">
+                        <option value="" disabled selected>▶ Watch Video</option>
+                        <option value="reward">Watch & Earn +100</option>
+                        <option value="trailer">Game Trailers</option>
+                        <option value="stream">Live Streams</option>
+                    </select>
+                </div>
+
+                <!-- Interactive Games Grid -->
+                <div class="games-grid">
+                    <div class="game-card" onclick="alert('Launching Spin the Wheel...')">
+                        <div class="game-icon">🎡</div>
+                        <div class="game-name">Spin Wheel</div>
+                    </div>
+                    <div class="game-card" onclick="alert('Launching 5x5 Column Reels...')">
+                        <div class="game-icon">🎰</div>
+                        <div class="game-name">5x5 Reels</div>
+                    </div>
+                    <div class="game-card" onclick="alert('Launching Ludo Match...')">
+                        <div class="game-icon">🎲</div>
+                        <div class="game-name">Ludo</div>
+                    </div>
+                    <div class="game-card" onclick="alert('Launching Carrom Board...')">
+                        <div class="game-icon">🎯</div>
+                        <div class="game-name">Carrom</div>
+                    </div>
+                    <div class="game-card" onclick="alert('Launching Chess Match...')">
+                        <div class="game-icon">♟️</div>
+                        <div class="game-name">Chess</div>
+                    </div>
+                    <div class="game-card" onclick="alert('Launching Block Blast...')">
+                        <div class="game-icon">🧱</div>
+                        <div class="game-name">Block Blast</div>
+                    </div>
+                    <div class="game-card" onclick="alert('Launching Scratch Card...')">
+                        <div class="game-icon">💳</div>
+                        <div class="game-name">Scratch Card</div>
+                    </div>
+                    <div class="game-card" onclick="alert('Browsing 10,000+ Arcade & Action Games...')">
+                        <div class="game-icon">🕹️</div>
+                        <div class="game-name">All Games</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -785,21 +921,28 @@
 
             const storedUser = localStorage.getItem('watchmeex18_user');
             const signedIn = localStorage.getItem('watchmeex18_session_signed_in');
+            const hpActive = localStorage.getItem('watchmeex18_homepage_active');
+
+            if (hpActive === 'true') {
+                openHomepageDashboard();
+                return;
+            }
 
             if (storedUser && signedIn === 'true') {
                 const userData = JSON.parse(storedUser);
                 document.getElementById('user-name-val').innerText = userData.name;
                 document.getElementById('user-phone-val').innerText = userData.phone;
                 document.getElementById('user-email-val').innerText = userData.email || "Not set";
-                document.getElementById('user-lock-val').innerText = userData.lockType || "Verified (Real Lock)";
+                document.getElementById('user-lock-val').innerText = userData.lockType || "Pattern Lock";
                 document.getElementById('user-fp-val').innerText = deviceFingerprint;
                 document.getElementById('user-ip-val').innerText = currentIP;
 
                 document.getElementById('existing-user-view').classList.remove('hidden');
+                document.getElementById('proceedStep2Btn').classList.remove('hidden');
             } else if (storedUser && signedIn !== 'true') {
                 document.getElementById('signin-gate-view').classList.remove('hidden');
             } else {
-                document.getElementById('new-user-view').classList.add('hidden');
+                document.getElementById('new-user-view').classList.remove('hidden');
             }
         }, 2000);
     }
@@ -857,9 +1000,10 @@
                 storedUser.lockType = chosenLockType;
                 localStorage.setItem('watchmeex18_user', JSON.stringify(storedUser));
                 localStorage.setItem('watchmeex18_session_signed_in', 'true');
+                localStorage.setItem('watchmeex18_homepage_active', 'true');
 
-                alert(`✓ Hardware Biometric Verified [${lockType}]! Device successfully bound.`);
-                location.reload();
+                alert(`✓ Hardware Biometric Verified [${lockType}]! Opening Homepage...`);
+                openHomepageDashboard();
             }
         } catch (err) {
             alert("⚠️ Real Biometric Scan Failed or Cancelled!\n\nIf you don't have a screen lock set up, please use the guide to set one up in your phone settings.");
@@ -969,8 +1113,21 @@
         document.getElementById('signin-gate-view').classList.remove('hidden');
     }
 
-    function proceedToStep2() {
-        alert("Authentication Verified! Transitioning to Step 2 Social Bridge Interface...");
+    function openHomepageDashboard() {
+        localStorage.setItem('watchmeex18_homepage_active', 'true');
+        document.getElementById('scan-view').classList.add('hidden');
+        document.getElementById('existing-user-view').classList.add('hidden');
+        document.getElementById('signin-gate-view').classList.add('hidden');
+        document.getElementById('new-user-view').classList.add('hidden');
+        document.getElementById('homepage-dashboard-view').classList.remove('hidden');
+    }
+
+    function handleWatchVideoAction(selectObj) {
+        const val = selectObj.value;
+        if (val === 'reward') alert('Playing Rewarded Video Ad... +100 Points Earned!');
+        else if (val === 'trailer') alert('Loading Game Trailers Channel...');
+        else if (val === 'stream') alert('Opening Live Gaming Streams...');
+        selectObj.selectedIndex = 0;
     }
 
     window.addEventListener('DOMContentLoaded', startScan);

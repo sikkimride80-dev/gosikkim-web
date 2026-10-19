@@ -32,24 +32,24 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            padding-bottom: 24px;
+            padding-bottom: 28px;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Top Right Branding */
+        /* Top Right Branding: Big with Red, Green, Yellow Glow Mix */
         .top-right-brand {
             position: fixed;
             top: 16px;
             right: 16px;
             z-index: 50;
-            font-size: 11px;
+            font-size: 18px;
             font-weight: 900;
-            letter-spacing: 1.5px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ff0055, #00ff66, #ffcc00);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9));
+            filter: drop-shadow(0 0 10px rgba(255, 0, 85, 0.8)) drop-shadow(0 0 18px rgba(0, 255, 102, 0.7)) drop-shadow(0 0 25px rgba(255, 204, 0, 0.6));
             text-transform: uppercase;
         }
 
@@ -129,34 +129,14 @@
         .app-container {
             position: relative;
             z-index: 10;
-            width: 90%;
-            max-width: 400px;
+            width: 92%;
+            max-width: 420px;
             background: transparent;
             border: none;
             border-radius: 24px;
             padding: 16px;
             text-align: center;
             margin-top: auto;
-        }
-
-        .brand-title {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 2px;
-            filter: drop-shadow(0 2px 6px rgba(10, 15, 25, 0.9));
-        }
-
-        .brand-subtitle {
-            font-size: 9px;
-            color: #ffffff;
-            text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95), 0 0 8px rgba(70, 90, 120, 0.6);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
         }
 
         .scanner-box {
@@ -254,15 +234,15 @@
         .btn-submit {
             margin-top: 10px;
             width: 100%;
-            padding: 11px;
+            padding: 13px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             background: linear-gradient(135deg, rgba(138, 43, 226, 0.85), rgba(255, 0, 127, 0.85));
             color: #ffffff;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
             letter-spacing: 1px;
             text-shadow: 0 1px 3px rgba(10, 15, 25, 0.9);
         }
@@ -304,54 +284,50 @@
         .info-label { color: #d0d0f0; }
         .info-value { font-weight: 700; color: #ffffff; }
 
-        /* Lock Button Container with Continuous Pointing Finger Animation */
+        /* Bigger Lock Button with Lady's Index Finger Pointing Right Beside Text */
         .lock-container-wrapper {
             position: relative;
-            margin-top: 12px;
+            margin-top: 14px;
             width: 100%;
         }
 
         .lock-icon-btn {
-            background: rgba(138, 43, 226, 0.4);
+            background: rgba(110, 30, 200, 0.65);
             border: 2px solid var(--accent-cyan);
             color: #ffffff;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 800;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 900;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 10px;
             width: 100%;
-            text-shadow: 0 1px 3px rgba(10, 15, 25, 0.9);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
             transition: all 0.2s ease;
         }
 
         .lock-icon-btn.active {
-            background: rgba(0, 255, 102, 0.3);
+            background: rgba(0, 255, 102, 0.35);
             border: 2px solid var(--accent-green);
             color: var(--accent-green);
-            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
         }
 
-        /* Animated Pointing Finger (First finger continually indicating button) */
-        .pointing-finger {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            animation: pointBounce 1s infinite ease-in-out;
-            pointer-events: none;
-            filter: drop-shadow(0 0 6px rgba(0, 243, 255, 0.8));
+        /* Animated Lady Index Finger Pointing Directly Beside Text */
+        .pointing-finger-lady {
+            font-size: 20px;
+            display: inline-block;
+            animation: ladyFingerBounce 0.8s infinite ease-in-out;
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
         }
 
-        @keyframes pointBounce {
-            0%, 100% { transform: translateY(-50%) translateX(0); }
-            50% { transform: translateY(-50%) translateX(6px); }
+        @keyframes ladyFingerBounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-6px); }
         }
 
         .modal-overlay {
@@ -421,7 +397,7 @@
 </head>
 <body>
 
-    <!-- Top Right Branding -->
+    <!-- Top Right Big Glowing Brand (Red, Green, Yellow Mix) -->
     <div class="top-right-brand">WATCHMEEX18</div>
 
     <!-- Chaotic Storm Lightning Image & Slanted Rain FX -->
@@ -433,9 +409,6 @@
     </div>
 
     <div class="app-container">
-        <div class="brand-title">WatchMeex18</div>
-        <div class="brand-subtitle">Social Bridge Platform</div>
-
         <!-- 1. Background Scanner -->
         <div id="scan-view" class="scanner-box">
             <div class="radar-circle">
@@ -476,11 +449,14 @@
                 </div>
             </div>
 
-            <button class="lock-icon-btn" onclick="openLockSelectionMenu()" style="margin-top: 12px; border-style: solid;">
-                <span>👆 UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
-            </button>
+            <div class="lock-container-wrapper">
+                <button class="lock-icon-btn" onclick="openLockSelectionMenu()">
+                    <span class="pointing-finger-lady">👈</span>
+                    <span>UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
+                </button>
+            </div>
 
-            <button class="btn-submit hidden" id="proceedStep2Btn" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
+            <button class="btn-submit hidden" id="proceedStep2Btn" onclick="proceedToStep2()" style="margin-top: 10px;">CONTINUE TO STEP 2 🚀</button>
         </div>
 
         <!-- 3. New User Registration Form -->
@@ -509,15 +485,15 @@
             </form>
         </div>
 
-        <!-- 4. Second Verification Gate (Clean & Minimized) -->
+        <!-- 4. Verification Gate (Clean & Big Button with Lady Finger Pointing) -->
         <div id="signin-gate-view" class="hidden">
-            <div style="font-size: 11px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 6px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
+            <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
                 Please choose your lock type and verify
             </div>
 
             <div class="lock-container-wrapper">
-                <span class="pointing-finger">👉</span>
                 <button type="button" id="biometricBtn" class="lock-icon-btn" onclick="openLockSelectionMenu()">
+                    <span class="pointing-finger-lady">👈</span>
                     <span>CHOOSE LOCK TYPE & VERIFY</span>
                 </button>
             </div>
@@ -904,7 +880,7 @@
         const btn = document.getElementById('biometricBtn');
         if (btn) {
             btn.classList.add('active');
-            btn.innerHTML = `<span>✓ Lock Verified (${chosenLockType})</span>`;
+            btn.innerHTML = `<span class="pointing-finger-lady">👈</span><span>✓ LOCK VERIFIED (${chosenLockType})</span>`;
         }
     }
 

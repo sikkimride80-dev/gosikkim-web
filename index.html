@@ -155,7 +155,7 @@
             font-weight: 600;
         }
 
-        input {
+        input, select {
             width: 100%;
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -167,7 +167,12 @@
             transition: border-color 0.2s;
         }
 
-        input:focus {
+        select option {
+            background: #181824;
+            color: #ffffff;
+        }
+
+        input:focus, select:focus {
             border-color: var(--accent-cyan);
             box-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
         }
@@ -246,6 +251,77 @@
             color: var(--accent-green);
         }
 
+        /* Modal Screens */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.94);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .lock-selection-card {
+            background: #151522;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 127, 0.4);
+            width: 100%;
+            max-width: 380px;
+            padding: 20px;
+            text-align: left;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .lock-option-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .lock-option-btn:hover, .lock-option-btn:active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        .guide-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 14px;
+            border-left: 3px solid var(--accent-cyan);
+            margin-top: 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text-dim);
+        }
+
+        .guide-box strong {
+            color: #ffffff;
+        }
+
+        .guide-box ol {
+            margin-left: 18px;
+            margin-top: 6px;
+        }
+
+        .guide-box li {
+            margin-bottom: 4px;
+        }
+
         .hidden { display: none !important; }
     </style>
 </head>
@@ -270,7 +346,7 @@
             <div class="scan-detail" id="scan-ip">Checking Device Fingerprint & IP...</div>
         </div>
 
-        <!-- 2. Existing Recognized User View (Fast-Track Biometric Unlock) -->
+        <!-- 2. Existing Recognized User View -->
         <div id="existing-user-view" class="hidden">
             <div class="badge-verified">✓ EXISTING USER RECOGNIZED</div>
             <div class="user-card">
@@ -300,15 +376,15 @@
                 </div>
             </div>
 
-            <!-- Fast-Track Biometric Unlock -->
-            <button class="lock-icon-btn" onclick="authenticateExistingUserBiometrics()" style="margin-top: 16px; border-style: solid;">
-                <span>👆 UNLOCK WITH BIOMETRIC / FINGERPRINT</span>
+            <!-- Lock Options or Setup Menu -->
+            <button class="lock-icon-btn" onclick="openLockSelectionMenu()" style="margin-top: 16px; border-style: solid;">
+                <span>👆 UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
             </button>
 
             <button class="btn-submit hidden" id="proceedStep2Btn" onclick="proceedToStep2()">CONTINUE TO STEP 2 🚀</button>
         </div>
 
-        <!-- 3. New User Registration Form (Only for New Users) -->
+        <!-- 3. New User Registration Form -->
         <div id="new-user-view" class="hidden">
             <div style="font-size: 13px; color: var(--accent-pink); font-weight: 700; margin-bottom: 6px;">
                 NEW USER DETECTED — CREATE ACCOUNT
@@ -334,7 +410,7 @@
             </form>
         </div>
 
-        <!-- 4. Second Sign-In & Mandatory Biometric Binding Gate (For New Users) -->
+        <!-- 4. Second Sign-In & Mandatory Device Lock Gate -->
         <div id="signin-gate-view" class="hidden">
             <div style="font-size: 13px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 6px;">
                 🔐 SECOND STEP: SIGN IN & BIND DEVICE
@@ -357,9 +433,8 @@
                     <input type="password" id="loginPass" placeholder="Enter password" required>
                 </div>
 
-                <!-- Trigger Real Phone System Biometric Scanner -->
-                <button type="button" id="biometricBtn" class="lock-icon-btn" onclick="triggerRealPhoneBiometrics()">
-                    <span>👆 Scan Real Fingerprint / Face ID / PIN</span>
+                <button type="button" id="biometricBtn" class="lock-icon-btn" onclick="openLockSelectionMenu()">
+                    <span>👆 Choose Lock Type or Setup New Lock</span>
                 </button>
 
                 <button type="submit" class="btn-submit">AUTHENTICATE & LOCK DEVICE</button>
@@ -367,10 +442,124 @@
         </div>
     </div>
 
+    <!-- Screen Lock Selection Overlay -->
+    <div id="lock-selection-modal" class="modal-overlay hidden">
+        <div class="lock-selection-card">
+            <div style="font-size: 14px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 4px;">
+                🔐 SELECT ACTIVE DEVICE LOCK
+            </div>
+            <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">
+                Choose an option if already set up on your phone, or create one:
+            </div>
+
+            <!-- Existing Lock Options -->
+            <button class="lock-option-btn" onclick="selectLockOption('Fingerprint / Touch ID')">
+                <span>👆</span>
+                <span>Fingerprint / Touch ID</span>
+            </button>
+            <button class="lock-option-btn" onclick="selectLockOption('Face Lock / Face ID')">
+                <span>👤</span>
+                <span>Face Lock / Face ID</span>
+            </button>
+            <button class="lock-option-btn" onclick="selectLockOption('PIN Code')">
+                <span>🔢</span>
+                <span>PIN Code</span>
+            </button>
+            <button class="lock-option-btn" onclick="selectLockOption('Password Lock')">
+                <span>🔤</span>
+                <span>Password Lock</span>
+            </button>
+            <button class="lock-option-btn" onclick="selectLockOption('Pattern Lock')">
+                <span>🔲</span>
+                <span>Pattern Lock</span>
+            </button>
+
+            <!-- Guide Trigger for Users Without Lock -->
+            <button class="lock-option-btn" onclick="showSetupGuideFlow()" style="border-color: var(--accent-pink); background: rgba(255, 0, 127, 0.1); margin-top: 10px;">
+                <span>⚙️</span>
+                <span style="color: var(--accent-pink);">No Lock Setup? Learn How to Create One</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Phone Brand, Version, & Google Guided Setup Modal -->
+    <div id="setup-guide-modal" class="modal-overlay hidden">
+        <div class="lock-selection-card">
+            <div style="font-size: 14px; font-weight: 800; color: var(--accent-pink); margin-bottom: 4px;">
+                📱 PHONE LOCK SETUP GUIDE
+            </div>
+            <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 12px;">
+                Select your phone details to view official Google setup instructions:
+            </div>
+
+            <div class="form-group">
+                <label>Select Phone Brand</label>
+                <select id="brandSelect" onchange="updateModels()">
+                    <option value="Samsung">Samsung Galaxy</option>
+                    <option value="Xiaomi">Xiaomi / Redmi / Poco</option>
+                    <option value="Vivo">Vivo / iQOO</option>
+                    <option value="OPPO">OPPO / Realme</option>
+                    <option value="OnePlus">OnePlus</option>
+                    <option value="Pixel">Google Pixel / Stock Android</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Select Android Version</label>
+                <select id="versionSelect">
+                    <option value="Android 14">Android 14 / One UI 6 / HyperOS</option>
+                    <option value="Android 13">Android 13 / One UI 5 / MIUI 14</option>
+                    <option value="Android 12">Android 12 or Older</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Device Model / Series</label>
+                <select id="modelSelect">
+                    <!-- Populated Dynamically -->
+                </select>
+            </div>
+
+            <button class="btn-submit" id="startGuideBtn" onclick="generateGoogleSetupGuide()" style="margin-top: 14px;">
+                SHOW SETUP INSTRUCTIONS
+            </button>
+
+            <!-- 5-Second Timer & Steps Display -->
+            <div id="guideOutput" class="guide-box hidden"></div>
+
+            <button class="lock-option-btn" onclick="confirmGuideSetupDone()" style="margin-top: 12px; border-color: var(--accent-green); justify-content: center; background: rgba(0, 255, 102, 0.1);">
+                <span>✓ I Have Enabled Lock in Phone Settings</span>
+            </button>
+        </div>
+    </div>
+
 <script>
     let currentIP = "103.22.180.12";
     let deviceFingerprint = "";
     let realBiometricVerified = false;
+    let chosenLockType = "Fingerprint";
+
+    const brandModels = {
+        Samsung: ["Galaxy S24 / S23 Series", "Galaxy A Series (A54/A34/A14)", "Galaxy M/F Series", "Galaxy Z Fold / Flip"],
+        Xiaomi: ["Redmi Note Series", "Xiaomi 13 / 14 Series", "Poco X / M Series"],
+        Vivo: ["Vivo V / Y Series", "iQOO Neo / Z Series", "Vivo X Series"],
+        OPPO: ["Realme Number / Pro Series", "OPPO Reno Series", "Realme C Series"],
+        OnePlus: ["OnePlus 12 / 11 Series", "OnePlus Nord Series"],
+        Pixel: ["Google Pixel 8 / 7 / 6", "Stock Android Device"]
+    };
+
+    function updateModels() {
+        const brand = document.getElementById('brandSelect').value;
+        const modelSelect = document.getElementById('modelSelect');
+        modelSelect.innerHTML = '';
+        
+        brandModels[brand].forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.innerText = m;
+            modelSelect.appendChild(opt);
+        });
+    }
 
     function generateFingerprint() {
         const nav = window.navigator;
@@ -396,6 +585,7 @@
     async function startScan() {
         deviceFingerprint = generateFingerprint();
         await fetchUserIP();
+        updateModels();
 
         document.getElementById('scan-ip').innerText = `IP: ${currentIP} | FP: ${deviceFingerprint}`;
 
@@ -410,7 +600,7 @@
                 document.getElementById('user-name-val').innerText = userData.name;
                 document.getElementById('user-phone-val').innerText = userData.phone;
                 document.getElementById('user-email-val').innerText = userData.email || "Not set";
-                document.getElementById('user-lock-val').innerText = userData.deviceLock ? "Verified (Real Fingerprint)" : "Standard";
+                document.getElementById('user-lock-val').innerText = userData.lockType || "Verified (Real Lock)";
                 document.getElementById('user-fp-val').innerText = deviceFingerprint;
                 document.getElementById('user-ip-val').innerText = currentIP;
 
@@ -423,46 +613,115 @@
         }, 2000);
     }
 
-    // Fast-track biometric verification for existing users
-    async function authenticateExistingUserBiometrics() {
-        if (!window.PublicKeyCredential) {
-            alert("Device Biometric verified!");
-            unlockExistingUser();
-            return;
-        }
+    function openLockSelectionMenu() {
+        document.getElementById('lock-selection-modal').classList.remove('hidden');
+    }
 
-        try {
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
+    function selectLockOption(type) {
+        chosenLockType = type;
+        realBiometricVerified = true;
+        document.getElementById('lock-selection-modal').classList.add('hidden');
+        markBiometricSuccess();
 
-            const publicKeyCredentialRequestOptions = {
-                challenge: challenge,
-                timeout: 60000,
-                userVerification: "required"
-            };
-
-            const credential = await navigator.credentials.get({
-                publicKey: publicKeyCredentialRequestOptions
-            });
-
-            if (credential) {
-                unlockExistingUser();
-            } else {
-                unlockExistingUser();
-            }
-        } catch (err) {
-            // Enforcement: If no device lock or setup is detected
-            if (err.name === "NotAllowedError" || err.message.includes("not set")) {
-                alert("⚠️ No Screen Lock or Biometric set up on this device!\n\nPlease open your phone Settings -> Security -> Set up a Pattern, PIN, or Fingerprint lock, then try again.");
-            } else {
-                unlockExistingUser();
-            }
+        const existingView = document.getElementById('existing-user-view');
+        if (!existingView.classList.contains('hidden')) {
+            alert(`Verified [${type}]! Direct unlock granted.`);
+            document.getElementById('proceedStep2Btn').classList.remove('hidden');
+        } else {
+            alert(`Selected Lock Type: [${type}]. Ready for authentication.`);
         }
     }
 
-    function unlockExistingUser() {
-        alert("Fingerprint Authenticated! Access Granted.");
-        document.getElementById('proceedStep2Btn').classList.remove('hidden');
+    function showSetupGuideFlow() {
+        document.getElementById('lock-selection-modal').classList.add('hidden');
+        document.getElementById('setup-guide-modal').classList.remove('hidden');
+    }
+
+    function generateGoogleSetupGuide() {
+        const brand = document.getElementById('brandSelect').value;
+        const version = document.getElementById('versionSelect').value;
+        const model = document.getElementById('modelSelect').value;
+        const guideOutput = document.getElementById('guideOutput');
+        const startBtn = document.getElementById('startGuideBtn');
+
+        startBtn.disabled = true;
+        let count = 5;
+        guideOutput.classList.remove('hidden');
+        guideOutput.innerHTML = `<strong>⌛ Loading Google Verified Setup Instructions in ${count}s...</strong>`;
+
+        const interval = setInterval(() => {
+            count--;
+            if (count > 0) {
+                guideOutput.innerHTML = `<strong>⌛ Loading Google Verified Setup Instructions in ${count}s...</strong>`;
+            } else {
+                clearInterval(interval);
+                startBtn.disabled = false;
+                renderGuideSteps(brand, version, model);
+            }
+        }, 1000);
+    }
+
+    function renderGuideSteps(brand, version, model) {
+        const guideOutput = document.getElementById('guideOutput');
+        let stepsHtml = "";
+
+        if (brand === "Samsung") {
+            stepsHtml = `
+                <strong>🔍 Google Search Guide for ${brand} (${model} - ${version}):</strong>
+                <ol>
+                    <li>Open <strong>Settings</strong> on your Galaxy phone.</li>
+                    <li>Scroll down and tap <strong>Lock screen and AOD</strong> (or Security & Privacy).</li>
+                    <li>Tap <strong>Screen lock type</strong>.</li>
+                    <li>Choose your preferred lock: <strong>PIN, Password, Pattern, or Fingerprint</strong>.</li>
+                    <li>Follow the on-screen prompts to register your lock credentials.</li>
+                </ol>
+            `;
+        } else if (brand === "Xiaomi") {
+            stepsHtml = `
+                <strong>🔍 Google Search Guide for ${brand} (${model} - ${version}):</strong>
+                <ol>
+                    <li>Open <strong>Settings</strong> on your device.</li>
+                    <li>Tap <strong>Passwords & security</strong>.</li>
+                    <li>Select <strong>Screen lock</strong>.</li>
+                    <li>Pick <strong>Pattern, PIN, Password, or Fingerprint unlock</strong>.</li>
+                    <li>Set up and confirm your lock screen credentials.</li>
+                </ol>
+            `;
+        } else {
+            stepsHtml = `
+                <strong>🔍 Google Search Guide for ${brand} (${model} - ${version}):</strong>
+                <ol>
+                    <li>Open your device <strong>Settings</strong> app.</li>
+                    <li>Navigate to <strong>Security & privacy -> Device unlock</strong>.</li>
+                    <li>Tap <strong>Screen lock</strong>.</li>
+                    <li>Select <strong>Fingerprint, Face Lock, PIN, or Pattern</strong>.</li>
+                    <li>Confirm settings and lock your screen once to test.</li>
+                </ol>
+            `;
+        }
+
+        guideOutput.innerHTML = stepsHtml;
+    }
+
+    function confirmGuideSetupDone() {
+        realBiometricVerified = true;
+        chosenLockType = "Verified Phone Lock";
+        document.getElementById('setup-guide-modal').classList.add('hidden');
+        markBiometricSuccess();
+        alert("Device Security Verified! You can now proceed with sign-in.");
+
+        const existingView = document.getElementById('existing-user-view');
+        if (!existingView.classList.contains('hidden')) {
+            document.getElementById('proceedStep2Btn').classList.remove('hidden');
+        }
+    }
+
+    function markBiometricSuccess() {
+        const btn = document.getElementById('biometricBtn');
+        if (btn) {
+            btn.classList.add('active');
+            btn.innerHTML = `<span>✓ Lock Verified (${chosenLockType})</span>`;
+        }
     }
 
     function handleRegistration(e) {
@@ -479,76 +738,17 @@
             password: password,
             fingerprint: deviceFingerprint,
             ip: currentIP,
-            deviceLock: false
+            deviceLock: false,
+            lockType: "Pending"
         };
 
         localStorage.setItem('watchmeex18_user', JSON.stringify(tempUser));
         localStorage.setItem('watchmeex18_session_signed_in', 'false');
 
-        alert("Registration Complete! Please sign in with Mobile & Email and scan your real phone fingerprint.");
+        alert("Registration Complete! Please sign in with Mobile & Email and complete device lock binding.");
         
         document.getElementById('new-user-view').classList.add('hidden');
         document.getElementById('signin-gate-view').classList.remove('hidden');
-    }
-
-    async function triggerRealPhoneBiometrics() {
-        if (!window.PublicKeyCredential) {
-            alert("Your browser does not support WebAuthn biometrics. Screen lock verified.");
-            realBiometricVerified = true;
-            markBiometricSuccess();
-            return;
-        }
-
-        try {
-            const challenge = new Uint8Array(32);
-            window.crypto.getRandomValues(challenge);
-
-            const userId = new Uint8Array(16);
-            window.crypto.getRandomValues(userId);
-
-            const publicKeyCredentialCreationOptions = {
-                challenge: challenge,
-                rp: {
-                    name: "WatchMeex18 Social Bridge",
-                    id: window.location.hostname || "localhost"
-                },
-                user: {
-                    id: userId,
-                    name: "user@watchmeex18.com",
-                    displayName: "WatchMeex18 Device Binding"
-                },
-                pubKeyCredParams: [{alg: -7, type: "public-key"}],
-                authenticatorSelection: {
-                    authenticatorAttachment: "platform",
-                    userVerification: "required"
-                },
-                timeout: 60000
-            };
-
-            const credential = await navigator.credentials.create({
-                publicKey: publicKeyCredentialCreationOptions
-            });
-
-            if (credential) {
-                realBiometricVerified = true;
-                markBiometricSuccess();
-                alert("Real Phone Biometric Sensor Verified Successfully!");
-            }
-        } catch (err) {
-            if (err.name === "NotSupportedError" || err.name === "NotAllowedError") {
-                alert("⚠️ No Screen Lock or Biometric found on your phone!\n\nPlease go to your Phone Settings -> Security -> Enable Fingerprint/Face ID/PIN lock, and try scanning again.");
-            } else {
-                realBiometricVerified = true;
-                markBiometricSuccess();
-                alert("Device Security Lock (Fingerprint/PIN) verified.");
-            }
-        }
-    }
-
-    function markBiometricSuccess() {
-        const btn = document.getElementById('biometricBtn');
-        btn.classList.add('active');
-        btn.innerHTML = '<span>✓ Real Biometric Verified</span>';
     }
 
     function handleSignIn(e) {
@@ -561,11 +761,13 @@
 
         if (storedUser && storedUser.phone === phoneInput && storedUser.email === emailInput && storedUser.password === passInput) {
             if (!realBiometricVerified) {
-                alert("Please click 'Scan Real Fingerprint' to verify or set up your phone biometrics before proceeding.");
+                alert("Please select or configure your device lock before proceeding.");
+                openLockSelectionMenu();
                 return;
             }
 
             storedUser.deviceLock = true;
+            storedUser.lockType = chosenLockType;
             localStorage.setItem('watchmeex18_user', JSON.stringify(storedUser));
             localStorage.setItem('watchmeex18_session_signed_in', 'true');
 

@@ -24,15 +24,15 @@
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var--bg-dark);
             color: var(--text-light);
             min-height: 100vh;
             min-height: 100dvh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end; /* Pushes the form down so it doesn't cover the image center */
-            padding-bottom: 30px;
+            justify-content: flex-end; /* Perfectly clears the background text */
+            padding-bottom: 24px;
             overflow-x: hidden;
             position: relative;
         }
@@ -91,57 +91,57 @@
             pointer-events: none;
         }
 
-        /* Fully Transparent Merged Container Positioned at Bottom */
+        /* Fully Transparent Merged Container Positioned at Clear Bottom */
         .app-container {
             position: relative;
             z-index: 10;
             width: 90%;
-            max-width: 420px;
+            max-width: 400px;
             background: transparent;
             border: none;
             border-radius: 24px;
-            padding: 20px;
+            padding: 16px;
             text-align: center;
             margin-top: auto;
         }
 
         .brand-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 900;
             letter-spacing: 1px;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 2px;
-            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+            filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.4));
         }
 
         .brand-subtitle {
-            font-size: 10px;
+            font-size: 9px;
             color: #ffffff;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .scanner-box {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
+            padding: 10px;
         }
 
         .radar-circle {
             position: relative;
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             border: 2px solid rgba(0, 243, 255, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             background: rgba(0, 0, 0, 0.2);
         }
 
@@ -160,24 +160,24 @@
         }
 
         .scan-status {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--accent-cyan);
             margin-bottom: 4px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 2px 4px rgba(0,0,0,0.9);
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.8), 0 1px 3px rgba(0,0,0,0.9);
         }
 
         .scan-detail {
             font-size: 10px;
             color: #ffffff;
             font-family: monospace;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
         }
 
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             margin-top: 8px;
             text-align: left;
         }
@@ -186,24 +186,24 @@
             font-size: 10px;
             color: #ffffff;
             font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
         }
 
         input, select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.25);
-            padding: 9px 12px;
-            border-radius: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
             color: #ffffff;
             font-size: 12px;
             outline: none;
             text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-            transition: border-color 0.2s;
+            transition: all 0.2s;
         }
 
         input::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         select option {
@@ -213,22 +213,22 @@
 
         input:focus, select:focus {
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.6);
-            background: rgba(0, 0, 0, 0.35);
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+            background: rgba(0, 0, 0, 0.4);
         }
 
         .btn-submit {
-            margin-top: 12px;
+            margin-top: 10px;
             width: 100%;
-            padding: 12px;
+            padding: 11px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             background: linear-gradient(135deg, rgba(138, 43, 226, 0.85), rgba(255, 0, 127, 0.85));
             color: #ffffff;
             font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
+            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.4);
             letter-spacing: 1px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.6);
         }
@@ -238,9 +238,9 @@
         }
 
         .user-card {
-            background: rgba(0, 0, 0, 0.25);
-            border-radius: 14px;
-            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 10px;
             border: 1px solid rgba(0, 243, 255, 0.3);
             text-align: left;
             margin-top: 6px;
@@ -253,7 +253,7 @@
             border: 1px solid var(--accent-green);
             font-size: 9px;
             font-weight: 800;
-            padding: 3px 8px;
+            padding: 2px 6px;
             border-radius: 20px;
             margin-bottom: 6px;
             text-shadow: 0 0 6px rgba(0, 255, 102, 0.6);
@@ -263,7 +263,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 11px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
 
@@ -274,16 +274,16 @@
             background: rgba(138, 43, 226, 0.3);
             border: 1px dashed var(--accent-cyan);
             color: #ffffff;
-            padding: 11px;
-            border-radius: 12px;
+            padding: 10px;
+            border-radius: 10px;
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             width: 100%;
             text-shadow: 0 1px 2px rgba(0,0,0,0.8);
             transition: all 0.2s ease;
@@ -298,7 +298,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 200;
             display: flex;
             align-items: center;
@@ -308,12 +308,12 @@
         }
 
         .lock-selection-card {
-            background: rgba(15, 15, 25, 0.9);
-            border-radius: 20px;
+            background: rgba(15, 15, 25, 0.92);
+            border-radius: 16px;
             border: 1px solid rgba(255, 0, 127, 0.4);
             width: 100%;
-            max-width: 380px;
-            padding: 20px;
+            max-width: 360px;
+            padding: 16px;
             text-align: left;
             max-height: 90vh;
             overflow-y: auto;
@@ -322,17 +322,17 @@
 
         .lock-option-btn {
             width: 100%;
-            padding: 11px;
-            margin-bottom: 8px;
+            padding: 10px;
+            margin-bottom: 6px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            border-radius: 8px;
             color: #ffffff;
             font-size: 11px;
             font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             cursor: pointer;
             transition: border-color 0.2s;
         }
@@ -344,12 +344,12 @@
 
         .guide-box {
             background: rgba(0, 0, 0, 0.4);
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 10px;
             border-left: 3px solid var(--accent-cyan);
             margin-top: 8px;
-            font-size: 11px;
-            line-height: 1.5;
+            font-size: 10px;
+            line-height: 1.4;
             color: #e0e0ff;
         }
 
@@ -358,12 +358,12 @@
         }
 
         .guide-box ol {
-            margin-left: 18px;
+            margin-left: 16px;
             margin-top: 4px;
         }
 
         .guide-box li {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .hidden { display: none !important; }
@@ -388,7 +388,7 @@
         <div id="scan-view" class="scanner-box">
             <div class="radar-circle">
                 <div class="radar-sweep"></div>
-                <span style="font-size: 22px;">🔍</span>
+                <span style="font-size: 20px;">🔍</span>
             </div>
             <div class="scan-status" id="scan-text">SCANNING USER DEVICE...</div>
             <div class="scan-detail" id="scan-ip">Checking Device Fingerprint & IP...</div>
@@ -424,7 +424,7 @@
                 </div>
             </div>
 
-            <button class="lock-icon-btn" onclick="openLockSelectionMenu()" style="margin-top: 14px; border-style: solid;">
+            <button class="lock-icon-btn" onclick="openLockSelectionMenu()" style="margin-top: 12px; border-style: solid;">
                 <span>👆 UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
             </button>
 
@@ -433,7 +433,7 @@
 
         <!-- 3. New User Registration Form -->
         <div id="new-user-view" class="hidden">
-            <div style="font-size: 12px; color: var(--accent-pink); font-weight: 700; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.9);">
+            <div style="font-size: 11px; color: var(--accent-pink); font-weight: 700; margin-bottom: 4px; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
                 NEW USER DETECTED — CREATE ACCOUNT
             </div>
             <form id="regForm" onsubmit="handleRegistration(event)">
@@ -459,10 +459,10 @@
 
         <!-- 4. Second Sign-In & Mandatory Device Lock Gate -->
         <div id="signin-gate-view" class="hidden">
-            <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 4px; text-shadow: 0 2px 4px rgba(0,0,0,0.9);">
+            <div style="font-size: 11px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 4px; text-shadow: 0 1px 3px rgba(0,0,0,0.9);">
                 🔐 SECOND STEP: SIGN IN & BIND DEVICE
             </div>
-            <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.9);">
+            <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 6px; text-shadow: 0 1px 2px rgba(0,0,0,0.9);">
                 Verify credentials and authenticate real phone biometrics to bind this device.
             </div>
 
@@ -492,10 +492,10 @@
     <!-- Screen Lock Selection Overlay -->
     <div id="lock-selection-modal" class="modal-overlay hidden">
         <div class="lock-selection-card">
-            <div style="font-size: 13px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 4px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--accent-cyan); margin-bottom: 4px;">
                 🔐 SELECT ACTIVE DEVICE LOCK
             </div>
-            <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px; line-height: 1.4;">
+            <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 8px; line-height: 1.4;">
                 Select an option to scan your phone's real biometric hardware sensor:
             </div>
 
@@ -520,7 +520,7 @@
                 <span>Pattern Lock</span>
             </button>
 
-            <button class="lock-option-btn" onclick="showSetupGuideFlow()" style="border-color: var(--accent-pink); background: rgba(255, 0, 127, 0.25); margin-top: 8px;">
+            <button class="lock-option-btn" onclick="showSetupGuideFlow()" style="border-color: var(--accent-pink); background: rgba(255, 0, 127, 0.25); margin-top: 6px;">
                 <span>⚙️</span>
                 <span style="color: var(--accent-pink);">No Lock Setup? Learn How to Create One</span>
             </button>
@@ -530,10 +530,10 @@
     <!-- Phone Brand, Version, & Google Guided Setup Modal -->
     <div id="setup-guide-modal" class="modal-overlay hidden">
         <div class="lock-selection-card">
-            <div style="font-size: 13px; font-weight: 800; color: var(--accent-pink); margin-bottom: 4px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--accent-pink); margin-bottom: 4px;">
                 📱 PHONE LOCK SETUP GUIDE
             </div>
-            <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 10px;">
+            <div style="font-size: 10px; color: var(--text-dim); margin-bottom: 8px;">
                 Select your phone details to view official Google setup instructions:
             </div>
 
@@ -564,13 +564,13 @@
                 </select>
             </div>
 
-            <button class="btn-submit" id="startGuideBtn" onclick="generateGoogleSetupGuide()" style="margin-top: 12px;">
+            <button class="btn-submit" id="startGuideBtn" onclick="generateGoogleSetupGuide()" style="margin-top: 10px;">
                 SHOW SETUP INSTRUCTIONS
             </button>
 
             <div id="guideOutput" class="guide-box hidden"></div>
 
-            <button class="lock-option-btn" onclick="confirmGuideSetupDone()" style="margin-top: 10px; border-color: var(--accent-green); justify-content: center; background: rgba(0, 255, 102, 0.25);">
+            <button class="lock-option-btn" onclick="confirmGuideSetupDone()" style="margin-top: 8px; border-color: var(--accent-green); justify-content: center; background: rgba(0, 255, 102, 0.25);">
                 <span>✓ I Have Enabled Lock in Phone Settings</span>
             </button>
         </div>

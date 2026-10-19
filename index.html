@@ -37,7 +37,7 @@
             position: relative;
         }
 
-        /* Exact Uncropped Image Mapping with Long, Intense Deadly Lightning Engine */
+        /* Exact Uncropped Image Mapping with 1.5s Fast Deadly Long Lightning Engine */
         .page-bg-container {
             position: fixed;
             inset: 0;
@@ -49,34 +49,31 @@
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
-            animation: longDeadlyLightning 3.5s infinite ease-in-out;
+            animation: fastLongDeadlyLightning 1.5s infinite ease-in-out;
         }
 
-        /* Frequent, Long-Duration, High-Intensity Deadly Lightning Flashes */
-        @keyframes longDeadlyLightning {
-            0%, 50%, 68%, 85%, 100% {
+        /* Frequent 1.5s Fast, Long-Duration, High-Intensity Deadly Lightning Flashes */
+        @keyframes fastLongDeadlyLightning {
+            0%, 40%, 55%, 75%, 88%, 100% {
                 filter: brightness(1) contrast(1) saturate(1);
             }
-            52% {
-                filter: brightness(3.8) contrast(1.9) saturate(1.6) drop-shadow(0 0 80px rgba(220, 245, 255, 1));
+            42% {
+                filter: brightness(4.0) contrast(2.1) saturate(1.8) drop-shadow(0 0 100px rgba(230, 248, 255, 1));
             }
-            55% {
-                filter: brightness(2.5) contrast(1.4) saturate(1.3);
+            46% {
+                filter: brightness(2.2) contrast(1.4) saturate(1.3);
             }
-            58% {
-                filter: brightness(4.5) contrast(2.2) saturate(1.8) drop-shadow(0 0 100px rgba(255, 255, 255, 1));
+            50% {
+                filter: brightness(4.8) contrast(2.4) saturate(2.0) drop-shadow(0 0 120px rgba(255, 255, 255, 1));
             }
-            61% {
-                filter: brightness(1.8) contrast(1.2);
+            53% {
+                filter: brightness(1.7) contrast(1.2);
             }
-            63% {
-                filter: brightness(3.2) contrast(1.6);
+            77% {
+                filter: brightness(4.2) contrast(2.2) saturate(1.8) drop-shadow(0 0 110px rgba(210, 240, 255, 1));
             }
-            80% {
-                filter: brightness(4.0) contrast(2.0) saturate(1.7) drop-shadow(0 0 90px rgba(210, 240, 255, 1));
-            }
-            83% {
-                filter: brightness(2.2) contrast(1.3);
+            82% {
+                filter: brightness(2.0) contrast(1.3);
             }
         }
 
@@ -103,27 +100,28 @@
             pointer-events: none;
         }
 
-        /* Audio Activation Banner */
+        /* Guaranteed Interactive Audio Activation Banner */
         #audio-prompt {
             position: fixed;
             top: 15px;
             z-index: 300;
-            background: rgba(138, 43, 226, 0.85);
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(255, 0, 127, 0.9));
             border: 1px solid var(--accent-cyan);
             color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 12px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0, 243, 255, 0.4);
-            animation: pulseBanner 2s infinite;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
+            animation: pulseBanner 1.5s infinite;
+            letter-spacing: 0.5px;
         }
 
         @keyframes pulseBanner {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 243, 255, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(0, 243, 255, 0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(0, 243, 255, 0.4); }
         }
 
         /* Fully Transparent Merged Container Positioned at Clear Bottom */
@@ -406,17 +404,17 @@
 </head>
 <body>
 
-    <!-- Deadly Storm Lightning Image & Slanted Rain FX -->
+    <!-- Fast Deadly Lightning Image & Slanted Rain FX -->
     <div class="page-bg-container"></div>
     <canvas id="rain-canvas"></canvas>
 
-    <!-- Audio Activation Button (Bypasses browser mobile restrictions instantly on touch/click) -->
-    <button id="audio-prompt" onclick="enableStormAudio()">🔊 Tap to Enable Storm Sound FX</button>
+    <!-- Interactive Audio Activation Button -->
+    <button id="audio-prompt" onclick="enableStormAudio()">⚡ TAP TO START THUNDERSTORM & RAIN AUDIO 🔊</button>
 
-    <!-- Embedded Heavy Thunderstorm Audio Stream -->
+    <!-- Reliable Direct CDN Thunderstorm & Heavy Rain Audio Stream -->
     <audio id="storm-audio" loop preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/1255/1255-preview.mp3" type="audio/mpeg">
         <source src="https://actions.google.com/sounds/v1/weather/thunderstorm_heavy.ogg" type="audio/ogg">
-        <source src="https://cdn.pixabay.com/download/audio/2021/08/09/audio_191986427d.mp3?filename=heavy-rain-and-thunder-14660.mp3" type="audio/mpeg">
     </audio>
 
     <div class="social-icons-bg">
@@ -629,7 +627,7 @@
             audio.play().then(() => {
                 if (promptBtn) promptBtn.style.display = 'none';
             }).catch(e => {
-                console.log("Audio play blocked:", e);
+                alert("Audio playback failed. Please check browser permissions.");
             });
         }
     }

@@ -11,8 +11,7 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            /* Ultra-transparent glass card for background integration */
-            --card-bg: rgba(10, 10, 18, 0.38);
+            --card-bg: rgba(10, 10, 18, 0.40);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -38,26 +37,25 @@
             position: relative;
         }
 
-        /* Fully Visible Uncropped Background with Smooth 0.8x Slow Pan */
+        /* Full Uncropped Image Fitting Perfectly with Slow Pan */
         .page-bg-container {
             position: fixed;
-            inset: -15px;
-            width: 105vw;
-            height: 105vh;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
             z-index: -3;
             overflow: hidden;
-            background-image: linear-gradient(rgba(5, 5, 10, 0.3), rgba(5, 5, 10, 0.5)), url('./IMG-20261020-WA8328.jpg');
-            background-size: cover;
+            background-image: linear-gradient(rgba(5, 5, 10, 0.15), rgba(5, 5, 10, 0.3)), url('./IMG-20261020-WA8328.jpg');
+            background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
-            animation: panBackground 28s ease-in-out infinite alternate;
+            animation: panBackground 30s ease-in-out infinite alternate;
         }
 
         @keyframes panBackground {
-            0% { transform: scale(1.02) translate(-1%, -1%); }
-            50% { transform: scale(1.06) translate(1%, 1%); }
-            100% { transform: scale(1.02) translate(-1%, -1%); }
+            0% { transform: scale(1.0); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1.0); }
         }
 
         /* Lightning Flash Simulation Layer */
@@ -107,9 +105,9 @@
             width: 90%;
             max-width: 420px;
             background: var(--card-bg);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 24px;
             padding: 24px 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
@@ -306,8 +304,8 @@
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 200;
             display: flex;
             align-items: center;

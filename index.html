@@ -11,7 +11,7 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            --card-bg: rgba(15, 15, 25, 0.60);
+            --card-bg: rgba(15, 15, 25, 0.65);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -26,6 +26,12 @@
 
         body {
             background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(138, 43, 226, 0.35), transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.2), transparent 50%),
+                radial-gradient(circle at 20% 90%, rgba(255, 0, 127, 0.25), transparent 50%),
+                linear-gradient(135deg, #07070c 0%, #120b22 50%, #050508 100%);
+            background-attachment: fixed;
             color: var(--text-light);
             min-height: 100vh;
             min-height: 100dvh;
@@ -35,33 +41,6 @@
             justify-content: center;
             overflow-x: hidden;
             position: relative;
-        }
-
-        /* Guaranteed Embedded Background Image Layer */
-        .page-bg-container {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
-
-        .page-bg-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Glassmorphism Tint Overlay */
-        .bg-glow {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 5, 12, 0.40);
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
-            z-index: -1;
-            pointer-events: none;
         }
 
         .social-icons-bg {
@@ -359,12 +338,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Embedded Direct Image Background Layer (Bypasses all URL blocking) -->
-    <div class="page-bg-container">
-        <img src="https://d.uguu.se/RxcCoYzD.jpg" crossorigin="anonymous" alt="Background">
-    </div>
-    <div class="bg-glow"></div>
 
     <div class="social-icons-bg">
         <span>▶️</span><span>📷</span><span>👍</span><span>🐦</span><span>💬</span><span>✈️</span>

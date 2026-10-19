@@ -11,7 +11,6 @@
             --accent-pink: #ff007f;
             --accent-green: #00ff66;
             --bg-dark: #07070c;
-            --card-bg: rgba(10, 10, 18, 0.45);
             --text-light: #ffffff;
             --text-dim: #d0d0f0;
         }
@@ -37,7 +36,7 @@
             position: relative;
         }
 
-        /* Full Uncropped Image Fitting Perfectly with Zero Blur & Slow Pan */
+        /* Full Uncropped Image with Zero Blur & Slow Pan */
         .page-bg-container {
             position: fixed;
             inset: 0;
@@ -98,20 +97,17 @@
             pointer-events: none;
         }
 
-        /* Transparent Glass Container */
+        /* Fully Transparent Merged Container */
         .app-container {
             position: relative;
             z-index: 10;
             width: 90%;
             max-width: 420px;
-            background: var(--card-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
             padding: 24px 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6),
-                        0 0 25px rgba(138, 43, 226, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             text-align: center;
         }
 
@@ -201,8 +197,8 @@
 
         input, select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 10px 12px;
             border-radius: 10px;
             color: #ffffff;
@@ -227,7 +223,7 @@
             padding: 13px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(255, 0, 127, 0.9));
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(255, 0, 127, 0.8));
             color: #ffffff;
             font-size: 13px;
             font-weight: 800;
@@ -241,7 +237,7 @@
         }
 
         .user-card {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 14px;
             padding: 14px;
             border: 1px solid rgba(0, 243, 255, 0.3);
@@ -273,7 +269,7 @@
         .info-value { font-weight: 700; color: #ffffff; }
 
         .lock-icon-btn {
-            background: rgba(138, 43, 226, 0.4);
+            background: rgba(138, 43, 226, 0.3);
             border: 1px dashed var(--accent-cyan);
             color: #ffffff;
             padding: 12px;
@@ -299,9 +295,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 200;
             display: flex;
             align-items: center;
@@ -327,8 +321,8 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 8px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             color: #ffffff;
             font-size: 12px;
@@ -346,7 +340,7 @@
         }
 
         .guide-box {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 12px;
             padding: 14px;
             border-left: 3px solid var(--accent-cyan);

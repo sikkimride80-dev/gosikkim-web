@@ -93,7 +93,6 @@
             margin-bottom: 18px;
         }
 
-        /* Scanner */
         .scanner-box {
             display: flex;
             flex-direction: column;
@@ -140,7 +139,6 @@
             font-family: monospace;
         }
 
-        /* Form Controls */
         .form-group {
             display: flex;
             flex-direction: column;
@@ -251,7 +249,6 @@
             color: var(--accent-green);
         }
 
-        /* Modal Screens */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -376,7 +373,6 @@
                 </div>
             </div>
 
-            <!-- Lock Options or Setup Menu -->
             <button class="lock-icon-btn" onclick="openLockSelectionMenu()" style="margin-top: 16px; border-style: solid;">
                 <span>👆 UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
             </button>
@@ -524,7 +520,7 @@
                 SHOW SETUP INSTRUCTIONS
             </button>
 
-            <!-- 5-Second Timer & Steps Display -->
+            <!-- Fast 1-Second Display -->
             <div id="guideOutput" class="guide-box hidden"></div>
 
             <button class="lock-option-btn" onclick="confirmGuideSetupDone()" style="margin-top: 12px; border-color: var(--accent-green); justify-content: center; background: rgba(0, 255, 102, 0.1);">
@@ -637,6 +633,7 @@
         document.getElementById('setup-guide-modal').classList.remove('hidden');
     }
 
+    // Updated timing to 1 Second
     function generateGoogleSetupGuide() {
         const brand = document.getElementById('brandSelect').value;
         const version = document.getElementById('versionSelect').value;
@@ -645,19 +642,12 @@
         const startBtn = document.getElementById('startGuideBtn');
 
         startBtn.disabled = true;
-        let count = 5;
         guideOutput.classList.remove('hidden');
-        guideOutput.innerHTML = `<strong>⌛ Loading Google Verified Setup Instructions in ${count}s...</strong>`;
+        guideOutput.innerHTML = `<strong>⌛ Loading Google Verified Setup Instructions...</strong>`;
 
-        const interval = setInterval(() => {
-            count--;
-            if (count > 0) {
-                guideOutput.innerHTML = `<strong>⌛ Loading Google Verified Setup Instructions in ${count}s...</strong>`;
-            } else {
-                clearInterval(interval);
-                startBtn.disabled = false;
-                renderGuideSteps(brand, version, model);
-            }
+        setTimeout(() => {
+            startBtn.disabled = false;
+            renderGuideSteps(brand, version, model);
         }, 1000);
     }
 

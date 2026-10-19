@@ -37,7 +37,7 @@
             position: relative;
         }
 
-        /* Exact Uncropped Image Mapping matching original photo dimensions */
+        /* Exact Uncropped Image Mapping with Realistic Living Lightning Pulse */
         .page-bg-container {
             position: fixed;
             inset: 0;
@@ -49,29 +49,35 @@
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
+            animation: imageLightningStrike 8s infinite;
         }
 
-        /* Realistic Alive Lightning Flash Simulation Layer */
-        .lightning-flash {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle at 35% 30%, rgba(220, 240, 255, 0.35) 0%, rgba(0, 243, 255, 0.1) 40%, transparent 80%);
-            z-index: -2;
-            pointer-events: none;
-            opacity: 0;
-            animation: aliveLightning 7s infinite;
+        /* Makes the actual lightning and sky in the image pulse and flash organically */
+        @keyframes imageLightningStrike {
+            0%, 84%, 93%, 100% {
+                filter: brightness(1) contrast(1);
+            }
+            85% {
+                filter: brightness(1.6) contrast(1.25) drop-shadow(0 0 25px rgba(180, 230, 255, 0.8));
+            }
+            86% {
+                filter: brightness(1.1) contrast(1.05);
+            }
+            87% {
+                filter: brightness(1.85) contrast(1.35) drop-shadow(0 0 40px rgba(200, 245, 255, 0.95));
+            }
+            89% {
+                filter: brightness(1.2) contrast(1.1);
+            }
+            91% {
+                filter: brightness(1.5) contrast(1.2);
+            }
+            92% {
+                filter: brightness(1.05) contrast(1);
+            }
         }
 
-        @keyframes aliveLightning {
-            0%, 85%, 94%, 100% { opacity: 0; }
-            86% { opacity: 0.9; }
-            87% { opacity: 0.2; }
-            88% { opacity: 1; }
-            90% { opacity: 0.4; }
-            92% { opacity: 0.8; }
-        }
-
-        /* Rain and Water Drip Canvas Layer */
+        /* Slanted Rain and Body Drips Canvas Layer */
         #rain-canvas {
             position: fixed;
             inset: 0;
@@ -374,9 +380,8 @@
 </head>
 <body>
 
-    <!-- Live Animated Background & Lightning FX -->
+    <!-- Living Lightning Image & Slanted Rain FX -->
     <div class="page-bg-container"></div>
-    <div class="lightning-flash"></div>
     <canvas id="rain-canvas"></canvas>
 
     <div class="social-icons-bg">
@@ -604,7 +609,6 @@
         });
     }
 
-    // Gentle water drops dripping from the person's body on the car roof
     const waterDrips = [];
     for (let i = 0; i < 5; i++) {
         waterDrips.push({
@@ -619,18 +623,16 @@
     function animateRainAndDrips() {
         ctx.clearRect(0, 0, width, height);
         
-        // 1. Draw Slanted Storm Rain
         ctx.lineWidth = 1.2;
         for (let drop of raindrops) {
             ctx.strokeStyle = `rgba(180, 220, 245, ${drop.opacity})`;
             ctx.beginPath();
-            // Slanted angle representing heavy wind-driven rain
             ctx.moveTo(drop.x, drop.y);
             ctx.lineTo(drop.x - 3.5, drop.y + drop.length);
             ctx.stroke();
 
             drop.y += drop.speed;
-            drop.x -= 1.2; // Slant drift speed
+            drop.x -= 1.2;
 
             if (drop.y > height || drop.x < -50) {
                 drop.y = -20;
@@ -638,7 +640,6 @@
             }
         }
 
-        // 2. Draw Gentle Water Drips from Person's Body
         for (let drip of waterDrips) {
             ctx.fillStyle = `rgba(200, 235, 255, ${drip.opacity})`;
             ctx.beginPath();
@@ -648,7 +649,6 @@
             drip.y += drip.speed;
             drip.opacity -= 0.015;
 
-            // Reset drip near person's torso/shoulders
             if (drip.y > height * 0.48 || drip.opacity <= 0) {
                 drip.x = width * 0.47 + (Math.random() * 40 - 20);
                 drip.y = height * 0.28 + (Math.random() * 25);

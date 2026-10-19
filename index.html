@@ -12,7 +12,7 @@
             --accent-green: #00ff66;
             --bg-dark: #07070c;
             --text-light: #ffffff;
-            --text-dim: #d0d0f0;
+            --text-dim: #e0e0ff;
         }
 
         * {
@@ -97,17 +97,16 @@
             pointer-events: none;
         }
 
-        /* Fully Transparent Merged Container */
+        /* Fully Borderless & Transparent Merged Container */
         .app-container {
             position: relative;
             z-index: 10;
             width: 90%;
             max-width: 420px;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: none;
             border-radius: 24px;
             padding: 24px 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             text-align: center;
         }
 
@@ -125,7 +124,7 @@
         .brand-subtitle {
             font-size: 11px;
             color: #ffffff;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 18px;
@@ -170,14 +169,14 @@
             font-weight: 700;
             color: var(--accent-cyan);
             margin-bottom: 6px;
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 2px 4px rgba(0,0,0,0.9);
         }
 
         .scan-detail {
             font-size: 11px;
             color: #ffffff;
             font-family: monospace;
-            text-shadow: 0 1px 2px #000;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
         }
 
         .form-group {
@@ -192,29 +191,35 @@
             font-size: 11px;
             color: #ffffff;
             font-weight: 700;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
         }
 
         input, select {
             width: 100%;
-            background: rgba(0, 0, 0, 0.25);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             padding: 10px 12px;
             border-radius: 10px;
             color: #ffffff;
             font-size: 13px;
             outline: none;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
             transition: border-color 0.2s;
         }
 
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
         select option {
-            background: #181824;
+            background: #12121c;
             color: #ffffff;
         }
 
         input:focus, select:focus {
             border-color: var(--accent-cyan);
             box-shadow: 0 0 12px rgba(0, 243, 255, 0.6);
+            background: rgba(0, 0, 0, 0.35);
         }
 
         .btn-submit {
@@ -223,13 +228,14 @@
             padding: 13px;
             border: none;
             border-radius: 12px;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(255, 0, 127, 0.8));
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.85), rgba(255, 0, 127, 0.85));
             color: #ffffff;
             font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
             letter-spacing: 1px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.6);
         }
 
         .btn-submit:active {
@@ -263,6 +269,7 @@
             justify-content: space-between;
             font-size: 12px;
             margin-bottom: 6px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
         }
 
         .info-label { color: #d0d0f0; }
@@ -283,6 +290,7 @@
             justify-content: center;
             gap: 8px;
             width: 100%;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
             transition: all 0.2s ease;
         }
 
@@ -295,7 +303,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 200;
             display: flex;
             align-items: center;
@@ -305,7 +313,7 @@
         }
 
         .lock-selection-card {
-            background: rgba(20, 20, 32, 0.85);
+            background: rgba(15, 15, 25, 0.9);
             border-radius: 20px;
             border: 1px solid rgba(255, 0, 127, 0.4);
             width: 100%;
@@ -430,7 +438,7 @@
 
         <!-- 3. New User Registration Form -->
         <div id="new-user-view" class="hidden">
-            <div style="font-size: 13px; color: var(--accent-pink); font-weight: 700; margin-bottom: 6px;">
+            <div style="font-size: 13px; color: var(--accent-pink); font-weight: 700; margin-bottom: 6px; text-shadow: 0 2px 4px rgba(0,0,0,0.9);">
                 NEW USER DETECTED — CREATE ACCOUNT
             </div>
             <form id="regForm" onsubmit="handleRegistration(event)">
@@ -456,10 +464,10 @@
 
         <!-- 4. Second Sign-In & Mandatory Device Lock Gate -->
         <div id="signin-gate-view" class="hidden">
-            <div style="font-size: 13px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 6px;">
+            <div style="font-size: 13px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 6px; text-shadow: 0 2px 4px rgba(0,0,0,0.9);">
                 🔐 SECOND STEP: SIGN IN & BIND DEVICE
             </div>
-            <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 10px;">
+            <div style="font-size: 11px; color: var(--text-dim); margin-bottom: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.9);">
                 Verify credentials and authenticate real phone biometrics to bind this device.
             </div>
 

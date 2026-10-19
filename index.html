@@ -51,24 +51,27 @@
             background-repeat: no-repeat;
         }
 
-        /* Lightning Flash Simulation Layer */
+        /* Realistic Alive Lightning Flash Simulation Layer */
         .lightning-flash {
             position: fixed;
             inset: 0;
-            background: rgba(0, 243, 255, 0.04);
+            background: radial-gradient(circle at 35% 30%, rgba(220, 240, 255, 0.35) 0%, rgba(0, 243, 255, 0.1) 40%, transparent 80%);
             z-index: -2;
             pointer-events: none;
             opacity: 0;
-            animation: flashLightning 8s infinite;
+            animation: aliveLightning 7s infinite;
         }
 
-        @keyframes flashLightning {
-            0%, 88%, 92%, 100% { opacity: 0; }
-            89%, 93% { opacity: 0.7; }
-            90% { opacity: 0.3; }
+        @keyframes aliveLightning {
+            0%, 85%, 94%, 100% { opacity: 0; }
+            86% { opacity: 0.9; }
+            87% { opacity: 0.2; }
+            88% { opacity: 1; }
+            90% { opacity: 0.4; }
+            92% { opacity: 0.8; }
         }
 
-        /* Rain Canvas Layer */
+        /* Rain and Water Drip Canvas Layer */
         #rain-canvas {
             position: fixed;
             inset: 0;
@@ -113,7 +116,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 2px;
-            /* Atmospheric cloud glow border */
             filter: drop-shadow(0 2px 6px rgba(10, 15, 25, 0.9));
         }
 
@@ -187,7 +189,6 @@
             font-size: 10px;
             color: #ffffff;
             font-weight: 700;
-            /* Small atmospheric cloud shadow border */
             text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95), 0 0 6px rgba(50, 70, 90, 0.8);
         }
 
@@ -373,7 +374,7 @@
 </head>
 <body>
 
-    <!-- Live Animated Background & Storm FX -->
+    <!-- Live Animated Background & Lightning FX -->
     <div class="page-bg-container"></div>
     <div class="lightning-flash"></div>
     <canvas id="rain-canvas"></canvas>
@@ -579,7 +580,7 @@
     </div>
 
 <script>
-    /* Live Rain Simulation Engine */
+    /* Slanted Storm Rain & Character Water Drips Simulation Engine */
     const canvas = document.getElementById('rain-canvas');
     const ctx = canvas.getContext('2d');
     let width = canvas.width = window.innerWidth;
@@ -591,40 +592,75 @@
     });
 
     const raindrops = [];
-    const maxDrops = 100;
+    const maxDrops = 110;
 
     for (let i = 0; i < maxDrops; i++) {
         raindrops.push({
-            x: Math.random() * width,
+            x: Math.random() * width * 1.5 - (width * 0.25),
             y: Math.random() * height,
-            length: Math.random() * 20 + 10,
-            speed: Math.random() * 12 + 8,
-            opacity: Math.random() * 0.4 + 0.2
+            length: Math.random() * 22 + 12,
+            speed: Math.random() * 10 + 10,
+            opacity: Math.random() * 0.45 + 0.2
         });
     }
 
-    function animateRain() {
+    // Gentle water drops dripping from the person's body on the car roof
+    const waterDrips = [];
+    for (let i = 0; i < 5; i++) {
+        waterDrips.push({
+            x: width * 0.47 + (Math.random() * 40 - 20),
+            y: height * 0.28 + (Math.random() * 30),
+            radius: Math.random() * 1.5 + 1,
+            speed: Math.random() * 2 + 1.5,
+            opacity: Math.random() * 0.6 + 0.3
+        });
+    }
+
+    function animateRainAndDrips() {
         ctx.clearRect(0, 0, width, height);
-        ctx.lineWidth = 1.2;
         
+        // 1. Draw Slanted Storm Rain
+        ctx.lineWidth = 1.2;
         for (let drop of raindrops) {
-            ctx.strokeStyle = `rgba(174, 219, 242, ${drop.opacity})`;
+            ctx.strokeStyle = `rgba(180, 220, 245, ${drop.opacity})`;
             ctx.beginPath();
+            // Slanted angle representing heavy wind-driven rain
             ctx.moveTo(drop.x, drop.y);
-            ctx.lineTo(drop.x - 1, drop.y + drop.length);
+            ctx.lineTo(drop.x - 3.5, drop.y + drop.length);
             ctx.stroke();
 
             drop.y += drop.speed;
-            drop.x -= 0.5;
+            drop.x -= 1.2; // Slant drift speed
 
-            if (drop.y > height) {
+            if (drop.y > height || drop.x < -50) {
                 drop.y = -20;
-                drop.x = Math.random() * width;
+                drop.x = Math.random() * width * 1.3;
             }
         }
-        requestAnimationFrame(animateRain);
+
+        // 2. Draw Gentle Water Drips from Person's Body
+        for (let drip of waterDrips) {
+            ctx.fillStyle = `rgba(200, 235, 255, ${drip.opacity})`;
+            ctx.beginPath();
+            ctx.arc(drip.x, drip.y, drip.radius, 0, Math.PI * 2);
+            ctx.fill();
+
+            drip.y += drip.speed;
+            drip.opacity -= 0.015;
+
+            // Reset drip near person's torso/shoulders
+            if (drip.y > height * 0.48 || drip.opacity <= 0) {
+                drip.x = width * 0.47 + (Math.random() * 40 - 20);
+                drip.y = height * 0.28 + (Math.random() * 25);
+                drip.radius = Math.random() * 1.5 + 1;
+                drip.speed = Math.random() * 2 + 1.5;
+                drip.opacity = Math.random() * 0.6 + 0.3;
+            }
+        }
+
+        requestAnimationFrame(animateRainAndDrips);
     }
-    animateRain();
+    animateRainAndDrips();
 
     let currentIP = "103.22.180.12";
     let deviceFingerprint = "";

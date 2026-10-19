@@ -302,38 +302,83 @@
             width: 100%;
         }
 
-        /* System Settings Modal */
-        .modal-overlay {
+        /* Full Screen Authentic Android System "Usage Data Access" Screen */
+        .system-settings-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.88);
-            z-index: 100;
+            background-color: #000000;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff;
+            overflow-y: auto;
+        }
+
+        .system-top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .system-top-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 17px;
+        }
+
+        .system-subhead {
+            padding: 16px;
+            font-size: 12px;
+            color: #999999;
+            line-height: 1.4;
+        }
+
+        .system-app-list {
+            display: flex;
+            flex-direction: column;
+            padding: 0 16px;
+        }
+
+        .system-app-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .system-app-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .system-app-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #1e1e1e;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            font-size: 18px;
         }
 
-        .settings-card {
-            background: #181824;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 100%;
-            max-width: 360px;
-            padding: 20px;
-            text-align: left;
-        }
-
-        .settings-header {
-            font-size: 15px;
-            font-weight: 800;
+        .system-app-name {
+            font-size: 14px;
+            font-weight: 600;
             color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 8px;
+        }
+
+        .system-app-size {
+            font-size: 11px;
+            color: #777777;
+            margin-top: 2px;
         }
 
         .hidden { display: none !important; }
@@ -454,10 +499,10 @@
                 <div class="toggle-box">
                     <div class="toggle-text">
                         <strong>Track Usage Access</strong>
-                        Grant phone system settings & web permission
+                        Enable in phone system settings to permit bridge analytics
                     </div>
                     <label class="switch">
-                        <input type="checkbox" id="usagePermToggle" onchange="triggerSystemSettings(this)">
+                        <input type="checkbox" id="usagePermToggle" onchange="openAndroidSystemSettings(this)">
                         <span class="slider"></span>
                     </label>
                 </div>
@@ -467,29 +512,92 @@
         </div>
     </div>
 
-    <!-- Mandatory System Settings Modal for Dual Permissions -->
-    <div id="settings-modal" class="modal-overlay hidden">
-        <div class="settings-card">
-            <div class="settings-header">
-                ⚙️ Device & Web Settings Required
+    <!-- Authentic Android Phone System "Usage data access" Screen -->
+    <div id="android-system-screen" class="system-settings-overlay hidden">
+        <div class="system-top-nav">
+            <div class="system-top-title">
+                <span onclick="closeAndroidSystemSettings()" style="cursor: pointer;">⟨</span>
+                <span>Usage data access</span>
             </div>
-            <div style="font-size: 12px; color: var(--text-dim); margin-bottom: 14px; line-height: 1.4;">
-                <strong style="color: #fff;">Usage Access Permissions</strong><br>
-                To enable <strong>WatchMeex18 Social Bridge</strong> analytics, you must permit both <strong>Phone System Access</strong> and <strong>Web Tracking Settings</strong>.
+            <div style="display: flex; gap: 14px; font-size: 16px;">
+                <span>🔍</span>
+                <span>⋮</span>
             </div>
-            
-            <div style="background: rgba(255,255,255,0.06); padding: 12px; border-radius: 10px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 10px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 11px; font-weight: 700; color: #fff;">1. Phone Device Settings</span>
-                    <span id="phone-perm-status" style="font-size: 10px; color: var(--accent-pink); font-weight: 800;">PENDING</span>
+        </div>
+
+        <div class="system-subhead">
+            Allow apps to monitor which other apps you use and how often and identify your service provider, language settings, and other usage data.
+        </div>
+
+        <div class="system-app-list">
+            <!-- WatchMeex18 Permission Target App -->
+            <div class="system-app-item" style="background: rgba(138, 43, 226, 0.15); margin: 4px -16px; padding: 14px 16px; border-left: 3px solid var(--accent-cyan);">
+                <div class="system-app-info">
+                    <div class="system-app-icon" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-pink));">👁️</div>
+                    <div>
+                        <div class="system-app-name" style="color: var(--accent-cyan);">WatchMeex18</div>
+                        <div class="system-app-size">Social Bridge Platform (24.80 MB)</div>
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 11px; font-weight: 700; color: #fff;">2. Web Usage Permission</span>
-                    <span id="web-perm-status" style="font-size: 10px; color: var(--accent-pink); font-weight: 800;">PENDING</span>
+                <label class="switch">
+                    <input type="checkbox" id="watchmeexSystemToggle" onchange="toggleWatchmeexUsageAccess(this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="system-app-item">
+                <div class="system-app-info">
+                    <div class="system-app-icon">🤖</div>
+                    <div>
+                        <div class="system-app-name">Ad privacy</div>
+                        <div class="system-app-size">27.75 MB</div>
+                    </div>
                 </div>
-                <button onclick="confirmDualPermissions()" style="width: 100%; margin-top: 6px; background: var(--accent-green); color: #000; border: none; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer;">
-                    ENABLE ALL PERMISSIONS
-                </button>
+                <label class="switch"><input type="checkbox" disabled><span class="slider"></span></label>
+            </div>
+
+            <div class="system-app-item">
+                <div class="system-app-info">
+                    <div class="system-app-icon">📶</div>
+                    <div>
+                        <div class="system-app-name">Bluetooth</div>
+                        <div class="system-app-size">1.51 MB</div>
+                    </div>
+                </div>
+                <label class="switch"><input type="checkbox" disabled><span class="slider"></span></label>
+            </div>
+
+            <div class="system-app-item">
+                <div class="system-app-info">
+                    <div class="system-app-icon">🟢</div>
+                    <div>
+                        <div class="system-app-name">Digital Wellbeing</div>
+                        <div class="system-app-size">21.34 MB</div>
+                    </div>
+                </div>
+                <label class="switch"><input type="checkbox" disabled><span class="slider"></span></label>
+            </div>
+
+            <div class="system-app-item">
+                <div class="system-app-info">
+                    <div class="system-app-icon">🌐</div>
+                    <div>
+                        <div class="system-app-name">Google</div>
+                        <div class="system-app-size">478 MB</div>
+                    </div>
+                </div>
+                <label class="switch"><input type="checkbox" disabled><span class="slider"></span></label>
+            </div>
+
+            <div class="system-app-item">
+                <div class="system-app-info">
+                    <div class="system-app-icon">🧩</div>
+                    <div>
+                        <div class="system-app-name">Google Play services</div>
+                        <div class="system-app-size">1.72 GB</div>
+                    </div>
+                </div>
+                <label class="switch"><input type="checkbox" disabled><span class="slider"></span></label>
             </div>
         </div>
     </div>
@@ -539,7 +647,7 @@
                 document.getElementById('user-phone-val').innerText = userData.phone;
                 document.getElementById('user-email-val').innerText = userData.email || "Not set";
                 document.getElementById('user-lock-val').innerText = userData.deviceLock ? "Active (Fingerprint/PIN)" : "Standard";
-                document.getElementById('user-track-val').innerText = userData.usagePermission ? "Granted (Phone & Web Permitted)" : "Denied";
+                document.getElementById('user-track-val').innerText = userData.usagePermission ? "Granted (System Permitted)" : "Denied";
                 document.getElementById('user-fp-val').innerText = deviceFingerprint;
                 document.getElementById('user-ip-val').innerText = currentIP;
 
@@ -595,30 +703,31 @@
         }
     }
 
-    function triggerSystemSettings(elem) {
+    function openAndroidSystemSettings(elem) {
         if (elem.checked) {
             elem.checked = false;
-            document.getElementById('settings-modal').classList.remove('hidden');
+            document.getElementById('android-system-screen').classList.remove('hidden');
         } else {
             trackUsageGranted = false;
         }
     }
 
-    function confirmDualPermissions() {
-        document.getElementById('phone-perm-status').innerText = "GRANTED ✓";
-        document.getElementById('phone-perm-status').style.color = "var(--accent-green)";
-
-        setTimeout(() => {
-            document.getElementById('web-perm-status').innerText = "GRANTED ✓";
-            document.getElementById('web-perm-status').style.color = "var(--accent-green)";
-
+    function toggleWatchmeexUsageAccess(elem) {
+        if (elem.checked) {
+            trackUsageGranted = true;
+            document.getElementById('usagePermToggle').checked = true;
             setTimeout(() => {
-                trackUsageGranted = true;
-                document.getElementById('usagePermToggle').checked = true;
-                document.getElementById('settings-modal').classList.add('hidden');
-                alert("All Phone Settings & Web Permissions Granted!");
-            }, 600);
-        }, 600);
+                alert("System Setting Updated: Usage data access granted for WatchMeex18!");
+                document.getElementById('android-system-screen').classList.add('hidden');
+            }, 500);
+        } else {
+            trackUsageGranted = false;
+            document.getElementById('usagePermToggle').checked = false;
+        }
+    }
+
+    function closeAndroidSystemSettings() {
+        document.getElementById('android-system-screen').classList.add('hidden');
     }
 
     function handleSignIn(e) {

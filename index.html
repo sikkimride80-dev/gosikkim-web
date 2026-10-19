@@ -37,25 +37,26 @@
             position: relative;
         }
 
-        /* Cinematic Pan & Scan Background Animation */
+        /* Fully Visible Uncropped Image with 0.8x Slow Pan */
         .page-bg-container {
             position: fixed;
-            inset: -10px;
-            width: 120vw;
-            height: 120vh;
+            inset: -20px;
+            width: 110vw;
+            height: 110vh;
             z-index: -3;
             overflow: hidden;
             background-image: linear-gradient(rgba(7, 7, 12, 0.45), rgba(7, 7, 12, 0.65)), url('./IMG-20261020-WA8328.jpg');
-            background-size: cover;
+            background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
-            animation: panBackground 18s ease-in-out infinite alternate;
+            background-attachment: fixed;
+            animation: panBackground 25s ease-in-out infinite alternate;
         }
 
         @keyframes panBackground {
-            0% { transform: scale(1.05) translate(-3%, -2%); }
-            50% { transform: scale(1.12) translate(3%, 2%); }
-            100% { transform: scale(1.05) translate(-3%, -2%); }
+            0% { transform: scale(1.02) translate(-2%, -1%); }
+            50% { transform: scale(1.08) translate(2%, 1%); }
+            100% { transform: scale(1.02) translate(-2%, -1%); }
         }
 
         /* Lightning Flash Simulation Layer */

@@ -37,7 +37,7 @@
             position: relative;
         }
 
-        /* Exact Uncropped Image Mapping with True Erratic Thunderstorm Flash Engine */
+        /* Exact Uncropped Image Mapping with Fully Randomized Erratic Lightning */
         .page-bg-container {
             position: fixed;
             inset: 0;
@@ -49,54 +49,48 @@
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
-            animation: realThunderstormSequence 9s infinite steps(1, end);
+            animation: chaoticStormLightning 12s infinite steps(1, end);
         }
 
-        /* Organic, erratic thunderstorm sequence: jagged multi-strikes, sudden flickers, and pauses */
-        @keyframes realThunderstormSequence {
-            0%, 12%, 16%, 38%, 42%, 45%, 70%, 100% {
+        /* Completely mixed up, randomized, organic thunderstorm flash pattern */
+        @keyframes chaoticStormLightning {
+            0%, 14%, 18%, 21%, 52%, 56%, 78%, 81%, 84%, 100% {
                 filter: brightness(1) contrast(1) saturate(1);
             }
-            /* First heavy strike: erratic double-flash with rapid jitter */
-            10% {
+            /* Quick double burst */
+            15% {
                 filter: brightness(4.5) contrast(2.4) saturate(2.0) drop-shadow(0 0 130px rgba(240, 250, 255, 1));
             }
-            11% {
-                filter: brightness(1.4) contrast(1.1);
+            17% {
+                filter: brightness(1.3) contrast(1.1);
             }
-            13% {
-                filter: brightness(3.8) contrast(2.0) saturate(1.7);
-            }
-            14% {
-                filter: brightness(1.8) contrast(1.2);
-            }
-            15% {
-                filter: brightness(5.0) contrast(2.6) saturate(2.2) drop-shadow(0 0 160px rgba(255, 255, 255, 1));
-            }
-            
-            /* Second long rolling flash sequence */
-            40% {
-                filter: brightness(4.2) contrast(2.2) saturate(1.8) drop-shadow(0 0 140px rgba(230, 245, 255, 1));
-            }
-            41% {
-                filter: brightness(2.2) contrast(1.4);
-            }
-            43% {
+            19% {
                 filter: brightness(3.5) contrast(1.9);
             }
-            44% {
-                filter: brightness(1.5) contrast(1.1);
+            
+            /* Long erratic single flash */
+            53% {
+                filter: brightness(5.0) contrast(2.6) saturate(2.2) drop-shadow(0 0 160px rgba(255, 255, 255, 1));
+            }
+            54% {
+                filter: brightness(1.6) contrast(1.2);
+            }
+            55% {
+                filter: brightness(3.0) contrast(1.7);
             }
 
-            /* Third sharp sudden strike */
-            68% {
-                filter: brightness(4.8) contrast(2.5) saturate(2.1) drop-shadow(0 0 150px rgba(255, 255, 255, 1));
+            /* Rapid erratic multi-strike sequence */
+            79% {
+                filter: brightness(4.2) contrast(2.2) saturate(1.8) drop-shadow(0 0 140px rgba(230, 245, 255, 1));
             }
-            69% {
-                filter: brightness(1.2) contrast(1.0);
+            80% {
+                filter: brightness(2.1) contrast(1.3);
             }
-            71% {
-                filter: brightness(3.2) contrast(1.7);
+            82% {
+                filter: brightness(4.8) contrast(2.5) saturate(2.0) drop-shadow(0 0 150px rgba(255, 255, 255, 1));
+            }
+            83% {
+                filter: brightness(1.4) contrast(1.1);
             }
         }
 
@@ -403,7 +397,7 @@
 </head>
 <body>
 
-    <!-- True Thunderstorm Lightning Image & Slanted Rain FX -->
+    <!-- Chaotic Thunderstorm Image & Slanted Rain FX -->
     <div class="page-bg-container"></div>
     <canvas id="rain-canvas"></canvas>
 

@@ -284,7 +284,7 @@
         .info-label { color: #d0d0f0; }
         .info-value { font-weight: 700; color: #ffffff; }
 
-        /* Bigger Lock Button with Lady's Index Finger Pointing Right Beside Text */
+        /* Big Lock Button Container */
         .lock-container-wrapper {
             position: relative;
             margin-top: 14px;
@@ -292,6 +292,7 @@
         }
 
         .lock-icon-btn {
+            position: relative;
             background: rgba(110, 30, 200, 0.65);
             border: 2px solid var(--accent-cyan);
             color: #ffffff;
@@ -303,11 +304,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
             text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);
             box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
             transition: all 0.2s ease;
+            overflow: visible;
         }
 
         .lock-icon-btn.active {
@@ -317,17 +319,60 @@
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
         }
 
-        /* Animated Lady Index Finger Pointing Directly Beside Text */
-        .pointing-finger-lady {
-            font-size: 20px;
-            display: inline-block;
-            animation: ladyFingerBounce 0.8s infinite ease-in-out;
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+        /* Custom Hand Image Pointing Exactly at the First Letter with Live Ripple Effect */
+        .live-pointing-hand {
+            width: 38px;
+            height: auto;
+            transform: scaleX(-1); /* Flips horizontal pointer to point left towards the text */
+            animation: handPressAndPoint 1.2s infinite ease-in-out;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.6));
+            flex-shrink: 0;
         }
 
-        @keyframes ladyFingerBounce {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(-6px); }
+        @keyframes handPressAndPoint {
+            0%, 100% {
+                transform: scaleX(-1) translateX(0) scale(1);
+            }
+            50% {
+                transform: scaleX(-1) translateX(-8px) scale(1.05);
+            }
+        }
+
+        /* Pond Ripple / Wrinkle Ring Effect Emanating from the First Letter */
+        .ripple-origin {
+            position: absolute;
+            left: 22px; /* aligns right at the tip of the pointing finger and first letter 'C' */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+        }
+
+        .ripple-ring {
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(0, 243, 255, 0.85);
+            border-radius: 50%;
+            animation: pondRippleExpand 1.2s infinite cubic-bezier(0, 0.2, 0.8, 1);
+        }
+
+        .ripple-ring:nth-child(2) {
+            animation-delay: 0.4s;
+            border-color: rgba(255, 0, 127, 0.75);
+        }
+
+        @keyframes pondRippleExpand {
+            0% {
+                transform: scale(0.2);
+                opacity: 1;
+                border-width: 3px;
+            }
+            100% {
+                transform: scale(4.5);
+                opacity: 0;
+                border-width: 0.5px;
+            }
         }
 
         .modal-overlay {
@@ -451,7 +496,13 @@
 
             <div class="lock-container-wrapper">
                 <button class="lock-icon-btn" onclick="openLockSelectionMenu()">
-                    <span class="pointing-finger-lady">👈</span>
+                    <!-- Realistic Pond Ripple Ring Origin Point -->
+                    <div class="ripple-origin">
+                        <div class="ripple-ring"></div>
+                        <div class="ripple-ring"></div>
+                    </div>
+                    <!-- Custom Pointing Hand Image matching your reference -->
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M85 45c0-4-3-7-7-7H55l4-14c1-4-1-8-5-9-3-1-7 1-8 4l-12 21H18c-4 0-7 3-7 7v25c0 4 3 7 7 7h45c4 0 7-3 7-7v-3l12 7c3 2 7 0 8-3 1-3 0-6-3-8l-10-6h11c4 0 7-3 7-7z' fill='%23e0ac69'/></svg>" class="live-pointing-hand" alt="Pointing Hand">
                     <span>UNLOCK WITH DEVICE LOCK / FINGERPRINT</span>
                 </button>
             </div>
@@ -485,7 +536,7 @@
             </form>
         </div>
 
-        <!-- 4. Verification Gate (Clean & Big Button with Lady Finger Pointing) -->
+        <!-- 4. Verification Gate with Live Pointing Hand & Pond Ripple Ring Effect -->
         <div id="signin-gate-view" class="hidden">
             <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 800; margin-bottom: 8px; text-shadow: 0 1px 4px rgba(10, 15, 25, 0.95);">
                 Please choose your lock type and verify
@@ -493,7 +544,13 @@
 
             <div class="lock-container-wrapper">
                 <button type="button" id="biometricBtn" class="lock-icon-btn" onclick="openLockSelectionMenu()">
-                    <span class="pointing-finger-lady">👈</span>
+                    <!-- Pond Ripple Rings starting precisely where the finger touches the first letter 'C' -->
+                    <div class="ripple-origin">
+                        <div class="ripple-ring"></div>
+                        <div class="ripple-ring"></div>
+                    </div>
+                    <!-- Custom Pointing Hand Image matching your reference -->
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M85 45c0-4-3-7-7-7H55l4-14c1-4-1-8-5-9-3-1-7 1-8 4l-12 21H18c-4 0-7 3-7 7v25c0 4 3 7 7 7h45c4 0 7-3 7-7v-3l12 7c3 2 7 0 8-3 1-3 0-6-3-8l-10-6h11c4 0 7-3 7-7z' fill='%23e0ac69'/></svg>" class="live-pointing-hand" alt="Pointing Hand">
                     <span>CHOOSE LOCK TYPE & VERIFY</span>
                 </button>
             </div>
@@ -739,7 +796,7 @@
             } else if (storedUser && signedIn !== 'true') {
                 document.getElementById('signin-gate-view').classList.remove('hidden');
             } else {
-                document.getElementById('new-user-view').classList.remove('hidden');
+                document.getElementById('new-user-view').classList.add('hidden');
             }
         }, 2000);
     }
@@ -880,7 +937,7 @@
         const btn = document.getElementById('biometricBtn');
         if (btn) {
             btn.classList.add('active');
-            btn.innerHTML = `<span class="pointing-finger-lady">👈</span><span>✓ LOCK VERIFIED (${chosenLockType})</span>`;
+            btn.innerHTML = `<div class="ripple-origin"><div class="ripple-ring"></div><div class="ripple-ring"></div></div><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M85 45c0-4-3-7-7-7H55l4-14c1-4-1-8-5-9-3-1-7 1-8 4l-12 21H18c-4 0-7 3-7 7v25c0 4 3 7 7 7h45c4 0 7-3 7-7v-3l12 7c3 2 7 0 8-3 1-3 0-6-3-8l-10-6h11c4 0 7-3 7-7z' fill='%2300ff66'/></svg>" class="live-pointing-hand" alt="Pointing Hand"><span>✓ LOCK VERIFIED (${chosenLockType})</span>`;
         }
     }
 

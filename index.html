@@ -37,7 +37,7 @@
             position: relative;
         }
 
-        /* Exact Uncropped Image Mapping with Custom Lightning Timing: 3s flash -> 2s pause -> 2s flash */
+        /* Exact Uncropped Image Mapping with True Erratic Thunderstorm Flash Engine */
         .page-bg-container {
             position: fixed;
             inset: 0;
@@ -49,33 +49,54 @@
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
-            animation: customLightningCycle 7s infinite ease-in-out;
+            animation: realThunderstormSequence 9s infinite steps(1, end);
         }
 
-        /* Total cycle = 7 seconds: Flash 3s (0%–42%), Pause 2s (43%–71%), Flash 2s (72%–100%) */
-        @keyframes customLightningCycle {
-            0%, 43% {
+        /* Organic, erratic thunderstorm sequence: jagged multi-strikes, sudden flickers, and pauses */
+        @keyframes realThunderstormSequence {
+            0%, 12%, 16%, 38%, 42%, 45%, 70%, 100% {
                 filter: brightness(1) contrast(1) saturate(1);
             }
-            /* First long deadly flash (lasts 3 seconds of the cycle) */
-            5%, 15%, 25%, 35% {
-                filter: brightness(4.2) contrast(2.2) saturate(1.9) drop-shadow(0 0 120px rgba(230, 248, 255, 1));
+            /* First heavy strike: erratic double-flash with rapid jitter */
+            10% {
+                filter: brightness(4.5) contrast(2.4) saturate(2.0) drop-shadow(0 0 130px rgba(240, 250, 255, 1));
             }
-            10%, 20%, 30% {
-                filter: brightness(2.0) contrast(1.3);
+            11% {
+                filter: brightness(1.4) contrast(1.1);
             }
-            43.1%, 71% {
-                filter: brightness(1) contrast(1) saturate(1);
+            13% {
+                filter: brightness(3.8) contrast(2.0) saturate(1.7);
             }
-            /* Second flash (lasts 2 seconds of the cycle) */
-            75%, 85%, 95% {
-                filter: brightness(4.8) contrast(2.5) saturate(2.0) drop-shadow(0 0 140px rgba(255, 255, 255, 1));
+            14% {
+                filter: brightness(1.8) contrast(1.2);
             }
-            80%, 90% {
+            15% {
+                filter: brightness(5.0) contrast(2.6) saturate(2.2) drop-shadow(0 0 160px rgba(255, 255, 255, 1));
+            }
+            
+            /* Second long rolling flash sequence */
+            40% {
+                filter: brightness(4.2) contrast(2.2) saturate(1.8) drop-shadow(0 0 140px rgba(230, 245, 255, 1));
+            }
+            41% {
                 filter: brightness(2.2) contrast(1.4);
             }
-            100% {
-                filter: brightness(1) contrast(1) saturate(1);
+            43% {
+                filter: brightness(3.5) contrast(1.9);
+            }
+            44% {
+                filter: brightness(1.5) contrast(1.1);
+            }
+
+            /* Third sharp sudden strike */
+            68% {
+                filter: brightness(4.8) contrast(2.5) saturate(2.1) drop-shadow(0 0 150px rgba(255, 255, 255, 1));
+            }
+            69% {
+                filter: brightness(1.2) contrast(1.0);
+            }
+            71% {
+                filter: brightness(3.2) contrast(1.7);
             }
         }
 
@@ -382,7 +403,7 @@
 </head>
 <body>
 
-    <!-- Custom Timing Lightning Image & Slanted Rain FX -->
+    <!-- True Thunderstorm Lightning Image & Slanted Rain FX -->
     <div class="page-bg-container"></div>
     <canvas id="rain-canvas"></canvas>
 

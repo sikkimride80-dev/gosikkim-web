@@ -40,14 +40,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 12px 10px;
+            padding: 0;
+            overflow-x: hidden;
         }
 
         .top-lang-edit-btn {
             position: fixed;
             top: 12px;
             right: 12px;
-            z-index: 50;
+            z-index: 100;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--border-color);
             padding: 6px 12px;
@@ -81,7 +82,24 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            transition: height 0.3s ease;
+            transition: all 0.3s ease;
+        }
+
+        /* OUTER BOUNDARY DASHBOARD FRAME OVERRIDE */
+        .container.outer-boundary-mode {
+            width: 100vw;
+            max-width: 100%;
+            min-height: 100vh;
+            min-height: 100dvh;
+            border-radius: 0;
+            border: none;
+            background: transparent;
+            backdrop-filter: none;
+            box-shadow: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .app-brand {
@@ -98,6 +116,7 @@
             opacity: 1;
             transform: translateY(0) scale(1);
             transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            width: 100%;
         }
 
         .step-content.fade-out {
@@ -375,29 +394,34 @@
 
         .btn-continue:active { transform: scale(0.98); }
 
-        /* RE-STRUCTURED EDGE-TO-EDGE DASHBOARD STYLES */
-        .dashboard-container { 
-            text-align: left; 
-            margin: -24px -16px -20px -16px;
-            padding-bottom: 50px;
+        /* OUTER BOUNDARY ATTACHED DASHBOARD STYLES */
+        .outer-dashboard-layout {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100vh;
+            min-height: 100dvh;
+            width: 100%;
             position: relative;
-            min-height: 380px;
         }
 
-        /* TOP BOUNDARY ATTACHED BAR */
-        .top-attached-active-banner {
-            padding: 10px 14px;
+        /* TOP OUTER BOUNDARY ATTACHED HEADER BAR */
+        .top-outer-boundary-bar {
+            width: 100%;
+            padding: 12px 16px;
             background: rgba(0, 255, 102, 0.08);
             border-bottom: 1px solid var(--accent-green);
             display: flex;
             align-items: center;
             justify-content: space-between;
+            backdrop-filter: blur(12px);
         }
 
         .top-boundary-left {
             display: flex;
             flex-direction: column;
             gap: 2px;
+            text-align: left;
         }
 
         .active-status-badge {
@@ -418,7 +442,7 @@
         .top-boundary-center {
             font-size: 11px;
             font-weight: 900;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
             background: linear-gradient(90deg, #00f3ff, #ff007f, #ffd700);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -449,16 +473,17 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* PROFILE & TOP EXP ATTACHED BOUNDARY BAR */
+        /* PROFILE & TOP EXP OUTER BOUNDARY BAR */
         .dash-user-profile-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 14px 10px 14px;
+            padding: 16px 16px 12px 16px;
+            width: 100%;
         }
 
         .dash-user-title {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 800;
             color: var(--text-light);
             letter-spacing: 0.5px;
@@ -468,7 +493,7 @@
         }
 
         .voice-speaker-icon {
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
             transition: transform 0.2s ease;
         }
@@ -481,31 +506,43 @@
             color: var(--accent-yellow);
             background: rgba(255, 215, 0, 0.15);
             border: 1px solid var(--accent-yellow);
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 12px;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
         }
 
-        /* BLANK DASHBOARD WELCOME HERO */
+        /* MIDDLE MAIN CONTENT WRAPPER */
+        .outer-dashboard-content {
+            flex-grow: 1;
+            padding: 10px 16px 80px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 480px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* BLANK DASHBOARD HERO */
         .blank-dashboard-hero {
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             border: 1px dashed var(--border-color);
-            border-radius: 16px;
-            padding: 26px 14px;
-            margin: 10px 14px;
+            border-radius: 20px;
+            padding: 30px 16px;
             text-align: center;
             color: var(--text-dim);
+            backdrop-filter: blur(10px);
         }
 
         /* POPUP PANEL TAB SECTIONS */
         .dashboard-popup-panel {
             background: rgba(15, 17, 26, 0.98);
             border: 1.5px solid var(--border-color);
-            border-radius: 18px;
-            padding: 16px;
-            margin: 10px 14px;
+            border-radius: 20px;
+            padding: 20px 16px 16px 16px;
             position: relative;
             animation: panelPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            backdrop-filter: blur(16px);
         }
 
         @keyframes panelPopup {
@@ -515,15 +552,15 @@
 
         .panel-close-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 14px;
+            right: 14px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid var(--border-color);
             color: var(--text-light);
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             display: flex;
@@ -533,28 +570,28 @@
 
         /* STREAK SECTION STYLES */
         .streak-section-header {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 800;
             color: var(--text-light);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-right: 28px;
+            padding-right: 30px;
         }
 
         .streak-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 14px;
         }
 
         .streak-day-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 6px 2px;
+            border-radius: 12px;
+            padding: 8px 4px;
             text-align: center;
             position: relative;
         }
@@ -578,8 +615,8 @@
             opacity: 0.85;
         }
 
-        .streak-day-title { font-size: 9px; font-weight: 800; color: var(--text-dim); margin-bottom: 2px; }
-        .streak-day-exp { font-size: 11px; font-weight: 900; color: var(--text-light); }
+        .streak-day-title { font-size: 10px; font-weight: 800; color: var(--text-dim); margin-bottom: 2px; }
+        .streak-day-exp { font-size: 12px; font-weight: 900; color: var(--text-light); }
         .streak-day-card.unlocked .streak-day-exp { color: var(--accent-yellow); }
 
         .streak-status-badge {
@@ -598,29 +635,29 @@
         .cooldown-info-card {
             background: rgba(0, 243, 255, 0.05);
             border: 1px solid rgba(0, 243, 255, 0.2);
-            border-radius: 10px;
-            padding: 8px 10px;
+            border-radius: 12px;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .cooldown-text { font-size: 10px; color: var(--text-dim); font-weight: 600; }
-        .cooldown-timer { font-family: monospace; font-size: 12px; font-weight: 800; color: var(--accent-cyan); }
+        .cooldown-text { font-size: 11px; color: var(--text-dim); font-weight: 600; }
+        .cooldown-timer { font-family: monospace; font-size: 13px; font-weight: 800; color: var(--accent-cyan); }
 
         /* MY DASHBOARD OPTIONS GRID */
         .my-dash-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-top: 4px;
+            gap: 10px;
+            margin-top: 6px;
         }
 
         .my-dash-tile {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px 8px;
+            border-radius: 14px;
+            padding: 14px 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -631,9 +668,9 @@
             background: rgba(0, 243, 255, 0.1);
         }
 
-        .my-dash-tile-icon { font-size: 22px; margin-bottom: 4px; }
-        .my-dash-tile-title { font-size: 11px; font-weight: 800; color: var(--text-light); }
-        .my-dash-tile-sub { font-size: 9px; color: var(--text-dim); margin-top: 2px; }
+        .my-dash-tile-icon { font-size: 24px; margin-bottom: 6px; }
+        .my-dash-tile-title { font-size: 12px; font-weight: 800; color: var(--text-light); }
+        .my-dash-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
 
         /* NOTIFICATION RINGING BELL WITH RED DOT */
         .claim-nav-wrapper {
@@ -671,20 +708,20 @@
             80% { transform: rotate(10deg) scale(1.1); }
         }
 
-        /* BOTTOM ATTACHED BOUNDARY NAVIGATION BAR */
-        .bottom-dash-nav-bar {
-            position: absolute;
+        /* BOTTOM OUTER BOUNDARY ATTACHED NAVIGATION BAR */
+        .bottom-outer-boundary-bar {
+            position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             background: rgba(15, 17, 26, 0.98);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
             border-top: 1px solid var(--border-color);
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 8px 10px;
-            z-index: 20;
+            padding: 10px 16px;
+            z-index: 50;
         }
 
         .dash-nav-item {
@@ -695,11 +732,11 @@
             background: transparent;
             border: none;
             color: var(--text-dim);
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 700;
             cursor: pointer;
-            padding: 4px 10px;
-            border-radius: 10px;
+            padding: 6px 14px;
+            border-radius: 12px;
             transition: all 0.2s ease;
         }
 
@@ -708,14 +745,14 @@
             background: rgba(0, 243, 255, 0.12);
         }
 
-        .dash-nav-icon { font-size: 15px; }
+        .dash-nav-icon { font-size: 16px; }
 
         .modal-overlay {
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(8px);
-            z-index: 100;
+            z-index: 200;
             display: flex;
             align-items: flex-end;
             justify-content: center;
@@ -834,13 +871,13 @@
 </head>
 <body>
 
-    <button class="top-lang-edit-btn" onclick="openLanguageModal()">
+    <button class="top-lang-edit-btn" id="topLangBtn" onclick="openLanguageModal()">
         <span>🌐</span>
         <span id="topLangBadge">English</span>
         <span>✏️</span>
     </button>
 
-    <div class="container">
+    <div class="container" id="mainContainer">
         <div class="app-brand" id="brandTitleHeader">Smilings</div>
 
         <!-- STEP 1 CONTENT SECTION -->
@@ -1050,12 +1087,12 @@
             </button>
         </div>
 
-        <!-- STEP 6: FULLY FITTED EDGE-TO-EDGE DASHBOARD -->
+        <!-- STEP 6: OUTER BOUNDARY DASHBOARD -->
         <div id="step6Box" class="step-content hidden">
-            <div class="dashboard-container">
+            <div class="outer-dashboard-layout">
                 
-                <!-- TOP ATTACHED BOUNDARY BAR -->
-                <div class="top-attached-active-banner">
+                <!-- TOP OUTER BOUNDARY ATTACHED HEADER BAR -->
+                <div class="top-outer-boundary-bar">
                     <div class="top-boundary-left">
                         <div class="active-status-badge">
                             <span>●</span>
@@ -1074,77 +1111,80 @@
                     </div>
                 </div>
 
-                <!-- PROFILE ROW & TOP RIGHT ATTACHED EXP BOUNDARY BADGE -->
+                <!-- PROFILE ROW & TOP RIGHT ATTACHED EXP OUTER BOUNDARY BADGE -->
                 <div class="dash-user-profile-bar">
                     <div class="dash-user-title">
                         <span id="dashUserPhoneVal">+91 XXXXXXXXXX</span>
                         <span class="voice-speaker-icon" onclick="voiceOutMobileNumber()" title="Listen to Mobile Number">🔊</span>
                     </div>
 
-                    <!-- EXP attached to top right boundary -->
+                    <!-- EXP attached to top right outer boundary -->
                     <div class="dash-user-exp-top-right" id="userTotalExpVal">⚡ 100 EXP</div>
                 </div>
 
-                <!-- BLANK DEFAULT DASHBOARD VIEW -->
-                <div id="blankDashboardView" class="blank-dashboard-hero">
-                    <div style="font-size: 24px; margin-bottom: 4px;">✨</div>
-                    <div style="font-size: 12px; font-weight: 700; color: var(--text-light); margin-bottom: 2px;">Welcome to Your Dashboard</div>
-                    <div style="font-size: 10px;">Select an option from the bottom menu bar below to begin.</div>
+                <!-- MIDDLE MAIN DASHBOARD CONTENT SECTION -->
+                <div class="outer-dashboard-content">
+                    <!-- BLANK DEFAULT DASHBOARD HERO -->
+                    <div id="blankDashboardView" class="blank-dashboard-hero">
+                        <div style="font-size: 26px; margin-bottom: 6px;">✨</div>
+                        <div style="font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 2px;">Welcome to Your Dashboard</div>
+                        <div style="font-size: 11px;">Select an option from the bottom menu bar below to begin.</div>
+                    </div>
+
+                    <!-- POPUP PANEL TAB 1: CLAIM DAILY (7-Day Streak System) -->
+                    <div id="claimDailyTabContent" class="dashboard-popup-panel hidden">
+                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
+                        
+                        <div class="streak-section-header">
+                            <span>🔥 Daily Sign-In Streak</span>
+                            <span style="font-size: 10px; color: var(--accent-cyan);" id="streakDaysCount">0 / 7 Days</span>
+                        </div>
+
+                        <div class="streak-grid" id="streakGrid">
+                            <!-- Dynamic 7-Day Cards Rendered via JS -->
+                        </div>
+
+                        <div class="cooldown-info-card" id="cooldownCard">
+                            <div class="cooldown-text" id="cooldownLabelText">Next reward available:</div>
+                            <div class="cooldown-timer" id="cooldownTimerVal">READY NOW</div>
+                        </div>
+                    </div>
+
+                    <!-- POPUP PANEL TAB 2: MY DASHBOARD (Main Options Hub) -->
+                    <div id="myDashboardTabContent" class="dashboard-popup-panel hidden">
+                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
+
+                        <div class="streak-section-header">
+                            <span>📊 My Dashboard Hub</span>
+                        </div>
+                        
+                        <div class="my-dash-grid">
+                            <div class="my-dash-tile" onclick="alert('Opening Account Security Profile...')">
+                                <div class="my-dash-tile-icon">🛡️</div>
+                                <div class="my-dash-tile-title">Security & IP</div>
+                                <div class="my-dash-tile-sub">Device Fingerprint</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Opening Reward History...')">
+                                <div class="my-dash-tile-icon">📜</div>
+                                <div class="my-dash-tile-title">EXP Records</div>
+                                <div class="my-dash-tile-sub">Streak Logs</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Opening Language Settings...')">
+                                <div class="my-dash-tile-icon">🌐</div>
+                                <div class="my-dash-tile-title">Language</div>
+                                <div class="my-dash-tile-sub">Regional Settings</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Opening Support Hub...')">
+                                <div class="my-dash-tile-icon">🎧</div>
+                                <div class="my-dash-tile-title">Support</div>
+                                <div class="my-dash-tile-sub">Help & FAQ</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- POPUP PANEL TAB 1: CLAIM DAILY (7-Day Streak System) -->
-                <div id="claimDailyTabContent" class="dashboard-popup-panel hidden">
-                    <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
-                    
-                    <div class="streak-section-header">
-                        <span>🔥 Daily Sign-In Streak</span>
-                        <span style="font-size: 10px; color: var(--accent-cyan);" id="streakDaysCount">0 / 7 Days</span>
-                    </div>
-
-                    <div class="streak-grid" id="streakGrid">
-                        <!-- Dynamic 7-Day Cards Rendered via JS -->
-                    </div>
-
-                    <div class="cooldown-info-card" id="cooldownCard">
-                        <div class="cooldown-text" id="cooldownLabelText">Next reward available:</div>
-                        <div class="cooldown-timer" id="cooldownTimerVal">READY NOW</div>
-                    </div>
-                </div>
-
-                <!-- POPUP PANEL TAB 2: MY DASHBOARD (Main Options Hub) -->
-                <div id="myDashboardTabContent" class="dashboard-popup-panel hidden">
-                    <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
-
-                    <div class="streak-section-header">
-                        <span>📊 My Dashboard Hub</span>
-                    </div>
-                    
-                    <div class="my-dash-grid">
-                        <div class="my-dash-tile" onclick="alert('Opening Account Security Profile...')">
-                            <div class="my-dash-tile-icon">🛡️</div>
-                            <div class="my-dash-tile-title">Security & IP</div>
-                            <div class="my-dash-tile-sub">Device Fingerprint</div>
-                        </div>
-                        <div class="my-dash-tile" onclick="alert('Opening Reward History...')">
-                            <div class="my-dash-tile-icon">📜</div>
-                            <div class="my-dash-tile-title">EXP Records</div>
-                            <div class="my-dash-tile-sub">Streak Logs</div>
-                        </div>
-                        <div class="my-dash-tile" onclick="alert('Opening Language Settings...')">
-                            <div class="my-dash-tile-icon">🌐</div>
-                            <div class="my-dash-tile-title">Language</div>
-                            <div class="my-dash-tile-sub">Regional Settings</div>
-                        </div>
-                        <div class="my-dash-tile" onclick="alert('Opening Support Hub...')">
-                            <div class="my-dash-tile-icon">🎧</div>
-                            <div class="my-dash-tile-title">Support</div>
-                            <div class="my-dash-tile-sub">Help & FAQ</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BOTTOM ATTACHED BOUNDARY NAVIGATION BAR -->
-                <div class="bottom-dash-nav-bar">
+                <!-- BOTTOM OUTER BOUNDARY ATTACHED NAVIGATION BAR -->
+                <div class="bottom-outer-boundary-bar">
                     <button type="button" class="dash-nav-item" id="navClaimBtn" onclick="switchDashboardTab('claimDaily')">
                         <div class="claim-nav-wrapper">
                             <span class="dash-nav-icon">🔥</span>
@@ -1184,21 +1224,7 @@
 
 <script>
     const indianLanguages = [
-        { native: "English", english: "English", state: "Default / Auto", code: "en",
-          translations: { 
-              title: "Select your preferred language for the app", 
-              sub: "Every text and feature in the app will adapt to your chosen language", 
-              continue: "CONTINUE", 
-              step2Title: "Enter your registered mobile number", 
-              step2Sub: "We will send a security code to verify your mobile account",
-              step3Title: "Create a secure password",
-              step3Sub: "Set a password to protect your account and re-enter to confirm",
-              step5Title: "Sign in to your account",
-              step5Sub: "Enter your registered mobile number and password to access Smilings",
-              step5Btn: "SIGN IN",
-              modalTitle: "Choose Your State / Preferred Language" 
-          } 
-        },
+        { native: "English", english: "English", state: "Default / Auto", code: "en" },
         { native: "हिंदी", english: "Hindi", state: "National / UP, MP, Bihar, Delhi, RJ, HP, UK", code: "hi" },
         { native: "বাংলা", english: "Bengali", state: "West Bengal, Tripura, Andaman", code: "bn" },
         { native: "తెలుగు", english: "Telugu", state: "Andhra Pradesh, Telangana", code: "te" },
@@ -1406,6 +1432,7 @@
 
             currentStep = 6;
             document.getElementById('brandTitleHeader').classList.add('hidden');
+            document.getElementById('mainContainer').classList.add('outer-boundary-mode');
             document.getElementById('dashUserPhoneVal').innerText = "+91 " + mobileNum;
 
             step6.classList.remove('hidden');
@@ -1587,6 +1614,7 @@
 
             currentStep = 6;
             document.getElementById('brandTitleHeader').classList.add('hidden');
+            document.getElementById('mainContainer').classList.add('outer-boundary-mode');
             const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
             if (savedAcc && savedAcc.mobile) {
                 document.getElementById('dashUserPhoneVal').innerText = "+91 " + savedAcc.mobile;
@@ -1639,6 +1667,7 @@
 
             currentStep = 6;
             document.getElementById('brandTitleHeader').classList.add('hidden');
+            document.getElementById('mainContainer').classList.add('outer-boundary-mode');
             document.getElementById('dashUserPhoneVal').innerText = "+91 " + mobile;
 
             step6.classList.remove('hidden');
@@ -1816,6 +1845,7 @@
 
             currentStep = 5;
             document.getElementById('brandTitleHeader').classList.remove('hidden');
+            document.getElementById('mainContainer').classList.remove('outer-boundary-mode');
 
             const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
             if (savedAcc && savedAcc.mobile) {

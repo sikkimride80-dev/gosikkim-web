@@ -372,22 +372,6 @@
         .scan-label { color: var(--text-dim); }
         .scan-value { font-weight: 700; color: var(--accent-cyan); }
 
-        .rotatable-count-badge {
-            display: inline-block;
-            background: rgba(255, 0, 127, 0.2);
-            color: var(--accent-pink);
-            border: 1px solid var(--accent-pink);
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-weight: 800;
-            animation: pulseGlow 1.5s infinite ease-in-out;
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,0,127,0.5)); }
-            50% { transform: scale(1.08); filter: drop-shadow(0 0 10px rgba(255,0,127,0.9)); }
-        }
-
         .btn-continue {
             width: 100%;
             padding: 16px;
@@ -562,6 +546,34 @@
             font-weight: 800;
             color: var(--accent-cyan);
         }
+
+        /* MY DASHBOARD OPTIONS GRID */
+        .my-dash-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .my-dash-tile {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .my-dash-tile:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 243, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .my-dash-tile-icon { font-size: 26px; margin-bottom: 8px; }
+        .my-dash-tile-title { font-size: 13px; font-weight: 800; color: var(--text-light); }
+        .my-dash-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
 
         /* BOTTOM DASHBOARD MENU NAVIGATION BAR */
         .bottom-dash-nav-bar {
@@ -751,15 +763,15 @@
     <div class="container">
         <div class="app-brand">Smilings</div>
 
-        <!-- STEP 1 CONTENT SECTION -->
+        <!-- STEP 1 CONTENT SECTION (With Smart Environmental Scan) -->
         <div id="step1Box" class="step-content">
             <div id="step1InitScanBox">
                 <div class="radar-box">
                     <div class="radar-sweep-line"></div>
                     <span style="font-size: 24px;">🌐</span>
                 </div>
-                <div class="instruction-title" id="step1ScanTitle" style="color: var(--accent-cyan);">Checking Device & IP Security...</div>
-                <div class="instruction-sub" id="step1ScanSub">Matching user record history with network coordinates</div>
+                <div class="instruction-title" id="step1ScanTitle" style="color: var(--accent-cyan);">Scanning Device & Network...</div>
+                <div class="instruction-sub" id="step1ScanSub">Checking fingerprint, IP address, and location history</div>
 
                 <div class="scan-progress-bar-bg">
                     <div class="scan-progress-bar-fill" id="step1ProgressFill"></div>
@@ -869,7 +881,7 @@
             </div>
         </div>
 
-        <!-- STEP 5 CONTENT SECTION -->
+        <!-- STEP 5 CONTENT SECTION (Sign In) -->
         <div id="step5Box" class="step-content hidden">
             <div class="instruction-title" id="step5TitleText">Sign in to your account</div>
             <div class="instruction-sub" id="step5SubText">Enter your registered mobile number and password to access Smilings</div>
@@ -896,10 +908,10 @@
             </button>
         </div>
 
-        <!-- FORGOT PASSWORD RESET SCREEN -->
+        <!-- FORGOT / NEW DEVICE FORCED PASSWORD RESET SCREEN -->
         <div id="forgotPassBox" class="step-content hidden">
-            <div class="instruction-title">Reset Your Password</div>
-            <div class="instruction-sub">Enter your mobile number and set a new password</div>
+            <div class="instruction-title" id="resetScreenTitle">Security Verification Required</div>
+            <div class="instruction-sub" id="resetScreenSub">New device or network detected. Please create a new secure password.</div>
 
             <div class="phone-input-group">
                 <div class="country-code-prefix">
@@ -910,17 +922,17 @@
             </div>
 
             <div class="password-input-group">
-                <input type="password" id="newPassInput" class="password-input-field" placeholder="Enter new password (once)">
+                <input type="password" id="newPassInput" class="password-input-field" placeholder="Enter new password">
                 <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('newPassInput', this)">👁️</button>
             </div>
 
             <div class="password-input-group">
-                <input type="password" id="confirmNewPassInput" class="password-input-field" placeholder="Confirm new password (twice)">
+                <input type="password" id="confirmNewPassInput" class="password-input-field" placeholder="Confirm new password">
                 <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('confirmNewPassInput', this)">👁️</button>
             </div>
 
             <button type="button" class="btn-continue" onclick="submitPasswordReset()">
-                SUBMIT NEW PASSWORD
+                UPDATE & SECURE ACCOUNT
             </button>
         </div>
 
@@ -953,8 +965,8 @@
                 </div>
             </div>
 
-            <button type="button" class="btn-continue hidden" id="resetCompleteBtn" onclick="returnFromResetToStep5()">
-                CONTINUE TO SIGN IN
+            <button type="button" class="btn-continue hidden" id="resetCompleteBtn" onclick="returnFromResetToDashboard()">
+                CONTINUE TO DASHBOARD
             </button>
         </div>
 
@@ -966,9 +978,9 @@
                 <div class="top-attached-active-banner">
                     <div class="active-banner-label">
                         <span>●</span>
-                        <span>SESSION ACTIVE</span>
+                        <span>SESSION SECURED</span>
                     </div>
-                    <div class="active-banner-sub">Auto-logout if app is left</div>
+                    <div class="active-banner-sub">Same Device & Network Verified</div>
                 </div>
 
                 <!-- User Profile Header -->
@@ -997,16 +1009,33 @@
                     </div>
                 </div>
 
-                <!-- MENU TAB 2: MY DASHBOARD (Placeholder for next features) -->
+                <!-- MENU TAB 2: MY DASHBOARD (Main Options Hub) -->
                 <div id="myDashboardTabContent" class="hidden">
                     <div class="streak-section-header">
-                        <span>📊 My Dashboard</span>
+                        <span>📊 My Dashboard Hub</span>
                     </div>
                     
-                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed var(--border-color); border-radius: 16px; padding: 24px 16px; text-align: center; color: var(--text-dim);">
-                        <div style="font-size: 28px; margin-bottom: 8px;">🚀</div>
-                        <div style="font-size: 14px; font-weight: 700; color: var(--text-light); margin-bottom: 4px;">Dashboard Features Ready</div>
-                        <div style="font-size: 12px;">Tell me what features, stats, or options to build inside this section!</div>
+                    <div class="my-dash-grid">
+                        <div class="my-dash-tile" onclick="alert('Opening Account Security Profile...')">
+                            <div class="my-dash-tile-icon">🛡️</div>
+                            <div class="my-dash-tile-title">Security & IP</div>
+                            <div class="my-dash-tile-sub">Device Fingerprint</div>
+                        </div>
+                        <div class="my-dash-tile" onclick="alert('Opening Reward History...')">
+                            <div class="my-dash-tile-icon">📜</div>
+                            <div class="my-dash-tile-title">EXP Records</div>
+                            <div class="my-dash-tile-sub">Streak Logs</div>
+                        </div>
+                        <div class="my-dash-tile" onclick="alert('Opening Language Settings...')">
+                            <div class="my-dash-tile-icon">🌐</div>
+                            <div class="my-dash-tile-title">Language</div>
+                            <div class="my-dash-tile-sub">Regional Settings</div>
+                        </div>
+                        <div class="my-dash-tile" onclick="alert('Opening Support Hub...')">
+                            <div class="my-dash-tile-icon">🎧</div>
+                            <div class="my-dash-tile-title">Support</div>
+                            <div class="my-dash-tile-sub">Help & FAQ</div>
+                        </div>
                     </div>
                 </div>
 
@@ -1020,7 +1049,7 @@
                         <span class="dash-nav-icon">📊</span>
                         <span>My Dashboard</span>
                     </button>
-                    <button type="button" class="dash-nav-item" style="color: var(--accent-pink);" onclick="triggerAutoLogout()">
+                    <button type="button" class="dash-nav-item" style="color: var(--accent-pink);" onclick="manualLogout()">
                         <span class="dash-nav-icon">🚪</span>
                         <span>Logout</span>
                     </button>
@@ -1108,7 +1137,7 @@
     let userIP = "103.22.180.12";
     let userFingerprint = "";
     let passwordChangeCount = 1;
-    let appLeftTimestamp = null;
+    const currentLocation = "Gangtok, Sikkim, India";
 
     /* 7-DAY STREAK SYSTEM DATA */
     const streakRewards = [
@@ -1243,6 +1272,7 @@
         }
     }
 
+    /* STEP 1 SMART ENVIRONMENTAL SCAN ENGINE */
     function runStep1InitialScan() {
         userFingerprint = generateFingerprint();
         fetchUserIPAndLocation();
@@ -1261,17 +1291,17 @@
             progressBar.style.width = progress + "%";
 
             if (elapsed < 2000) {
-                titleText.innerText = "Connecting Security Node...";
-                subText.innerText = "Reading device parameters...";
+                titleText.innerText = "Scanning Security Node...";
+                subText.innerText = "Analyzing device fingerprint & hardware...";
             } else if (elapsed < 4000) {
-                titleText.innerText = "Matching IP & Location Data...";
-                subText.innerText = "Checking existing user record database...";
+                titleText.innerText = "Matching IP & Location Database...";
+                subText.innerText = "Checking previous session records...";
                 document.getElementById('step1IpVal').innerText = userIP;
                 document.getElementById('step1FpVal').innerText = userFingerprint;
             } else {
-                titleText.innerText = "Verifying Location Coordinates...";
+                titleText.innerText = "Verifying GPS Coordinates...";
                 subText.innerText = "Matching regional network profile...";
-                document.getElementById('step1LocVal').innerText = "Gangtok, Sikkim, India";
+                document.getElementById('step1LocVal').innerText = currentLocation;
             }
 
             if (elapsed >= duration) {
@@ -1279,16 +1309,36 @@
 
                 const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
 
+                // Check if saved record exists
                 if (savedAcc && savedAcc.mobile && savedAcc.password) {
-                    titleText.innerText = "✓ RECORD MATCHED! REDIRECTING...";
-                    titleText.style.color = "var(--accent-green)";
-                    subText.innerText = "Recognized device. Skipping to Sign In screen...";
+                    // Compare current environment with stored environment
+                    const isSameDevice = (savedAcc.fingerprint === userFingerprint);
+                    const isSameIp = (savedAcc.ip === userIP);
+                    const isSameLoc = (savedAcc.location === currentLocation);
 
-                    setTimeout(() => {
-                        jumpDirectToStep5(savedAcc.mobile);
-                    }, 1000);
-                } else {
-                    titleText.innerText = "✓ SCAN COMPLETE - NEW DEVICE DETECTED";
+                    if (isSameDevice && isSameIp && isSameLoc) {
+                        // SAME DEVICE + SAME IP + SAME LOCATION -> BYPASS STEP 5 DIRECTLY TO DASHBOARD
+                        titleText.innerText = "✓ ENVIRONMENT MATCHED! AUTO-LOGGED IN";
+                        titleText.style.color = "var(--accent-green)";
+                        subText.innerText = "Same device and network detected. Entering dashboard...";
+
+                        setTimeout(() => {
+                            jumpDirectToDashboard(savedAcc.mobile);
+                        }, 1000);
+                    } else {
+                        // DIFFERENT DEVICE OR IP/LOCATION -> REQUIRE PASSWORD CREATION / NEW VERIFICATION
+                        titleText.innerText = "⚠ NEW DEVICE/NETWORK DETECTED";
+                        titleText.style.color = "var(--accent-yellow)";
+                        subText.innerText = "Environmental changes found. Password update required...";
+
+                        setTimeout(() => {
+                            jumpToNewPasswordVerification(savedAcc.mobile);
+                        }, 1200);
+                    }
+                } 
+                else {
+                    // FIRST TIME SIGNING UP -> FOLLOW STANDARD SEQUENCE
+                    titleText.innerText = "✓ SCAN COMPLETE - NEW USER DETECTED";
                     titleText.style.color = "var(--accent-cyan)";
                     subText.innerText = "Please choose language to start registration sequence...";
 
@@ -1302,9 +1352,9 @@
         }, 100);
     }
 
-    function jumpDirectToStep5(mobileNum) {
+    function jumpDirectToDashboard(mobileNum) {
         const step1 = document.getElementById('step1Box');
-        const step5 = document.getElementById('step5Box');
+        const step6 = document.getElementById('step6Box');
 
         step1.classList.add('fade-out');
 
@@ -1312,15 +1362,34 @@
             step1.classList.add('hidden');
             step1.classList.remove('fade-out');
 
-            currentStep = 5;
-            applyTranslations(selectedLang);
+            currentStep = 6;
+            document.getElementById('dashUserPhoneVal').innerText = "+91 " + mobileNum;
 
-            document.getElementById('step5MobileInput').value = mobileNum;
+            step6.classList.remove('hidden');
+            step6.classList.add('fade-in');
 
-            step5.classList.remove('hidden');
-            step5.classList.add('fade-in');
+            loadStreakData();
+            renderStreakGrid();
+        }, 350);
+    }
 
-            document.getElementById('step5PassInput').focus();
+    function jumpToNewPasswordVerification(mobileNum) {
+        const step1 = document.getElementById('step1Box');
+        const forgotBox = document.getElementById('forgotPassBox');
+
+        step1.classList.add('fade-out');
+
+        setTimeout(() => {
+            step1.classList.add('hidden');
+            step1.classList.remove('fade-out');
+
+            document.getElementById('resetMobileInput').value = mobileNum;
+            document.getElementById('resetScreenTitle').innerText = "New Device / Location Security Check";
+            document.getElementById('resetScreenSub').innerText = "Your IP/Location changed. Please create a new password to access your account.";
+
+            forgotBox.classList.remove('hidden');
+            forgotBox.classList.add('fade-in');
+            document.getElementById('newPassInput').focus();
         }, 350);
     }
 
@@ -1406,7 +1475,8 @@
             language: selectedLang.english,
             changeCount: 1,
             ip: userIP,
-            fingerprint: userFingerprint
+            fingerprint: userFingerprint,
+            location: currentLocation
         };
         localStorage.setItem('smilings_user_account', JSON.stringify(savedAccount));
 
@@ -1452,7 +1522,7 @@
             } else {
                 titleText.innerText = "Verifying Location Coordinates...";
                 subText.innerText = "Matching regional network profile...";
-                document.getElementById('scanLocVal').innerText = "Gangtok, Sikkim, India";
+                document.getElementById('scanLocVal').innerText = currentLocation;
             }
 
             if (elapsed >= duration) {
@@ -1462,15 +1532,15 @@
                 subText.innerText = "All security checks passed. Account initialized successfully!";
 
                 setTimeout(() => {
-                    goToStep5();
+                    goToDashboardFromRegistration();
                 }, 1200);
             }
         }, 100);
     }
 
-    function goToStep5() {
+    function goToDashboardFromRegistration() {
         const step4 = document.getElementById('step4Box');
-        const step5 = document.getElementById('step5Box');
+        const step6 = document.getElementById('step6Box');
 
         step4.classList.add('fade-out');
 
@@ -1478,18 +1548,17 @@
             step4.classList.add('hidden');
             step4.classList.remove('fade-out');
 
-            currentStep = 5;
-            applyTranslations(selectedLang);
-
+            currentStep = 6;
             const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
             if (savedAcc && savedAcc.mobile) {
-                document.getElementById('step5MobileInput').value = savedAcc.mobile;
+                document.getElementById('dashUserPhoneVal').innerText = "+91 " + savedAcc.mobile;
             }
 
-            step5.classList.remove('hidden');
-            step5.classList.add('fade-in');
+            step6.classList.remove('hidden');
+            step6.classList.add('fade-in');
 
-            document.getElementById('step5PassInput').focus();
+            loadStreakData();
+            renderStreakGrid();
         }, 350);
     }
 
@@ -1507,6 +1576,9 @@
             if (savedAcc && savedAcc.mobile) {
                 document.getElementById('resetMobileInput').value = savedAcc.mobile;
             }
+
+            document.getElementById('resetScreenTitle').innerText = "Reset Your Password";
+            document.getElementById('resetScreenSub').innerText = "Enter your mobile number and set a new password";
 
             forgotBox.classList.remove('hidden');
             forgotBox.classList.add('fade-in');
@@ -1540,6 +1612,9 @@
         savedAcc.mobile = mobile;
         savedAcc.password = pass1;
         savedAcc.changeCount = passwordChangeCount;
+        savedAcc.ip = userIP;
+        savedAcc.fingerprint = userFingerprint;
+        savedAcc.location = currentLocation;
         localStorage.setItem('smilings_user_account', JSON.stringify(savedAcc));
 
         const forgotBox = document.getElementById('forgotPassBox');
@@ -1600,9 +1675,9 @@
         }, 100);
     }
 
-    function returnFromResetToStep5() {
+    function returnFromResetToDashboard() {
         const resetScanBox = document.getElementById('resetScanBox');
-        const step5 = document.getElementById('step5Box');
+        const step6 = document.getElementById('step6Box');
 
         resetScanBox.classList.add('fade-out');
 
@@ -1610,22 +1685,21 @@
             resetScanBox.classList.add('hidden');
             resetScanBox.classList.remove('fade-out');
 
-            currentStep = 5;
-            applyTranslations(selectedLang);
-
+            currentStep = 6;
             const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
             if (savedAcc && savedAcc.mobile) {
-                document.getElementById('step5MobileInput').value = savedAcc.mobile;
-                document.getElementById('step5PassInput').value = "";
+                document.getElementById('dashUserPhoneVal').innerText = "+91 " + savedAcc.mobile;
             }
 
-            step5.classList.remove('hidden');
-            step5.classList.add('fade-in');
-            document.getElementById('step5PassInput').focus();
+            step6.classList.remove('hidden');
+            step6.classList.add('fade-in');
+
+            loadStreakData();
+            renderStreakGrid();
         }, 350);
     }
 
-    /* STEP 5 SIGN IN -> STEP 6 REVAMPED DASHBOARD */
+    /* STEP 5 SIGN IN */
     function submitStep5Login() {
         const mobile = document.getElementById('step5MobileInput').value;
         const pass = document.getElementById('step5PassInput').value;
@@ -1646,6 +1720,14 @@
             return;
         }
 
+        // Update environment fingerprint upon successful login
+        if (savedAcc) {
+            savedAcc.ip = userIP;
+            savedAcc.fingerprint = userFingerprint;
+            savedAcc.location = currentLocation;
+            localStorage.setItem('smilings_user_account', JSON.stringify(savedAcc));
+        }
+
         const step5 = document.getElementById('step5Box');
         const step6 = document.getElementById('step6Box');
 
@@ -1663,7 +1745,6 @@
 
             loadStreakData();
             renderStreakGrid();
-            setupBackgroundInactivityTracker();
         }, 350);
     }
 
@@ -1796,28 +1877,7 @@
         }, 1000);
     }
 
-    /* BACKGROUND INACTIVITY MONITOR (App Leave / Background Tab Switch) */
-    function setupBackgroundInactivityTracker() {
-        appLeftTimestamp = null;
-
-        document.addEventListener('visibilitychange', () => {
-            if (currentStep === 6) {
-                if (document.hidden) {
-                    appLeftTimestamp = Date.now();
-                } else {
-                    if (appLeftTimestamp) {
-                        const secondsAway = (Date.now() - appLeftTimestamp) / 1000;
-                        if (secondsAway >= 60) {
-                            triggerAutoLogout();
-                        }
-                        appLeftTimestamp = null;
-                    }
-                }
-            }
-        });
-    }
-
-    function triggerAutoLogout() {
+    function manualLogout() {
         const step6 = document.getElementById('step6Box');
         const step5 = document.getElementById('step5Box');
 

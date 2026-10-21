@@ -12,6 +12,7 @@
             --accent-cyan: #00f3ff;
             --accent-green: #00ff66;
             --accent-pink: #ff007f;
+            --accent-yellow: #ffd700;
             --bg-dark: #090a0f;
             --card-bg: rgba(20, 22, 32, 0.9);
             --text-light: #ffffff;
@@ -407,88 +408,160 @@
             transform: scale(0.98);
         }
 
-        .dashboard-container { text-align: left; }
+        /* REVAMPED DASHBOARD STYLES */
+        .dashboard-container { 
+            text-align: left; 
+            margin-top: -10px;
+        }
 
-        .dashboard-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
+        /* Top Boundary-Attached Active Session Warning Bar */
+        .top-attached-active-banner {
+            margin: -36px -22px 20px -22px;
             padding: 12px 16px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-        }
-
-        .user-welcome-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--text-light);
-        }
-
-        .user-status-pill {
-            font-size: 10px;
-            font-weight: 800;
-            background: rgba(0, 255, 102, 0.15);
-            color: var(--accent-green);
-            border: 1px solid var(--accent-green);
-            padding: 3px 8px;
-            border-radius: 12px;
-        }
-
-        .inactivity-timer-card {
-            background: rgba(0, 255, 102, 0.08);
-            border: 1px solid rgba(0, 255, 102, 0.25);
-            border-radius: 14px;
-            padding: 10px 14px;
+            background: rgba(0, 255, 102, 0.1);
+            border-bottom: 1px solid var(--accent-green);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 16px;
         }
 
-        .timer-label {
+        .active-banner-label {
             font-size: 11px;
-            font-weight: 700;
-            color: var(--text-dim);
+            font-weight: 800;
+            color: var(--accent-green);
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .timer-status-text {
-            font-family: monospace;
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--accent-green);
+        .active-banner-sub {
+            font-size: 10px;
+            color: var(--text-dim);
         }
 
-        .dashboard-grid {
+        .dash-user-profile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .dash-user-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .dash-user-exp {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent-yellow);
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid var(--accent-yellow);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        /* 7-DAY STREAK SECTION STYLES */
+        .streak-section-header {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .streak-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 10px;
             margin-bottom: 16px;
         }
 
-        .dash-tile {
+        .streak-day-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 14px;
+            border-radius: 14px;
+            padding: 10px 6px;
             text-align: center;
-            cursor: pointer;
+            position: relative;
             transition: all 0.2s ease;
         }
 
-        .dash-tile:hover {
+        .streak-day-card.featured {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(108, 92, 231, 0.25), rgba(0, 243, 255, 0.15));
             border-color: var(--accent-cyan);
-            background: rgba(0, 243, 255, 0.12);
-            transform: translateY(-2px);
         }
 
-        .dash-tile-icon { font-size: 24px; margin-bottom: 6px; }
-        .dash-tile-title { font-size: 12px; font-weight: 800; color: var(--text-light); }
-        .dash-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+        .streak-day-card.unlocked {
+            border-color: var(--accent-yellow);
+            background: rgba(255, 215, 0, 0.1);
+            cursor: pointer;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.25);
+        }
+
+        .streak-day-card.claimed {
+            border-color: var(--accent-green);
+            background: rgba(0, 255, 102, 0.08);
+            opacity: 0.85;
+        }
+
+        .streak-day-title {
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .streak-day-exp {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--text-light);
+        }
+
+        .streak-day-card.unlocked .streak-day-exp {
+            color: var(--accent-yellow);
+        }
+
+        .streak-status-badge {
+            font-size: 9px;
+            font-weight: 800;
+            margin-top: 6px;
+            padding: 2px 4px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .status-claimed { color: var(--accent-green); background: rgba(0, 255, 102, 0.15); }
+        .status-ready { color: #000; background: var(--accent-yellow); }
+        .status-locked { color: var(--text-dim); background: rgba(255, 255, 255, 0.08); }
+
+        .cooldown-info-card {
+            background: rgba(0, 243, 255, 0.05);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .cooldown-text {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+
+        .cooldown-timer {
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--accent-cyan);
+        }
 
         .modal-overlay {
             position: fixed;
@@ -844,51 +917,44 @@
             </button>
         </div>
 
-        <!-- STEP 6: MAIN APP DASHBOARD -->
+        <!-- STEP 6: REVAMPED MAIN APP DASHBOARD -->
         <div id="step6Box" class="step-content hidden">
             <div class="dashboard-container">
-                <div class="dashboard-header">
+                
+                <!-- Attached Active Session Banner directly at the top boundary -->
+                <div class="top-attached-active-banner">
+                    <div class="active-banner-label">
+                        <span>●</span>
+                        <span>SESSION ACTIVE</span>
+                    </div>
+                    <div class="active-banner-sub">Auto-logout if app is left</div>
+                </div>
+
+                <!-- User Profile Header -->
+                <div class="dash-user-profile">
                     <div>
-                        <div class="user-welcome-title">Welcome to Smilings</div>
-                        <div style="font-size: 11px; color: var(--text-dim);" id="dashUserPhoneVal">Mobile Verified</div>
+                        <div class="dash-user-title" id="dashUserPhoneVal">+91 XXXXXXXXXX</div>
+                        <div style="font-size: 11px; color: var(--text-dim);">Account Status: Active</div>
                     </div>
-                    <span class="user-status-pill">● ACTIVE</span>
+                    <div class="dash-user-exp" id="userTotalExpVal">⚡ 0 EXP</div>
                 </div>
 
-                <!-- App Leave / Background Inactivity Protection Card -->
-                <div class="inactivity-timer-card">
-                    <div class="timer-label">
-                        <span>🛡️ Session Status:</span>
-                    </div>
-                    <div class="timer-status-text" id="inactivityTimerVal">ACTIVE (Auto-logout if app is left)</div>
+                <!-- 7-Day Daily Sign-In Streak Section -->
+                <div class="streak-section-header">
+                    <span>📅 Daily Sign-In Streak</span>
+                    <span style="font-size: 11px; color: var(--accent-cyan);" id="streakDaysCount">0 / 7 Days</span>
                 </div>
 
-                <div class="dashboard-grid">
-                    <div class="dash-tile" onclick="alert('Opening Daily Rewards...')">
-                        <div class="dash-tile-icon">🎁</div>
-                        <div class="dash-tile-title">Daily Check-In</div>
-                        <div class="dash-tile-sub">Claim Points</div>
-                    </div>
-                    <div class="dash-tile" onclick="alert('Opening Games Section...')">
-                        <div class="dash-tile-icon">🎮</div>
-                        <div class="dash-tile-title">Games Hub</div>
-                        <div class="dash-tile-sub">10,000+ Games</div>
-                    </div>
-                    <div class="dash-tile" onclick="alert('Opening Live Chat & Rooms...')">
-                        <div class="dash-tile-icon">💬</div>
-                        <div class="dash-tile-title">Community</div>
-                        <div class="dash-tile-sub">Live Rooms</div>
-                    </div>
-                    <div class="dash-tile" onclick="alert('Opening Account Security Profile...')">
-                        <div class="dash-tile-icon">🛡️</div>
-                        <div class="dash-tile-title">Security</div>
-                        <div class="dash-tile-sub">IP & Hardware</div>
-                    </div>
+                <div class="streak-grid" id="streakGrid">
+                    <!-- Dynamic 7-Day Cards Rendered via JS -->
                 </div>
 
-                <button type="button" class="btn-continue" style="background: rgba(255, 0, 127, 0.25); border: 1px solid var(--accent-pink); margin-top: 6px;" onclick="triggerAutoLogout()">
-                    LOGOUT
-                </button>
+                <!-- 24-Hour Cooldown Timer Info Card -->
+                <div class="cooldown-info-card" id="cooldownCard">
+                    <div class="cooldown-text" id="cooldownLabelText">Next reward available:</div>
+                    <div class="cooldown-timer" id="cooldownTimerVal">READY NOW</div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -963,7 +1029,7 @@
         { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
         { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
         { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
-        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
+        { native: "নেपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
     ];
 
     let selectedLang = indianLanguages[0];
@@ -971,9 +1037,26 @@
     let userIP = "103.22.180.12";
     let userFingerprint = "";
     let passwordChangeCount = 1;
-
-    /* Left App Background Timer Variable */
     let appLeftTimestamp = null;
+
+    /* 7-DAY STREAK SYSTEM DATA */
+    const streakRewards = [
+        { day: 1, exp: 100 },
+        { day: 2, exp: 200 },
+        { day: 3, exp: 300 },
+        { day: 4, exp: 400 },
+        { day: 5, exp: 500 },
+        { day: 6, exp: 600 },
+        { day: 7, exp: 700 }
+    ];
+
+    let streakData = {
+        currentDay: 1,
+        totalExp: 0,
+        lastClaimTime: null
+    };
+
+    let cooldownTimerInterval = null;
 
     function renderLanguages(list) {
         const container = document.getElementById('languageList');
@@ -1471,7 +1554,7 @@
         }, 350);
     }
 
-    /* STEP 5 SIGN IN -> STEP 6 DASHBOARD */
+    /* STEP 5 SIGN IN -> STEP 6 REVAMPED DASHBOARD */
     function submitStep5Login() {
         const mobile = document.getElementById('step5MobileInput').value;
         const pass = document.getElementById('step5PassInput').value;
@@ -1507,26 +1590,138 @@
             step6.classList.remove('hidden');
             step6.classList.add('fade-in');
 
+            loadStreakData();
+            renderStreakGrid();
             setupBackgroundInactivityTracker();
         }, 350);
     }
 
-    /* BACKGROUND / APP-LEAVE INACTIVITY TRACKER */
+    /* 7-DAY STREAK & 24-HOUR COOLDOWN ENGINE */
+    function loadStreakData() {
+        const savedStreak = JSON.parse(localStorage.getItem('smilings_streak_data'));
+        if (savedStreak) {
+            streakData = savedStreak;
+        }
+        document.getElementById('userTotalExpVal').innerText = `⚡ ${streakData.totalExp} EXP`;
+        document.getElementById('streakDaysCount').innerText = `${Math.min(streakData.currentDay - 1, 7)} / 7 Days`;
+    }
+
+    function saveStreakData() {
+        localStorage.setItem('smilings_streak_data', JSON.stringify(streakData));
+        document.getElementById('userTotalExpVal').innerText = `⚡ ${streakData.totalExp} EXP`;
+        document.getElementById('streakDaysCount').innerText = `${Math.min(streakData.currentDay - 1, 7)} / 7 Days`;
+    }
+
+    function renderStreakGrid() {
+        const gridContainer = document.getElementById('streakGrid');
+        gridContainer.innerHTML = '';
+
+        const now = Date.now();
+        const cooldownMs = 24 * 60 * 60 * 1000; // 24 Hours in Milliseconds
+        let canClaimNext = true;
+
+        if (streakData.lastClaimTime && (now - streakData.lastClaimTime < cooldownMs)) {
+            canClaimNext = false;
+        }
+
+        streakRewards.forEach(item => {
+            const card = document.createElement('div');
+            card.className = `streak-day-card ${item.day === 7 ? 'featured' : ''}`;
+
+            let statusHtml = '';
+            
+            if (item.day < streakData.currentDay) {
+                // Already Claimed
+                card.classList.add('claimed');
+                statusHtml = `<span class="streak-status-badge status-claimed">✓ CLAIMED</span>`;
+            } else if (item.day === streakData.currentDay) {
+                if (canClaimNext) {
+                    // Ready to Claim
+                    card.classList.add('unlocked');
+                    card.onclick = () => claimDayReward(item);
+                    statusHtml = `<span class="streak-status-badge status-ready">CLAIM NOW</span>`;
+                } else {
+                    // In 24-Hour Cooldown
+                    card.classList.add('locked');
+                    statusHtml = `<span class="streak-status-badge status-locked">COOLDOWN</span>`;
+                }
+            } else {
+                // Future Days
+                card.classList.add('locked');
+                statusHtml = `<span class="streak-status-badge status-locked">LOCKED</span>`;
+            }
+
+            card.innerHTML = `
+                <div class="streak-day-title">Day ${item.day}</div>
+                <div class="streak-day-exp">+${item.exp} EXP</div>
+                ${statusHtml}
+            `;
+
+            gridContainer.appendChild(card);
+        });
+
+        updateCooldownTimer();
+    }
+
+    function claimDayReward(item) {
+        streakData.totalExp += item.exp;
+        streakData.lastClaimTime = Date.now();
+        streakData.currentDay = streakData.currentDay >= 7 ? 1 : streakData.currentDay + 1;
+
+        saveStreakData();
+        renderStreakGrid();
+
+        alert(`🎉 Day ${item.day} Reward Claimed!\n\nYou earned +${item.exp} EXP.\n\nNext day reward unlocks after a 24-hour cooldown!`);
+    }
+
+    function updateCooldownTimer() {
+        const cooldownCard = document.getElementById('cooldownCard');
+        const timerVal = document.getElementById('cooldownTimerVal');
+        const labelText = document.getElementById('cooldownLabelText');
+
+        if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
+
+        if (!streakData.lastClaimTime) {
+            labelText.innerText = "Status:";
+            timerVal.innerText = "DAY 1 READY TO CLAIM";
+            return;
+        }
+
+        const cooldownMs = 24 * 60 * 60 * 1000;
+
+        cooldownTimerInterval = setInterval(() => {
+            const now = Date.now();
+            const elapsed = now - streakData.lastClaimTime;
+            const remaining = cooldownMs - elapsed;
+
+            if (remaining <= 0) {
+                clearInterval(cooldownTimerInterval);
+                labelText.innerText = "Status:";
+                timerVal.innerText = `DAY ${streakData.currentDay} UNLOCKED!`;
+                renderStreakGrid();
+            } else {
+                const hours = Math.floor(remaining / (1000 * 60 * 60));
+                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+
+                labelText.innerText = `Day ${streakData.currentDay} Cooldown:`;
+                timerVal.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+    }
+
+    /* BACKGROUND INACTIVITY MONITOR (App Leave / Background Tab Switch) */
     function setupBackgroundInactivityTracker() {
         appLeftTimestamp = null;
 
-        // Listen for user leaving tab or hiding the browser
         document.addEventListener('visibilitychange', () => {
             if (currentStep === 6) {
                 if (document.hidden) {
-                    // User left the web app tab -> record timestamp
                     appLeftTimestamp = Date.now();
                 } else {
-                    // User returned to the web app tab
                     if (appLeftTimestamp) {
                         const secondsAway = (Date.now() - appLeftTimestamp) / 1000;
                         if (secondsAway >= 60) {
-                            // Away for more than 1 minute -> trigger auto logout to Step 5
                             triggerAutoLogout();
                         }
                         appLeftTimestamp = null;

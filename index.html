@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smilings - Step 1: Select Language</title>
+    <title>Smilings - Step 1 & 2</title>
     <style>
         :root {
             --primary: #6c5ce7;
             --primary-hover: #5b4bc4;
-            --accent-glow: rgba(108, 92, 231, 0.35);
+            --accent-glow: rgba(108, 92, 231, 0.4);
             --bg-dark: #090a0f;
             --card-bg: rgba(20, 22, 32, 0.9);
             --text-light: #ffffff;
@@ -77,6 +77,8 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
             text-align: center;
             position: relative;
+            overflow: hidden;
+            transition: height 0.3s ease;
         }
 
         .app-brand {
@@ -101,9 +103,40 @@
             margin-bottom: 22px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            transition: all 0.3s ease;
         }
 
-        /* Question Title & Subtitle */
+        /* Magical Step Transition Animation Styles */
+        .step-content {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .step-content.fade-out {
+            opacity: 0;
+            transform: translateY(-12px) scale(0.96);
+            pointer-events: none;
+        }
+
+        .step-content.fade-in {
+            animation: magicAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes magicAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(16px) scale(0.95);
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* Step 1 Elements */
         .instruction-title {
             font-size: 17px;
             font-weight: 800;
@@ -160,6 +193,74 @@
 
         .dropdown-arrow.open {
             transform: rotate(180deg);
+        }
+
+        /* Step 2 Phone Input Box Styling */
+        .phone-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid var(--border-color);
+            border-radius: 16px;
+            padding: 4px 8px;
+            margin-bottom: 24px;
+            transition: all 0.2s ease;
+        }
+
+        .phone-input-group:focus-within {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.12);
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .country-code-prefix {
+            font-size: 16px;
+            font-weight: 800;
+            color: #a29bfe;
+            padding: 12px 10px 12px 12px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .phone-input-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-light);
+            font-size: 17px;
+            font-weight: 700;
+            padding: 12px;
+            letter-spacing: 1px;
+        }
+
+        .phone-input-field::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+            letter-spacing: 0;
+            font-size: 14px;
+        }
+
+        .btn-continue {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 24px var(--accent-glow);
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+        }
+
+        .btn-continue:active {
+            transform: scale(0.98);
         }
 
         /* Modal Overlay & Bottom Sheet */
@@ -298,24 +399,7 @@
             overflow: hidden;
         }
 
-        .btn-continue {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-            color: var(--text-light);
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 8px 24px var(--accent-glow);
-            letter-spacing: 0.5px;
-            transition: all 0.2s;
-        }
-
-        .btn-continue:active {
-            transform: scale(0.98);
-        }
+        .hidden { display: none !important; }
 
         @media (min-width: 600px) {
             .modal-overlay {
@@ -346,23 +430,43 @@
         <div class="app-brand">Smilings</div>
         <div class="step-badge" id="stepBadgeText">Step 1 of Unlimited</div>
 
-        <!-- Language Question Title & Description -->
-        <div class="instruction-title" id="titleText">Select your preferred language for the app</div>
-        <div class="instruction-sub" id="subText">Every text and feature in the app will adapt to your chosen language</div>
+        <!-- STEP 1 CONTENT SECTION -->
+        <div id="step1Box" class="step-content">
+            <div class="instruction-title" id="titleText">Select your preferred language for the app</div>
+            <div class="instruction-sub" id="subText">Every text and feature in the app will adapt to your chosen language</div>
 
-        <div class="language-box-wrapper">
-            <button type="button" class="language-select-trigger" onclick="openLanguageModal()">
-                <div class="selected-lang-display">
-                    <span style="font-size: 18px;">🌐</span>
-                    <span id="currentLangLabel">English (Auto)</span>
-                </div>
-                <span class="dropdown-arrow" id="dropdownArrow">▼</span>
+            <div class="language-box-wrapper">
+                <button type="button" class="language-select-trigger" onclick="openLanguageModal()">
+                    <div class="selected-lang-display">
+                        <span style="font-size: 18px;">🌐</span>
+                        <span id="currentLangLabel">English (Auto)</span>
+                    </div>
+                    <span class="dropdown-arrow" id="dropdownArrow">▼</span>
+                </button>
+            </div>
+
+            <button type="button" class="btn-continue" id="continueBtnText" onclick="goToStep2()">
+                CONTINUE
             </button>
         </div>
 
-        <button type="button" class="btn-continue" id="continueBtnText" onclick="proceedToNextStep()">
-            CONTINUE
-        </button>
+        <!-- STEP 2 CONTENT SECTION (Magically Appears) -->
+        <div id="step2Box" class="step-content hidden">
+            <div class="instruction-title" id="step2TitleText">Enter your registered mobile number</div>
+            <div class="instruction-sub" id="step2SubText">We will send a security code to verify your mobile account</div>
+
+            <div class="phone-input-group">
+                <div class="country-code-prefix">
+                    <span>🇮🇳</span>
+                    <span>+91</span>
+                </div>
+                <input type="tel" id="mobileInput" class="phone-input-field" placeholder="Enter 10-digit number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
+            </div>
+
+            <button type="button" class="btn-continue" id="step2ContinueBtn" onclick="submitMobileStep2()">
+                CONTINUE
+            </button>
+        </div>
     </div>
 
     <!-- Language Selection Bottom Sheet Modal -->
@@ -385,33 +489,85 @@
     // Exhaustive List of Indian State Languages, Dialects & Translations
     const indianLanguages = [
         { native: "English", english: "English", state: "Default / Auto", code: "en",
-          translations: { title: "Select your preferred language for the app", sub: "Every text and feature in the app will adapt to your chosen language", continue: "CONTINUE", step: "Step 1 of Unlimited", modalTitle: "Choose Your State / Preferred Language" } },
+          translations: { 
+              title: "Select your preferred language for the app", 
+              sub: "Every text and feature in the app will adapt to your chosen language", 
+              continue: "CONTINUE", 
+              step1: "Step 1 of Unlimited", 
+              step2: "Step 2 of Unlimited", 
+              step2Title: "Enter your registered mobile number", 
+              step2Sub: "We will send a security code to verify your mobile account",
+              modalTitle: "Choose Your State / Preferred Language" 
+          } 
+        },
         { native: "हिंदी", english: "Hindi", state: "National / UP, MP, Bihar, Delhi, RJ, HP, UK", code: "hi",
-          translations: { title: "ऐप के लिए अपनी पसंदीदा भाषा चुनें", sub: "ऐप का हर शब्द आपकी चुनी हुई भाषा में प्रदर्शित होगा", continue: "आगे बढ़ें", step: "असीमित में से चरण 1", modalTitle: "अपनी राज्य या पसंदीदा भाषा चुनें" } },
+          translations: { 
+              title: "ऐप के लिए अपनी पसंदीदा भाषा चुनें", 
+              sub: "ऐप का हर शब्द आपकी चुनी हुई भाषा में प्रदर्शित होगा", 
+              continue: "आगे बढ़ें", 
+              step1: "असीमित में से चरण 1", 
+              step2: "असीमित में से चरण 2", 
+              step2Title: "अपना पंजीकृत मोबाइल नंबर दर्ज करें", 
+              step2Sub: "आपके मोबाइल खाते को सत्यापित करने के लिए हम सुरक्षा कोड भेजेंगे",
+              modalTitle: "अपनी राज्य या पसंदीदा भाषा चुनें" 
+          } 
+        },
         { native: "বাংলা", english: "Bengali", state: "West Bengal, Tripura, Andaman", code: "bn",
-          translations: { title: "অ্যাপের জন্য আপনার পছন্দের ভাষা নির্বাচন করুন", sub: "অ্যাপের প্রতিটি শব্দ আপনার নির্বাচিত ভাষায় পরিবর্তিত হবে", continue: "এগিয়ে যান", step: "ধাপ ১ (আনলিমিটেড)", modalTitle: "আপনার রাজ্য বা পছন্দসই ভাষা বেছে নিন" } },
+          translations: { 
+              title: "অ্যাপের জন্য আপনার পছন্দের ভাষা নির্বাচন করুন", 
+              sub: "অ্যাপের প্রতিটি শব্দ আপনার নির্বাচিত ভাষায় পরিবর্তিত হবে", 
+              continue: "এগিয়ে যান", 
+              step1: "ধাপ ১ (আনলিমিটেড)", 
+              step2: "ধাপ ২ (আনলিমিটেড)", 
+              step2Title: "আপনার নিবন্ধিত মোবাইল নম্বর লিখুন", 
+              step2Sub: "আপনার মোবাইল অ্যাকাউন্ট যাচাই করতে আমরা একটি নিরাপত্তা কোড পাঠাব",
+              modalTitle: "আপনার রাজ্য বা পছন্দসই ভাষা বেছে নিন" 
+          } 
+        },
         { native: "తెలుగు", english: "Telugu", state: "Andhra Pradesh, Telangana", code: "te",
-          translations: { title: "యాప్ కోసం మీ ప్రాధాన్య భాషను ఎంచుకోండి", sub: "యాప్‌లోని ప్రతి అక్షరం మీరు ఎంచుకున్న భాషలోకి మారుతుంది", continue: "కొనసాగించండి", step: "అపరిమితంలో దశ 1", modalTitle: "మీ రాష్ట్రం లేదా ప్రాధాన్య భాషను ఎంచుకోండి" } },
+          translations: { 
+              title: "యాప్ కోసం మీ ప్రాధాన్య భాషను ఎంచుకోండి", 
+              sub: "యాప్‌లోని ప్రతి అక్షరం మీరు ఎంచుకున్న భాషలోకి మారుతుంది", 
+              continue: "కొనసాగించండి", 
+              step1: "అపరిమితంలో దశ 1", 
+              step2: "అపరిమితంలో దశ 2", 
+              step2Title: "మీ రిజిస్టర్డ్ మొబైల్ నంబర్‌ను నమోదు చేయండి", 
+              step2Sub: "మీ మొబైల్ ఖాతాను నిరూపించడానికి మేము కోడ్‌ను పంపుతాము",
+              modalTitle: "మీ రాష్ట్రం లేదా ప్రాధాన్య భాషను ఎంచుకోండి" 
+          } 
+        },
         { native: "मराठी", english: "Marathi", state: "Maharashtra, Goa", code: "mr",
-          translations: { title: "ॲपसाठी तुमची पसंतीची भाषा निवडा", sub: "ॲपमधील प्रत्येक शब्द तुमच्या निवडलेल्या भाषेत दिसेल", continue: "पुढे जा", step: "अमर्याद पैकी टप्पा १", modalTitle: "तुमची राज्य किंवा पसंतीची भाषा निवडा" } },
+          translations: { 
+              title: "ॲपसाठी तुमची पसंतीची भाषा निवडा", 
+              sub: "ॲपमधील प्रत्येक शब्द तुमच्या निवडलेल्या भाषेत दिसेल", 
+              continue: "पुढे जा", 
+              step1: "अमर्याद पैकी टप्पा १", 
+              step2: "अमर्याद पैकी टप्पा २", 
+              step2Title: "तुमचा नोंदणीकृत मोबाईल नंबर टाका", 
+              step2Sub: "तुमचे मोबाईल खाते सत्यापित करण्यासाठी आम्ही सुरक्षा कोड पाठवू",
+              modalTitle: "तुमची राज्य किंवा पसंतीची भाषा निवडा" 
+          } 
+        },
         { native: "தமிழ்", english: "Tamil", state: "Tamil Nadu, Puducherry", code: "ta",
-          translations: { title: "செயலிக்கு உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்", sub: "செயலியின் அனைத்து எழுத்துக்களும் உங்கள் மொழியில் மாறும்", continue: "தொடரவும்", step: "வரம்பற்றதில் படி 1", modalTitle: "உங்கள் மாநிலம் அல்லது மொழியைத் தேர்ந்தெடுக்கவும்" } },
-        { native: "اردو", english: "Urdu", state: "Telangana, UP, J&K, Bihar", code: "ur",
-          translations: { title: "ایپ کے لیے اپنی پسندیدہ زبان منتخب کریں", sub: "ایپ کے تمام الفاظ آپ کی منتخب کردہ زبان میں دکھائے جائیں گے", continue: "آگے بڑھیں", step: "لا محدود کا پہلا مرحلہ", modalTitle: "اپنی ریاست یا زبان منتخب کریں" } },
-        { native: "ગુજરાતી", english: "Gujarati", state: "Gujarat, Daman & Diu", code: "gu",
-          translations: { title: "એપ્લિકેશન માટે તમારી પસંદગીની ભાષા પસંદ કરો", sub: "એપ્લિકેશનનો દરેક અક્ષર તમારી પસંદ કરેલી ભાષામાં બદલાઈ જશે", continue: "આગળ વધો", step: "અનલિમિટેડ પૈકી સ્ટેપ 1", modalTitle: "તમારી રાજ્ય અથવા પસંદગીની ભાષા પસંદ કરો" } },
-        { native: "ಕನ್ನಡ", english: "Kannada", state: "Karnataka", code: "kn",
-          translations: { title: "ಆಪ್‌ಗಾಗಿ ನಿಮ್ಮ ಆದ್ಯತೆಯ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ", sub: "ಆಪ್‌ನ ಪ್ರತಿಯೊಂದು ಪಠ್ಯವು ನೀವು ಆಯ್ಕೆ ಮಾಡಿದ ಭಾಷೆಗೆ ಬದಲಾಗುತ್ತದೆ", continue: "ಮುಂದುವರಿಯಿರಿ", step: "ಅపరిಮಿತ ಹಂತಗಳಲ್ಲಿ ಹಂತ 1", modalTitle: "ನಿಮ್ಮ ರಾಜ್ಯ ಅಥವಾ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ" } },
-        { native: "മലയാളം", english: "Malayalam", state: "Kerala, Lakshadweep", code: "ml",
-          translations: { title: "ആപ്പിനായി നിങ്ങളുടെ ഇഷ്ടമുള്ള ഭാഷ തിരഞ്ഞെടുക്കുക", sub: "ആപ്പിലെ ഓരോ വാക്കും നിങ്ങൾ തിരഞ്ഞെടുത്ത ഭാഷയിലാകും", continue: "തുടരുക", step: "അപരിമിത ഘട്ടങ്ങളിൽ ഘട്ടം 1", modalTitle: "നിങ്ങളുടെ സംസ്ഥാനം അല്ലെങ്കിൽ ഭാഷ തിരഞ്ഞെടുക്കുക" } },
-        { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or",
-          translations: { title: "ଆପ୍ ପାଇଁ ଆପଣଙ୍କ ପସନ୍ଦର ଭାଷା ବାଛନ୍ତୁ", sub: "ଆପ୍ ର ସମସ୍ତ ଶବ୍ଦ ଆପଣଙ୍କ ମନୋନୀତ ଭାଷାରେ ଦେଖାଯିବ", continue: "ଆଗକୁ ବଢନ୍ତୁ", step: "ଅସୀମିତ ମଧ୍ୟରୁ ପ୍ରଥମ ପଦକ୍ଷେପ", modalTitle: "ଆପଣଙ୍କ ରାଜ୍ୟ କିମ୍ବା ଭାଷା ବାଛନ୍ତୁ" } },
-        { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa",
-          translations: { title: "ਐਪ ਲਈ ਆਪਣੀ ਪਸੰਦੀਦਾ ਭਾਸ਼ਾ ਚੁਣੋ", sub: "ਐਪ ਦਾ ਹਰ ਸ਼ਬਦ ਤੁਹਾਡੀ ਚੁਣੀ ਹੋਈ ਭਾਸ਼ਾ ਵਿੱਚ ਬਦਲ ਜਾਵੇਗਾ", continue: "ਅੱਗੇ ਵਧੋ", step: "ਅਸੀਮਤ ਵਿੱਚੋਂ ਪੜਾਅ 1", modalTitle: "ਆਪਣੀ ਰਾਜ ਜਾਂ ਪਸੰਦੀਦਾ ਭਾਸ਼ਾ ਚੁਣੋ" } },
-        { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as",
-          translations: { title: "অ্যাপৰ বাবে আপোনাৰ পছন্দৰ ভাষা বাছনি কৰক", sub: "অ্যাপৰ প্ৰতিটো শব্দ আপোনাৰ নিৰ্বাচিত ভাষালৈ সলনি হ'ব", continue: "আগবাঢ়ক", code: "as", step: "অসীমিতৰ প্ৰথম পদক্ষেপ", modalTitle: "আপোনাৰ ৰাজ্য বা পছন্দৰ ভাষা বাছক" } },
-        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne",
-          translations: { title: "एपका लागि आफ्नो मनपर्ने भाषा छान्नुहोस्", sub: "एपको प्रत्येक शब्द तपाईंले रोज्नुभएको भाषामा परिवर्तन हुनेछ", continue: "अघि बढ्नुहोस्", step: "अनगिन्ती मध्ये चरण १", modalTitle: "आफ्नो राज्य वा भाषा छान्नुहोस्" } },
+          translations: { 
+              title: "செயலிக்கு உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்", 
+              sub: "செயலியின் அனைத்து எழுத்துக்களும் உங்கள் மொழியில் மாறும்", 
+              continue: "தொடரவும்", 
+              step1: "வரம்பற்றதில் படி 1", 
+              step2: "வரம்பற்றதில் படி 2", 
+              step2Title: "உங்கள் பதிவுசெய்த மொபைல் எண்ணை உள்ளிடவும்", 
+              step2Sub: "உங்கள் மொபைல் கணக்கைச் சரிபார்க்க நாங்கள் குறியீட்டை அனுப்புவோம்",
+              modalTitle: "உங்கள் மாநிலம் அல்லது மொழியைத் தேர்ந்தெடுக்கவும்" 
+          } 
+        },
+        { native: "اردو", english: "Urdu", state: "Telangana, UP, J&K, Bihar", code: "ur" },
+        { native: "ગુજરાતી", english: "Gujarati", state: "Gujarat, Daman & Diu", code: "gu" },
+        { native: "કન્નડ", english: "Kannada", state: "Karnataka", code: "kn" },
+        { native: "മലയാളം", english: "Malayalam", state: "Kerala, Lakshadweep", code: "ml" },
+        { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
+        { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
+        { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
+        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" },
         { native: "मैथिली", english: "Maithili", state: "Bihar, Jharkhand", code: "mai" },
         { native: "संथाली", english: "Santali", state: "Jharkhand, Odisha, WB", code: "sat" },
         { native: "कश्मीरी", english: "Kashmiri", state: "Jammu & Kashmir", code: "ks" },
@@ -435,6 +591,7 @@
     ];
 
     let selectedLang = indianLanguages[0];
+    let currentStep = 1;
 
     function renderLanguages(list) {
         const container = document.getElementById('languageList');
@@ -491,15 +648,26 @@
             title: `App Preferred Language: ${item.english}`,
             sub: "Every text and feature in the app will adapt to your chosen language",
             continue: "CONTINUE",
-            step: "Step 1 of Unlimited",
+            step1: "Step 1 of Unlimited",
+            step2: "Step 2 of Unlimited",
+            step2Title: "Enter your registered mobile number",
+            step2Sub: "We will send a security code to verify your mobile account",
             modalTitle: "Choose Your State / Preferred Language"
         };
 
         document.getElementById('titleText').innerText = t.title;
         document.getElementById('subText').innerText = t.sub;
         document.getElementById('continueBtnText').innerText = t.continue;
-        document.getElementById('stepBadgeText').innerText = t.step;
+        document.getElementById('step2ContinueBtn').innerText = t.continue;
         document.getElementById('modalTitleText').innerText = t.modalTitle;
+        
+        if (currentStep === 1) {
+            document.getElementById('stepBadgeText').innerText = t.step1;
+        } else {
+            document.getElementById('stepBadgeText').innerText = t.step2;
+            document.getElementById('step2TitleText').innerText = t.step2Title;
+            document.getElementById('step2SubText').innerText = t.step2Sub;
+        }
     }
 
     function filterLanguages() {
@@ -512,8 +680,44 @@
         renderLanguages(filtered);
     }
 
-    function proceedToNextStep() {
-        alert(`Step 1 Completed!\nSelected Language: ${selectedLang.english} (${selectedLang.native}).\n\nReady to build Step 2 when you give the word!`);
+    /* Magical Transition from Step 1 to Step 2 */
+    function goToStep2() {
+        const step1 = document.getElementById('step1Box');
+        const step2 = document.getElementById('step2Box');
+        const badge = document.getElementById('stepBadgeText');
+
+        // Fade out Step 1
+        step1.classList.add('fade-out');
+
+        setTimeout(() => {
+            step1.classList.add('hidden');
+            step1.classList.remove('fade-out');
+
+            // Update step badge text
+            currentStep = 2;
+            applyTranslations(selectedLang);
+
+            // Magically appear Step 2
+            step2.classList.remove('hidden');
+            step2.classList.add('fade-in');
+
+            // Focus on phone input field automatically
+            document.getElementById('mobileInput').focus();
+        }, 350);
+    }
+
+    /* Only allow numeric input up to 10 digits */
+    function validateMobileInput(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+    function submitMobileStep2() {
+        const mobile = document.getElementById('mobileInput').value;
+        if (mobile.length !== 10) {
+            alert("Please enter a valid 10-digit mobile number!");
+            return;
+        }
+        alert(`Step 2 Completed!\nMobile Number: +91 ${mobile}\n\nReady for Step 3 whenever you instruct!`);
     }
 
     window.addEventListener('DOMContentLoaded', () => {

@@ -1,770 +1,1586 @@
-```html
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-[#090a0f]">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Smilings - Secure Web Platform</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Inter -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              purple: '#8b5cf6',
-              cyan: '#06b6d4',
-              dark: '#090a0f',
-              card: 'rgba(17, 24, 39, 0.75)',
-              border: 'rgba(139, 92, 246, 0.3)'
-            }
-          },
-          animation: {
-            'pulse-glow': 'pulseGlow 2s infinite alternate',
-            'spin-slow': 'spin 8s linear infinite',
-            'scan-line': 'scanLine 2s ease-in-out infinite'
-          },
-          keyframes: {
-            pulseGlow: {
-              '0%': { boxShadow: '0 0 15px rgba(139, 92, 246, 0.3)' },
-              '100%': { boxShadow: '0 0 30px rgba(6, 182, 212, 0.6)' }
-            },
-            scanLine: {
-              '0%': { top: '0%' },
-              '50%': { top: '100%' },
-              '100%': { top: '0%' }
-            }
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smilings</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-hover: #5b4bc4;
+            --accent-glow: rgba(108, 92, 231, 0.4);
+            --accent-cyan: #00f3ff;
+            --accent-green: #00ff66;
+            --accent-pink: #ff007f;
+            --bg-dark: #090a0f;
+            --card-bg: rgba(20, 22, 32, 0.9);
+            --text-light: #ffffff;
+            --text-dim: #9aa0b4;
+            --border-color: rgba(255, 255, 255, 0.12);
         }
-      }
-    }
-  </script>
 
-  <style>
-    body {
-      font-family: 'Inter', sans-serif;
-    }
-    .glass-card {
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(139, 92, 246, 0.25);
-    }
-    .glow-shadow {
-      box-shadow: 0 0 25px -5px rgba(139, 92, 246, 0.3), 0 0 15px -5px rgba(6, 182, 212, 0.2);
-    }
-    /* Radar Scan Effect */
-    .radar-sweep {
-      background: conic-gradient(from 0deg, transparent 0deg, transparent 270deg, rgba(6, 182, 212, 0.4) 360deg);
-    }
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #090a0f;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #374151;
-      border-radius: 3px;
-    }
-  </style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(108, 92, 231, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(0, 243, 255, 0.12) 0%, transparent 45%);
+            color: var(--text-light);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 16px;
+        }
+
+        .top-lang-edit-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            color: var(--text-light);
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .top-lang-edit-btn:hover {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.2);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 440px;
+            background: var(--card-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 36px 22px 30px 22px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+
+        .app-brand {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7, #00f3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+        }
+
+        .step-content {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .step-content.fade-out {
+            opacity: 0;
+            transform: translateY(-12px) scale(0.96);
+            pointer-events: none;
+        }
+
+        .step-content.fade-in {
+            animation: magicAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes magicAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(16px) scale(0.95);
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .instruction-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .instruction-sub {
+            font-size: 13px;
+            color: var(--text-dim);
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .language-box-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .language-select-trigger {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid var(--border-color);
+            padding: 16px;
+            border-radius: 16px;
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .language-select-trigger:hover {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.12);
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .selected-lang-display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dropdown-arrow {
+            font-size: 12px;
+            color: var(--text-dim);
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-arrow.open {
+            transform: rotate(180deg);
+        }
+
+        .phone-input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid var(--border-color);
+            border-radius: 16px;
+            padding: 4px 8px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .phone-input-group:focus-within {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.12);
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .country-code-prefix {
+            font-size: 16px;
+            font-weight: 800;
+            color: #a29bfe;
+            padding: 12px 10px 12px 12px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .phone-input-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-light);
+            font-size: 17px;
+            font-weight: 700;
+            padding: 12px;
+            letter-spacing: 1px;
+        }
+
+        .phone-input-field::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+            letter-spacing: 0;
+            font-size: 14px;
+        }
+
+        .password-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid var(--border-color);
+            border-radius: 16px;
+            padding: 4px 12px;
+            margin-bottom: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .password-input-group:focus-within {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.12);
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .password-input-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 40px 12px 4px;
+        }
+
+        .password-input-field::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .eye-toggle-btn {
+            position: absolute;
+            right: 14px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .eye-toggle-btn:hover {
+            color: var(--text-light);
+        }
+
+        .forgot-pass-wrapper {
+            text-align: right;
+            margin: -4px 4px 16px 0;
+        }
+
+        .forgot-pass-link {
+            color: #a29bfe;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-pass-link:hover {
+            color: var(--accent-cyan);
+            text-decoration: underline;
+        }
+
+        .radar-box {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 18px auto;
+            border-radius: 50%;
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 243, 255, 0.05);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.2);
+        }
+
+        .radar-sweep-line {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border-top: 2px solid var(--accent-cyan);
+            border-right: 2px solid transparent;
+            animation: radarRotate 1.2s linear infinite;
+        }
+
+        @keyframes radarRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .scan-progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 16px 0 12px 0;
+        }
+
+        .scan-progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+
+        .scan-details-card {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(0, 243, 255, 0.25);
+            border-radius: 14px;
+            padding: 12px;
+            margin-top: 12px;
+            text-align: left;
+            font-family: monospace;
+            font-size: 11px;
+            color: #d0d0f0;
+        }
+
+        .scan-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .scan-info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .scan-label { color: var(--text-dim); }
+        .scan-value { font-weight: 700; color: var(--accent-cyan); }
+
+        .rotatable-count-badge {
+            display: inline-block;
+            background: rgba(255, 0, 127, 0.2);
+            color: var(--accent-pink);
+            border: 1px solid var(--accent-pink);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 800;
+            animation: pulseGlow 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,0,127,0.5)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 10px rgba(255,0,127,0.9)); }
+        }
+
+        .btn-continue {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 8px 24px var(--accent-glow);
+            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-continue:active {
+            transform: scale(0.98);
+        }
+
+        .dashboard-container { text-align: left; }
+
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+        }
+
+        .user-welcome-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .user-status-pill {
+            font-size: 10px;
+            font-weight: 800;
+            background: rgba(0, 255, 102, 0.15);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            padding: 3px 8px;
+            border-radius: 12px;
+        }
+
+        .inactivity-timer-card {
+            background: rgba(255, 0, 127, 0.1);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            border-radius: 14px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .timer-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .timer-countdown {
+            font-family: monospace;
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--accent-pink);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .dash-tile {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dash-tile:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 243, 255, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .dash-tile-icon { font-size: 24px; margin-bottom: 6px; }
+        .dash-tile-title { font-size: 12px; font-weight: 800; color: var(--text-light); }
+        .dash-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .language-modal {
+            width: 100%;
+            max-width: 480px;
+            background: #121420;
+            border-top-left-radius: 28px;
+            border-top-right-radius: 28px;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            max-height: 82vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        .modal-overlay.active .language-modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-light);
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-light);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--text-light);
+            font-size: 14px;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        .search-box:focus { border-color: var(--primary); }
+
+        .language-list {
+            overflow-y: auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-right: 4px;
+        }
+
+        .language-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .language-item:hover, .language-item.selected {
+            background: rgba(108, 92, 231, 0.18);
+            border-color: var(--primary);
+        }
+
+        .lang-names { text-align: left; }
+        .lang-native { font-size: 14px; font-weight: 700; color: var(--text-light); }
+        .lang-english { font-size: 12px; color: var(--text-dim); }
+
+        .state-tag {
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-dim);
+            padding: 3px 8px;
+            border-radius: 6px;
+            max-width: 140px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .hidden { display: none !important; }
+
+        @media (min-width: 600px) {
+            .modal-overlay { align-items: center; }
+            .language-modal {
+                border-radius: 28px;
+                border-bottom: 1px solid var(--border-color);
+                max-height: 72vh;
+                transform: scale(0.9);
+            }
+            .modal-overlay.active .language-modal { transform: scale(1); }
+        }
+    </style>
 </head>
-<body class="h-full text-slate-100 bg-[#090a0f] relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
+<body>
 
-  <!-- Ambient Glow Background Spheres -->
-  <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
-  <div class="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-cyan-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+    <button class="top-lang-edit-btn" onclick="openLanguageModal()">
+        <span>🌐</span>
+        <span id="topLangBadge">English</span>
+        <span>✏️</span>
+    </button>
 
-  <!-- Main Dynamic Wrapper -->
-  <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 relative z-10">
+    <div class="container">
+        <div class="app-brand">Smilings</div>
 
-    <!-- Toast Notification Banner -->
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none"></div>
+        <!-- STEP 1 CONTENT SECTION -->
+        <div id="step1Box" class="step-content">
+            <div id="step1InitScanBox">
+                <div class="radar-box">
+                    <div class="radar-sweep-line"></div>
+                    <span style="font-size: 24px;">🌐</span>
+                </div>
+                <div class="instruction-title" id="step1ScanTitle" style="color: var(--accent-cyan);">Checking Device & IP Security...</div>
+                <div class="instruction-sub" id="step1ScanSub">Matching user record history with network coordinates</div>
 
-    <!-- MAIN APP CONTAINER -->
-    <div id="app-card" class="w-full max-w-md glass-card rounded-2xl glow-shadow p-6 sm:p-8 transition-all duration-500">
+                <div class="scan-progress-bar-bg">
+                    <div class="scan-progress-bar-fill" id="step1ProgressFill"></div>
+                </div>
 
-      <!-- APP HEADER -->
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-tr from-purple-600 to-cyan-500 mb-3 shadow-lg shadow-purple-500/30">
-          <i class="fa-solid fa-smile-beam text-2xl text-white"></i>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-cyan-400 to-white bg-clip-text text-transparent">
-          Smilings
-        </h1>
-        <p id="sub-header" class="text-xs text-slate-400 mt-1">Next-Gen Identity & Security Platform</p>
-      </div>
-
-      <!-- ================= STEP 0: INITIAL SYSTEM RADAR SCAN ================= -->
-      <div id="step-0-scan" class="flex flex-col items-center justify-center py-6 text-center">
-        <div class="relative w-36 h-36 mb-6 flex items-center justify-center">
-          <!-- Animated Radar Circles -->
-          <div class="absolute inset-0 rounded-full border border-cyan-500/20 animate-ping"></div>
-          <div class="absolute inset-2 rounded-full border border-purple-500/30"></div>
-          <div class="absolute inset-6 rounded-full border border-slate-700"></div>
-          <!-- Rotating Radar Sweep -->
-          <div class="absolute inset-0 rounded-full radar-sweep animate-spin"></div>
-          <i class="fa-solid fa-fingerprint text-3xl text-cyan-400 relative z-10"></i>
-        </div>
-        <h3 id="scan-title" class="text-lg font-semibold text-slate-200 mb-1">Scanning System Environment...</h3>
-        <p id="scan-status" class="text-xs text-cyan-400/80 font-mono">Checking Device Fingerprint & IP Location</p>
-        
-        <!-- Progress Bar -->
-        <div class="w-full bg-slate-800 h-1.5 rounded-full mt-6 overflow-hidden">
-          <div id="scan-progress" class="bg-gradient-to-r from-purple-500 to-cyan-400 h-full w-0 transition-all duration-300"></div>
-        </div>
-        <div class="mt-4 text-[11px] text-slate-500 flex justify-between w-full font-mono">
-          <span>IP: 192.168.1.104</span>
-          <span id="scan-countdown">6s remaining</span>
-        </div>
-      </div>
-
-      <!-- ================= STEP 1: LANGUAGE SELECTION ================= -->
-      <div id="step-1-lang" class="hidden">
-        <h2 class="text-lg font-semibold text-center mb-1">Select Your Language</h2>
-        <p class="text-xs text-slate-400 text-center mb-6">Choose your preferred interface language</p>
-        
-        <div class="space-y-3 mb-6">
-          <button onclick="selectLanguage('English')" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-purple-900/30 border border-slate-700/60 hover:border-purple-500/50 transition">
-            <span class="flex items-center gap-3 font-medium text-sm">
-              <span class="text-lg">🇺🇸</span> English (US)
-            </span>
-            <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
-          </button>
-          <button onclick="selectLanguage('Spanish')" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-purple-900/30 border border-slate-700/60 hover:border-purple-500/50 transition">
-            <span class="flex items-center gap-3 font-medium text-sm">
-              <span class="text-lg">🇪🇸</span> Español
-            </span>
-            <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
-          </button>
-          <button onclick="selectLanguage('Hindi')" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-purple-900/30 border border-slate-700/60 hover:border-purple-500/50 transition">
-            <span class="flex items-center gap-3 font-medium text-sm">
-              <span class="text-lg">🇮🇳</span> हिन्दी (Hindi)
-            </span>
-            <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- ================= STEP 2: MOBILE NUMBER ================= -->
-      <div id="step-2-mobile" class="hidden">
-        <h2 class="text-lg font-semibold text-center mb-1">Enter Mobile Number</h2>
-        <p class="text-xs text-slate-400 text-center mb-6">We will use this for security authentication</p>
-
-        <form onsubmit="handleMobileSubmit(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Mobile Phone Number</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 text-sm font-semibold">+1</span>
-              <input type="tel" id="signup-mobile" required placeholder="(555) 000-0000" class="w-full pl-10 pr-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm text-slate-100 placeholder-slate-600 outline-none transition" />
+                <div class="scan-details-card">
+                    <div class="scan-info-row">
+                        <span class="scan-label">IP Address:</span>
+                        <span class="scan-value" id="step1IpVal">Detecting...</span>
+                    </div>
+                    <div class="scan-info-row">
+                        <span class="scan-label">Fingerprint:</span>
+                        <span class="scan-value" id="step1FpVal">Generating...</span>
+                    </div>
+                    <div class="scan-info-row">
+                        <span class="scan-label">Location:</span>
+                        <span class="scan-value" id="step1LocVal">Locating GPS...</span>
+                    </div>
+                </div>
             </div>
-          </div>
-          <button type="submit" class="w-full py-3 bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white text-sm font-semibold rounded-xl shadow-lg shadow-purple-500/25 transition">
-            Continue Registration
-          </button>
-        </form>
-      </div>
 
-      <!-- ================= STEP 3: CREATE PASSWORD ================= -->
-      <div id="step-3-password" class="hidden">
-        <h2 class="text-lg font-semibold text-center mb-1">Create Password</h2>
-        <p class="text-xs text-slate-400 text-center mb-6">Set up a strong password for your account</p>
+            <div id="step1LangContent" class="hidden">
+                <div class="instruction-title" id="titleText">Select your preferred language for the app</div>
+                <div class="instruction-sub" id="subText">Every text and feature in the app will adapt to your chosen language</div>
 
-        <form onsubmit="handleCreatePassword(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">New Password</label>
-            <div class="relative">
-              <input type="password" id="create-pass" required placeholder="••••••••" class="w-full pl-4 pr-10 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm text-slate-100 outline-none" />
-              <button type="button" onclick="togglePasswordVisibility('create-pass', 'eye-3a')" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200">
-                <i id="eye-3a" class="fa-solid fa-eye"></i>
-              </button>
+                <div class="language-box-wrapper">
+                    <button type="button" class="language-select-trigger" onclick="openLanguageModal()">
+                        <div class="selected-lang-display">
+                            <span style="font-size: 18px;">🌐</span>
+                            <span id="currentLangLabel">English (Auto)</span>
+                        </div>
+                        <span class="dropdown-arrow" id="dropdownArrow">▼</span>
+                    </button>
+                </div>
+
+                <button type="button" class="btn-continue" id="continueBtnText" onclick="goToStep2()">
+                    CONTINUE
+                </button>
             </div>
-          </div>
+        </div>
 
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Confirm Password</label>
-            <div class="relative">
-              <input type="password" id="confirm-pass" required placeholder="••••••••" class="w-full pl-4 pr-10 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm text-slate-100 outline-none" />
-              <button type="button" onclick="togglePasswordVisibility('confirm-pass', 'eye-3b')" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200">
-                <i id="eye-3b" class="fa-solid fa-eye"></i>
-              </button>
+        <!-- STEP 2 CONTENT SECTION -->
+        <div id="step2Box" class="step-content hidden">
+            <div class="instruction-title" id="step2TitleText">Enter your registered mobile number</div>
+            <div class="instruction-sub" id="step2SubText">We will send a security code to verify your mobile account</div>
+
+            <div class="phone-input-group">
+                <div class="country-code-prefix">
+                    <span>🇮🇳</span>
+                    <span>+91</span>
+                </div>
+                <input type="tel" id="mobileInput" class="phone-input-field" placeholder="Enter 10-digit number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
             </div>
-          </div>
 
-          <button type="submit" class="w-full py-3 bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white text-sm font-semibold rounded-xl shadow-lg transition">
-            Proceed to Verification
-          </button>
-        </form>
-      </div>
-
-      <!-- ================= STEP 4: VERIFICATION SCAN ================= -->
-      <div id="step-4-verify" class="hidden flex-col items-center text-center py-4">
-        <div class="relative w-28 h-28 mb-4 flex items-center justify-center">
-          <div class="absolute inset-0 rounded-full border-2 border-purple-500/40 border-t-cyan-400 animate-spin"></div>
-          <i class="fa-solid fa-shield-halved text-3xl text-purple-400"></i>
+            <button type="button" class="btn-continue" id="step2ContinueBtn" onclick="goToStep3()">
+                CONTINUE
+            </button>
         </div>
-        <h3 class="text-base font-semibold">Verification Audit in Progress</h3>
-        <p class="text-xs text-slate-400 mt-1 mb-4">Encrypting credentials and initializing record...</p>
-        
-        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-2">
-          <div id="verify-progress" class="bg-cyan-400 h-full w-0 transition-all duration-300"></div>
-        </div>
-        <span id="verify-timer" class="text-[11px] font-mono text-cyan-400">6s remaining</span>
-      </div>
 
-      <!-- ================= STEP 5: SIGN IN SCREEN ================= -->
-      <div id="step-5-signin" class="hidden">
-        <h2 class="text-lg font-semibold text-center mb-1">Sign In to Smilings</h2>
-        <p class="text-xs text-slate-400 text-center mb-6">Welcome back! Please authenticate to continue.</p>
+        <!-- STEP 3 CONTENT SECTION -->
+        <div id="step3Box" class="step-content hidden">
+            <div class="instruction-title" id="step3TitleText">Create a secure password</div>
+            <div class="instruction-sub" id="step3SubText">Set a password to protect your account and re-enter to confirm</div>
 
-        <form onsubmit="handleSignIn(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Mobile Phone Number</label>
-            <input type="tel" id="signin-mobile" required placeholder="Enter mobile number" class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm text-slate-100 outline-none" />
-          </div>
-
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label class="text-xs font-medium text-slate-400">Password</label>
-              <button type="button" onclick="startForgotPasswordFlow()" class="text-xs text-cyan-400 hover:text-cyan-300 transition">
-                Forgot password? Click here
-              </button>
+            <div class="password-input-group">
+                <input type="password" id="createPassInput" class="password-input-field" placeholder="Create a password">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('createPassInput', this)">👁️</button>
             </div>
-            <div class="relative">
-              <input type="password" id="signin-pass" required placeholder="••••••••" class="w-full pl-4 pr-10 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm text-slate-100 outline-none" />
-              <button type="button" onclick="togglePasswordVisibility('signin-pass', 'eye-5')" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200">
-                <i id="eye-5" class="fa-solid fa-eye"></i>
-              </button>
+
+            <div class="password-input-group">
+                <input type="password" id="confirmPassInput" class="password-input-field" placeholder="Re-enter created password">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('confirmPassInput', this)">👁️</button>
             </div>
-          </div>
 
-          <button type="submit" class="w-full py-3 bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white text-sm font-semibold rounded-xl shadow-lg shadow-purple-500/25 transition">
-            Sign In
-          </button>
-        </form>
-
-        <div class="mt-6 pt-4 border-t border-slate-800 text-center">
-          <p class="text-xs text-slate-500">Need a new account? <button onclick="resetToSignUp()" class="text-purple-400 hover:underline">Register standard profile</button></p>
+            <button type="button" class="btn-continue" id="step3ContinueBtn" onclick="submitStep3AndStartScan()">
+                CONTINUE
+            </button>
         </div>
-      </div>
 
-      <!-- ================= FORGOT PASSWORD FLOW ================= -->
-      <div id="forgot-pass-screen" class="hidden">
-        <h2 class="text-lg font-semibold text-center mb-1">Reset Password</h2>
-        <p class="text-xs text-slate-400 text-center mb-6">Verify identity and set a new password</p>
-
-        <form onsubmit="handleResetPassword(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">Registered Mobile Number</label>
-            <input type="tel" id="reset-mobile" required placeholder="Enter mobile number" class="w-full px-4 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm text-slate-100 outline-none" />
-          </div>
-
-          <div>
-            <label class="block text-xs font-medium text-slate-400 mb-1">New Password</label>
-            <div class="relative">
-              <input type="password" id="reset-pass" required placeholder="••••••••" class="w-full pl-4 pr-10 py-3 bg-slate-900/80 border border-slate-700 rounded-xl focus:ring-2 focus:ring-purple-500 text-sm text-slate-100 outline-none" />
-              <button type="button" onclick="togglePasswordVisibility('reset-pass', 'eye-fp')" class="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200">
-                <i id="eye-fp" class="fa-solid fa-eye"></i>
-              </button>
+        <!-- STEP 4 CONTENT SECTION -->
+        <div id="step4Box" class="step-content hidden">
+            <div class="radar-box">
+                <div class="radar-sweep-line"></div>
+                <span style="font-size: 24px;">🌐</span>
             </div>
-          </div>
 
-          <button type="submit" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white text-sm font-semibold rounded-xl shadow-lg transition">
-            Update & Run Security Scan
-          </button>
-        </form>
+            <div class="instruction-title" id="scanStatusTitle" style="color: var(--accent-cyan);">Scanning Security Credentials...</div>
+            <div class="instruction-sub" id="scanStatusSub">Auto-verifying IP address & location coordinates</div>
 
-        <button onclick="switchStep('step-5-signin')" class="w-full mt-3 text-xs text-slate-400 hover:text-white py-2">
-          ← Back to Sign In
-        </button>
-      </div>
+            <div class="scan-progress-bar-bg">
+                <div class="scan-progress-bar-fill" id="scanProgressFill"></div>
+            </div>
 
-      <!-- FORGOT PASSWORD SCANNING STATE -->
-      <div id="forgot-pass-scan" class="hidden flex-col items-center text-center py-4">
-        <div class="relative w-28 h-28 mb-4 flex items-center justify-center">
-          <div class="absolute inset-0 rounded-full border-2 border-cyan-500/40 border-t-purple-500 animate-spin"></div>
-          <i class="fa-solid fa-key text-3xl text-cyan-400"></i>
-        </div>
-        <h3 class="text-base font-semibold">Running 6s Security Audit</h3>
-        <p class="text-xs text-slate-400 mt-1">Updating credentials database...</p>
-        
-        <!-- Password Change Counter Card -->
-        <div class="my-4 px-4 py-2 bg-slate-800/80 border border-purple-500/30 rounded-lg">
-          <span class="text-xs text-slate-400">Password Change Frequency: </span>
-          <span id="reset-counter-display" class="text-sm font-bold text-cyan-400">1 Times</span>
+            <div class="scan-details-card">
+                <div class="scan-info-row">
+                    <span class="scan-label">IP Address:</span>
+                    <span class="scan-value" id="scanIpVal">Detecting...</span>
+                </div>
+                <div class="scan-info-row">
+                    <span class="scan-label">Fingerprint:</span>
+                    <span class="scan-value" id="scanFpVal">Generating...</span>
+                </div>
+                <div class="scan-info-row">
+                    <span class="scan-label">Location:</span>
+                    <span class="scan-value" id="scanLocVal">Locating GPS...</span>
+                </div>
+            </div>
         </div>
 
-        <div class="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden mb-2">
-          <div id="reset-scan-progress" class="bg-purple-500 h-full w-0 transition-all duration-300"></div>
-        </div>
-        <span id="reset-scan-timer" class="text-[11px] font-mono text-purple-400">6s remaining</span>
-      </div>
+        <!-- STEP 5 CONTENT SECTION -->
+        <div id="step5Box" class="step-content hidden">
+            <div class="instruction-title" id="step5TitleText">Sign in to your account</div>
+            <div class="instruction-sub" id="step5SubText">Enter your registered mobile number and password to access Smilings</div>
 
+            <div class="phone-input-group">
+                <div class="country-code-prefix">
+                    <span>🇮🇳</span>
+                    <span>+91</span>
+                </div>
+                <input type="tel" id="step5MobileInput" class="phone-input-field" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
+            </div>
+
+            <div class="password-input-group">
+                <input type="password" id="step5PassInput" class="password-input-field" placeholder="Enter your password">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('step5PassInput', this)">👁️</button>
+            </div>
+
+            <div class="forgot-pass-wrapper">
+                <a class="forgot-pass-link" onclick="goToForgotPasswordScreen()">Forgot password? Click here</a>
+            </div>
+
+            <button type="button" class="btn-continue" id="step5ContinueBtn" onclick="submitStep5Login()">
+                SIGN IN
+            </button>
+        </div>
+
+        <!-- FORGOT PASSWORD RESET SCREEN -->
+        <div id="forgotPassBox" class="step-content hidden">
+            <div class="instruction-title">Reset Your Password</div>
+            <div class="instruction-sub">Enter your mobile number and set a new password</div>
+
+            <div class="phone-input-group">
+                <div class="country-code-prefix">
+                    <span>🇮🇳</span>
+                    <span>+91</span>
+                </div>
+                <input type="tel" id="resetMobileInput" class="phone-input-field" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
+            </div>
+
+            <div class="password-input-group">
+                <input type="password" id="newPassInput" class="password-input-field" placeholder="Enter new password (once)">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('newPassInput', this)">👁️</button>
+            </div>
+
+            <div class="password-input-group">
+                <input type="password" id="confirmNewPassInput" class="password-input-field" placeholder="Confirm new password (twice)">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('confirmNewPassInput', this)">👁️</button>
+            </div>
+
+            <button type="button" class="btn-continue" onclick="submitPasswordReset()">
+                SUBMIT NEW PASSWORD
+            </button>
+        </div>
+
+        <!-- 6-SECOND PASSWORD AUDIT SCAN SCREEN -->
+        <div id="resetScanBox" class="step-content hidden">
+            <div class="radar-box">
+                <div class="radar-sweep-line"></div>
+                <span style="font-size: 24px;">🔐</span>
+            </div>
+
+            <div class="instruction-title" id="resetScanTitle" style="color: var(--accent-cyan);">Auditing Password Changes...</div>
+            <div class="instruction-sub" id="resetScanSub">Analyzing account history and security logs</div>
+
+            <div class="scan-progress-bar-bg">
+                <div class="scan-progress-bar-fill" id="resetProgressFill"></div>
+            </div>
+
+            <div class="scan-details-card">
+                <div class="scan-info-row">
+                    <span class="scan-label">Target Mobile:</span>
+                    <span class="scan-value" id="resetTargetPhone">+91-XXXXXXXXXX</span>
+                </div>
+                <div class="scan-info-row">
+                    <span class="scan-label">Password Changes Detected:</span>
+                    <span class="scan-value"><span class="rotatable-count-badge" id="passwordChangeCountVal">Calculating...</span></span>
+                </div>
+                <div class="scan-info-row">
+                    <span class="scan-label">Security Status:</span>
+                    <span class="scan-value" id="resetSecurityStatusVal" style="color: var(--accent-green);">VERIFYING...</span>
+                </div>
+            </div>
+
+            <button type="button" class="btn-continue hidden" id="resetCompleteBtn" onclick="returnFromResetToStep5()">
+                CONTINUE TO SIGN IN
+            </button>
+        </div>
+
+        <!-- STEP 6: MAIN APP DASHBOARD -->
+        <div id="step6Box" class="step-content hidden">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <div>
+                        <div class="user-welcome-title">Welcome to Smilings</div>
+                        <div style="font-size: 11px; color: var(--text-dim);" id="dashUserPhoneVal">Mobile Verified</div>
+                    </div>
+                    <span class="user-status-pill">● ACTIVE</span>
+                </div>
+
+                <!-- 1-Minute Inactivity Timer HUD -->
+                <div class="inactivity-timer-card">
+                    <div class="timer-label">
+                        <span>⏳ Auto Logout:</span>
+                    </div>
+                    <div class="timer-countdown" id="inactivityTimerVal">01:00</div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                        <div class="dash-tile-icon">🎁</div>
+                        <div class="dash-tile-title">Daily Check-In</div>
+                        <div class="dash-tile-sub">Claim Points</div>
+                    </div>
+                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                        <div class="dash-tile-icon">🎮</div>
+                        <div class="dash-tile-title">Games Hub</div>
+                        <div class="dash-tile-sub">10,000+ Games</div>
+                    </div>
+                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                        <div class="dash-tile-icon">💬</div>
+                        <div class="dash-tile-title">Community</div>
+                        <div class="dash-tile-sub">Live Rooms</div>
+                    </div>
+                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                        <div class="dash-tile-icon">🛡️</div>
+                        <div class="dash-tile-title">Security</div>
+                        <div class="dash-tile-sub">IP & Hardware</div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-continue" style="background: rgba(255, 0, 127, 0.25); border: 1px solid var(--accent-pink); margin-top: 6px;" onclick="triggerAutoLogout()">
+                    LOGOUT
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- ================= STEP 6: MAIN DASHBOARD (FULL WIDTH WHEN ACTIVE) ================= -->
-    <div id="step-6-dashboard" class="hidden w-full max-w-5xl space-y-6">
-
-      <!-- TOP DASHBOARD NAVIGATION -->
-      <div class="glass-card rounded-2xl p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-center gap-4 glow-shadow">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-purple-600 to-cyan-500 flex items-center justify-center text-white text-xl shadow-lg">
-            <i class="fa-solid fa-user-shield"></i>
-          </div>
-          <div>
-            <h2 class="text-lg font-bold text-slate-100 flex items-center gap-2">
-              Welcome back! <span id="dash-user-mobile" class="text-cyan-400 font-mono text-sm"></span>
-            </h2>
-            <p class="text-xs text-slate-400">Active Session Secured • Language: <span id="dash-lang" class="text-slate-200">English</span></p>
-          </div>
-        </div>
-
-        <!-- 1-MINUTE INACTIVITY HUD & LOGOUT -->
-        <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 pt-3 sm:pt-0 border-slate-800">
-          
-          <!-- Visual Inactivity Countdown Widget -->
-          <div class="flex items-center gap-3 bg-slate-900/90 border border-purple-500/30 px-3.5 py-2 rounded-xl shadow-inner">
-            <div class="relative w-8 h-8 flex items-center justify-center">
-              <svg class="w-full h-full transform -rotate-90">
-                <circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="2.5" class="text-slate-800" fill="transparent" />
-                <circle id="timer-circle" cx="16" cy="16" r="13" stroke="currentColor" stroke-width="2.5" class="text-cyan-400 transition-all duration-1000" fill="transparent" stroke-dasharray="81.68" stroke-dashoffset="0" />
-              </svg>
-              <i class="fa-solid fa-clock text-[10px] text-slate-400 absolute"></i>
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOutsideClick(event)">
+        <div class="language-modal">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitleText">Choose Your State / Preferred Language</span>
+                <button class="close-btn" onclick="closeLanguageModal()">✕</button>
             </div>
-            <div class="flex flex-col">
-              <span class="text-[10px] uppercase tracking-wider text-slate-400 font-medium">Auto Logout</span>
-              <span id="logout-countdown" class="text-xs font-mono font-bold text-cyan-300">01:00</span>
-            </div>
-          </div>
 
-          <button onclick="manualLogout()" class="px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 hover:text-red-300 text-xs font-semibold rounded-xl transition flex items-center gap-2">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            <span>Log Out</span>
-          </button>
+            <input type="text" id="searchInput" class="search-box" placeholder="Search language or state..." oninput="filterLanguages()">
+
+            <div class="language-list" id="languageList"></div>
         </div>
-      </div>
-
-      <!-- DASHBOARD CARDS & CONTENT -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <!-- Activity Monitor Card -->
-        <div class="glass-card p-5 rounded-2xl border border-slate-800">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-sm font-semibold text-slate-200">Activity Sentinel</h3>
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping mr-1.5"></span>
-              Monitoring Live
-            </span>
-          </div>
-          <p class="text-xs text-slate-400 mb-4">Move your mouse, tap, or press any key to refresh the 1-minute session timer automatically.</p>
-          <div id="last-activity-log" class="text-[11px] font-mono text-cyan-400/90 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
-            Last Event: <span id="event-type">System Ready</span>
-          </div>
-        </div>
-
-        <!-- System Stats -->
-        <div class="glass-card p-5 rounded-2xl border border-slate-800">
-          <h3 class="text-sm font-semibold text-slate-200 mb-3">Security Overview</h3>
-          <div class="space-y-2.5 text-xs">
-            <div class="flex justify-between p-2 rounded-lg bg-slate-900/40">
-              <span class="text-slate-400">Device Match</span>
-              <span class="text-emerald-400 font-semibold">Verified</span>
-            </div>
-            <div class="flex justify-between p-2 rounded-lg bg-slate-900/40">
-              <span class="text-slate-400">Encryption Level</span>
-              <span class="text-cyan-400 font-mono">AES-256-GCM</span>
-            </div>
-            <div class="flex justify-between p-2 rounded-lg bg-slate-900/40">
-              <span class="text-slate-400">Password Audits</span>
-              <span id="dash-reset-count" class="text-purple-400 font-bold">0 Times</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Controls -->
-        <div class="glass-card p-5 rounded-2xl border border-slate-800">
-          <h3 class="text-sm font-semibold text-slate-200 mb-3">Quick Controls</h3>
-          <div class="space-y-2">
-            <button onclick="triggerSimulatedActivity()" class="w-full py-2 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 text-purple-300 rounded-lg text-xs font-medium transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-bolt"></i> Reset Inactivity Timer
-            </button>
-            <button onclick="startForgotPasswordFlow()" class="w-full py-2 bg-cyan-600/20 hover:bg-cyan-600/30 border border-cyan-500/30 text-cyan-300 rounded-lg text-xs font-medium transition flex items-center justify-center gap-2">
-              <i class="fa-solid fa-key"></i> Password Reset Audit
-            </button>
-          </div>
-        </div>
-
-      </div>
-
     </div>
 
-  </div>
+<script>
+    const indianLanguages = [
+        { native: "English", english: "English", state: "Default / Auto", code: "en",
+          translations: { 
+              title: "Select your preferred language for the app", 
+              sub: "Every text and feature in the app will adapt to your chosen language", 
+              continue: "CONTINUE", 
+              step2Title: "Enter your registered mobile number", 
+              step2Sub: "We will send a security code to verify your mobile account",
+              step3Title: "Create a secure password",
+              step3Sub: "Set a password to protect your account and re-enter to confirm",
+              step5Title: "Sign in to your account",
+              step5Sub: "Enter your registered mobile number and password to access Smilings",
+              step5Btn: "SIGN IN",
+              modalTitle: "Choose Your State / Preferred Language" 
+          } 
+        },
+        { native: "हिंदी", english: "Hindi", state: "National / UP, MP, Bihar, Delhi, RJ, HP, UK", code: "hi",
+          translations: { 
+              title: "ऐप के लिए अपनी पसंदीदा भाषा चुनें", 
+              sub: "ऐप का हर शब्द आपकी चुनी हुई भाषा में प्रदर्शित होगा", 
+              continue: "आगे बढ़ें", 
+              step2Title: "अपना पंजीकृत मोबाइल नंबर दर्ज करें", 
+              step2Sub: "आपके मोबाइल खाते को सत्यापित करने के लिए हम सुरक्षा कोड भेजेंगे",
+              step3Title: "एक सुरक्षित पासवर्ड बनाएं",
+              step3Sub: "खाते की सुरक्षा के लिए पासवर्ड सेट करें और पुष्टि के लिए पुनः दर्ज करें",
+              step5Title: "अपने खाते में साइन इन करें",
+              step5Sub: "स्माइलिंग्स में प्रवेश करने के लिए अपना मोबाइल नंबर और पासवर्ड दर्ज करें",
+              step5Btn: "साइन इन करें",
+              modalTitle: "अपनी राज्य या पसंदीदा भाषा चुनें" 
+          } 
+        },
+        { native: "বাংলা", english: "Bengali", state: "West Bengal, Tripura, Andaman", code: "bn",
+          translations: { 
+              title: "অ্যাপের জন্য আপনার পছন্দের ভাষা নির্বাচন করুন", 
+              sub: "অ্যাপের প্রতিটি শব্দ আপনার নির্বাচিত ভাষায় পরিবর্তিত হবে", 
+              continue: "এগিয়ে যান", 
+              step2Title: "আপনার নিবন্ধিত মোবাইল নম্বর লিখুন", 
+              step2Sub: "আপনার মোবাইল অ্যাকাউন্ট যাচাই করতে আমরা একটি নিরাপত্তা কোড পাঠাব",
+              step3Title: "একটি নিরাপদ পাসওয়ার্ড তৈরি করুন",
+              step3Sub: "অ্যাকাউন্ট সুরক্ষিত করতে একটি পাসওয়ার্ড সেট করুন এবং নিশ্চিত করতে পুনরায় লিখুন",
+              step5Title: "আপনার অ্যাকাউন্টে সাইন ইন করুন",
+              step5Sub: "প্রবেশ করতে আপনার মোবাইল নম্বর এবং পাসওয়ার্ড লিখুন",
+              step5Btn: "সাইন ইন করুন",
+              modalTitle: "আপনার রাজ্য বা পছন্দসই ভাষা বেছে নিন" 
+          } 
+        },
+        { native: "తెలుగు", english: "Telugu", state: "Andhra Pradesh, Telangana", code: "te" },
+        { native: "मराठी", english: "Marathi", state: "Maharashtra, Goa", code: "mr" },
+        { native: "தமிழ்", english: "Tamil", state: "Tamil Nadu, Puducherry", code: "ta" },
+        { native: "اردو", english: "Urdu", state: "Telangana, UP, J&K, Bihar", code: "ur" },
+        { native: "ગુજરાતી", english: "Gujarati", state: "Gujarat, Daman & Diu", code: "gu" },
+        { native: "કન્નડ", english: "Kannada", state: "Karnataka", code: "kn" },
+        { native: "മലയാളം", english: "Malayalam", state: "Kerala, Lakshadweep", code: "ml" },
+        { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
+        { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
+        { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
+        { native: "নেपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
+    ];
 
-  <!-- APPLICATION LOGIC & INACTIVITY AUTO-LOGOUT SCRIPT -->
-  <script>
-    // State Management
-    let currentUser = JSON.parse(localStorage.getItem('smilings_user')) || null;
-    let selectedLanguage = 'English';
-    let passwordResetCounter = parseInt(localStorage.getItem('smilings_reset_count') || '0');
+    let selectedLang = indianLanguages[0];
+    let currentStep = 1;
+    let userIP = "103.22.180.12";
+    let userFingerprint = "";
+    let passwordChangeCount = 1;
 
-    // Inactivity Mechanics
-    const INACTIVITY_LIMIT_SECONDS = 60; // 1 Minute
-    let secondsRemaining = INACTIVITY_LIMIT_SECONDS;
+    /* 1-Minute Inactivity Timer Variables */
+    let inactivityTimeLeft = 60;
     let inactivityInterval = null;
 
-    // DOM References
-    const appCard = document.getElementById('app-card');
-    const toastContainer = document.getElementById('toast-container');
+    function renderLanguages(list) {
+        const container = document.getElementById('languageList');
+        container.innerHTML = '';
 
-    // Init on Page Load
-    window.addEventListener('load', () => {
-      runInitialSystemScan();
-      setupInactivityListeners();
-    });
+        list.forEach(item => {
+            const isSelected = item.code === selectedLang.code;
+            const div = document.createElement('div');
+            div.className = `language-item ${isSelected ? 'selected' : ''}`;
+            div.onclick = () => selectLanguage(item);
 
-    // Toast Notification System
-    function showToast(message, type = 'info') {
-      const toast = document.createElement('div');
-      const bgColors = {
-        info: 'bg-slate-900/90 border-cyan-500/50 text-cyan-300',
-        success: 'bg-slate-900/90 border-emerald-500/50 text-emerald-300',
-        warning: 'bg-slate-900/90 border-amber-500/50 text-amber-300',
-        error: 'bg-slate-900/90 border-red-500/50 text-red-300'
-      };
-      
-      toast.className = `p-3.5 rounded-xl border ${bgColors[type]} text-xs font-medium backdrop-blur-lg shadow-xl transition-all duration-300 transform translate-y-2 opacity-0 flex items-center justify-between pointer-events-auto`;
-      toast.innerHTML = `
-        <div class="flex items-center gap-2.5">
-          <i class="fa-solid ${type === 'success' ? 'fa-circle-check' : type === 'warning' ? 'fa-triangle-exclamation' : 'fa-circle-info'}"></i>
-          <span>${message}</span>
-        </div>
-      `;
-
-      toastContainer.appendChild(toast);
-      setTimeout(() => {
-        toast.classList.remove('translate-y-2', 'opacity-0');
-      }, 10);
-
-      setTimeout(() => {
-        toast.classList.add('opacity-0', 'translate-y-[-10px]');
-        setTimeout(() => toast.remove(), 300);
-      }, 4000);
+            div.innerHTML = `
+                <div class="lang-names">
+                    <div class="lang-native">${item.native}</div>
+                    <div class="lang-english">${item.english}</div>
+                </div>
+                <div class="state-tag" title="${item.state}">${item.state}</div>
+            `;
+            container.appendChild(div);
+        });
     }
 
-    // View Navigation Helper
-    function switchStep(stepId) {
-      const steps = [
-        'step-0-scan', 'step-1-lang', 'step-2-mobile', 
-        'step-3-password', 'step-4-verify', 'step-5-signin', 
-        'forgot-pass-screen', 'forgot-pass-scan', 'step-6-dashboard'
-      ];
+    function openLanguageModal() {
+        document.getElementById('modalOverlay').classList.add('active');
+        document.getElementById('dropdownArrow').classList.add('open');
+        renderLanguages(indianLanguages);
+    }
 
-      steps.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add('hidden');
-      });
+    function closeLanguageModal() {
+        document.getElementById('modalOverlay').classList.remove('active');
+        document.getElementById('dropdownArrow').classList.remove('open');
+        document.getElementById('searchInput').value = '';
+    }
 
-      const activeEl = document.getElementById(stepId);
-      if (activeEl) {
-        if (stepId === 'step-4-verify' || stepId === 'forgot-pass-scan') {
-          activeEl.classList.remove('hidden');
-          activeEl.classList.add('flex');
+    function closeModalOnOutsideClick(event) {
+        if (event.target.id === 'modalOverlay') {
+            closeLanguageModal();
+        }
+    }
+
+    function selectLanguage(item) {
+        selectedLang = item;
+        document.getElementById('currentLangLabel').innerText = `${item.english} (${item.native})`;
+        document.getElementById('topLangBadge').innerText = item.english;
+        
+        applyTranslations(item);
+        closeLanguageModal();
+    }
+
+    function applyTranslations(item) {
+        const t = item.translations || {
+            title: `App Preferred Language: ${item.english}`,
+            sub: "Every text and feature in the app will adapt to your chosen language",
+            continue: "CONTINUE",
+            step2Title: "Enter your registered mobile number",
+            step2Sub: "We will send a security code to verify your mobile account",
+            step3Title: "Create a secure password",
+            step3Sub: "Set a password to protect your account and re-enter to confirm",
+            step5Title: "Sign in to your account",
+            step5Sub: "Enter your registered mobile number and password to access Smilings",
+            step5Btn: "SIGN IN",
+            modalTitle: "Choose Your State / Preferred Language"
+        };
+
+        document.getElementById('titleText').innerText = t.title;
+        document.getElementById('subText').innerText = t.sub;
+        document.getElementById('continueBtnText').innerText = t.continue;
+        document.getElementById('step2ContinueBtn').innerText = t.continue;
+        document.getElementById('step3ContinueBtn').innerText = t.continue;
+        document.getElementById('modalTitleText').innerText = t.modalTitle;
+        
+        if (currentStep === 2) {
+            document.getElementById('step2TitleText').innerText = t.step2Title;
+            document.getElementById('step2SubText').innerText = t.step2Sub;
+        } else if (currentStep === 3) {
+            document.getElementById('step3TitleText').innerText = t.step3Title;
+            document.getElementById('step3SubText').innerText = t.step3Sub;
+        } else if (currentStep === 5) {
+            document.getElementById('step5TitleText').innerText = t.step5Title;
+            document.getElementById('step5SubText').innerText = t.step5Sub;
+            document.getElementById('step5ContinueBtn').innerText = t.step5Btn;
+        }
+    }
+
+    function filterLanguages() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = indianLanguages.filter(item => 
+            item.english.toLowerCase().includes(query) ||
+            item.native.toLowerCase().includes(query) ||
+            item.state.toLowerCase().includes(query)
+        );
+        renderLanguages(filtered);
+    }
+
+    function generateFingerprint() {
+        const nav = window.navigator;
+        const str = nav.userAgent + nav.language + screen.width + "x" + screen.height;
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return "SML-" + Math.abs(hash).toString(16).toUpperCase();
+    }
+
+    async function fetchUserIPAndLocation() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            userIP = data.ip || "103.22.180.12";
+        } catch (e) {
+            userIP = "103.22.180.12";
+        }
+    }
+
+    function runStep1InitialScan() {
+        userFingerprint = generateFingerprint();
+        fetchUserIPAndLocation();
+
+        const progressBar = document.getElementById('step1ProgressFill');
+        const titleText = document.getElementById('step1ScanTitle');
+        const subText = document.getElementById('step1ScanSub');
+
+        let progress = 0;
+        const startTime = Date.now();
+        const duration = 6000;
+
+        const scanInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            progress = Math.min((elapsed / duration) * 100, 100);
+            progressBar.style.width = progress + "%";
+
+            if (elapsed < 2000) {
+                titleText.innerText = "Connecting Security Node...";
+                subText.innerText = "Reading device parameters...";
+            } else if (elapsed < 4000) {
+                titleText.innerText = "Matching IP & Location Data...";
+                subText.innerText = "Checking existing user record database...";
+                document.getElementById('step1IpVal').innerText = userIP;
+                document.getElementById('step1FpVal').innerText = userFingerprint;
+            } else {
+                titleText.innerText = "Verifying Location Coordinates...";
+                subText.innerText = "Matching regional network profile...";
+                document.getElementById('step1LocVal').innerText = "Gangtok, Sikkim, India";
+            }
+
+            if (elapsed >= duration) {
+                clearInterval(scanInterval);
+
+                const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+
+                if (savedAcc && savedAcc.mobile && savedAcc.password) {
+                    titleText.innerText = "✓ RECORD MATCHED! REDIRECTING...";
+                    titleText.style.color = "var(--accent-green)";
+                    subText.innerText = "Recognized device. Skipping to Sign In screen...";
+
+                    setTimeout(() => {
+                        jumpDirectToStep5(savedAcc.mobile);
+                    }, 1000);
+                } else {
+                    titleText.innerText = "✓ SCAN COMPLETE - NEW DEVICE DETECTED";
+                    titleText.style.color = "var(--accent-cyan)";
+                    subText.innerText = "Please choose language to start registration sequence...";
+
+                    setTimeout(() => {
+                        document.getElementById('step1InitScanBox').classList.add('hidden');
+                        document.getElementById('step1LangContent').classList.remove('hidden');
+                        document.getElementById('step1LangContent').classList.add('fade-in');
+                    }, 1000);
+                }
+            }
+        }, 100);
+    }
+
+    function jumpDirectToStep5(mobileNum) {
+        const step1 = document.getElementById('step1Box');
+        const step5 = document.getElementById('step5Box');
+
+        step1.classList.add('fade-out');
+
+        setTimeout(() => {
+            step1.classList.add('hidden');
+            step1.classList.remove('fade-out');
+
+            currentStep = 5;
+            applyTranslations(selectedLang);
+
+            document.getElementById('step5MobileInput').value = mobileNum;
+
+            step5.classList.remove('hidden');
+            step5.classList.add('fade-in');
+
+            document.getElementById('step5PassInput').focus();
+        }, 350);
+    }
+
+    function goToStep2() {
+        const step1 = document.getElementById('step1Box');
+        const step2 = document.getElementById('step2Box');
+
+        step1.classList.add('fade-out');
+
+        setTimeout(() => {
+            step1.classList.add('hidden');
+            step1.classList.remove('fade-out');
+
+            currentStep = 2;
+            applyTranslations(selectedLang);
+
+            step2.classList.remove('hidden');
+            step2.classList.add('fade-in');
+
+            document.getElementById('mobileInput').focus();
+        }, 350);
+    }
+
+    function validateMobileInput(input) {
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+    function goToStep3() {
+        const mobile = document.getElementById('mobileInput').value;
+        if (mobile.length !== 10) {
+            alert("Please enter a valid 10-digit mobile number!");
+            return;
+        }
+
+        const step2 = document.getElementById('step2Box');
+        const step3 = document.getElementById('step3Box');
+
+        step2.classList.add('fade-out');
+
+        setTimeout(() => {
+            step2.classList.add('hidden');
+            step2.classList.remove('fade-out');
+
+            currentStep = 3;
+            applyTranslations(selectedLang);
+
+            step3.classList.remove('hidden');
+            step3.classList.add('fade-in');
+
+            document.getElementById('createPassInput').focus();
+        }, 350);
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.innerText = '🙈';
         } else {
-          activeEl.classList.remove('hidden');
+            input.type = 'password';
+            btn.innerText = '👁️';
         }
-      }
-
-      // Show/Hide App Container frame depending on dashboard
-      if (stepId === 'step-6-dashboard') {
-        appCard.classList.add('hidden');
-        startInactivityTimer();
-      } else {
-        appCard.classList.remove('hidden');
-        stopInactivityTimer();
-      }
     }
 
-    // Toggle Password Input Visibility
-    function togglePasswordVisibility(inputId, eyeIconId) {
-      const input = document.getElementById(inputId);
-      const icon = document.getElementById(eyeIconId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-      } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-      }
-    }
+    function submitStep3AndStartScan() {
+        const pass1 = document.getElementById('createPassInput').value;
+        const pass2 = document.getElementById('confirmPassInput').value;
 
-    // ================= STEP 1: INITIAL 6-SECOND RADAR SCAN =================
-    function runInitialSystemScan() {
-      switchStep('step-0-scan');
-      let progress = 0;
-      let timeLeft = 6;
-      const progressBar = document.getElementById('scan-progress');
-      const countdown = document.getElementById('scan-countdown');
-
-      const interval = setInterval(() => {
-        progress += 16.6;
-        timeLeft -= 1;
-        progressBar.style.width = `${Math.min(progress, 100)}%`;
-        if (timeLeft >= 0) countdown.innerText = `${timeLeft}s remaining`;
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          // Check if matching user record exists
-          if (currentUser && currentUser.mobile) {
-            showToast('Existing device identity found. Redirecting to Sign In...', 'info');
-            document.getElementById('signin-mobile').value = currentUser.mobile;
-            switchStep('step-5-signin');
-          } else {
-            showToast('New system environment detected.', 'info');
-            switchStep('step-1-lang');
-          }
+        if (!pass1 || pass1.length < 4) {
+            alert("Password must be at least 4 characters long!");
+            return;
         }
-      }, 1000);
-    }
 
-    // Language Selection
-    function selectLanguage(lang) {
-      selectedLanguage = lang;
-      showToast(`Language set to ${lang}`, 'success');
-      switchStep('step-2-mobile');
-    }
-
-    // Mobile Number Submission
-    function handleMobileSubmit(e) {
-      e.preventDefault();
-      const mobile = document.getElementById('signup-mobile').value;
-      if (!mobile) return;
-      
-      currentUser = { mobile, password: '' };
-      switchStep('step-3-password');
-    }
-
-    // Password Creation
-    function handleCreatePassword(e) {
-      e.preventDefault();
-      const pass = document.getElementById('create-pass').value;
-      const confirm = document.getElementById('confirm-pass').value;
-
-      if (pass !== confirm) {
-        showToast('Passwords do not match!', 'error');
-        return;
-      }
-
-      currentUser.password = pass;
-      startStep4VerificationScan();
-    }
-
-    // ================= STEP 4: 6-SECOND VERIFICATION SCAN =================
-    function startStep4VerificationScan() {
-      switchStep('step-4-verify');
-      let progress = 0;
-      let timeLeft = 6;
-      const progressBar = document.getElementById('verify-progress');
-      const timerLabel = document.getElementById('verify-timer');
-
-      const interval = setInterval(() => {
-        progress += 16.6;
-        timeLeft -= 1;
-        progressBar.style.width = `${Math.min(progress, 100)}%`;
-        if (timeLeft >= 0) timerLabel.innerText = `${timeLeft}s remaining`;
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          // Store User Data
-          localStorage.setItem('smilings_user', JSON.stringify(currentUser));
-          showToast('Account creation verified! Please sign in.', 'success');
-          document.getElementById('signin-mobile').value = currentUser.mobile;
-          switchStep('step-5-signin');
+        if (pass1 !== pass2) {
+            alert("Passwords do not match! Please re-enter.");
+            return;
         }
-      }, 1000);
+
+        const registeredMobile = document.getElementById('mobileInput').value;
+        const savedAccount = {
+            mobile: registeredMobile,
+            password: pass1,
+            language: selectedLang.english,
+            changeCount: 1,
+            ip: userIP,
+            fingerprint: userFingerprint
+        };
+        localStorage.setItem('smilings_user_account', JSON.stringify(savedAccount));
+
+        const step3 = document.getElementById('step3Box');
+        const step4 = document.getElementById('step4Box');
+
+        step3.classList.add('fade-out');
+
+        setTimeout(() => {
+            step3.classList.add('hidden');
+            step3.classList.remove('fade-out');
+
+            currentStep = 4;
+            step4.classList.remove('hidden');
+            step4.classList.add('fade-in');
+
+            runSixSecondRegistrationScanEngine();
+        }, 350);
     }
 
-    // Reset to Sign Up Flow
-    function resetToSignUp() {
-      localStorage.removeItem('smilings_user');
-      currentUser = null;
-      switchStep('step-1-lang');
+    function runSixSecondRegistrationScanEngine() {
+        const progressBar = document.getElementById('scanProgressFill');
+        const titleText = document.getElementById('scanStatusTitle');
+        const subText = document.getElementById('scanStatusSub');
+
+        let progress = 0;
+        const startTime = Date.now();
+        const duration = 6000;
+
+        const scanInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            progress = Math.min((elapsed / duration) * 100, 100);
+            progressBar.style.width = progress + "%";
+
+            if (elapsed < 2000) {
+                titleText.innerText = "Connecting to Security Node...";
+                subText.innerText = "Establishing SSL encrypted link...";
+            } else if (elapsed < 4000) {
+                titleText.innerText = "Analyzing IP Address & Device...";
+                subText.innerText = "Reading hardware parameters...";
+                document.getElementById('scanIpVal').innerText = userIP;
+                document.getElementById('scanFpVal').innerText = userFingerprint;
+            } else {
+                titleText.innerText = "Verifying Location Coordinates...";
+                subText.innerText = "Matching regional network profile...";
+                document.getElementById('scanLocVal').innerText = "Gangtok, Sikkim, India";
+            }
+
+            if (elapsed >= duration) {
+                clearInterval(scanInterval);
+                titleText.innerText = "✓ SCAN COMPLETE & VERIFIED!";
+                titleText.style.color = "var(--accent-green)";
+                subText.innerText = "All security checks passed. Account initialized successfully!";
+
+                setTimeout(() => {
+                    goToStep5();
+                }, 1200);
+            }
+        }, 100);
     }
 
-    // ================= STEP 5: SIGN IN SCREEN =================
-    function handleSignIn(e) {
-      e.preventDefault();
-      const mobile = document.getElementById('signin-mobile').value;
-      const pass = document.getElementById('signin-pass').value;
+    function goToStep5() {
+        const step4 = document.getElementById('step4Box');
+        const step5 = document.getElementById('step5Box');
 
-      if (!currentUser || currentUser.mobile !== mobile || currentUser.password !== pass) {
-        showToast('Invalid credentials or unregistered profile.', 'error');
-        return;
-      }
+        step4.classList.add('fade-out');
 
-      showToast('Authentication successful!', 'success');
-      
-      // Update Dashboard Info
-      document.getElementById('dash-user-mobile').innerText = currentUser.mobile;
-      document.getElementById('dash-lang').innerText = selectedLanguage;
-      document.getElementById('dash-reset-count').innerText = `${passwordResetCounter} Times`;
+        setTimeout(() => {
+            step4.classList.add('hidden');
+            step4.classList.remove('fade-out');
 
-      switchStep('step-6-dashboard');
+            currentStep = 5;
+            applyTranslations(selectedLang);
+
+            const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+            if (savedAcc && savedAcc.mobile) {
+                document.getElementById('step5MobileInput').value = savedAcc.mobile;
+            }
+
+            step5.classList.remove('hidden');
+            step5.classList.add('fade-in');
+
+            document.getElementById('step5PassInput').focus();
+        }, 350);
     }
 
-    // ================= FORGOT PASSWORD FLOW & SCAN =================
-    function startForgotPasswordFlow() {
-      switchStep('forgot-pass-screen');
+    function goToForgotPasswordScreen() {
+        const step5 = document.getElementById('step5Box');
+        const forgotBox = document.getElementById('forgotPassBox');
+
+        step5.classList.add('fade-out');
+
+        setTimeout(() => {
+            step5.classList.add('hidden');
+            step5.classList.remove('fade-out');
+
+            const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+            if (savedAcc && savedAcc.mobile) {
+                document.getElementById('resetMobileInput').value = savedAcc.mobile;
+            }
+
+            forgotBox.classList.remove('hidden');
+            forgotBox.classList.add('fade-in');
+            document.getElementById('newPassInput').focus();
+        }, 350);
     }
 
-    function handleResetPassword(e) {
-      e.preventDefault();
-      const mobile = document.getElementById('reset-mobile').value;
-      const newPass = document.getElementById('reset-pass').value;
+    function submitPasswordReset() {
+        const mobile = document.getElementById('resetMobileInput').value;
+        const pass1 = document.getElementById('newPassInput').value;
+        const pass2 = document.getElementById('confirmNewPassInput').value;
 
-      if (!currentUser || currentUser.mobile !== mobile) {
-        showToast('Mobile number not found in current session record.', 'error');
-        return;
-      }
-
-      // Update User Password
-      currentUser.password = newPass;
-      localStorage.setItem('smilings_user', JSON.stringify(currentUser));
-
-      // Increment Counter
-      passwordResetCounter += 1;
-      localStorage.setItem('smilings_reset_count', passwordResetCounter.toString());
-      document.getElementById('reset-counter-display').innerText = `${passwordResetCounter} Times`;
-
-      // Trigger Audit Scan
-      runResetAuditScan();
-    }
-
-    function runResetAuditScan() {
-      switchStep('forgot-pass-scan');
-      let progress = 0;
-      let timeLeft = 6;
-      const progressBar = document.getElementById('reset-scan-progress');
-      const timerLabel = document.getElementById('reset-scan-timer');
-
-      const interval = setInterval(() => {
-        progress += 16.6;
-        timeLeft -= 1;
-        progressBar.style.width = `${Math.min(progress, 100)}%`;
-        if (timeLeft >= 0) timerLabel.innerText = `${timeLeft}s remaining`;
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          showToast('Password updated & audit verified. Redirecting to Sign In.', 'success');
-          document.getElementById('signin-mobile').value = currentUser.mobile;
-          document.getElementById('signin-pass').value = '';
-          switchStep('step-5-signin');
+        if (mobile.length !== 10) {
+            alert("Please enter a valid 10-digit mobile number!");
+            return;
         }
-      }, 1000);
-    }
 
-    // ================= NEW INACTIVITY AUTO-LOGOUT MECHANIC =================
-    
-    // Global Event Listener Hookup for User Activity
-    function setupInactivityListeners() {
-      const events = ['mousemove', 'keypress', 'touchstart', 'click', 'scroll'];
-      events.forEach(eventName => {
-        window.addEventListener(eventName, () => {
-          // Reset timer only if dashboard is active
-          if (!document.getElementById('step-6-dashboard').classList.contains('hidden')) {
-            resetInactivityTimer(eventName);
-          }
-        }, true);
-      });
-    }
-
-    function startInactivityTimer() {
-      secondsRemaining = INACTIVITY_LIMIT_SECONDS;
-      updateTimerUI();
-      
-      if (inactivityInterval) clearInterval(inactivityInterval);
-
-      inactivityInterval = setInterval(() => {
-        secondsRemaining -= 1;
-        updateTimerUI();
-
-        if (secondsRemaining <= 0) {
-          clearInterval(inactivityInterval);
-          performAutoLogout();
+        if (!pass1 || pass1.length < 4) {
+            alert("New password must be at least 4 characters long!");
+            return;
         }
-      }, 1000);
+
+        if (pass1 !== pass2) {
+            alert("Passwords do not match! Please re-enter.");
+            return;
+        }
+
+        let savedAcc = JSON.parse(localStorage.getItem('smilings_user_account')) || {};
+        passwordChangeCount = (savedAcc.changeCount || 1) + 1;
+
+        savedAcc.mobile = mobile;
+        savedAcc.password = pass1;
+        savedAcc.changeCount = passwordChangeCount;
+        localStorage.setItem('smilings_user_account', JSON.stringify(savedAcc));
+
+        const forgotBox = document.getElementById('forgotPassBox');
+        const resetScanBox = document.getElementById('resetScanBox');
+
+        forgotBox.classList.add('fade-out');
+
+        setTimeout(() => {
+            forgotBox.classList.add('hidden');
+            forgotBox.classList.remove('fade-out');
+
+            resetScanBox.classList.remove('hidden');
+            resetScanBox.classList.add('fade-in');
+
+            runSixSecondResetAuditScan(mobile);
+        }, 350);
     }
 
-    function resetInactivityTimer(eventType = 'user activity') {
-      secondsRemaining = INACTIVITY_LIMIT_SECONDS;
-      updateTimerUI();
-      
-      const eventLog = document.getElementById('event-type');
-      if (eventLog) {
-        const time = new Date().toLocaleTimeString();
-        eventLog.innerText = `${eventType.toUpperCase()} detected at ${time}`;
-      }
+    function runSixSecondResetAuditScan(mobileNum) {
+        document.getElementById('resetTargetPhone').innerText = "+91 " + mobileNum;
+        const progressBar = document.getElementById('resetProgressFill');
+        const titleText = document.getElementById('resetScanTitle');
+        const subText = document.getElementById('resetScanSub');
+        const countVal = document.getElementById('passwordChangeCountVal');
+        const completeBtn = document.getElementById('resetCompleteBtn');
+
+        completeBtn.classList.add('hidden');
+        countVal.innerText = "Calculating...";
+
+        let progress = 0;
+        const startTime = Date.now();
+        const duration = 6000;
+
+        const scanInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            progress = Math.min((elapsed / duration) * 100, 100);
+            progressBar.style.width = progress + "%";
+
+            if (elapsed < 2000) {
+                titleText.innerText = "Auditing Password Logs...";
+                subText.innerText = "Checking security database records...";
+            } else if (elapsed < 4000) {
+                titleText.innerText = "Detecting Change Frequencies...";
+                subText.innerText = "Reading rotatable modification history...";
+                countVal.innerText = `${passwordChangeCount} Times`;
+            } else {
+                titleText.innerText = "Updating Security Hashes...";
+                subText.innerText = "Saving new password credentials securely...";
+            }
+
+            if (elapsed >= duration) {
+                clearInterval(scanInterval);
+                titleText.innerText = "✓ PASSWORD RESET VERIFIED!";
+                titleText.style.color = "var(--accent-green)";
+                subText.innerText = `Detected ${passwordChangeCount} password modifications for this number. Reset complete!`;
+                completeBtn.classList.remove('hidden');
+            }
+        }, 100);
     }
 
-    function stopInactivityTimer() {
-      if (inactivityInterval) {
-        clearInterval(inactivityInterval);
-        inactivityInterval = null;
-      }
+    function returnFromResetToStep5() {
+        const resetScanBox = document.getElementById('resetScanBox');
+        const step5 = document.getElementById('step5Box');
+
+        resetScanBox.classList.add('fade-out');
+
+        setTimeout(() => {
+            resetScanBox.classList.add('hidden');
+            resetScanBox.classList.remove('fade-out');
+
+            currentStep = 5;
+            applyTranslations(selectedLang);
+
+            const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+            if (savedAcc && savedAcc.mobile) {
+                document.getElementById('step5MobileInput').value = savedAcc.mobile;
+                document.getElementById('step5PassInput').value = "";
+            }
+
+            step5.classList.remove('hidden');
+            step5.classList.add('fade-in');
+            document.getElementById('step5PassInput').focus();
+        }, 350);
     }
 
-    function updateTimerUI() {
-      const countdownEl = document.getElementById('logout-countdown');
-      const circleEl = document.getElementById('timer-circle');
+    /* STEP 5 SIGN IN -> STEP 6 DASHBOARD & INACTIVITY TIMER */
+    function submitStep5Login() {
+        const mobile = document.getElementById('step5MobileInput').value;
+        const pass = document.getElementById('step5PassInput').value;
 
-      if (!countdownEl || !circleEl) return;
+        if (mobile.length !== 10) {
+            alert("Please enter a valid 10-digit mobile number!");
+            return;
+        }
 
-      const mins = Math.floor(secondsRemaining / 60);
-      const secs = secondsRemaining % 60;
-      countdownEl.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        if (!pass) {
+            alert("Please enter your password!");
+            return;
+        }
 
-      // Circular SVG Progress Calculation (Circumference ~ 81.68)
-      const circumference = 81.68;
-      const offset = circumference - (secondsRemaining / INACTIVITY_LIMIT_SECONDS) * circumference;
-      circleEl.style.strokeDashoffset = offset;
+        const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+        if (savedAcc && savedAcc.password && savedAcc.password !== pass) {
+            alert("Incorrect password! Please try again or use 'Forgot password?'.");
+            return;
+        }
 
-      // Color warning transition
-      if (secondsRemaining <= 15) {
-        circleEl.setAttribute('stroke', '#ef4444'); // Red
-        countdownEl.classList.remove('text-cyan-300');
-        countdownEl.classList.add('text-red-400');
-      } else {
-        circleEl.setAttribute('stroke', '#06b6d4'); // Cyan
-        countdownEl.classList.remove('text-red-400');
-        countdownEl.classList.add('text-cyan-300');
-      }
+        const step5 = document.getElementById('step5Box');
+        const step6 = document.getElementById('step6Box');
+
+        step5.classList.add('fade-out');
+
+        setTimeout(() => {
+            step5.classList.add('hidden');
+            step5.classList.remove('fade-out');
+
+            currentStep = 6;
+            document.getElementById('dashUserPhoneVal').innerText = "+91 " + mobile;
+
+            step6.classList.remove('hidden');
+            step6.classList.add('fade-in');
+
+            startInactivityMonitor();
+        }, 350);
     }
 
-    function performAutoLogout() {
-      showToast('Logged out automatically due to 1 minute of inactivity.', 'warning');
-      document.getElementById('signin-pass').value = '';
-      switchStep('step-5-signin');
+    /* 1-MINUTE INACTIVITY TIMER CONTROLLER */
+    function startInactivityMonitor() {
+        inactivityTimeLeft = 60;
+        updateInactivityDisplay();
+
+        if (inactivityInterval) clearInterval(inactivityInterval);
+
+        inactivityInterval = setInterval(() => {
+            inactivityTimeLeft--;
+            updateInactivityDisplay();
+
+            if (inactivityTimeLeft <= 0) {
+                clearInterval(inactivityInterval);
+                triggerAutoLogout();
+            }
+        }, 1000);
+
+        ['mousemove', 'keydown', 'click', 'touchstart', 'scroll'].forEach(evt => {
+            window.addEventListener(evt, resetInactivityTimer, { passive: true });
+        });
     }
 
-    function manualLogout() {
-      showToast('Logged out successfully.', 'info');
-      document.getElementById('signin-pass').value = '';
-      switchStep('step-5-signin');
+    function resetInactivityTimer() {
+        if (currentStep === 6) {
+            inactivityTimeLeft = 60;
+            updateInactivityDisplay();
+        }
     }
 
-    function triggerSimulatedActivity() {
-      resetInactivityTimer('Manual Trigger Button');
-      showToast('Session timer refreshed to 1 minute.', 'info');
+    function updateInactivityDisplay() {
+        const timerElem = document.getElementById('inactivityTimerVal');
+        if (timerElem) {
+            const mins = Math.floor(inactivityTimeLeft / 60);
+            const secs = inactivityTimeLeft % 60;
+            timerElem.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
     }
-  </script>
+
+    function triggerAutoLogout() {
+        if (inactivityInterval) clearInterval(inactivityInterval);
+
+        const step6 = document.getElementById('step6Box');
+        const step5 = document.getElementById('step5Box');
+
+        step6.classList.add('fade-out');
+
+        setTimeout(() => {
+            step6.classList.add('hidden');
+            step6.classList.remove('fade-out');
+
+            currentStep = 5;
+            applyTranslations(selectedLang);
+
+            const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+            if (savedAcc && savedAcc.mobile) {
+                document.getElementById('step5MobileInput').value = savedAcc.mobile;
+                document.getElementById('step5PassInput').value = "";
+            }
+
+            step5.classList.remove('hidden');
+            step5.classList.add('fade-in');
+        }, 350);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        renderLanguages(indianLanguages);
+        runStep1InitialScan();
+    });
+</script>
+
 </body>
 </html>
-```

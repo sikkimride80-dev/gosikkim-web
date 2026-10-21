@@ -378,7 +378,6 @@
         .scan-label { color: var(--text-dim); }
         .scan-value { font-weight: 700; color: var(--accent-cyan); }
 
-        /* Rotatable Counter Highlight */
         .rotatable-count-badge {
             display: inline-block;
             background: rgba(255, 0, 127, 0.2);
@@ -416,9 +415,7 @@
         }
 
         /* STEP 6: MAIN DASHBOARD STYLES */
-        .dashboard-container {
-            text-align: left;
-        }
+        .dashboard-container { text-align: left; }
 
         .dashboard-header {
             display: flex;
@@ -470,22 +467,9 @@
             transform: translateY(-2px);
         }
 
-        .dash-tile-icon {
-            font-size: 24px;
-            margin-bottom: 6px;
-        }
-
-        .dash-tile-title {
-            font-size: 12px;
-            font-weight: 800;
-            color: var(--text-light);
-        }
-
-        .dash-tile-sub {
-            font-size: 10px;
-            color: var(--text-dim);
-            margin-top: 2px;
-        }
+        .dash-tile-icon { font-size: 24px; margin-bottom: 6px; }
+        .dash-tile-title { font-size: 12px; font-weight: 800; color: var(--text-light); }
+        .dash-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
 
         /* Modal Overlay & Bottom Sheet */
         .modal-overlay {
@@ -566,9 +550,7 @@
             margin-bottom: 16px;
         }
 
-        .search-box:focus {
-            border-color: var(--primary);
-        }
+        .search-box:focus { border-color: var(--primary); }
 
         .language-list {
             overflow-y: auto;
@@ -638,24 +620,56 @@
     <div class="container">
         <div class="app-brand">Smilings</div>
 
-        <!-- STEP 1 CONTENT SECTION -->
+        <!-- STEP 1 CONTENT SECTION (With Initial Device & IP Scan) -->
         <div id="step1Box" class="step-content">
-            <div class="instruction-title" id="titleText">Select your preferred language for the app</div>
-            <div class="instruction-sub" id="subText">Every text and feature in the app will adapt to your chosen language</div>
+            <!-- Initial Scanner State -->
+            <div id="step1InitScanBox">
+                <div class="radar-box">
+                    <div class="radar-sweep-line"></div>
+                    <span style="font-size: 24px;">🌐</span>
+                </div>
+                <div class="instruction-title" id="step1ScanTitle" style="color: var(--accent-cyan);">Checking Device & IP Security...</div>
+                <div class="instruction-sub" id="step1ScanSub">Matching user record history with network coordinates</div>
 
-            <div class="language-box-wrapper">
-                <button type="button" class="language-select-trigger" onclick="openLanguageModal()">
-                    <div class="selected-lang-display">
-                        <span style="font-size: 18px;">🌐</span>
-                        <span id="currentLangLabel">English (Auto)</span>
+                <div class="scan-progress-bar-bg">
+                    <div class="scan-progress-bar-fill" id="step1ProgressFill"></div>
+                </div>
+
+                <div class="scan-details-card">
+                    <div class="scan-info-row">
+                        <span class="scan-label">IP Address:</span>
+                        <span class="scan-value" id="step1IpVal">Detecting...</span>
                     </div>
-                    <span class="dropdown-arrow" id="dropdownArrow">▼</span>
-                </button>
+                    <div class="scan-info-row">
+                        <span class="scan-label">Fingerprint:</span>
+                        <span class="scan-value" id="step1FpVal">Generating...</span>
+                    </div>
+                    <div class="scan-info-row">
+                        <span class="scan-label">Location:</span>
+                        <span class="scan-value" id="step1LocVal">Locating GPS...</span>
+                    </div>
+                </div>
             </div>
 
-            <button type="button" class="btn-continue" id="continueBtnText" onclick="goToStep2()">
-                CONTINUE
-            </button>
+            <!-- Standard Step 1 Language Select (Revealed for New Users) -->
+            <div id="step1LangContent" class="hidden">
+                <div class="instruction-title" id="titleText">Select your preferred language for the app</div>
+                <div class="instruction-sub" id="subText">Every text and feature in the app will adapt to your chosen language</div>
+
+                <div class="language-box-wrapper">
+                    <button type="button" class="language-select-trigger" onclick="openLanguageModal()">
+                        <div class="selected-lang-display">
+                            <span style="font-size: 18px;">🌐</span>
+                            <span id="currentLangLabel">English (Auto)</span>
+                        </div>
+                        <span class="dropdown-arrow" id="dropdownArrow">▼</span>
+                    </button>
+                </div>
+
+                <button type="button" class="btn-continue" id="continueBtnText" onclick="goToStep2()">
+                    CONTINUE
+                </button>
+            </div>
         </div>
 
         <!-- STEP 2 CONTENT SECTION -->
@@ -696,7 +710,7 @@
             </button>
         </div>
 
-        <!-- STEP 4 CONTENT SECTION (6-Second Automatic Scanner) -->
+        <!-- STEP 4 CONTENT SECTION (6-Second Automatic Scanner for Registration) -->
         <div id="step4Box" class="step-content hidden">
             <div class="radar-box">
                 <div class="radar-sweep-line"></div>
@@ -932,7 +946,7 @@
         { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
         { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
         { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
-        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
+        { native: "নেपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
     ];
 
     let selectedLang = indianLanguages[0];
@@ -1034,6 +1048,112 @@
         renderLanguages(filtered);
     }
 
+    function generateFingerprint() {
+        const nav = window.navigator;
+        const str = nav.userAgent + nav.language + screen.width + "x" + screen.height;
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return "SML-" + Math.abs(hash).toString(16).toUpperCase();
+    }
+
+    async function fetchUserIPAndLocation() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            userIP = data.ip || "103.22.180.12";
+        } catch (e) {
+            userIP = "103.22.180.12";
+        }
+    }
+
+    /* STEP 1 AUTOMATIC INITIAL SCAN ON APPLICATION LAUNCH */
+    function runStep1InitialScan() {
+        userFingerprint = generateFingerprint();
+        fetchUserIPAndLocation();
+
+        const progressBar = document.getElementById('step1ProgressFill');
+        const titleText = document.getElementById('step1ScanTitle');
+        const subText = document.getElementById('step1ScanSub');
+
+        let progress = 0;
+        const startTime = Date.now();
+        const duration = 6000;
+
+        const scanInterval = setInterval(() => {
+            const elapsed = Date.now() - startTime;
+            progress = Math.min((elapsed / duration) * 100, 100);
+            progressBar.style.width = progress + "%";
+
+            if (elapsed < 2000) {
+                titleText.innerText = "Connecting Security Node...";
+                subText.innerText = "Reading device parameters...";
+            } else if (elapsed < 4000) {
+                titleText.innerText = "Matching IP & Location Data...";
+                subText.innerText = "Checking existing user record database...";
+                document.getElementById('step1IpVal').innerText = userIP;
+                document.getElementById('step1FpVal').innerText = userFingerprint;
+            } else {
+                titleText.innerText = "Verifying Location Coordinates...";
+                subText.innerText = "Matching regional network profile...";
+                document.getElementById('step1LocVal').innerText = "Gangtok, Sikkim, India";
+            }
+
+            if (elapsed >= duration) {
+                clearInterval(scanInterval);
+
+                const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+
+                // IF SYSTEM FINDS EXISTING RECORD -> SKIP DIRECTLY TO STEP 5
+                if (savedAcc && savedAcc.mobile && savedAcc.password) {
+                    titleText.innerText = "✓ RECORD MATCHED! REDIRECTING...";
+                    titleText.style.color = "var(--accent-green)";
+                    subText.innerText = "Recognized device. Skipping to Sign In screen...";
+
+                    setTimeout(() => {
+                        jumpDirectToStep5(savedAcc.mobile);
+                    }, 1000);
+                } 
+                // IF NEW USER / UNKNOWN IP -> SHOW STEP 1 LANGUAGE SELECTOR & CONTINUE SEQUENCE
+                else {
+                    titleText.innerText = "✓ SCAN COMPLETE - NEW DEVICE DETECTED";
+                    titleText.style.color = "var(--accent-cyan)";
+                    subText.innerText = "Please choose language to start registration sequence...";
+
+                    setTimeout(() => {
+                        document.getElementById('step1InitScanBox').classList.add('hidden');
+                        document.getElementById('step1LangContent').classList.remove('hidden');
+                        document.getElementById('step1LangContent').classList.add('fade-in');
+                    }, 1000);
+                }
+            }
+        }, 100);
+    }
+
+    function jumpDirectToStep5(mobileNum) {
+        const step1 = document.getElementById('step1Box');
+        const step5 = document.getElementById('step5Box');
+
+        step1.classList.add('fade-out');
+
+        setTimeout(() => {
+            step1.classList.add('hidden');
+            step1.classList.remove('fade-out');
+
+            currentStep = 5;
+            applyTranslations(selectedLang);
+
+            document.getElementById('step5MobileInput').value = mobileNum;
+
+            step5.classList.remove('hidden');
+            step5.classList.add('fade-in');
+
+            document.getElementById('step5PassInput').focus();
+        }, 350);
+    }
+
     function goToStep2() {
         const step1 = document.getElementById('step1Box');
         const step2 = document.getElementById('step2Box');
@@ -1095,27 +1215,6 @@
         }
     }
 
-    function generateFingerprint() {
-        const nav = window.navigator;
-        const str = nav.userAgent + nav.language + screen.width + "x" + screen.height;
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = ((hash << 5) - hash) + str.charCodeAt(i);
-            hash |= 0;
-        }
-        return "SML-" + Math.abs(hash).toString(16).toUpperCase();
-    }
-
-    async function fetchUserIPAndLocation() {
-        try {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            userIP = data.ip || "103.22.180.12";
-        } catch (e) {
-            userIP = "103.22.180.12";
-        }
-    }
-
     function submitStep3AndStartScan() {
         const pass1 = document.getElementById('createPassInput').value;
         const pass2 = document.getElementById('confirmPassInput').value;
@@ -1135,7 +1234,9 @@
             mobile: registeredMobile,
             password: pass1,
             language: selectedLang.english,
-            changeCount: 1
+            changeCount: 1,
+            ip: userIP,
+            fingerprint: userFingerprint
         };
         localStorage.setItem('smilings_user_account', JSON.stringify(savedAccount));
 
@@ -1152,14 +1253,11 @@
             step4.classList.remove('hidden');
             step4.classList.add('fade-in');
 
-            runSixSecondScanEngine();
+            runSixSecondRegistrationScanEngine();
         }, 350);
     }
 
-    function runSixSecondScanEngine() {
-        userFingerprint = generateFingerprint();
-        fetchUserIPAndLocation();
-
+    function runSixSecondRegistrationScanEngine() {
         const progressBar = document.getElementById('scanProgressFill');
         const titleText = document.getElementById('scanStatusTitle');
         const subText = document.getElementById('scanStatusSub');
@@ -1275,7 +1373,6 @@
         savedAcc.changeCount = passwordChangeCount;
         localStorage.setItem('smilings_user_account', JSON.stringify(savedAcc));
 
-        // Start 6-Second Password Audit Scan
         const forgotBox = document.getElementById('forgotPassBox');
         const resetScanBox = document.getElementById('resetScanBox');
 
@@ -1380,7 +1477,6 @@
             return;
         }
 
-        // Transition to Step 6 Main Dashboard
         const step5 = document.getElementById('step5Box');
         const step6 = document.getElementById('step6Box');
 
@@ -1400,6 +1496,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
         renderLanguages(indianLanguages);
+        runStep1InitialScan();
     });
 </script>
 

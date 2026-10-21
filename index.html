@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smilings - Step 1 & 2</title>
+    <title>Smilings - Step 1, 2 & 3</title>
     <style>
         :root {
             --primary: #6c5ce7;
@@ -136,7 +136,6 @@
             }
         }
 
-        /* Step 1 Elements */
         .instruction-title {
             font-size: 17px;
             font-weight: 800;
@@ -152,6 +151,7 @@
             line-height: 1.4;
         }
 
+        /* Step 1 Language Trigger */
         .language-box-wrapper {
             position: relative;
             margin-bottom: 24px;
@@ -195,7 +195,7 @@
             transform: rotate(180deg);
         }
 
-        /* Step 2 Phone Input Box Styling */
+        /* Step 2 Phone Input Group */
         .phone-input-group {
             display: flex;
             align-items: center;
@@ -244,6 +244,61 @@
             font-size: 14px;
         }
 
+        /* Step 3 Password Input Group with Eye Icon */
+        .password-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid var(--border-color);
+            border-radius: 16px;
+            padding: 4px 12px;
+            margin-bottom: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .password-input-group:focus-within {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.12);
+            box-shadow: 0 0 16px var(--accent-glow);
+        }
+
+        .password-input-field {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-light);
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 40px 12px 4px;
+        }
+
+        .password-input-field::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .eye-toggle-btn {
+            position: absolute;
+            right: 14px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .eye-toggle-btn:hover {
+            color: var(--text-light);
+        }
+
         .btn-continue {
             width: 100%;
             padding: 16px;
@@ -257,6 +312,7 @@
             box-shadow: 0 8px 24px var(--accent-glow);
             letter-spacing: 0.5px;
             transition: all 0.2s;
+            margin-top: 10px;
         }
 
         .btn-continue:active {
@@ -450,7 +506,7 @@
             </button>
         </div>
 
-        <!-- STEP 2 CONTENT SECTION (Magically Appears) -->
+        <!-- STEP 2 CONTENT SECTION -->
         <div id="step2Box" class="step-content hidden">
             <div class="instruction-title" id="step2TitleText">Enter your registered mobile number</div>
             <div class="instruction-sub" id="step2SubText">We will send a security code to verify your mobile account</div>
@@ -463,7 +519,29 @@
                 <input type="tel" id="mobileInput" class="phone-input-field" placeholder="Enter 10-digit number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
             </div>
 
-            <button type="button" class="btn-continue" id="step2ContinueBtn" onclick="submitMobileStep2()">
+            <button type="button" class="btn-continue" id="step2ContinueBtn" onclick="goToStep3()">
+                CONTINUE
+            </button>
+        </div>
+
+        <!-- STEP 3 CONTENT SECTION (Magically Appears) -->
+        <div id="step3Box" class="step-content hidden">
+            <div class="instruction-title" id="step3TitleText">Create a secure password</div>
+            <div class="instruction-sub" id="step3SubText">Set a password to protect your account and re-enter to confirm</div>
+
+            <!-- Create Password Field -->
+            <div class="password-input-group">
+                <input type="password" id="createPassInput" class="password-input-field" placeholder="Create a password">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('createPassInput', this)">👁️</button>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="password-input-group">
+                <input type="password" id="confirmPassInput" class="password-input-field" placeholder="Re-enter created password">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('confirmPassInput', this)">👁️</button>
+            </div>
+
+            <button type="button" class="btn-continue" id="step3ContinueBtn" onclick="submitStep3()">
                 CONTINUE
             </button>
         </div>
@@ -495,8 +573,11 @@
               continue: "CONTINUE", 
               step1: "Step 1 of Unlimited", 
               step2: "Step 2 of Unlimited", 
+              step3: "Step 3 of Unlimited", 
               step2Title: "Enter your registered mobile number", 
               step2Sub: "We will send a security code to verify your mobile account",
+              step3Title: "Create a secure password",
+              step3Sub: "Set a password to protect your account and re-enter to confirm",
               modalTitle: "Choose Your State / Preferred Language" 
           } 
         },
@@ -507,8 +588,11 @@
               continue: "आगे बढ़ें", 
               step1: "असीमित में से चरण 1", 
               step2: "असीमित में से चरण 2", 
+              step3: "असीमित में से चरण 3", 
               step2Title: "अपना पंजीकृत मोबाइल नंबर दर्ज करें", 
               step2Sub: "आपके मोबाइल खाते को सत्यापित करने के लिए हम सुरक्षा कोड भेजेंगे",
+              step3Title: "एक सुरक्षित पासवर्ड बनाएं",
+              step3Sub: "खाते की सुरक्षा के लिए पासवर्ड सेट करें और पुष्टि के लिए पुनः दर्ज करें",
               modalTitle: "अपनी राज्य या पसंदीदा भाषा चुनें" 
           } 
         },
@@ -519,75 +603,25 @@
               continue: "এগিয়ে যান", 
               step1: "ধাপ ১ (আনলিমিটেড)", 
               step2: "ধাপ ২ (আনলিমিটেড)", 
+              step3: "ধাপ ৩ (আনলিমিটেড)", 
               step2Title: "আপনার নিবন্ধিত মোবাইল নম্বর লিখুন", 
               step2Sub: "আপনার মোবাইল অ্যাকাউন্ট যাচাই করতে আমরা একটি নিরাপত্তা কোড পাঠাব",
+              step3Title: "একটি নিরাপদ পাসওয়ার্ড তৈরি করুন",
+              step3Sub: "অ্যাকাউন্ট সুরক্ষিত করতে একটি পাসওয়ার্ড সেট করুন এবং নিশ্চিত করতে পুনরায় লিখুন",
               modalTitle: "আপনার রাজ্য বা পছন্দসই ভাষা বেছে নিন" 
           } 
         },
-        { native: "తెలుగు", english: "Telugu", state: "Andhra Pradesh, Telangana", code: "te",
-          translations: { 
-              title: "యాప్ కోసం మీ ప్రాధాన్య భాషను ఎంచుకోండి", 
-              sub: "యాప్‌లోని ప్రతి అక్షరం మీరు ఎంచుకున్న భాషలోకి మారుతుంది", 
-              continue: "కొనసాగించండి", 
-              step1: "అపరిమితంలో దశ 1", 
-              step2: "అపరిమితంలో దశ 2", 
-              step2Title: "మీ రిజిస్టర్డ్ మొబైల్ నంబర్‌ను నమోదు చేయండి", 
-              step2Sub: "మీ మొబైల్ ఖాతాను నిరూపించడానికి మేము కోడ్‌ను పంపుతాము",
-              modalTitle: "మీ రాష్ట్రం లేదా ప్రాధాన్య భాషను ఎంచుకోండి" 
-          } 
-        },
-        { native: "मराठी", english: "Marathi", state: "Maharashtra, Goa", code: "mr",
-          translations: { 
-              title: "ॲपसाठी तुमची पसंतीची भाषा निवडा", 
-              sub: "ॲपमधील प्रत्येक शब्द तुमच्या निवडलेल्या भाषेत दिसेल", 
-              continue: "पुढे जा", 
-              step1: "अमर्याद पैकी टप्पा १", 
-              step2: "अमर्याद पैकी टप्पा २", 
-              step2Title: "तुमचा नोंदणीकृत मोबाईल नंबर टाका", 
-              step2Sub: "तुमचे मोबाईल खाते सत्यापित करण्यासाठी आम्ही सुरक्षा कोड पाठवू",
-              modalTitle: "तुमची राज्य किंवा पसंतीची भाषा निवडा" 
-          } 
-        },
-        { native: "தமிழ்", english: "Tamil", state: "Tamil Nadu, Puducherry", code: "ta",
-          translations: { 
-              title: "செயலிக்கு உங்கள் விருப்பமான மொழியைத் தேர்ந்தெடுக்கவும்", 
-              sub: "செயலியின் அனைத்து எழுத்துக்களும் உங்கள் மொழியில் மாறும்", 
-              continue: "தொடரவும்", 
-              step1: "வரம்பற்றதில் படி 1", 
-              step2: "வரம்பற்றதில் படி 2", 
-              step2Title: "உங்கள் பதிவுசெய்த மொபைல் எண்ணை உள்ளிடவும்", 
-              step2Sub: "உங்கள் மொபைல் கணக்கைச் சரிபார்க்க நாங்கள் குறியீட்டை அனுப்புவோம்",
-              modalTitle: "உங்கள் மாநிலம் அல்லது மொழியைத் தேர்ந்தெடுக்கவும்" 
-          } 
-        },
+        { native: "తెలుగు", english: "Telugu", state: "Andhra Pradesh, Telangana", code: "te" },
+        { native: "मराठी", english: "Marathi", state: "Maharashtra, Goa", code: "mr" },
+        { native: "தமிழ்", english: "Tamil", state: "Tamil Nadu, Puducherry", code: "ta" },
         { native: "اردو", english: "Urdu", state: "Telangana, UP, J&K, Bihar", code: "ur" },
         { native: "ગુજરાતી", english: "Gujarati", state: "Gujarat, Daman & Diu", code: "gu" },
-        { native: "કન્નડ", english: "Kannada", state: "Karnataka", code: "kn" },
+        { native: "ಕನ್ನಡ", english: "Kannada", state: "Karnataka", code: "kn" },
         { native: "മലയാളം", english: "Malayalam", state: "Kerala, Lakshadweep", code: "ml" },
         { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
         { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
         { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
-        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" },
-        { native: "मैथिली", english: "Maithili", state: "Bihar, Jharkhand", code: "mai" },
-        { native: "संथाली", english: "Santali", state: "Jharkhand, Odisha, WB", code: "sat" },
-        { native: "कश्मीरी", english: "Kashmiri", state: "Jammu & Kashmir", code: "ks" },
-        { native: "कोंकणी", english: "Konkani", state: "Goa, Karnataka", code: "kok" },
-        { native: "सिंधी", english: "Sindhi", state: "Gujarat, Rajasthan", code: "sd" },
-        { native: "डोगरी", english: "Dogri", state: "Jammu & Kashmir", code: "doi" },
-        { native: "मणिपुरी", english: "Manipuri (Meitei)", state: "Manipur", code: "mni" },
-        { native: "बोडो", english: "Bodo", state: "Assam (Bodoland)", code: "brx" },
-        { native: "संस्कृतम्", english: "Sanskrit", state: "Uttarakhand", code: "sa" },
-        { native: "भोजपुरी", english: "Bhojpuri", state: "Bihar, UP", code: "bho" },
-        { native: "मारवाड़ी", english: "Marwari", state: "Rajasthan", code: "mwr" },
-        { native: "छत्तीसगढ़ी", english: "Chhattisgarhi", state: "Chhattisgarh", code: "ctg" },
-        { native: "हरियाणवी", english: "Haryanvi", state: "Haryana", code: "bgc" },
-        { native: "तुळु", english: "Tulu", state: "Karnataka, Kerala", code: "tcy" },
-        { native: "खसी", english: "Khasi", state: "Meghalaya", code: "kha" },
-        { native: "गारो", english: "Garo", state: "Meghalaya", code: "grt" },
-        { native: "मिज़ो", english: "Mizo", state: "Mizoram", code: "lus" },
-        { native: "नागामीस", english: "Nagamese", state: "Nagaland", code: "nag" },
-        { native: "कोकबोरोक", english: "Kokborok", state: "Tripura", code: "trv" },
-        { native: "लद्दाखी", english: "Ladakhi", state: "Ladakh", code: "lbj" }
+        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
     ];
 
     let selectedLang = indianLanguages[0];
@@ -637,9 +671,7 @@
         document.getElementById('currentLangLabel').innerText = `${item.english} (${item.native})`;
         document.getElementById('topLangBadge').innerText = item.english;
         
-        // Translate app UI dynamically
         applyTranslations(item);
-        
         closeLanguageModal();
     }
 
@@ -650,8 +682,11 @@
             continue: "CONTINUE",
             step1: "Step 1 of Unlimited",
             step2: "Step 2 of Unlimited",
+            step3: "Step 3 of Unlimited",
             step2Title: "Enter your registered mobile number",
             step2Sub: "We will send a security code to verify your mobile account",
+            step3Title: "Create a secure password",
+            step3Sub: "Set a password to protect your account and re-enter to confirm",
             modalTitle: "Choose Your State / Preferred Language"
         };
 
@@ -659,14 +694,19 @@
         document.getElementById('subText').innerText = t.sub;
         document.getElementById('continueBtnText').innerText = t.continue;
         document.getElementById('step2ContinueBtn').innerText = t.continue;
+        document.getElementById('step3ContinueBtn').innerText = t.continue;
         document.getElementById('modalTitleText').innerText = t.modalTitle;
         
         if (currentStep === 1) {
             document.getElementById('stepBadgeText').innerText = t.step1;
-        } else {
+        } else if (currentStep === 2) {
             document.getElementById('stepBadgeText').innerText = t.step2;
             document.getElementById('step2TitleText').innerText = t.step2Title;
             document.getElementById('step2SubText').innerText = t.step2Sub;
+        } else if (currentStep === 3) {
+            document.getElementById('stepBadgeText').innerText = t.step3;
+            document.getElementById('step3TitleText').innerText = t.step3Title;
+            document.getElementById('step3SubText').innerText = t.step3Sub;
         }
     }
 
@@ -680,28 +720,23 @@
         renderLanguages(filtered);
     }
 
-    /* Magical Transition from Step 1 to Step 2 */
+    /* Transition Step 1 -> Step 2 */
     function goToStep2() {
         const step1 = document.getElementById('step1Box');
         const step2 = document.getElementById('step2Box');
-        const badge = document.getElementById('stepBadgeText');
 
-        // Fade out Step 1
         step1.classList.add('fade-out');
 
         setTimeout(() => {
             step1.classList.add('hidden');
             step1.classList.remove('fade-out');
 
-            // Update step badge text
             currentStep = 2;
             applyTranslations(selectedLang);
 
-            // Magically appear Step 2
             step2.classList.remove('hidden');
             step2.classList.add('fade-in');
 
-            // Focus on phone input field automatically
             document.getElementById('mobileInput').focus();
         }, 350);
     }
@@ -711,13 +746,61 @@
         input.value = input.value.replace(/[^0-9]/g, '');
     }
 
-    function submitMobileStep2() {
+    /* Transition Step 2 -> Step 3 */
+    function goToStep3() {
         const mobile = document.getElementById('mobileInput').value;
         if (mobile.length !== 10) {
             alert("Please enter a valid 10-digit mobile number!");
             return;
         }
-        alert(`Step 2 Completed!\nMobile Number: +91 ${mobile}\n\nReady for Step 3 whenever you instruct!`);
+
+        const step2 = document.getElementById('step2Box');
+        const step3 = document.getElementById('step3Box');
+
+        step2.classList.add('fade-out');
+
+        setTimeout(() => {
+            step2.classList.add('hidden');
+            step2.classList.remove('fade-out');
+
+            currentStep = 3;
+            applyTranslations(selectedLang);
+
+            step3.classList.remove('hidden');
+            step3.classList.add('fade-in');
+
+            document.getElementById('createPassInput').focus();
+        }, 350);
+    }
+
+    /* Toggle Password Visibility Eye Icon */
+    function togglePasswordVisibility(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.innerText = '🙈';
+        } else {
+            input.type = 'password';
+            btn.innerText = '👁️';
+        }
+    }
+
+    /* Submit Step 3 Validation */
+    function submitStep3() {
+        const pass1 = document.getElementById('createPassInput').value;
+        const pass2 = document.getElementById('confirmPassInput').value;
+
+        if (!pass1 || pass1.length < 4) {
+            alert("Password must be at least 4 characters long!");
+            return;
+        }
+
+        if (pass1 !== pass2) {
+            alert("Passwords do not match! Please re-enter.");
+            return;
+        }
+
+        alert(`Step 3 Completed Successfully!\nPassword saved securely.\n\nReady for Step 4 whenever you instruct!`);
     }
 
     window.addEventListener('DOMContentLoaded', () => {

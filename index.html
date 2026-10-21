@@ -473,32 +473,14 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* PROFILE & TOP EXP OUTER BOUNDARY BAR */
-        .dash-user-profile-bar {
+        /* TOP EXP OUTER BOUNDARY BAR (NO MOBILE NUMBER) */
+        .dash-top-exp-bar {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 16px 16px 12px 16px;
+            justify-content: flex-end;
+            padding: 14px 16px 8px 16px;
             width: 100%;
         }
-
-        .dash-user-title {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--text-light);
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .voice-speaker-icon {
-            font-size: 15px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .voice-speaker-icon:hover { transform: scale(1.2); }
 
         .dash-user-exp-top-right {
             font-size: 11px;
@@ -567,6 +549,39 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* PROFILE DETAILS CARD STYLES */
+        .profile-info-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        .profile-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 12px;
+        }
+
+        .profile-row:last-child {
+            border-bottom: none;
+        }
+
+        .profile-label { color: var(--text-dim); font-weight: 600; }
+        .profile-val { color: var(--text-light); font-weight: 800; display: flex; align-items: center; gap: 6px; }
+
+        .voice-speaker-btn {
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .voice-speaker-btn:hover { transform: scale(1.2); }
 
         /* STREAK SECTION STYLES */
         .streak-section-header {
@@ -720,7 +735,7 @@
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 10px 16px;
+            padding: 8px 6px;
             z-index: 50;
         }
 
@@ -732,10 +747,10 @@
             background: transparent;
             border: none;
             color: var(--text-dim);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             cursor: pointer;
-            padding: 6px 14px;
+            padding: 6px 10px;
             border-radius: 12px;
             transition: all 0.2s ease;
         }
@@ -745,7 +760,7 @@
             background: rgba(0, 243, 255, 0.12);
         }
 
-        .dash-nav-icon { font-size: 16px; }
+        .dash-nav-icon { font-size: 15px; }
 
         .modal-overlay {
             position: fixed;
@@ -1111,14 +1126,8 @@
                     </div>
                 </div>
 
-                <!-- PROFILE ROW & TOP RIGHT ATTACHED EXP OUTER BOUNDARY BADGE -->
-                <div class="dash-user-profile-bar">
-                    <div class="dash-user-title">
-                        <span id="dashUserPhoneVal">+91 XXXXXXXXXX</span>
-                        <span class="voice-speaker-icon" onclick="voiceOutMobileNumber()" title="Listen to Mobile Number">🔊</span>
-                    </div>
-
-                    <!-- EXP attached to top right outer boundary -->
+                <!-- TOP EXP OUTER BOUNDARY BAR (Mobile Number removed) -->
+                <div class="dash-top-exp-bar">
                     <div class="dash-user-exp-top-right" id="userTotalExpVal">⚡ 100 EXP</div>
                 </div>
 
@@ -1181,6 +1190,41 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- POPUP PANEL TAB 3: MY PROFILE SECTION -->
+                    <div id="myProfileTabContent" class="dashboard-popup-panel hidden">
+                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
+
+                        <div class="streak-section-header">
+                            <span>👤 My Profile Details</span>
+                        </div>
+
+                        <div class="profile-info-card">
+                            <div class="profile-row">
+                                <span class="profile-label">Registered Mobile:</span>
+                                <span class="profile-val">
+                                    <span id="profileMobileVal">+91 8918351226</span>
+                                    <span class="voice-speaker-btn" onclick="voiceOutMobileNumber()" title="Listen Mobile Number">🔊</span>
+                                </span>
+                            </div>
+                            <div class="profile-row">
+                                <span class="profile-label">Account Status:</span>
+                                <span class="profile-val" style="color: var(--accent-green);">● Active</span>
+                            </div>
+                            <div class="profile-row">
+                                <span class="profile-label">Device Fingerprint:</span>
+                                <span class="profile-val" id="profileFpVal" style="font-family: monospace; font-size: 11px;">SML-8912A</span>
+                            </div>
+                            <div class="profile-row">
+                                <span class="profile-label">Network Location:</span>
+                                <span class="profile-val" id="profileLocVal" style="color: var(--accent-cyan);">Gangtok, Sikkim</span>
+                            </div>
+                            <div class="profile-row">
+                                <span class="profile-label">Password Changes:</span>
+                                <span class="profile-val" id="profilePassChangesVal">1 Time</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- BOTTOM OUTER BOUNDARY ATTACHED NAVIGATION BAR -->
@@ -1198,6 +1242,10 @@
                     <button type="button" class="dash-nav-item" id="navDashBtn" onclick="switchDashboardTab('myDashboard')">
                         <span class="dash-nav-icon">📊</span>
                         <span>My Dashboard</span>
+                    </button>
+                    <button type="button" class="dash-nav-item" id="navProfileBtn" onclick="switchDashboardTab('myProfile')">
+                        <span class="dash-nav-icon">👤</span>
+                        <span>My Profile</span>
                     </button>
                     <button type="button" class="dash-nav-item" style="color: var(--accent-pink);" onclick="manualLogout()">
                         <span class="dash-nav-icon">🚪</span>
@@ -1420,6 +1468,14 @@
         }, 100);
     }
 
+    function updateProfileDetails(mobileNum) {
+        const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account')) || {};
+        document.getElementById('profileMobileVal').innerText = "+91 " + (mobileNum || savedAcc.mobile || "8918351226");
+        document.getElementById('profileFpVal').innerText = userFingerprint || savedAcc.fingerprint || "SML-8912A";
+        document.getElementById('profileLocVal').innerText = currentLocation;
+        document.getElementById('profilePassChangesVal').innerText = (savedAcc.changeCount || 1) + " Times";
+    }
+
     function jumpDirectToDashboard(mobileNum) {
         const step1 = document.getElementById('step1Box');
         const step6 = document.getElementById('step6Box');
@@ -1433,14 +1489,14 @@
             currentStep = 6;
             document.getElementById('brandTitleHeader').classList.add('hidden');
             document.getElementById('mainContainer').classList.add('outer-boundary-mode');
-            document.getElementById('dashUserPhoneVal').innerText = "+91 " + mobileNum;
+
+            updateProfileDetails(mobileNum);
 
             step6.classList.remove('hidden');
             step6.classList.add('fade-in');
 
             loadStreakData();
             renderStreakGrid();
-            voiceOutMobileNumber();
         }, 350);
     }
 
@@ -1616,16 +1672,14 @@
             document.getElementById('brandTitleHeader').classList.add('hidden');
             document.getElementById('mainContainer').classList.add('outer-boundary-mode');
             const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
-            if (savedAcc && savedAcc.mobile) {
-                document.getElementById('dashUserPhoneVal').innerText = "+91 " + savedAcc.mobile;
-            }
+
+            updateProfileDetails(savedAcc ? savedAcc.mobile : "");
 
             step6.classList.remove('hidden');
             step6.classList.add('fade-in');
 
             loadStreakData();
             renderStreakGrid();
-            voiceOutMobileNumber();
         }, 350);
     }
 
@@ -1668,14 +1722,14 @@
             currentStep = 6;
             document.getElementById('brandTitleHeader').classList.add('hidden');
             document.getElementById('mainContainer').classList.add('outer-boundary-mode');
-            document.getElementById('dashUserPhoneVal').innerText = "+91 " + mobile;
+
+            updateProfileDetails(mobile);
 
             step6.classList.remove('hidden');
             step6.classList.add('fade-in');
 
             loadStreakData();
             renderStreakGrid();
-            voiceOutMobileNumber();
         }, 350);
     }
 
@@ -1684,21 +1738,33 @@
         const blankView = document.getElementById('blankDashboardView');
         const claimContent = document.getElementById('claimDailyTabContent');
         const dashContent = document.getElementById('myDashboardTabContent');
+        const profileContent = document.getElementById('myProfileTabContent');
+
         const navClaimBtn = document.getElementById('navClaimBtn');
         const navDashBtn = document.getElementById('navDashBtn');
+        const navProfileBtn = document.getElementById('navProfileBtn');
 
         blankView.classList.add('hidden');
 
+        // Hide all panels
+        claimContent.classList.add('hidden');
+        dashContent.classList.add('hidden');
+        profileContent.classList.add('hidden');
+
+        // Deactivate all nav buttons
+        navClaimBtn.classList.remove('active');
+        navDashBtn.classList.remove('active');
+        navProfileBtn.classList.remove('active');
+
         if (tabName === 'claimDaily') {
             claimContent.classList.remove('hidden');
-            dashContent.classList.add('hidden');
             navClaimBtn.classList.add('active');
-            navDashBtn.classList.remove('active');
         } else if (tabName === 'myDashboard') {
-            claimContent.classList.add('hidden');
             dashContent.classList.remove('hidden');
-            navClaimBtn.classList.remove('active');
             navDashBtn.classList.add('active');
+        } else if (tabName === 'myProfile') {
+            profileContent.classList.remove('hidden');
+            navProfileBtn.classList.add('active');
         }
     }
 
@@ -1706,13 +1772,19 @@
         const blankView = document.getElementById('blankDashboardView');
         const claimContent = document.getElementById('claimDailyTabContent');
         const dashContent = document.getElementById('myDashboardTabContent');
+        const profileContent = document.getElementById('myProfileTabContent');
+
         const navClaimBtn = document.getElementById('navClaimBtn');
         const navDashBtn = document.getElementById('navDashBtn');
+        const navProfileBtn = document.getElementById('navProfileBtn');
 
         claimContent.classList.add('hidden');
         dashContent.classList.add('hidden');
+        profileContent.classList.add('hidden');
+
         navClaimBtn.classList.remove('active');
         navDashBtn.classList.remove('active');
+        navProfileBtn.classList.remove('active');
 
         blankView.classList.remove('hidden');
     }

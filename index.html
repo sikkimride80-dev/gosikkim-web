@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smilings - Step 1, 2 & 3</title>
+    <title>Smilings</title>
     <style>
         :root {
             --primary: #6c5ce7;
@@ -73,7 +73,7 @@
             -webkit-backdrop-filter: blur(18px);
             border: 1px solid var(--border-color);
             border-radius: 28px;
-            padding: 30px 22px;
+            padding: 36px 22px 30px 22px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
             text-align: center;
             position: relative;
@@ -82,28 +82,13 @@
         }
 
         .app-brand {
-            font-size: 30px;
+            font-size: 32px;
             font-weight: 900;
             letter-spacing: 1px;
             background: linear-gradient(135deg, #a29bfe, #6c5ce7, #00f3ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-        }
-
-        .step-badge {
-            display: inline-block;
-            background: rgba(108, 92, 231, 0.2);
-            color: #a29bfe;
-            border: 1px solid rgba(108, 92, 231, 0.4);
-            font-size: 11px;
-            font-weight: 800;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-bottom: 22px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            margin-bottom: 16px;
         }
 
         /* Magical Step Transition Animation Styles */
@@ -484,7 +469,6 @@
 
     <div class="container">
         <div class="app-brand">Smilings</div>
-        <div class="step-badge" id="stepBadgeText">Step 1 of Unlimited</div>
 
         <!-- STEP 1 CONTENT SECTION -->
         <div id="step1Box" class="step-content">
@@ -524,7 +508,7 @@
             </button>
         </div>
 
-        <!-- STEP 3 CONTENT SECTION (Magically Appears) -->
+        <!-- STEP 3 CONTENT SECTION -->
         <div id="step3Box" class="step-content hidden">
             <div class="instruction-title" id="step3TitleText">Create a secure password</div>
             <div class="instruction-sub" id="step3SubText">Set a password to protect your account and re-enter to confirm</div>
@@ -564,16 +548,12 @@
     </div>
 
 <script>
-    // Exhaustive List of Indian State Languages, Dialects & Translations
     const indianLanguages = [
         { native: "English", english: "English", state: "Default / Auto", code: "en",
           translations: { 
               title: "Select your preferred language for the app", 
               sub: "Every text and feature in the app will adapt to your chosen language", 
               continue: "CONTINUE", 
-              step1: "Step 1 of Unlimited", 
-              step2: "Step 2 of Unlimited", 
-              step3: "Step 3 of Unlimited", 
               step2Title: "Enter your registered mobile number", 
               step2Sub: "We will send a security code to verify your mobile account",
               step3Title: "Create a secure password",
@@ -586,9 +566,6 @@
               title: "ऐप के लिए अपनी पसंदीदा भाषा चुनें", 
               sub: "ऐप का हर शब्द आपकी चुनी हुई भाषा में प्रदर्शित होगा", 
               continue: "आगे बढ़ें", 
-              step1: "असीमित में से चरण 1", 
-              step2: "असीमित में से चरण 2", 
-              step3: "असीमित में से चरण 3", 
               step2Title: "अपना पंजीकृत मोबाइल नंबर दर्ज करें", 
               step2Sub: "आपके मोबाइल खाते को सत्यापित करने के लिए हम सुरक्षा कोड भेजेंगे",
               step3Title: "एक सुरक्षित पासवर्ड बनाएं",
@@ -601,9 +578,6 @@
               title: "অ্যাপের জন্য আপনার পছন্দের ভাষা নির্বাচন করুন", 
               sub: "অ্যাপের প্রতিটি শব্দ আপনার নির্বাচিত ভাষায় পরিবর্তিত হবে", 
               continue: "এগিয়ে যান", 
-              step1: "ধাপ ১ (আনলিমিটেড)", 
-              step2: "ধাপ ২ (আনলিমিটেড)", 
-              step3: "ধাপ ৩ (আনলিমিটেড)", 
               step2Title: "আপনার নিবন্ধিত মোবাইল নম্বর লিখুন", 
               step2Sub: "আপনার মোবাইল অ্যাকাউন্ট যাচাই করতে আমরা একটি নিরাপত্তা কোড পাঠাব",
               step3Title: "একটি নিরাপদ পাসওয়ার্ড তৈরি করুন",
@@ -680,9 +654,6 @@
             title: `App Preferred Language: ${item.english}`,
             sub: "Every text and feature in the app will adapt to your chosen language",
             continue: "CONTINUE",
-            step1: "Step 1 of Unlimited",
-            step2: "Step 2 of Unlimited",
-            step3: "Step 3 of Unlimited",
             step2Title: "Enter your registered mobile number",
             step2Sub: "We will send a security code to verify your mobile account",
             step3Title: "Create a secure password",
@@ -697,14 +668,10 @@
         document.getElementById('step3ContinueBtn').innerText = t.continue;
         document.getElementById('modalTitleText').innerText = t.modalTitle;
         
-        if (currentStep === 1) {
-            document.getElementById('stepBadgeText').innerText = t.step1;
-        } else if (currentStep === 2) {
-            document.getElementById('stepBadgeText').innerText = t.step2;
+        if (currentStep === 2) {
             document.getElementById('step2TitleText').innerText = t.step2Title;
             document.getElementById('step2SubText').innerText = t.step2Sub;
         } else if (currentStep === 3) {
-            document.getElementById('stepBadgeText').innerText = t.step3;
             document.getElementById('step3TitleText').innerText = t.step3Title;
             document.getElementById('step3SubText').innerText = t.step3Sub;
         }
@@ -720,7 +687,6 @@
         renderLanguages(filtered);
     }
 
-    /* Transition Step 1 -> Step 2 */
     function goToStep2() {
         const step1 = document.getElementById('step1Box');
         const step2 = document.getElementById('step2Box');
@@ -741,12 +707,10 @@
         }, 350);
     }
 
-    /* Only allow numeric input up to 10 digits */
     function validateMobileInput(input) {
         input.value = input.value.replace(/[^0-9]/g, '');
     }
 
-    /* Transition Step 2 -> Step 3 */
     function goToStep3() {
         const mobile = document.getElementById('mobileInput').value;
         if (mobile.length !== 10) {
@@ -773,7 +737,6 @@
         }, 350);
     }
 
-    /* Toggle Password Visibility Eye Icon */
     function togglePasswordVisibility(inputId, btn) {
         const input = document.getElementById(inputId);
         if (input.type === 'password') {
@@ -785,7 +748,6 @@
         }
     }
 
-    /* Submit Step 3 Validation */
     function submitStep3() {
         const pass1 = document.getElementById('createPassInput').value;
         const pass2 = document.getElementById('confirmPassInput').value;

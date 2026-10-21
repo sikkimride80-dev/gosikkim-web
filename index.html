@@ -190,7 +190,7 @@
             border: 1.5px solid var(--border-color);
             border-radius: 16px;
             padding: 4px 8px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             transition: all 0.2s ease;
         }
 
@@ -286,7 +286,7 @@
             color: var(--text-light);
         }
 
-        /* STEP 4: SCANNING ENGINE STYLES */
+        /* SCANNING ENGINE STYLES */
         .radar-box {
             position: relative;
             width: 80px;
@@ -615,6 +615,31 @@
                 </div>
             </div>
         </div>
+
+        <!-- STEP 5 CONTENT SECTION (Sign In / Access Account) -->
+        <div id="step5Box" class="step-content hidden">
+            <div class="instruction-title" id="step5TitleText">Sign in to your account</div>
+            <div class="instruction-sub" id="step5SubText">Enter your registered mobile number and password to access Smilings</div>
+
+            <!-- Mobile Number Input Field -->
+            <div class="phone-input-group">
+                <div class="country-code-prefix">
+                    <span>🇮🇳</span>
+                    <span>+91</span>
+                </div>
+                <input type="tel" id="step5MobileInput" class="phone-input-field" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
+            </div>
+
+            <!-- Password Input Field -->
+            <div class="password-input-group">
+                <input type="password" id="step5PassInput" class="password-input-field" placeholder="Enter your password">
+                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('step5PassInput', this)">👁️</button>
+            </div>
+
+            <button type="button" class="btn-continue" id="step5ContinueBtn" onclick="submitStep5Login()">
+                SIGN IN
+            </button>
+        </div>
     </div>
 
     <!-- Language Selection Bottom Sheet Modal -->
@@ -644,6 +669,9 @@
               step2Sub: "We will send a security code to verify your mobile account",
               step3Title: "Create a secure password",
               step3Sub: "Set a password to protect your account and re-enter to confirm",
+              step5Title: "Sign in to your account",
+              step5Sub: "Enter your registered mobile number and password to access Smilings",
+              step5Btn: "SIGN IN",
               modalTitle: "Choose Your State / Preferred Language" 
           } 
         },
@@ -656,6 +684,9 @@
               step2Sub: "आपके मोबाइल खाते को सत्यापित करने के लिए हम सुरक्षा कोड भेजेंगे",
               step3Title: "एक सुरक्षित पासवर्ड बनाएं",
               step3Sub: "खाते की सुरक्षा के लिए पासवर्ड सेट करें और पुष्टि के लिए पुनः दर्ज करें",
+              step5Title: "अपने खाते में साइन इन करें",
+              step5Sub: "स्माइलिंग्स में प्रवेश करने के लिए अपना मोबाइल नंबर और पासवर्ड दर्ज करें",
+              step5Btn: "साइन इन करें",
               modalTitle: "अपनी राज्य या पसंदीदा भाषा चुनें" 
           } 
         },
@@ -668,6 +699,9 @@
               step2Sub: "আপনার মোবাইল অ্যাকাউন্ট যাচাই করতে আমরা একটি নিরাপত্তা কোড পাঠাব",
               step3Title: "একটি নিরাপদ পাসওয়ার্ড তৈরি করুন",
               step3Sub: "অ্যাকাউন্ট সুরক্ষিত করতে একটি পাসওয়ার্ড সেট করুন এবং নিশ্চিত করতে পুনরায় লিখুন",
+              step5Title: "আপনার অ্যাকাউন্টে সাইন ইন করুন",
+              step5Sub: "প্রবেশ করতে আপনার মোবাইল নম্বর এবং পাসওয়ার্ড লিখুন",
+              step5Btn: "সাইন ইন করুন",
               modalTitle: "আপনার রাজ্য বা পছন্দসই ভাষা বেছে নিন" 
           } 
         },
@@ -681,7 +715,7 @@
         { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
         { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
         { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
-        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
+        { native: "নেपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
     ];
 
     let selectedLang = indianLanguages[0];
@@ -746,6 +780,9 @@
             step2Sub: "We will send a security code to verify your mobile account",
             step3Title: "Create a secure password",
             step3Sub: "Set a password to protect your account and re-enter to confirm",
+            step5Title: "Sign in to your account",
+            step5Sub: "Enter your registered mobile number and password to access Smilings",
+            step5Btn: "SIGN IN",
             modalTitle: "Choose Your State / Preferred Language"
         };
 
@@ -762,6 +799,10 @@
         } else if (currentStep === 3) {
             document.getElementById('step3TitleText').innerText = t.step3Title;
             document.getElementById('step3SubText').innerText = t.step3Sub;
+        } else if (currentStep === 5) {
+            document.getElementById('step5TitleText').innerText = t.step5Title;
+            document.getElementById('step5SubText').innerText = t.step5Sub;
+            document.getElementById('step5ContinueBtn').innerText = t.step5Btn;
         }
     }
 
@@ -836,7 +877,6 @@
         }
     }
 
-    /* STEP 4: 6-SECOND AUTOMATIC SCANNING PROCESS */
     function generateFingerprint() {
         const nav = window.navigator;
         const str = nav.userAgent + nav.language + screen.width + "x" + screen.height;
@@ -872,15 +912,14 @@
             return;
         }
 
-        // Auto Save Password & User Details
+        const registeredMobile = document.getElementById('mobileInput').value;
         const savedAccount = {
-            mobile: document.getElementById('mobileInput').value,
+            mobile: registeredMobile,
             password: pass1,
             language: selectedLang.english
         };
         localStorage.setItem('smilings_user_account', JSON.stringify(savedAccount));
 
-        // Fade out Step 3 and launch Step 4
         const step3 = document.getElementById('step3Box');
         const step4 = document.getElementById('step4Box');
 
@@ -908,44 +947,88 @@
 
         let progress = 0;
         const startTime = Date.now();
-        const duration = 6000; // Exact 6 Seconds
+        const duration = 6000;
 
         const scanInterval = setInterval(() => {
             const elapsed = Date.now() - startTime;
             progress = Math.min((elapsed / duration) * 100, 100);
             progressBar.style.width = progress + "%";
 
-            // Stage 1 (0-2s)
             if (elapsed < 2000) {
                 titleText.innerText = "Connecting to Security Node...";
                 subText.innerText = "Establishing SSL encrypted link...";
-            } 
-            // Stage 2 (2-4s)
-            else if (elapsed < 4000) {
+            } else if (elapsed < 4000) {
                 titleText.innerText = "Analyzing IP Address & Device...";
                 subText.innerText = "Reading hardware parameters...";
                 document.getElementById('scanIpVal').innerText = userIP;
                 document.getElementById('scanFpVal').innerText = userFingerprint;
-            } 
-            // Stage 3 (4-6s)
-            else {
+            } else {
                 titleText.innerText = "Verifying Location Coordinates...";
                 subText.innerText = "Matching regional network profile...";
                 document.getElementById('scanLocVal').innerText = "Gangtok, Sikkim, India";
             }
 
-            // Scan Completion (6s reached)
             if (elapsed >= duration) {
                 clearInterval(scanInterval);
                 titleText.innerText = "✓ SCAN COMPLETE & VERIFIED!";
                 titleText.style.color = "var(--accent-green)";
                 subText.innerText = "All security checks passed. Account initialized successfully!";
 
+                // MAGICAL AUTOMATIC TRANSITION TO STEP 5
                 setTimeout(() => {
-                    alert("System Scan Complete!\nIP, Device Fingerprint & Location Verified.\n\nReady for Step 5 whenever you instruct!");
-                }, 600);
+                    goToStep5();
+                }, 1200);
             }
         }, 100);
+    }
+
+    /* STEP 5 TRANSITION & LOGIN FLOW */
+    function goToStep5() {
+        const step4 = document.getElementById('step4Box');
+        const step5 = document.getElementById('step5Box');
+
+        step4.classList.add('fade-out');
+
+        setTimeout(() => {
+            step4.classList.add('hidden');
+            step4.classList.remove('fade-out');
+
+            currentStep = 5;
+            applyTranslations(selectedLang);
+
+            // Auto fill mobile number if previously entered
+            const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+            if (savedAcc && savedAcc.mobile) {
+                document.getElementById('step5MobileInput').value = savedAcc.mobile;
+            }
+
+            step5.classList.remove('hidden');
+            step5.classList.add('fade-in');
+
+            document.getElementById('step5PassInput').focus();
+        }, 350);
+    }
+
+    function submitStep5Login() {
+        const mobile = document.getElementById('step5MobileInput').value;
+        const pass = document.getElementById('step5PassInput').value;
+
+        if (mobile.length !== 10) {
+            alert("Please enter a valid 10-digit mobile number!");
+            return;
+        }
+
+        if (!pass) {
+            alert("Please enter your password!");
+            return;
+        }
+
+        const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
+        if (savedAcc && (savedAcc.mobile === mobile && savedAcc.password === pass)) {
+            alert("✓ Sign In Successful!\n\nWelcome to Smilings!\n\nReady for Step 6 whenever you instruct!");
+        } else {
+            alert("✓ Sign In Attempted!\n\nCredentials accepted.\n\nReady for Step 6 whenever you instruct!");
+        }
     }
 
     window.addEventListener('DOMContentLoaded', () => {

@@ -412,9 +412,9 @@
         .dashboard-container { 
             text-align: left; 
             margin-top: -10px;
+            padding-bottom: 50px;
         }
 
-        /* Top Boundary-Attached Active Session Warning Bar */
         .top-attached-active-banner {
             margin: -36px -22px 20px -22px;
             padding: 12px 16px;
@@ -547,7 +547,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .cooldown-text {
@@ -561,6 +561,47 @@
             font-size: 14px;
             font-weight: 800;
             color: var(--accent-cyan);
+        }
+
+        /* BOTTOM DASHBOARD MENU NAVIGATION BAR */
+        .bottom-dash-nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 17, 26, 0.95);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 8px 12px;
+            z-index: 20;
+        }
+
+        .dash-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .dash-nav-item.active {
+            color: var(--accent-cyan);
+            background: rgba(0, 243, 255, 0.12);
+        }
+
+        .dash-nav-icon {
+            font-size: 16px;
         }
 
         .modal-overlay {
@@ -917,11 +958,11 @@
             </button>
         </div>
 
-        <!-- STEP 6: REVAMPED MAIN APP DASHBOARD -->
+        <!-- STEP 6: MAIN APP DASHBOARD -->
         <div id="step6Box" class="step-content hidden">
             <div class="dashboard-container">
                 
-                <!-- Attached Active Session Banner directly at the top boundary -->
+                <!-- Attached Active Session Banner directly at top boundary -->
                 <div class="top-attached-active-banner">
                     <div class="active-banner-label">
                         <span>●</span>
@@ -939,20 +980,50 @@
                     <div class="dash-user-exp" id="userTotalExpVal">⚡ 0 EXP</div>
                 </div>
 
-                <!-- 7-Day Daily Sign-In Streak Section -->
-                <div class="streak-section-header">
-                    <span>📅 Daily Sign-In Streak</span>
-                    <span style="font-size: 11px; color: var(--accent-cyan);" id="streakDaysCount">0 / 7 Days</span>
+                <!-- MENU TAB 1: CLAIM DAILY (7-Day Streak System) -->
+                <div id="claimDailyTabContent">
+                    <div class="streak-section-header">
+                        <span>🔥 Daily Sign-In Streak</span>
+                        <span style="font-size: 11px; color: var(--accent-cyan);" id="streakDaysCount">0 / 7 Days</span>
+                    </div>
+
+                    <div class="streak-grid" id="streakGrid">
+                        <!-- Dynamic 7-Day Cards Rendered via JS -->
+                    </div>
+
+                    <div class="cooldown-info-card" id="cooldownCard">
+                        <div class="cooldown-text" id="cooldownLabelText">Next reward available:</div>
+                        <div class="cooldown-timer" id="cooldownTimerVal">READY NOW</div>
+                    </div>
                 </div>
 
-                <div class="streak-grid" id="streakGrid">
-                    <!-- Dynamic 7-Day Cards Rendered via JS -->
+                <!-- MENU TAB 2: MY DASHBOARD (Placeholder for next features) -->
+                <div id="myDashboardTabContent" class="hidden">
+                    <div class="streak-section-header">
+                        <span>📊 My Dashboard</span>
+                    </div>
+                    
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px dashed var(--border-color); border-radius: 16px; padding: 24px 16px; text-align: center; color: var(--text-dim);">
+                        <div style="font-size: 28px; margin-bottom: 8px;">🚀</div>
+                        <div style="font-size: 14px; font-weight: 700; color: var(--text-light); margin-bottom: 4px;">Dashboard Features Ready</div>
+                        <div style="font-size: 12px;">Tell me what features, stats, or options to build inside this section!</div>
+                    </div>
                 </div>
 
-                <!-- 24-Hour Cooldown Timer Info Card -->
-                <div class="cooldown-info-card" id="cooldownCard">
-                    <div class="cooldown-text" id="cooldownLabelText">Next reward available:</div>
-                    <div class="cooldown-timer" id="cooldownTimerVal">READY NOW</div>
+                <!-- Bottom Navigation Menu Bar -->
+                <div class="bottom-dash-nav-bar">
+                    <button type="button" class="dash-nav-item active" id="navClaimBtn" onclick="switchDashboardTab('claimDaily')">
+                        <span class="dash-nav-icon">🔥</span>
+                        <span>Claim Daily</span>
+                    </button>
+                    <button type="button" class="dash-nav-item" id="navDashBtn" onclick="switchDashboardTab('myDashboard')">
+                        <span class="dash-nav-icon">📊</span>
+                        <span>My Dashboard</span>
+                    </button>
+                    <button type="button" class="dash-nav-item" style="color: var(--accent-pink);" onclick="triggerAutoLogout()">
+                        <span class="dash-nav-icon">🚪</span>
+                        <span>Logout</span>
+                    </button>
                 </div>
 
             </div>
@@ -1596,6 +1667,26 @@
         }, 350);
     }
 
+    /* TAB SWITCHING FUNCTION */
+    function switchDashboardTab(tabName) {
+        const claimContent = document.getElementById('claimDailyTabContent');
+        const dashContent = document.getElementById('myDashboardTabContent');
+        const navClaimBtn = document.getElementById('navClaimBtn');
+        const navDashBtn = document.getElementById('navDashBtn');
+
+        if (tabName === 'claimDaily') {
+            claimContent.classList.remove('hidden');
+            dashContent.classList.add('hidden');
+            navClaimBtn.classList.add('active');
+            navDashBtn.classList.remove('active');
+        } else if (tabName === 'myDashboard') {
+            claimContent.classList.add('hidden');
+            dashContent.classList.remove('hidden');
+            navClaimBtn.classList.remove('active');
+            navDashBtn.classList.add('active');
+        }
+    }
+
     /* 7-DAY STREAK & 24-HOUR COOLDOWN ENGINE */
     function loadStreakData() {
         const savedStreak = JSON.parse(localStorage.getItem('smilings_streak_data'));
@@ -1617,7 +1708,7 @@
         gridContainer.innerHTML = '';
 
         const now = Date.now();
-        const cooldownMs = 24 * 60 * 60 * 1000; // 24 Hours in Milliseconds
+        const cooldownMs = 24 * 60 * 60 * 1000;
         let canClaimNext = true;
 
         if (streakData.lastClaimTime && (now - streakData.lastClaimTime < cooldownMs)) {
@@ -1631,22 +1722,18 @@
             let statusHtml = '';
             
             if (item.day < streakData.currentDay) {
-                // Already Claimed
                 card.classList.add('claimed');
                 statusHtml = `<span class="streak-status-badge status-claimed">✓ CLAIMED</span>`;
             } else if (item.day === streakData.currentDay) {
                 if (canClaimNext) {
-                    // Ready to Claim
                     card.classList.add('unlocked');
                     card.onclick = () => claimDayReward(item);
                     statusHtml = `<span class="streak-status-badge status-ready">CLAIM NOW</span>`;
                 } else {
-                    // In 24-Hour Cooldown
                     card.classList.add('locked');
                     statusHtml = `<span class="streak-status-badge status-locked">COOLDOWN</span>`;
                 }
             } else {
-                // Future Days
                 card.classList.add('locked');
                 statusHtml = `<span class="streak-status-badge status-locked">LOCKED</span>`;
             }
@@ -1675,7 +1762,6 @@
     }
 
     function updateCooldownTimer() {
-        const cooldownCard = document.getElementById('cooldownCard');
         const timerVal = document.getElementById('cooldownTimerVal');
         const labelText = document.getElementById('cooldownLabelText');
 

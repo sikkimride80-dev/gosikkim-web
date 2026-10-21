@@ -473,7 +473,7 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* TOP EXP OUTER BOUNDARY BAR (NO MOBILE NUMBER) */
+        /* TOP EXP OUTER BOUNDARY BAR */
         .dash-top-exp-bar {
             display: flex;
             align-items: center;
@@ -660,7 +660,7 @@
         .cooldown-text { font-size: 11px; color: var(--text-dim); font-weight: 600; }
         .cooldown-timer { font-family: monospace; font-size: 13px; font-weight: 800; color: var(--accent-cyan); }
 
-        /* MY DASHBOARD OPTIONS GRID */
+        /* MY DASHBOARD & MORE OPTIONS GRID */
         .my-dash-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -735,7 +735,7 @@
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 8px 6px;
+            padding: 8px 4px;
             z-index: 50;
         }
 
@@ -747,11 +747,11 @@
             background: transparent;
             border: none;
             color: var(--text-dim);
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 12px;
+            padding: 5px 6px;
+            border-radius: 10px;
             transition: all 0.2s ease;
         }
 
@@ -1126,7 +1126,7 @@
                     </div>
                 </div>
 
-                <!-- TOP EXP OUTER BOUNDARY BAR (Mobile Number removed) -->
+                <!-- TOP EXP OUTER BOUNDARY BAR -->
                 <div class="dash-top-exp-bar">
                     <div class="dash-user-exp-top-right" id="userTotalExpVal">⚡ 100 EXP</div>
                 </div>
@@ -1225,6 +1225,38 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- POPUP PANEL TAB 4: MORE OPTIONS SECTION -->
+                    <div id="moreOptionsTabContent" class="dashboard-popup-panel hidden">
+                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
+
+                        <div class="streak-section-header">
+                            <span>⚙️ More Settings & Features</span>
+                        </div>
+                        
+                        <div class="my-dash-grid">
+                            <div class="my-dash-tile" onclick="alert('Notifications Settings Coming Soon!')">
+                                <div class="my-dash-tile-icon">🔔</div>
+                                <div class="my-dash-tile-title">Notifications</div>
+                                <div class="my-dash-tile-sub">Alert Preferences</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Theme Customization Coming Soon!')">
+                                <div class="my-dash-tile-icon">🌙</div>
+                                <div class="my-dash-tile-title">App Theme</div>
+                                <div class="my-dash-tile-sub">Dark & Glow Mode</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Privacy & Terms Profile')">
+                                <div class="my-dash-tile-icon">🔐</div>
+                                <div class="my-dash-tile-title">Privacy Settings</div>
+                                <div class="my-dash-tile-sub">Data & Security</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Smilings App v2.4 - Build Stable')">
+                                <div class="my-dash-tile-icon">ℹ️</div>
+                                <div class="my-dash-tile-title">About App</div>
+                                <div class="my-dash-tile-sub">Version & Terms</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- BOTTOM OUTER BOUNDARY ATTACHED NAVIGATION BAR -->
@@ -1246,6 +1278,10 @@
                     <button type="button" class="dash-nav-item" id="navProfileBtn" onclick="switchDashboardTab('myProfile')">
                         <span class="dash-nav-icon">👤</span>
                         <span>My Profile</span>
+                    </button>
+                    <button type="button" class="dash-nav-item" id="navMoreBtn" onclick="switchDashboardTab('moreOptions')">
+                        <span class="dash-nav-icon">⚙️</span>
+                        <span>More</span>
                     </button>
                     <button type="button" class="dash-nav-item" style="color: var(--accent-pink);" onclick="manualLogout()">
                         <span class="dash-nav-icon">🚪</span>
@@ -1739,10 +1775,12 @@
         const claimContent = document.getElementById('claimDailyTabContent');
         const dashContent = document.getElementById('myDashboardTabContent');
         const profileContent = document.getElementById('myProfileTabContent');
+        const moreContent = document.getElementById('moreOptionsTabContent');
 
         const navClaimBtn = document.getElementById('navClaimBtn');
         const navDashBtn = document.getElementById('navDashBtn');
         const navProfileBtn = document.getElementById('navProfileBtn');
+        const navMoreBtn = document.getElementById('navMoreBtn');
 
         blankView.classList.add('hidden');
 
@@ -1750,11 +1788,13 @@
         claimContent.classList.add('hidden');
         dashContent.classList.add('hidden');
         profileContent.classList.add('hidden');
+        moreContent.classList.add('hidden');
 
         // Deactivate all nav buttons
         navClaimBtn.classList.remove('active');
         navDashBtn.classList.remove('active');
         navProfileBtn.classList.remove('active');
+        navMoreBtn.classList.remove('active');
 
         if (tabName === 'claimDaily') {
             claimContent.classList.remove('hidden');
@@ -1765,6 +1805,9 @@
         } else if (tabName === 'myProfile') {
             profileContent.classList.remove('hidden');
             navProfileBtn.classList.add('active');
+        } else if (tabName === 'moreOptions') {
+            moreContent.classList.remove('hidden');
+            navMoreBtn.classList.add('active');
         }
     }
 
@@ -1773,18 +1816,22 @@
         const claimContent = document.getElementById('claimDailyTabContent');
         const dashContent = document.getElementById('myDashboardTabContent');
         const profileContent = document.getElementById('myProfileTabContent');
+        const moreContent = document.getElementById('moreOptionsTabContent');
 
         const navClaimBtn = document.getElementById('navClaimBtn');
         const navDashBtn = document.getElementById('navDashBtn');
         const navProfileBtn = document.getElementById('navProfileBtn');
+        const navMoreBtn = document.getElementById('navMoreBtn');
 
         claimContent.classList.add('hidden');
         dashContent.classList.add('hidden');
         profileContent.classList.add('hidden');
+        moreContent.classList.add('hidden');
 
         navClaimBtn.classList.remove('active');
         navDashBtn.classList.remove('active');
         navProfileBtn.classList.remove('active');
+        navMoreBtn.classList.remove('active');
 
         blankView.classList.remove('hidden');
     }

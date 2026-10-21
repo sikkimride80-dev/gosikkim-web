@@ -525,6 +525,8 @@
             position: relative;
             animation: panelPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             backdrop-filter: blur(16px);
+            max-height: 70vh;
+            overflow-y: auto;
         }
 
         @keyframes panelPopup {
@@ -1235,12 +1237,35 @@
                         </div>
                         
                         <div class="my-dash-grid">
-                            <div class="my-dash-tile" onclick="alert('Notifications Settings Coming Soon!')">
+                            <!-- NEW REQUESTED OPTIONS -->
+                            <div class="my-dash-tile" onclick="alert('Opening Play Games Lobby...')">
+                                <div class="my-dash-tile-icon">🎮</div>
+                                <div class="my-dash-tile-title">PLAY GAMES</div>
+                                <div class="my-dash-tile-sub">Earn Rewards</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Opening Watch Video Arena...')">
+                                <div class="my-dash-tile-icon">🎬</div>
+                                <div class="my-dash-tile-title">WATCH VIDEO</div>
+                                <div class="my-dash-tile-sub">Trending Feeds</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Opening Video Upload Studio...')">
+                                <div class="my-dash-tile-icon">📹</div>
+                                <div class="my-dash-tile-title">POST YOUR VIDEO</div>
+                                <div class="my-dash-tile-sub">Share Content</div>
+                            </div>
+                            <div class="my-dash-tile" onclick="alert('Opening Subscription Plans...')">
+                                <div class="my-dash-tile-icon">⭐</div>
+                                <div class="my-dash-tile-title">BUY SUBSCRIPTION</div>
+                                <div class="my-dash-tile-sub">VIP Access & Perks</div>
+                            </div>
+
+                            <!-- EXISTING OPTIONS -->
+                            <div class="my-dash-tile" onclick="alert('Notifications Settings Preferences')">
                                 <div class="my-dash-tile-icon">🔔</div>
                                 <div class="my-dash-tile-title">Notifications</div>
                                 <div class="my-dash-tile-sub">Alert Preferences</div>
                             </div>
-                            <div class="my-dash-tile" onclick="alert('Theme Customization Coming Soon!')">
+                            <div class="my-dash-tile" onclick="alert('App Theme Options')">
                                 <div class="my-dash-tile-icon">🌙</div>
                                 <div class="my-dash-tile-title">App Theme</div>
                                 <div class="my-dash-tile-sub">Dark & Glow Mode</div>

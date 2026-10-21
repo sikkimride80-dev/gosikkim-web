@@ -437,8 +437,8 @@
         }
 
         .inactivity-timer-card {
-            background: rgba(255, 0, 127, 0.1);
-            border: 1px solid rgba(255, 0, 127, 0.3);
+            background: rgba(0, 255, 102, 0.08);
+            border: 1px solid rgba(0, 255, 102, 0.25);
             border-radius: 14px;
             padding: 10px 14px;
             display: flex;
@@ -456,11 +456,11 @@
             gap: 6px;
         }
 
-        .timer-countdown {
+        .timer-status-text {
             font-family: monospace;
-            font-size: 15px;
-            font-weight: 900;
-            color: var(--accent-pink);
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--accent-green);
         }
 
         .dashboard-grid {
@@ -855,31 +855,31 @@
                     <span class="user-status-pill">● ACTIVE</span>
                 </div>
 
-                <!-- 1-Minute Inactivity Timer HUD -->
+                <!-- App Leave / Background Inactivity Protection Card -->
                 <div class="inactivity-timer-card">
                     <div class="timer-label">
-                        <span>⏳ Auto Logout:</span>
+                        <span>🛡️ Session Status:</span>
                     </div>
-                    <div class="timer-countdown" id="inactivityTimerVal">01:00</div>
+                    <div class="timer-status-text" id="inactivityTimerVal">ACTIVE (Auto-logout if app is left)</div>
                 </div>
 
                 <div class="dashboard-grid">
-                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                    <div class="dash-tile" onclick="alert('Opening Daily Rewards...')">
                         <div class="dash-tile-icon">🎁</div>
                         <div class="dash-tile-title">Daily Check-In</div>
                         <div class="dash-tile-sub">Claim Points</div>
                     </div>
-                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                    <div class="dash-tile" onclick="alert('Opening Games Section...')">
                         <div class="dash-tile-icon">🎮</div>
                         <div class="dash-tile-title">Games Hub</div>
                         <div class="dash-tile-sub">10,000+ Games</div>
                     </div>
-                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                    <div class="dash-tile" onclick="alert('Opening Live Chat & Rooms...')">
                         <div class="dash-tile-icon">💬</div>
                         <div class="dash-tile-title">Community</div>
                         <div class="dash-tile-sub">Live Rooms</div>
                     </div>
-                    <div class="dash-tile" onclick="resetInactivityTimer()">
+                    <div class="dash-tile" onclick="alert('Opening Account Security Profile...')">
                         <div class="dash-tile-icon">🛡️</div>
                         <div class="dash-tile-title">Security</div>
                         <div class="dash-tile-sub">IP & Hardware</div>
@@ -963,7 +963,7 @@
         { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
         { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
         { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
-        { native: "নেपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
+        { native: "नेपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
     ];
 
     let selectedLang = indianLanguages[0];
@@ -972,9 +972,8 @@
     let userFingerprint = "";
     let passwordChangeCount = 1;
 
-    /* 1-Minute Inactivity Timer Variables */
-    let inactivityTimeLeft = 60;
-    let inactivityInterval = null;
+    /* Left App Background Timer Variable */
+    let appLeftTimestamp = null;
 
     function renderLanguages(list) {
         const container = document.getElementById('languageList');
@@ -1472,7 +1471,7 @@
         }, 350);
     }
 
-    /* STEP 5 SIGN IN -> STEP 6 DASHBOARD & INACTIVITY TIMER */
+    /* STEP 5 SIGN IN -> STEP 6 DASHBOARD */
     function submitStep5Login() {
         const mobile = document.getElementById('step5MobileInput').value;
         const pass = document.getElementById('step5PassInput').value;
@@ -1508,51 +1507,36 @@
             step6.classList.remove('hidden');
             step6.classList.add('fade-in');
 
-            startInactivityMonitor();
+            setupBackgroundInactivityTracker();
         }, 350);
     }
 
-    /* 1-MINUTE INACTIVITY TIMER CONTROLLER */
-    function startInactivityMonitor() {
-        inactivityTimeLeft = 60;
-        updateInactivityDisplay();
+    /* BACKGROUND / APP-LEAVE INACTIVITY TRACKER */
+    function setupBackgroundInactivityTracker() {
+        appLeftTimestamp = null;
 
-        if (inactivityInterval) clearInterval(inactivityInterval);
-
-        inactivityInterval = setInterval(() => {
-            inactivityTimeLeft--;
-            updateInactivityDisplay();
-
-            if (inactivityTimeLeft <= 0) {
-                clearInterval(inactivityInterval);
-                triggerAutoLogout();
+        // Listen for user leaving tab or hiding the browser
+        document.addEventListener('visibilitychange', () => {
+            if (currentStep === 6) {
+                if (document.hidden) {
+                    // User left the web app tab -> record timestamp
+                    appLeftTimestamp = Date.now();
+                } else {
+                    // User returned to the web app tab
+                    if (appLeftTimestamp) {
+                        const secondsAway = (Date.now() - appLeftTimestamp) / 1000;
+                        if (secondsAway >= 60) {
+                            // Away for more than 1 minute -> trigger auto logout to Step 5
+                            triggerAutoLogout();
+                        }
+                        appLeftTimestamp = null;
+                    }
+                }
             }
-        }, 1000);
-
-        ['mousemove', 'keydown', 'click', 'touchstart', 'scroll'].forEach(evt => {
-            window.addEventListener(evt, resetInactivityTimer, { passive: true });
         });
     }
 
-    function resetInactivityTimer() {
-        if (currentStep === 6) {
-            inactivityTimeLeft = 60;
-            updateInactivityDisplay();
-        }
-    }
-
-    function updateInactivityDisplay() {
-        const timerElem = document.getElementById('inactivityTimerVal');
-        if (timerElem) {
-            const mins = Math.floor(inactivityTimeLeft / 60);
-            const secs = inactivityTimeLeft % 60;
-            timerElem.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-    }
-
     function triggerAutoLogout() {
-        if (inactivityInterval) clearInterval(inactivityInterval);
-
         const step6 = document.getElementById('step6Box');
         const step5 = document.getElementById('step5Box');
 

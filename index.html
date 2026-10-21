@@ -392,11 +392,13 @@
             transform: scale(0.98);
         }
 
-        /* REVAMPED DASHBOARD STYLES */
+        /* DASHBOARD STYLES */
         .dashboard-container { 
             text-align: left; 
             margin-top: -10px;
-            padding-bottom: 50px;
+            padding-bottom: 60px;
+            position: relative;
+            min-height: 280px;
         }
 
         .top-attached-active-banner {
@@ -427,7 +429,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .dash-user-title {
@@ -446,6 +448,57 @@
             border-radius: 12px;
         }
 
+        /* BLANK DASHBOARD WELCOME BOX */
+        .blank-dashboard-hero {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border-color);
+            border-radius: 18px;
+            padding: 30px 16px;
+            text-align: center;
+            color: var(--text-dim);
+            margin-top: 10px;
+        }
+
+        /* POPUP PANEL CONTENT SECTIONS */
+        .dashboard-popup-panel {
+            background: rgba(15, 17, 26, 0.98);
+            border: 1.5px solid var(--border-color);
+            border-radius: 20px;
+            padding: 20px 16px 16px 16px;
+            margin-top: 10px;
+            position: relative;
+            animation: panelPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes panelPopup {
+            0% { opacity: 0; transform: translateY(10px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .panel-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .panel-close-btn:hover {
+            background: rgba(255, 0, 127, 0.2);
+            border-color: var(--accent-pink);
+        }
+
         /* 7-DAY STREAK SECTION STYLES */
         .streak-section-header {
             font-size: 14px;
@@ -455,20 +508,21 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding-right: 30px;
         }
 
         .streak-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 8px;
+            margin-bottom: 14px;
         }
 
         .streak-day-card {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 10px 6px;
+            border-radius: 12px;
+            padding: 8px 4px;
             text-align: center;
             position: relative;
             transition: all 0.2s ease;
@@ -501,7 +555,7 @@
         }
 
         .streak-day-exp {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 900;
             color: var(--text-light);
         }
@@ -511,9 +565,9 @@
         }
 
         .streak-status-badge {
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 800;
-            margin-top: 6px;
+            margin-top: 5px;
             padding: 2px 4px;
             border-radius: 6px;
             display: inline-block;
@@ -526,12 +580,11 @@
         .cooldown-info-card {
             background: rgba(0, 243, 255, 0.05);
             border: 1px solid rgba(0, 243, 255, 0.2);
-            border-radius: 14px;
-            padding: 12px;
+            border-radius: 12px;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
         }
 
         .cooldown-text {
@@ -542,7 +595,7 @@
 
         .cooldown-timer {
             font-family: monospace;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             color: var(--accent-cyan);
         }
@@ -551,15 +604,15 @@
         .my-dash-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 10px;
+            gap: 10px;
+            margin-top: 6px;
         }
 
         .my-dash-tile {
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 14px;
+            padding: 14px 10px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease;
@@ -571,9 +624,45 @@
             transform: translateY(-2px);
         }
 
-        .my-dash-tile-icon { font-size: 26px; margin-bottom: 8px; }
-        .my-dash-tile-title { font-size: 13px; font-weight: 800; color: var(--text-light); }
+        .my-dash-tile-icon { font-size: 24px; margin-bottom: 6px; }
+        .my-dash-tile-title { font-size: 12px; font-weight: 800; color: var(--text-light); }
         .my-dash-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
+
+        /* NOTIFICATION RINGING BELL WITH RED DOT */
+        .claim-nav-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .bell-alert-badge {
+            position: absolute;
+            top: -2px;
+            right: 2px;
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bellRing 0.8s infinite ease-in-out;
+        }
+
+        .red-dot-ping {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--accent-pink);
+        }
+
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            20% { transform: rotate(-14deg) scale(1.15); }
+            40% { transform: rotate(14deg) scale(1.15); }
+            60% { transform: rotate(-10deg) scale(1.1); }
+            80% { transform: rotate(10deg) scale(1.1); }
+        }
 
         /* BOTTOM DASHBOARD MENU NAVIGATION BAR */
         .bottom-dash-nav-bar {
@@ -595,7 +684,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             background: transparent;
             border: none;
             color: var(--text-dim);
@@ -763,7 +852,7 @@
     <div class="container">
         <div class="app-brand">Smilings</div>
 
-        <!-- STEP 1 CONTENT SECTION (With Smart Environmental Scan) -->
+        <!-- STEP 1 CONTENT SECTION -->
         <div id="step1Box" class="step-content">
             <div id="step1InitScanBox">
                 <div class="radar-box">
@@ -881,7 +970,7 @@
             </div>
         </div>
 
-        <!-- STEP 5 CONTENT SECTION (Sign In) -->
+        <!-- STEP 5 CONTENT SECTION -->
         <div id="step5Box" class="step-content hidden">
             <div class="instruction-title" id="step5TitleText">Sign in to your account</div>
             <div class="instruction-sub" id="step5SubText">Enter your registered mobile number and password to access Smilings</div>
@@ -908,7 +997,7 @@
             </button>
         </div>
 
-        <!-- FORGOT / NEW DEVICE FORCED PASSWORD RESET SCREEN -->
+        <!-- FORGOT / PASSWORD RESET SCREEN -->
         <div id="forgotPassBox" class="step-content hidden">
             <div class="instruction-title" id="resetScreenTitle">Security Verification Required</div>
             <div class="instruction-sub" id="resetScreenSub">New device or network detected. Please create a new secure password.</div>
@@ -992,8 +1081,17 @@
                     <div class="dash-user-exp" id="userTotalExpVal">⚡ 0 EXP</div>
                 </div>
 
-                <!-- MENU TAB 1: CLAIM DAILY (7-Day Streak System) -->
-                <div id="claimDailyTabContent">
+                <!-- BLANK DEFAULT DASHBOARD VIEW (Shown when no tab is active) -->
+                <div id="blankDashboardView" class="blank-dashboard-hero">
+                    <div style="font-size: 26px; margin-bottom: 6px;">✨</div>
+                    <div style="font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 2px;">Welcome to Your Dashboard</div>
+                    <div style="font-size: 11px;">Select an option from the bottom menu bar below to begin.</div>
+                </div>
+
+                <!-- POPUP PANEL TAB 1: CLAIM DAILY (7-Day Streak System) -->
+                <div id="claimDailyTabContent" class="dashboard-popup-panel hidden">
+                    <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
+                    
                     <div class="streak-section-header">
                         <span>🔥 Daily Sign-In Streak</span>
                         <span style="font-size: 11px; color: var(--accent-cyan);" id="streakDaysCount">0 / 7 Days</span>
@@ -1009,8 +1107,10 @@
                     </div>
                 </div>
 
-                <!-- MENU TAB 2: MY DASHBOARD (Main Options Hub) -->
-                <div id="myDashboardTabContent" class="hidden">
+                <!-- POPUP PANEL TAB 2: MY DASHBOARD (Main Options Hub) -->
+                <div id="myDashboardTabContent" class="dashboard-popup-panel hidden">
+                    <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
+
                     <div class="streak-section-header">
                         <span>📊 My Dashboard Hub</span>
                     </div>
@@ -1041,8 +1141,14 @@
 
                 <!-- Bottom Navigation Menu Bar -->
                 <div class="bottom-dash-nav-bar">
-                    <button type="button" class="dash-nav-item active" id="navClaimBtn" onclick="switchDashboardTab('claimDaily')">
-                        <span class="dash-nav-icon">🔥</span>
+                    <button type="button" class="dash-nav-item" id="navClaimBtn" onclick="switchDashboardTab('claimDaily')">
+                        <div class="claim-nav-wrapper">
+                            <span class="dash-nav-icon">🔥</span>
+                            <!-- Ringing Bell with Red Dot (Visible ONLY when claim is available) -->
+                            <div class="bell-alert-badge hidden" id="claimBellAlert">
+                                <div class="red-dot-ping"></div>
+                            </div>
+                        </div>
                         <span>Claim Daily</span>
                     </button>
                     <button type="button" class="dash-nav-item" id="navDashBtn" onclick="switchDashboardTab('myDashboard')">
@@ -1272,7 +1378,6 @@
         }
     }
 
-    /* STEP 1 SMART ENVIRONMENTAL SCAN ENGINE */
     function runStep1InitialScan() {
         userFingerprint = generateFingerprint();
         fetchUserIPAndLocation();
@@ -1309,15 +1414,12 @@
 
                 const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
 
-                // Check if saved record exists
                 if (savedAcc && savedAcc.mobile && savedAcc.password) {
-                    // Compare current environment with stored environment
                     const isSameDevice = (savedAcc.fingerprint === userFingerprint);
                     const isSameIp = (savedAcc.ip === userIP);
                     const isSameLoc = (savedAcc.location === currentLocation);
 
                     if (isSameDevice && isSameIp && isSameLoc) {
-                        // SAME DEVICE + SAME IP + SAME LOCATION -> BYPASS STEP 5 DIRECTLY TO DASHBOARD
                         titleText.innerText = "✓ ENVIRONMENT MATCHED! AUTO-LOGGED IN";
                         titleText.style.color = "var(--accent-green)";
                         subText.innerText = "Same device and network detected. Entering dashboard...";
@@ -1326,7 +1428,6 @@
                             jumpDirectToDashboard(savedAcc.mobile);
                         }, 1000);
                     } else {
-                        // DIFFERENT DEVICE OR IP/LOCATION -> REQUIRE PASSWORD CREATION / NEW VERIFICATION
                         titleText.innerText = "⚠ NEW DEVICE/NETWORK DETECTED";
                         titleText.style.color = "var(--accent-yellow)";
                         subText.innerText = "Environmental changes found. Password update required...";
@@ -1337,7 +1438,6 @@
                     }
                 } 
                 else {
-                    // FIRST TIME SIGNING UP -> FOLLOW STANDARD SEQUENCE
                     titleText.innerText = "✓ SCAN COMPLETE - NEW USER DETECTED";
                     titleText.style.color = "var(--accent-cyan)";
                     subText.innerText = "Please choose language to start registration sequence...";
@@ -1699,7 +1799,6 @@
         }, 350);
     }
 
-    /* STEP 5 SIGN IN */
     function submitStep5Login() {
         const mobile = document.getElementById('step5MobileInput').value;
         const pass = document.getElementById('step5PassInput').value;
@@ -1720,7 +1819,6 @@
             return;
         }
 
-        // Update environment fingerprint upon successful login
         if (savedAcc) {
             savedAcc.ip = userIP;
             savedAcc.fingerprint = userFingerprint;
@@ -1748,12 +1846,15 @@
         }, 350);
     }
 
-    /* TAB SWITCHING FUNCTION */
+    /* DASHBOARD POPUP PANEL CONTROLLER & CLOSE BUTTON */
     function switchDashboardTab(tabName) {
+        const blankView = document.getElementById('blankDashboardView');
         const claimContent = document.getElementById('claimDailyTabContent');
         const dashContent = document.getElementById('myDashboardTabContent');
         const navClaimBtn = document.getElementById('navClaimBtn');
         const navDashBtn = document.getElementById('navDashBtn');
+
+        blankView.classList.add('hidden');
 
         if (tabName === 'claimDaily') {
             claimContent.classList.remove('hidden');
@@ -1768,7 +1869,22 @@
         }
     }
 
-    /* 7-DAY STREAK & 24-HOUR COOLDOWN ENGINE */
+    function closeDashboardTabs() {
+        const blankView = document.getElementById('blankDashboardView');
+        const claimContent = document.getElementById('claimDailyTabContent');
+        const dashContent = document.getElementById('myDashboardTabContent');
+        const navClaimBtn = document.getElementById('navClaimBtn');
+        const navDashBtn = document.getElementById('navDashBtn');
+
+        claimContent.classList.add('hidden');
+        dashContent.classList.add('hidden');
+        navClaimBtn.classList.remove('active');
+        navDashBtn.classList.remove('active');
+
+        blankView.classList.remove('hidden');
+    }
+
+    /* 7-DAY STREAK & NOTIFICATION BELL ALERT ENGINE */
     function loadStreakData() {
         const savedStreak = JSON.parse(localStorage.getItem('smilings_streak_data'));
         if (savedStreak) {
@@ -1794,6 +1910,14 @@
 
         if (streakData.lastClaimTime && (now - streakData.lastClaimTime < cooldownMs)) {
             canClaimNext = false;
+        }
+
+        // Toggle Ringing Bell Alert on Bottom Nav Bar based on claim availability
+        const bellAlert = document.getElementById('claimBellAlert');
+        if (canClaimNext) {
+            bellAlert.classList.remove('hidden');
+        } else {
+            bellAlert.classList.add('hidden');
         }
 
         streakRewards.forEach(item => {

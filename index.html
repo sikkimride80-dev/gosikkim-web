@@ -2,2011 +2,429 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smilings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShieldAI - Enterprise AI Privacy & Security Middleware</title>
     <style>
         :root {
-            --primary: #6c5ce7;
-            --primary-hover: #5b4bc4;
-            --accent-glow: rgba(108, 92, 231, 0.4);
+            --bg-main: #0a0d14;
+            --card-bg: rgba(18, 24, 38, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
             --accent-cyan: #00f3ff;
             --accent-green: #00ff66;
-            --accent-pink: #ff007f;
-            --accent-yellow: #ffd700;
-            --bg-dark: #090a0f;
-            --card-bg: rgba(20, 22, 32, 0.95);
-            --text-light: #ffffff;
-            --text-dim: #9aa0b4;
-            --border-color: rgba(255, 255, 255, 0.12);
+            --accent-purple: #7000ff;
+            --text-light: #f1f5f9;
+            --text-dim: #64748b;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         body {
-            background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(108, 92, 231, 0.18) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(0, 243, 255, 0.12) 0%, transparent 45%);
+            background-color: var(--bg-main);
             color: var(--text-light);
             min-height: 100vh;
-            min-height: 100dvh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
             overflow-x: hidden;
         }
 
-        .top-lang-edit-btn {
-            position: fixed;
-            top: 12px;
-            right: 12px;
+        /* HEADER */
+        header {
+            width: 100%;
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(10, 13, 20, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
             z-index: 100;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: 20px;
-            color: var(--text-light);
-            font-size: 11px;
-            font-weight: 700;
+        }
+
+        .brand {
             display: flex;
             align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.2s ease;
-        }
-
-        .top-lang-edit-btn:hover {
-            border-color: var(--primary);
-            background: rgba(108, 92, 231, 0.2);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 440px;
-            background: var(--card-bg);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 24px 16px 20px 16px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        /* OUTER BOUNDARY DASHBOARD FRAME OVERRIDE */
-        .container.outer-boundary-mode {
-            width: 100vw;
-            max-width: 100%;
-            min-height: 100vh;
-            min-height: 100dvh;
-            border-radius: 0;
-            border: none;
-            background: transparent;
-            backdrop-filter: none;
-            box-shadow: none;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .app-brand {
-            font-size: 30px;
-            font-weight: 900;
-            letter-spacing: 1px;
-            background: linear-gradient(135deg, #a29bfe, #6c5ce7, #00f3ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 16px;
-        }
-
-        .step-content {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 100%;
-        }
-
-        .step-content.fade-out {
-            opacity: 0;
-            transform: translateY(-12px) scale(0.96);
-            pointer-events: none;
-        }
-
-        .step-content.fade-in {
-            animation: magicAppear 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        @keyframes magicAppear {
-            0% {
-                opacity: 0;
-                transform: translateY(16px) scale(0.95);
-                filter: blur(8px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-                filter: blur(0);
-            }
-        }
-
-        .instruction-title {
-            font-size: 16px;
+            gap: 12px;
+            font-size: 20px;
             font-weight: 800;
-            color: var(--text-light);
-            margin-bottom: 8px;
-            line-height: 1.3;
+            letter-spacing: 0.5px;
         }
 
-        .instruction-sub {
-            font-size: 12px;
-            color: var(--text-dim);
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .language-box-wrapper {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .language-select-trigger {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1.5px solid var(--border-color);
-            padding: 14px;
-            border-radius: 16px;
-            color: var(--text-light);
-            font-size: 14px;
-            font-weight: 700;
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            justify-content: center;
+            font-size: 16px;
         }
 
-        .language-select-trigger:hover {
-            border-color: var(--primary);
-            background: rgba(108, 92, 231, 0.12);
-            box-shadow: 0 0 16px var(--accent-glow);
-        }
-
-        .selected-lang-display {
+        .status-badge {
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .dropdown-arrow {
             font-size: 12px;
-            color: var(--text-dim);
-            transition: transform 0.3s ease;
-        }
-
-        .dropdown-arrow.open {
-            transform: rotate(180deg);
-        }
-
-        .phone-input-group {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1.5px solid var(--border-color);
-            border-radius: 16px;
-            padding: 4px 8px;
-            margin-bottom: 16px;
-            transition: all 0.2s ease;
-        }
-
-        .phone-input-group:focus-within {
-            border-color: var(--primary);
-            background: rgba(108, 92, 231, 0.12);
-            box-shadow: 0 0 16px var(--accent-glow);
-        }
-
-        .country-code-prefix {
-            font-size: 15px;
-            font-weight: 800;
-            color: #a29bfe;
-            padding: 10px 8px 10px 10px;
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            user-select: none;
-        }
-
-        .phone-input-field {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-light);
-            font-size: 16px;
-            font-weight: 700;
-            padding: 10px;
-            letter-spacing: 1px;
-        }
-
-        .phone-input-field::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-            font-weight: 500;
-            letter-spacing: 0;
-            font-size: 13px;
-        }
-
-        .password-input-group {
-            position: relative;
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1.5px solid var(--border-color);
-            border-radius: 16px;
-            padding: 4px 12px;
-            margin-bottom: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .password-input-group:focus-within {
-            border-color: var(--primary);
-            background: rgba(108, 92, 231, 0.12);
-            box-shadow: 0 0 16px var(--accent-glow);
-        }
-
-        .password-input-field {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-light);
-            font-size: 14px;
             font-weight: 600;
-            padding: 10px 36px 10px 4px;
-        }
-
-        .password-input-field::placeholder {
-            color: rgba(255, 255, 255, 0.35);
-            font-weight: 400;
-            font-size: 12px;
-        }
-
-        .eye-toggle-btn {
-            position: absolute;
-            right: 12px;
-            background: transparent;
-            border: none;
-            color: var(--text-dim);
-            font-size: 16px;
-            cursor: pointer;
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .forgot-pass-wrapper {
-            text-align: right;
-            margin: -4px 4px 14px 0;
-        }
-
-        .forgot-pass-link {
-            color: #a29bfe;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .radar-box {
-            position: relative;
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 16px auto;
-            border-radius: 50%;
-            border: 2px solid rgba(0, 243, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 243, 255, 0.05);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
-        }
-
-        .radar-sweep-line {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            border-top: 2px solid var(--accent-cyan);
-            border-right: 2px solid transparent;
-            animation: radarRotate 1.2s linear infinite;
-        }
-
-        @keyframes radarRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .scan-progress-bar-bg {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 14px 0 10px 0;
-        }
-
-        .scan-progress-bar-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent-cyan));
-            border-radius: 10px;
-            transition: width 0.1s linear;
-        }
-
-        .scan-details-card {
-            background: rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(0, 243, 255, 0.25);
-            border-radius: 14px;
-            padding: 10px;
-            margin-top: 10px;
-            text-align: left;
-            font-family: monospace;
-            font-size: 11px;
-            color: #d0d0f0;
-        }
-
-        .scan-info-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-        }
-
-        .scan-info-row:last-child { margin-bottom: 0; }
-        .scan-label { color: var(--text-dim); }
-        .scan-value { font-weight: 700; color: var(--accent-cyan); }
-
-        .btn-continue {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-            color: var(--text-light);
-            font-size: 14px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 8px 24px var(--accent-glow);
-            letter-spacing: 0.5px;
-            transition: all 0.2s;
-            margin-top: 8px;
-        }
-
-        .btn-continue:active { transform: scale(0.98); }
-
-        /* OUTER BOUNDARY ATTACHED DASHBOARD STYLES */
-        .outer-dashboard-layout {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            min-height: 100vh;
-            min-height: 100dvh;
-            width: 100%;
-            position: relative;
-        }
-
-        /* TOP OUTER BOUNDARY ATTACHED HEADER BAR */
-        .top-outer-boundary-bar {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(0, 255, 102, 0.08);
-            border-bottom: 1px solid var(--accent-green);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            backdrop-filter: blur(12px);
-        }
-
-        .top-boundary-left {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            text-align: left;
-        }
-
-        .active-status-badge {
-            font-size: 10px;
-            font-weight: 800;
             color: var(--accent-green);
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            background: rgba(0, 255, 102, 0.1);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
         }
 
-        .session-secured-badge {
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--text-dim);
-        }
-
-        .top-boundary-center {
-            font-size: 11px;
-            font-weight: 900;
-            letter-spacing: 0.8px;
-            background: linear-gradient(90deg, #00f3ff, #ff007f, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-        }
-
-        .top-boundary-right {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 900;
-            color: var(--text-light);
-            letter-spacing: 0.5px;
-        }
-
-        .live-green-signal {
+        .status-dot {
             width: 8px;
             height: 8px;
-            background-color: var(--accent-green);
+            background: var(--accent-green);
             border-radius: 50%;
             box-shadow: 0 0 8px var(--accent-green);
-            animation: liveBlink 1s infinite alternate ease-in-out;
         }
 
-        @keyframes liveBlink {
-            0% { opacity: 0.3; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1.2); }
-        }
-
-        /* TOP EXP OUTER BOUNDARY BAR */
-        .dash-top-exp-bar {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 14px 16px 8px 16px;
-            width: 100%;
-        }
-
-        .dash-user-exp-top-right {
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--accent-yellow);
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid var(--accent-yellow);
-            padding: 4px 12px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-        }
-
-        /* MIDDLE MAIN CONTENT WRAPPER */
-        .outer-dashboard-content {
+        /* MAIN LAYOUT */
+        main {
             flex-grow: 1;
-            padding: 10px 16px 80px 16px;
+            max-width: 1280px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 32px 24px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            max-width: 480px;
-            margin: 0 auto;
-            width: 100%;
+            gap: 32px;
         }
 
-        /* BLANK DASHBOARD HERO */
-        .blank-dashboard-hero {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed var(--border-color);
-            border-radius: 20px;
-            padding: 30px 16px;
-            text-align: center;
-            color: var(--text-dim);
+        .grid-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
             backdrop-filter: blur(10px);
         }
 
-        /* POPUP PANEL TAB SECTIONS */
-        .dashboard-popup-panel {
-            background: rgba(15, 17, 26, 0.98);
-            border: 1.5px solid var(--border-color);
-            border-radius: 20px;
-            padding: 20px 16px 16px 16px;
-            position: relative;
-            animation: panelPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            backdrop-filter: blur(16px);
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-
-        @keyframes panelPopup {
-            0% { opacity: 0; transform: translateY(10px) scale(0.97); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .panel-close-btn {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            color: var(--text-light);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 13px;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* PROFILE DETAILS CARD STYLES */
-        .profile-info-card {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px;
-            margin-top: 10px;
-            text-align: left;
-        }
-
-        .profile-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        .stat-label {
             font-size: 12px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
 
-        .profile-row:last-child {
-            border-bottom: none;
-        }
-
-        .profile-label { color: var(--text-dim); font-weight: 600; }
-        .profile-val { color: var(--text-light); font-weight: 800; display: flex; align-items: center; gap: 6px; }
-
-        .voice-speaker-btn {
-            font-size: 14px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .voice-speaker-btn:hover { transform: scale(1.2); }
-
-        /* STREAK SECTION STYLES */
-        .streak-section-header {
-            font-size: 14px;
+        .stat-value {
+            font-size: 28px;
             font-weight: 800;
             color: var(--text-light);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-right: 30px;
         }
 
-        .streak-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-bottom: 14px;
-        }
-
-        .streak-day-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 8px 4px;
-            text-align: center;
-            position: relative;
-        }
-
-        .streak-day-card.featured {
-            grid-column: span 2;
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.25), rgba(0, 243, 255, 0.15));
-            border-color: var(--accent-cyan);
-        }
-
-        .streak-day-card.unlocked {
-            border-color: var(--accent-yellow);
-            background: rgba(255, 215, 0, 0.1);
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.25);
-        }
-
-        .streak-day-card.claimed {
-            border-color: var(--accent-green);
-            background: rgba(0, 255, 102, 0.08);
-            opacity: 0.85;
-        }
-
-        .streak-day-title { font-size: 10px; font-weight: 800; color: var(--text-dim); margin-bottom: 2px; }
-        .streak-day-exp { font-size: 12px; font-weight: 900; color: var(--text-light); }
-        .streak-day-card.unlocked .streak-day-exp { color: var(--accent-yellow); }
-
-        .streak-status-badge {
-            font-size: 8px;
-            font-weight: 800;
+        .stat-sub {
+            font-size: 12px;
+            color: var(--accent-green);
             margin-top: 4px;
-            padding: 2px 4px;
-            border-radius: 4px;
-            display: inline-block;
+            font-weight: 600;
         }
 
-        .status-claimed { color: var(--accent-green); background: rgba(0, 255, 102, 0.15); }
-        .status-ready { color: #000; background: var(--accent-yellow); }
-        .status-locked { color: var(--text-dim); background: rgba(255, 255, 255, 0.08); }
-
-        .cooldown-info-card {
-            background: rgba(0, 243, 255, 0.05);
-            border: 1px solid rgba(0, 243, 255, 0.2);
-            border-radius: 12px;
-            padding: 10px 12px;
+        /* INTERACTIVE DEMO SECTION */
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 8px;
         }
 
-        .cooldown-text { font-size: 11px; color: var(--text-dim); font-weight: 600; }
-        .cooldown-timer { font-family: monospace; font-size: 13px; font-weight: 800; color: var(--accent-cyan); }
-
-        /* MY DASHBOARD & MORE OPTIONS GRID */
-        .my-dash-grid {
+        .demo-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 6px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
         }
 
-        .my-dash-tile {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 14px 10px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        @media (max-width: 768px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .my-dash-tile:hover {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 243, 255, 0.1);
-        }
-
-        .my-dash-tile-icon { font-size: 24px; margin-bottom: 6px; }
-        .my-dash-tile-title { font-size: 12px; font-weight: 800; color: var(--text-light); }
-        .my-dash-tile-sub { font-size: 10px; color: var(--text-dim); margin-top: 2px; }
-
-        /* NOTIFICATION RINGING BELL WITH RED DOT */
-        .claim-nav-wrapper {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .bell-alert-badge {
-            position: absolute;
-            top: -2px;
-            right: 0px;
-            width: 12px;
-            height: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: bellRing 0.8s infinite ease-in-out;
-        }
-
-        .red-dot-ping {
-            width: 7px;
-            height: 7px;
-            background-color: var(--accent-pink);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--accent-pink);
-        }
-
-        @keyframes bellRing {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            20% { transform: rotate(-14deg) scale(1.15); }
-            40% { transform: rotate(14deg) scale(1.15); }
-            60% { transform: rotate(-10deg) scale(1.1); }
-            80% { transform: rotate(10deg) scale(1.1); }
-        }
-
-        /* BOTTOM OUTER BOUNDARY ATTACHED NAVIGATION BAR */
-        .bottom-outer-boundary-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(15, 17, 26, 0.98);
-            backdrop-filter: blur(16px);
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 8px 4px;
-            z-index: 50;
-        }
-
-        .dash-nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            background: transparent;
-            border: none;
+        .box-title {
+            font-size: 13px;
+            font-weight: 700;
             color: var(--text-dim);
-            font-size: 9px;
+            margin-bottom: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--text-light);
+            font-family: monospace;
+            font-size: 13px;
+            resize: none;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .redacted-output {
+            width: 100%;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px;
+            color: var(--accent-cyan);
+            font-family: monospace;
+            font-size: 13px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .btn-action {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            color: #000;
+            font-weight: 800;
+            font-size: 14px;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        .btn-action:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* PRICING SECTION */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .price-card.popular {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 24px rgba(0, 243, 255, 0.15);
+        }
+
+        .plan-name {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .plan-price {
+            font-size: 36px;
+            font-weight: 900;
+            margin: 16px 0 8px 0;
+        }
+
+        .plan-price span {
+            font-size: 14px;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+
+        .plan-features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            color: var(--accent-green);
+            font-weight: 800;
+        }
+
+        .btn-subscribe {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
             font-weight: 700;
             cursor: pointer;
-            padding: 5px 6px;
-            border-radius: 10px;
-            transition: all 0.2s ease;
         }
 
-        .dash-nav-item.active {
-            color: var(--accent-cyan);
-            background: rgba(0, 243, 255, 0.12);
-        }
-
-        .dash-nav-icon { font-size: 15px; }
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .language-modal {
-            width: 100%;
-            max-width: 480px;
-            background: #121420;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            border: 1px solid var(--border-color);
-            border-bottom: none;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            padding: 16px;
-            transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
-        }
-
-        .modal-overlay.active .language-modal { transform: translateY(0); }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .modal-title { font-size: 14px; font-weight: 800; color: var(--text-light); }
-
-        .close-btn {
-            background: rgba(255, 255, 255, 0.1);
+        .price-card.popular .btn-subscribe {
+            background: var(--accent-cyan);
+            color: #000;
             border: none;
-            color: var(--text-light);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .search-box {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid var(--border-color);
-            padding: 10px 14px;
-            border-radius: 12px;
-            color: var(--text-light);
-            font-size: 13px;
-            outline: none;
-            margin-bottom: 12px;
-        }
-
-        .language-list {
-            overflow-y: auto;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .language-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 14px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid transparent;
-            cursor: pointer;
-        }
-
-        .language-item:hover, .language-item.selected {
-            background: rgba(108, 92, 231, 0.18);
-            border-color: var(--primary);
-        }
-
-        .lang-names { text-align: left; }
-        .lang-native { font-size: 13px; font-weight: 700; color: var(--text-light); }
-        .lang-english { font-size: 11px; color: var(--text-dim); }
-
-        .state-tag {
-            font-size: 9px;
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-dim);
-            padding: 2px 6px;
-            border-radius: 6px;
-        }
-
-        .hidden { display: none !important; }
-
-        @media (min-width: 600px) {
-            .modal-overlay { align-items: center; }
-            .language-modal {
-                border-radius: 24px;
-                border-bottom: 1px solid var(--border-color);
-                max-height: 70vh;
-                transform: scale(0.9);
-            }
-            .modal-overlay.active .language-modal { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <button class="top-lang-edit-btn" id="topLangBtn" onclick="openLanguageModal()">
-        <span>🌐</span>
-        <span id="topLangBadge">English</span>
-        <span>✏️</span>
-    </button>
+    <header>
+        <div class="brand">
+            <div class="brand-logo">🛡️</div>
+            <span>ShieldAI Engine</span>
+        </div>
+        <div class="status-badge">
+            <div class="status-dot"></div>
+            <span>EDGE NODE: ACTIVE (4.2ms)</span>
+        </div>
+    </header>
 
-    <div class="container" id="mainContainer">
-        <div class="app-brand" id="brandTitleHeader">Smilings</div>
-
-        <!-- STEP 1 CONTENT SECTION -->
-        <div id="step1Box" class="step-content">
-            <div id="step1InitScanBox">
-                <div class="radar-box">
-                    <div class="radar-sweep-line"></div>
-                    <span style="font-size: 22px;">🌐</span>
-                </div>
-                <div class="instruction-title" id="step1ScanTitle" style="color: var(--accent-cyan);">Scanning Device & Network...</div>
-                <div class="instruction-sub" id="step1ScanSub">Checking fingerprint, IP address, and location history</div>
-
-                <div class="scan-progress-bar-bg">
-                    <div class="scan-progress-bar-fill" id="step1ProgressFill"></div>
-                </div>
-
-                <div class="scan-details-card">
-                    <div class="scan-info-row">
-                        <span class="scan-label">IP Address:</span>
-                        <span class="scan-value" id="step1IpVal">Detecting...</span>
-                    </div>
-                    <div class="scan-info-row">
-                        <span class="scan-label">Fingerprint:</span>
-                        <span class="scan-value" id="step1FpVal">Generating...</span>
-                    </div>
-                    <div class="scan-info-row">
-                        <span class="scan-label">Location:</span>
-                        <span class="scan-value" id="step1LocVal">Locating GPS...</span>
-                    </div>
-                </div>
+    <main>
+        <!-- METRICS OVERVIEW -->
+        <div class="grid-stats">
+            <div class="stat-card">
+                <div class="stat-label">Requests Protected</div>
+                <div class="stat-value" id="reqCount">1,482,910</div>
+                <div class="stat-sub">+18.4% this week</div>
             </div>
-
-            <div id="step1LangContent" class="hidden">
-                <div class="instruction-title" id="titleText">Select your preferred language for the app</div>
-                <div class="instruction-sub" id="subText">Every text and feature in the app will adapt to your chosen language</div>
-
-                <div class="language-box-wrapper">
-                    <button type="button" class="language-select-trigger" onclick="openLanguageModal()">
-                        <div class="selected-lang-display">
-                            <span style="font-size: 16px;">🌐</span>
-                            <span id="currentLangLabel">English (Auto)</span>
-                        </div>
-                        <span class="dropdown-arrow" id="dropdownArrow">▼</span>
-                    </button>
-                </div>
-
-                <button type="button" class="btn-continue" id="continueBtnText" onclick="goToStep2()">
-                    CONTINUE
-                </button>
+            <div class="stat-card">
+                <div class="stat-label">PII Redactions</div>
+                <div class="stat-value">342,109</div>
+                <div class="stat-sub">Zero data leaks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Avg Inspection Speed</div>
+                <div class="stat-value">3.8 ms</div>
+                <div class="stat-sub">Sub-5ms SLA guarantee</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Monthly ARR (Demo)</div>
+                <div class="stat-value">$18,400</div>
+                <div class="stat-sub">12 Enterprise Accounts</div>
             </div>
         </div>
 
-        <!-- STEP 2 CONTENT SECTION -->
-        <div id="step2Box" class="step-content hidden">
-            <div class="instruction-title" id="step2TitleText">Enter your registered mobile number</div>
-            <div class="instruction-sub" id="step2SubText">We will send a security code to verify your mobile account</div>
-
-            <div class="phone-input-group">
-                <div class="country-code-prefix">
-                    <span>🇮🇳</span>
-                    <span>+91</span>
+        <!-- INTERACTIVE LIVE PII REDACTION DEMO -->
+        <div>
+            <div class="section-title">⚡ Live Inspection Sandbox</div>
+            <div class="demo-container">
+                <div>
+                    <div class="box-title">RAW INCOMING PAYLOAD (API / CHAT)</div>
+                    <textarea id="rawInput">Customer John Doe (Phone: +1 555-019-2831, Email: john.doe@acme.corp) wants to update card 4532-8912-0923-8812 and password SecretPass123! for account #89120.</textarea>
                 </div>
-                <input type="tel" id="mobileInput" class="phone-input-field" placeholder="Enter 10-digit number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
-            </div>
-
-            <button type="button" class="btn-continue" id="step2ContinueBtn" onclick="goToStep3()">
-                CONTINUE
-            </button>
-        </div>
-
-        <!-- STEP 3 CONTENT SECTION -->
-        <div id="step3Box" class="step-content hidden">
-            <div class="instruction-title" id="step3TitleText">Create a secure password</div>
-            <div class="instruction-sub" id="step3SubText">Set a password to protect your account and re-enter to confirm</div>
-
-            <div class="password-input-group">
-                <input type="password" id="createPassInput" class="password-input-field" placeholder="Create a password">
-                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('createPassInput', this)">👁️</button>
-            </div>
-
-            <div class="password-input-group">
-                <input type="password" id="confirmPassInput" class="password-input-field" placeholder="Re-enter created password">
-                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('confirmPassInput', this)">👁️</button>
-            </div>
-
-            <button type="button" class="btn-continue" id="step3ContinueBtn" onclick="submitStep3AndStartScan()">
-                CONTINUE
-            </button>
-        </div>
-
-        <!-- STEP 4 CONTENT SECTION -->
-        <div id="step4Box" class="step-content hidden">
-            <div class="radar-box">
-                <div class="radar-sweep-line"></div>
-                <span style="font-size: 22px;">🌐</span>
-            </div>
-
-            <div class="instruction-title" id="scanStatusTitle" style="color: var(--accent-cyan);">Scanning Security Credentials...</div>
-            <div class="instruction-sub" id="scanStatusSub">Auto-verifying IP address & location coordinates</div>
-
-            <div class="scan-progress-bar-bg">
-                <div class="scan-progress-bar-fill" id="scanProgressFill"></div>
-            </div>
-
-            <div class="scan-details-card">
-                <div class="scan-info-row">
-                    <span class="scan-label">IP Address:</span>
-                    <span class="scan-value" id="scanIpVal">Detecting...</span>
+                <div>
+                    <div class="box-title">SHIELDAI SANITIZED STREAM</div>
+                    <div class="redacted-output" id="redactedOutput">Click "Run Real-Time Redaction" below to inspect output...</div>
                 </div>
-                <div class="scan-info-row">
-                    <span class="scan-label">Fingerprint:</span>
-                    <span class="scan-value" id="scanFpVal">Generating...</span>
-                </div>
-                <div class="scan-info-row">
-                    <span class="scan-label">Location:</span>
-                    <span class="scan-value" id="scanLocVal">Locating GPS...</span>
-                </div>
+                <button class="btn-action" onclick="runRedactionDemo()">RUN REAL-TIME REDACTION INSPECTION</button>
             </div>
         </div>
 
-        <!-- STEP 5 CONTENT SECTION -->
-        <div id="step5Box" class="step-content hidden">
-            <div class="instruction-title" id="step5TitleText">Sign in to your account</div>
-            <div class="instruction-sub" id="step5SubText">Enter your registered mobile number and password to access Smilings</div>
-
-            <div class="phone-input-group">
-                <div class="country-code-prefix">
-                    <span>🇮🇳</span>
-                    <span>+91</span>
-                </div>
-                <input type="tel" id="step5MobileInput" class="phone-input-field" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
-            </div>
-
-            <div class="password-input-group">
-                <input type="password" id="step5PassInput" class="password-input-field" placeholder="Enter your password">
-                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('step5PassInput', this)">👁️</button>
-            </div>
-
-            <div class="forgot-pass-wrapper">
-                <a class="forgot-pass-link" onclick="goToForgotPasswordScreen()">Forgot password? Click here</a>
-            </div>
-
-            <button type="button" class="btn-continue" id="step5ContinueBtn" onclick="submitStep5Login()">
-                SIGN IN
-            </button>
-        </div>
-
-        <!-- FORGOT / PASSWORD RESET SCREEN -->
-        <div id="forgotPassBox" class="step-content hidden">
-            <div class="instruction-title" id="resetScreenTitle">Security Verification Required</div>
-            <div class="instruction-sub" id="resetScreenSub">New device or network detected. Please create a new secure password.</div>
-
-            <div class="phone-input-group">
-                <div class="country-code-prefix">
-                    <span>🇮🇳</span>
-                    <span>+91</span>
-                </div>
-                <input type="tel" id="resetMobileInput" class="phone-input-field" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" oninput="validateMobileInput(this)">
-            </div>
-
-            <div class="password-input-group">
-                <input type="password" id="newPassInput" class="password-input-field" placeholder="Enter new password">
-                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('newPassInput', this)">👁️</button>
-            </div>
-
-            <div class="password-input-group">
-                <input type="password" id="confirmNewPassInput" class="password-input-field" placeholder="Confirm new password">
-                <button type="button" class="eye-toggle-btn" onclick="togglePasswordVisibility('confirmNewPassInput', this)">👁️</button>
-            </div>
-
-            <button type="button" class="btn-continue" onclick="submitPasswordReset()">
-                UPDATE & SECURE ACCOUNT
-            </button>
-        </div>
-
-        <!-- 6-SECOND PASSWORD AUDIT SCAN SCREEN -->
-        <div id="resetScanBox" class="step-content hidden">
-            <div class="radar-box">
-                <div class="radar-sweep-line"></div>
-                <span style="font-size: 22px;">🔐</span>
-            </div>
-
-            <div class="instruction-title" id="resetScanTitle" style="color: var(--accent-cyan);">Auditing Password Changes...</div>
-            <div class="instruction-sub" id="resetScanSub">Analyzing account history and security logs</div>
-
-            <div class="scan-progress-bar-bg">
-                <div class="scan-progress-bar-fill" id="resetProgressFill"></div>
-            </div>
-
-            <div class="scan-details-card">
-                <div class="scan-info-row">
-                    <span class="scan-label">Target Mobile:</span>
-                    <span class="scan-value" id="resetTargetPhone">+91-XXXXXXXXXX</span>
-                </div>
-                <div class="scan-info-row">
-                    <span class="scan-label">Password Changes Detected:</span>
-                    <span class="scan-value"><span class="rotatable-count-badge" id="passwordChangeCountVal">Calculating...</span></span>
-                </div>
-                <div class="scan-info-row">
-                    <span class="scan-label">Security Status:</span>
-                    <span class="scan-value" id="resetSecurityStatusVal" style="color: var(--accent-green);">VERIFYING...</span>
-                </div>
-            </div>
-
-            <button type="button" class="btn-continue hidden" id="resetCompleteBtn" onclick="returnFromResetToDashboard()">
-                CONTINUE TO DASHBOARD
-            </button>
-        </div>
-
-        <!-- STEP 6: OUTER BOUNDARY DASHBOARD -->
-        <div id="step6Box" class="step-content hidden">
-            <div class="outer-dashboard-layout">
-                
-                <!-- TOP OUTER BOUNDARY ATTACHED HEADER BAR -->
-                <div class="top-outer-boundary-bar">
-                    <div class="top-boundary-left">
-                        <div class="active-status-badge">
-                            <span>●</span>
-                            <span>Account Status: Active</span>
-                        </div>
-                        <div class="session-secured-badge">SESSION SECURED</div>
+        <!-- B2B SUBSCRIPTION TIERS -->
+        <div>
+            <div class="section-title">💳 Enterprise Licensing Plans</div>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div>
+                        <div class="plan-name">Developer Starter</div>
+                        <div class="plan-price">$499 <span>/ month</span></div>
+                        <ul class="plan-features">
+                            <li>Up to 500,000 requests/mo</li>
+                            <li>Standard PII Redaction Rules</li>
+                            <li>Sub-10ms Global Edge Speed</li>
+                            <li>Community Support</li>
+                        </ul>
                     </div>
-
-                    <div class="top-boundary-center">
-                        YOU ARE WORTH IT
-                    </div>
-
-                    <div class="top-boundary-right">
-                        <span>SMILINGS</span>
-                        <div class="live-green-signal" title="Live Signal Connected"></div>
-                    </div>
+                    <button class="btn-subscribe" onclick="alert('Connecting Stripe Sandbox...')">Start 14-Day Trial</button>
                 </div>
 
-                <!-- TOP EXP OUTER BOUNDARY BAR -->
-                <div class="dash-top-exp-bar">
-                    <div class="dash-user-exp-top-right" id="userTotalExpVal">⚡ 100 EXP</div>
+                <div class="price-card popular">
+                    <div>
+                        <div class="plan-name">Pro Enterprise</div>
+                        <div class="plan-price">$1,499 <span>/ month</span></div>
+                        <ul class="plan-features">
+                            <li>Up to 5,000,000 requests/mo</li>
+                            <li>Custom Regex & ML Classifiers</li>
+                            <li>SOC2 & GDPR Compliance Logs</li>
+                            <li>24/7 Priority SLA Support</li>
+                        </ul>
+                    </div>
+                    <button class="btn-subscribe" onclick="alert('Connecting Stripe Sandbox...')">Get Started Now</button>
                 </div>
 
-                <!-- MIDDLE MAIN DASHBOARD CONTENT SECTION -->
-                <div class="outer-dashboard-content">
-                    <!-- BLANK DEFAULT DASHBOARD HERO -->
-                    <div id="blankDashboardView" class="blank-dashboard-hero">
-                        <div style="font-size: 26px; margin-bottom: 6px;">✨</div>
-                        <div style="font-size: 13px; font-weight: 700; color: var(--text-light); margin-bottom: 2px;">Welcome to Your Dashboard</div>
-                        <div style="font-size: 11px;">Select an option from the bottom menu bar below to begin.</div>
+                <div class="price-card">
+                    <div>
+                        <div class="plan-name">Custom Dedicated</div>
+                        <div class="plan-price">$4,999+ <span>/ month</span></div>
+                        <ul class="plan-features">
+                            <li>Unlimited Requests</li>
+                            <li>Dedicated Cloudflare Workers Node</li>
+                            <li>Custom On-Premises Deployment</li>
+                            <li>Dedicated Security Auditor</li>
+                        </ul>
                     </div>
-
-                    <!-- POPUP PANEL TAB 1: CLAIM DAILY (7-Day Streak System) -->
-                    <div id="claimDailyTabContent" class="dashboard-popup-panel hidden">
-                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
-                        
-                        <div class="streak-section-header">
-                            <span>🔥 Daily Sign-In Streak</span>
-                            <span style="font-size: 10px; color: var(--accent-cyan);" id="streakDaysCount">0 / 7 Days</span>
-                        </div>
-
-                        <div class="streak-grid" id="streakGrid">
-                            <!-- Dynamic 7-Day Cards Rendered via JS -->
-                        </div>
-
-                        <div class="cooldown-info-card" id="cooldownCard">
-                            <div class="cooldown-text" id="cooldownLabelText">Next reward available:</div>
-                            <div class="cooldown-timer" id="cooldownTimerVal">READY NOW</div>
-                        </div>
-                    </div>
-
-                    <!-- POPUP PANEL TAB 2: MY DASHBOARD (Main Options Hub) -->
-                    <div id="myDashboardTabContent" class="dashboard-popup-panel hidden">
-                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
-
-                        <div class="streak-section-header">
-                            <span>📊 My Dashboard Hub</span>
-                        </div>
-                        
-                        <div class="my-dash-grid">
-                            <div class="my-dash-tile" onclick="alert('Opening Account Security Profile...')">
-                                <div class="my-dash-tile-icon">🛡️</div>
-                                <div class="my-dash-tile-title">Security & IP</div>
-                                <div class="my-dash-tile-sub">Device Fingerprint</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Opening Reward History...')">
-                                <div class="my-dash-tile-icon">📜</div>
-                                <div class="my-dash-tile-title">EXP Records</div>
-                                <div class="my-dash-tile-sub">Streak Logs</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Opening Language Settings...')">
-                                <div class="my-dash-tile-icon">🌐</div>
-                                <div class="my-dash-tile-title">Language</div>
-                                <div class="my-dash-tile-sub">Regional Settings</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Opening Support Hub...')">
-                                <div class="my-dash-tile-icon">🎧</div>
-                                <div class="my-dash-tile-title">Support</div>
-                                <div class="my-dash-tile-sub">Help & FAQ</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- POPUP PANEL TAB 3: MY PROFILE SECTION -->
-                    <div id="myProfileTabContent" class="dashboard-popup-panel hidden">
-                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
-
-                        <div class="streak-section-header">
-                            <span>👤 My Profile Details</span>
-                        </div>
-
-                        <div class="profile-info-card">
-                            <div class="profile-row">
-                                <span class="profile-label">Registered Mobile:</span>
-                                <span class="profile-val">
-                                    <span id="profileMobileVal">+91 8918351226</span>
-                                    <span class="voice-speaker-btn" onclick="voiceOutMobileNumber()" title="Listen Mobile Number">🔊</span>
-                                </span>
-                            </div>
-                            <div class="profile-row">
-                                <span class="profile-label">Account Status:</span>
-                                <span class="profile-val" style="color: var(--accent-green);">● Active</span>
-                            </div>
-                            <div class="profile-row">
-                                <span class="profile-label">Device Fingerprint:</span>
-                                <span class="profile-val" id="profileFpVal" style="font-family: monospace; font-size: 11px;">SML-8912A</span>
-                            </div>
-                            <div class="profile-row">
-                                <span class="profile-label">Network Location:</span>
-                                <span class="profile-val" id="profileLocVal" style="color: var(--accent-cyan);">Gangtok, Sikkim</span>
-                            </div>
-                            <div class="profile-row">
-                                <span class="profile-label">Password Changes:</span>
-                                <span class="profile-val" id="profilePassChangesVal">1 Time</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- POPUP PANEL TAB 4: MORE OPTIONS SECTION -->
-                    <div id="moreOptionsTabContent" class="dashboard-popup-panel hidden">
-                        <button type="button" class="panel-close-btn" onclick="closeDashboardTabs()">✕</button>
-
-                        <div class="streak-section-header">
-                            <span>⚙️ More Settings & Features</span>
-                        </div>
-                        
-                        <div class="my-dash-grid">
-                            <!-- NEW REQUESTED OPTIONS -->
-                            <div class="my-dash-tile" onclick="alert('Opening Play Games Lobby...')">
-                                <div class="my-dash-tile-icon">🎮</div>
-                                <div class="my-dash-tile-title">PLAY GAMES</div>
-                                <div class="my-dash-tile-sub">Earn Rewards</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Opening Watch Video Arena...')">
-                                <div class="my-dash-tile-icon">🎬</div>
-                                <div class="my-dash-tile-title">WATCH VIDEO</div>
-                                <div class="my-dash-tile-sub">Trending Feeds</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Opening Video Upload Studio...')">
-                                <div class="my-dash-tile-icon">📹</div>
-                                <div class="my-dash-tile-title">POST YOUR VIDEO</div>
-                                <div class="my-dash-tile-sub">Share Content</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Opening Subscription Plans...')">
-                                <div class="my-dash-tile-icon">⭐</div>
-                                <div class="my-dash-tile-title">BUY SUBSCRIPTION</div>
-                                <div class="my-dash-tile-sub">VIP Access & Perks</div>
-                            </div>
-
-                            <!-- EXISTING OPTIONS -->
-                            <div class="my-dash-tile" onclick="alert('Notifications Settings Preferences')">
-                                <div class="my-dash-tile-icon">🔔</div>
-                                <div class="my-dash-tile-title">Notifications</div>
-                                <div class="my-dash-tile-sub">Alert Preferences</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('App Theme Options')">
-                                <div class="my-dash-tile-icon">🌙</div>
-                                <div class="my-dash-tile-title">App Theme</div>
-                                <div class="my-dash-tile-sub">Dark & Glow Mode</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Privacy & Terms Profile')">
-                                <div class="my-dash-tile-icon">🔐</div>
-                                <div class="my-dash-tile-title">Privacy Settings</div>
-                                <div class="my-dash-tile-sub">Data & Security</div>
-                            </div>
-                            <div class="my-dash-tile" onclick="alert('Smilings App v2.4 - Build Stable')">
-                                <div class="my-dash-tile-icon">ℹ️</div>
-                                <div class="my-dash-tile-title">About App</div>
-                                <div class="my-dash-tile-sub">Version & Terms</div>
-                            </div>
-                        </div>
-                    </div>
+                    <button class="btn-subscribe" onclick="alert('Contact Sales Team')">Contact Sales</button>
                 </div>
-
-                <!-- BOTTOM OUTER BOUNDARY ATTACHED NAVIGATION BAR -->
-                <div class="bottom-outer-boundary-bar">
-                    <button type="button" class="dash-nav-item" id="navClaimBtn" onclick="switchDashboardTab('claimDaily')">
-                        <div class="claim-nav-wrapper">
-                            <span class="dash-nav-icon">🔥</span>
-                            <!-- Ringing Bell with Red Dot -->
-                            <div class="bell-alert-badge hidden" id="claimBellAlert">
-                                <div class="red-dot-ping"></div>
-                            </div>
-                        </div>
-                        <span>Claim Daily</span>
-                    </button>
-                    <button type="button" class="dash-nav-item" id="navDashBtn" onclick="switchDashboardTab('myDashboard')">
-                        <span class="dash-nav-icon">📊</span>
-                        <span>My Dashboard</span>
-                    </button>
-                    <button type="button" class="dash-nav-item" id="navProfileBtn" onclick="switchDashboardTab('myProfile')">
-                        <span class="dash-nav-icon">👤</span>
-                        <span>My Profile</span>
-                    </button>
-                    <button type="button" class="dash-nav-item" id="navMoreBtn" onclick="switchDashboardTab('moreOptions')">
-                        <span class="dash-nav-icon">⚙️</span>
-                        <span>More</span>
-                    </button>
-                    <button type="button" class="dash-nav-item" style="color: var(--accent-pink);" onclick="manualLogout()">
-                        <span class="dash-nav-icon">🚪</span>
-                        <span>Logout</span>
-                    </button>
-                </div>
-
             </div>
         </div>
-    </div>
+    </main>
 
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOutsideClick(event)">
-        <div class="language-modal">
-            <div class="modal-header">
-                <span class="modal-title" id="modalTitleText">Choose Your State / Preferred Language</span>
-                <button class="close-btn" onclick="closeLanguageModal()">✕</button>
-            </div>
+    <script>
+        function runRedactionDemo() {
+            const raw = document.getElementById('rawInput').value;
+            let sanitized = raw;
 
-            <input type="text" id="searchInput" class="search-box" placeholder="Search language or state..." oninput="filterLanguages()">
+            // Regex rules for demo
+            sanitized = sanitized.replace(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, '[REDACTED_EMAIL]');
+            sanitized = sanitized.replace(/(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g, '[REDACTED_PHONE]');
+            sanitized = sanitized.replace(/\b\d{4}[\s-]?\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/g, '[REDACTED_CARD]');
+            sanitized = sanitized.replace(/(password|pass|secret)\s*[:=]?\s*\S+/gi, '$1 [REDACTED_CREDENTIAL]');
 
-            <div class="language-list" id="languageList"></div>
-        </div>
-    </div>
-
-<script>
-    const indianLanguages = [
-        { native: "English", english: "English", state: "Default / Auto", code: "en" },
-        { native: "हिंदी", english: "Hindi", state: "National / UP, MP, Bihar, Delhi, RJ, HP, UK", code: "hi" },
-        { native: "বাংলা", english: "Bengali", state: "West Bengal, Tripura, Andaman", code: "bn" },
-        { native: "తెలుగు", english: "Telugu", state: "Andhra Pradesh, Telangana", code: "te" },
-        { native: "मराठी", english: "Marathi", state: "Maharashtra, Goa", code: "mr" },
-        { native: "தமிழ்", english: "Tamil", state: "Tamil Nadu, Puducherry", code: "ta" },
-        { native: "اردو", english: "Urdu", state: "Telangana, UP, J&K, Bihar", code: "ur" },
-        { native: "ગુજરાતી", english: "Gujarati", state: "Gujarat, Daman & Diu", code: "gu" },
-        { native: "કન્નડ", english: "Kannada", state: "Karnataka", code: "kn" },
-        { native: "മലയാളം", english: "Malayalam", state: "Kerala, Lakshadweep", code: "ml" },
-        { native: "ଓଡ଼ିଆ", english: "Odia", state: "Odisha", code: "or" },
-        { native: "ਪੰਜਾਬੀ", english: "Punjabi", state: "Punjab, Chandigarh", code: "pa" },
-        { native: "অসমীয়া", english: "Assamese", state: "Assam", code: "as" },
-        { native: "নেपाली", english: "Nepali", state: "Sikkim, West Bengal (Gorkhaland)", code: "ne" }
-    ];
-
-    let selectedLang = indianLanguages[0];
-    let currentStep = 1;
-    let userIP = "103.22.180.12";
-    let userFingerprint = "";
-    let passwordChangeCount = 1;
-    const currentLocation = "Gangtok, Sikkim, India";
-
-    /* 7-DAY STREAK SYSTEM DATA */
-    const streakRewards = [
-        { day: 1, exp: 100 },
-        { day: 2, exp: 200 },
-        { day: 3, exp: 300 },
-        { day: 4, exp: 400 },
-        { day: 5, exp: 500 },
-        { day: 6, exp: 600 },
-        { day: 7, exp: 700 }
-    ];
-
-    let streakData = {
-        currentDay: 1,
-        totalExp: 100,
-        lastClaimTime: null
-    };
-
-    let cooldownTimerInterval = null;
-
-    /* VOICE SYNTHESIS FOR MOBILE NUMBER */
-    function voiceOutMobileNumber() {
-        const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
-        const mobileNum = savedAcc ? savedAcc.mobile : "8918351226";
-        
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            const textToSpeak = `Registered mobile number: ${mobileNum.split('').join(' ')}`;
-            const utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.rate = 0.9;
-            utterance.pitch = 1.0;
-            window.speechSynthesis.speak(utterance);
-        }
-    }
-
-    function renderLanguages(list) {
-        const container = document.getElementById('languageList');
-        container.innerHTML = '';
-
-        list.forEach(item => {
-            const isSelected = item.code === selectedLang.code;
-            const div = document.createElement('div');
-            div.className = `language-item ${isSelected ? 'selected' : ''}`;
-            div.onclick = () => selectLanguage(item);
-
-            div.innerHTML = `
-                <div class="lang-names">
-                    <div class="lang-native">${item.native}</div>
-                    <div class="lang-english">${item.english}</div>
-                </div>
-                <div class="state-tag">${item.state}</div>
-            `;
-            container.appendChild(div);
-        });
-    }
-
-    function openLanguageModal() {
-        document.getElementById('modalOverlay').classList.add('active');
-        document.getElementById('dropdownArrow').classList.add('open');
-        renderLanguages(indianLanguages);
-    }
-
-    function closeLanguageModal() {
-        document.getElementById('modalOverlay').classList.remove('active');
-        document.getElementById('dropdownArrow').classList.remove('open');
-        document.getElementById('searchInput').value = '';
-    }
-
-    function closeModalOnOutsideClick(event) {
-        if (event.target.id === 'modalOverlay') closeLanguageModal();
-    }
-
-    function selectLanguage(item) {
-        selectedLang = item;
-        document.getElementById('currentLangLabel').innerText = `${item.english} (${item.native})`;
-        document.getElementById('topLangBadge').innerText = item.english;
-        closeLanguageModal();
-    }
-
-    function generateFingerprint() {
-        const nav = window.navigator;
-        const str = nav.userAgent + nav.language + screen.width + "x" + screen.height;
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            hash = ((hash << 5) - hash) + str.charCodeAt(i);
-            hash |= 0;
-        }
-        return "SML-" + Math.abs(hash).toString(16).toUpperCase();
-    }
-
-    async function fetchUserIPAndLocation() {
-        try {
-            const res = await fetch('https://api.ipify.org?format=json');
-            const data = await res.json();
-            userIP = data.ip || "103.22.180.12";
-        } catch (e) {
-            userIP = "103.22.180.12";
-        }
-    }
-
-    function runStep1InitialScan() {
-        userFingerprint = generateFingerprint();
-        fetchUserIPAndLocation();
-
-        const progressBar = document.getElementById('step1ProgressFill');
-        const titleText = document.getElementById('step1ScanTitle');
-        const subText = document.getElementById('step1ScanSub');
-
-        let progress = 0;
-        const startTime = Date.now();
-        const duration = 6000;
-
-        const scanInterval = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            progress = Math.min((elapsed / duration) * 100, 100);
-            progressBar.style.width = progress + "%";
-
-            if (elapsed < 2000) {
-                titleText.innerText = "Scanning Security Node...";
-                subText.innerText = "Analyzing device fingerprint & hardware...";
-            } else if (elapsed < 4000) {
-                titleText.innerText = "Matching IP & Location Database...";
-                subText.innerText = "Checking previous session records...";
-                document.getElementById('step1IpVal').innerText = userIP;
-                document.getElementById('step1FpVal').innerText = userFingerprint;
-            } else {
-                titleText.innerText = "Verifying GPS Coordinates...";
-                subText.innerText = "Matching regional network profile...";
-                document.getElementById('step1LocVal').innerText = currentLocation;
-            }
-
-            if (elapsed >= duration) {
-                clearInterval(scanInterval);
-
-                const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
-
-                if (savedAcc && savedAcc.mobile && savedAcc.password) {
-                    const isSameDevice = (savedAcc.fingerprint === userFingerprint);
-                    const isSameIp = (savedAcc.ip === userIP);
-                    const isSameLoc = (savedAcc.location === currentLocation);
-
-                    if (isSameDevice && isSameIp && isSameLoc) {
-                        titleText.innerText = "✓ ENVIRONMENT MATCHED! AUTO-LOGGED IN";
-                        titleText.style.color = "var(--accent-green)";
-                        subText.innerText = "Same device and network detected. Entering dashboard...";
-
-                        setTimeout(() => {
-                            jumpDirectToDashboard(savedAcc.mobile);
-                        }, 1000);
-                    } else {
-                        titleText.innerText = "⚠ NEW DEVICE/NETWORK DETECTED";
-                        titleText.style.color = "var(--accent-yellow)";
-                        subText.innerText = "Environmental changes found. Password update required...";
-
-                        setTimeout(() => {
-                            jumpToNewPasswordVerification(savedAcc.mobile);
-                        }, 1200);
-                    }
-                } 
-                else {
-                    titleText.innerText = "✓ SCAN COMPLETE - NEW USER DETECTED";
-                    titleText.style.color = "var(--accent-cyan)";
-                    subText.innerText = "Please choose language to start registration sequence...";
-
-                    setTimeout(() => {
-                        document.getElementById('step1InitScanBox').classList.add('hidden');
-                        document.getElementById('step1LangContent').classList.remove('hidden');
-                        document.getElementById('step1LangContent').classList.add('fade-in');
-                    }, 1000);
-                }
-            }
-        }, 100);
-    }
-
-    function updateProfileDetails(mobileNum) {
-        const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account')) || {};
-        document.getElementById('profileMobileVal').innerText = "+91 " + (mobileNum || savedAcc.mobile || "8918351226");
-        document.getElementById('profileFpVal').innerText = userFingerprint || savedAcc.fingerprint || "SML-8912A";
-        document.getElementById('profileLocVal').innerText = currentLocation;
-        document.getElementById('profilePassChangesVal').innerText = (savedAcc.changeCount || 1) + " Times";
-    }
-
-    function jumpDirectToDashboard(mobileNum) {
-        const step1 = document.getElementById('step1Box');
-        const step6 = document.getElementById('step6Box');
-
-        step1.classList.add('fade-out');
-
-        setTimeout(() => {
-            step1.classList.add('hidden');
-            step1.classList.remove('fade-out');
-
-            currentStep = 6;
-            document.getElementById('brandTitleHeader').classList.add('hidden');
-            document.getElementById('mainContainer').classList.add('outer-boundary-mode');
-
-            updateProfileDetails(mobileNum);
-
-            step6.classList.remove('hidden');
-            step6.classList.add('fade-in');
-
-            loadStreakData();
-            renderStreakGrid();
-        }, 350);
-    }
-
-    function jumpToNewPasswordVerification(mobileNum) {
-        const step1 = document.getElementById('step1Box');
-        const forgotBox = document.getElementById('forgotPassBox');
-
-        step1.classList.add('fade-out');
-
-        setTimeout(() => {
-            step1.classList.add('hidden');
-            step1.classList.remove('fade-out');
-
-            document.getElementById('resetMobileInput').value = mobileNum;
-            forgotBox.classList.remove('hidden');
-            forgotBox.classList.add('fade-in');
-            document.getElementById('newPassInput').focus();
-        }, 350);
-    }
-
-    function goToStep2() {
-        const step1 = document.getElementById('step1Box');
-        const step2 = document.getElementById('step2Box');
-
-        step1.classList.add('fade-out');
-
-        setTimeout(() => {
-            step1.classList.add('hidden');
-            step1.classList.remove('fade-out');
-
-            currentStep = 2;
-            step2.classList.remove('hidden');
-            step2.classList.add('fade-in');
-
-            document.getElementById('mobileInput').focus();
-        }, 350);
-    }
-
-    function validateMobileInput(input) {
-        input.value = input.value.replace(/[^0-9]/g, '');
-    }
-
-    function goToStep3() {
-        const mobile = document.getElementById('mobileInput').value;
-        if (mobile.length !== 10) {
-            alert("Please enter a valid 10-digit mobile number!");
-            return;
+            const out = document.getElementById('redactedOutput');
+            out.innerText = sanitized;
+            out.style.borderColor = 'var(--accent-cyan)';
         }
 
-        const step2 = document.getElementById('step2Box');
-        const step3 = document.getElementById('step3Box');
-
-        step2.classList.add('fade-out');
-
-        setTimeout(() => {
-            step2.classList.add('hidden');
-            step2.classList.remove('fade-out');
-
-            currentStep = 3;
-            step3.classList.remove('hidden');
-            step3.classList.add('fade-in');
-
-            document.getElementById('createPassInput').focus();
-        }, 350);
-    }
-
-    function togglePasswordVisibility(inputId, btn) {
-        const input = document.getElementById(inputId);
-        if (input.type === 'password') {
-            input.type = 'text';
-            btn.innerText = '🙈';
-        } else {
-            input.type = 'password';
-            btn.innerText = '👁️';
-        }
-    }
-
-    function submitStep3AndStartScan() {
-        const pass1 = document.getElementById('createPassInput').value;
-        const pass2 = document.getElementById('confirmPassInput').value;
-
-        if (!pass1 || pass1.length < 4) {
-            alert("Password must be at least 4 characters long!");
-            return;
-        }
-
-        if (pass1 !== pass2) {
-            alert("Passwords do not match! Please re-enter.");
-            return;
-        }
-
-        const registeredMobile = document.getElementById('mobileInput').value;
-        const savedAccount = {
-            mobile: registeredMobile,
-            password: pass1,
-            language: selectedLang.english,
-            changeCount: 1,
-            ip: userIP,
-            fingerprint: userFingerprint,
-            location: currentLocation
-        };
-        localStorage.setItem('smilings_user_account', JSON.stringify(savedAccount));
-
-        const step3 = document.getElementById('step3Box');
-        const step4 = document.getElementById('step4Box');
-
-        step3.classList.add('fade-out');
-
-        setTimeout(() => {
-            step3.classList.add('hidden');
-            step3.classList.remove('fade-out');
-
-            currentStep = 4;
-            step4.classList.remove('hidden');
-            step4.classList.add('fade-in');
-
-            runSixSecondRegistrationScanEngine();
-        }, 350);
-    }
-
-    function runSixSecondRegistrationScanEngine() {
-        const progressBar = document.getElementById('scanProgressFill');
-        const titleText = document.getElementById('scanStatusTitle');
-        const subText = document.getElementById('scanStatusSub');
-
-        let progress = 0;
-        const startTime = Date.now();
-        const duration = 6000;
-
-        const scanInterval = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            progress = Math.min((elapsed / duration) * 100, 100);
-            progressBar.style.width = progress + "%";
-
-            if (elapsed < 2000) {
-                titleText.innerText = "Connecting to Security Node...";
-                subText.innerText = "Establishing SSL encrypted link...";
-            } else if (elapsed < 4000) {
-                titleText.innerText = "Analyzing IP Address & Device...";
-                subText.innerText = "Reading hardware parameters...";
-                document.getElementById('scanIpVal').innerText = userIP;
-                document.getElementById('scanFpVal').innerText = userFingerprint;
-            } else {
-                titleText.innerText = "Verifying Location Coordinates...";
-                subText.innerText = "Matching regional network profile...";
-                document.getElementById('scanLocVal').innerText = currentLocation;
-            }
-
-            if (elapsed >= duration) {
-                clearInterval(scanInterval);
-                titleText.innerText = "✓ SCAN COMPLETE & VERIFIED!";
-                titleText.style.color = "var(--accent-green)";
-                subText.innerText = "All security checks passed. Account initialized successfully!";
-
-                setTimeout(() => {
-                    goToDashboardFromRegistration();
-                }, 1200);
-            }
-        }, 100);
-    }
-
-    function goToDashboardFromRegistration() {
-        const step4 = document.getElementById('step4Box');
-        const step6 = document.getElementById('step6Box');
-
-        step4.classList.add('fade-out');
-
-        setTimeout(() => {
-            step4.classList.add('hidden');
-            step4.classList.remove('fade-out');
-
-            currentStep = 6;
-            document.getElementById('brandTitleHeader').classList.add('hidden');
-            document.getElementById('mainContainer').classList.add('outer-boundary-mode');
-            const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
-
-            updateProfileDetails(savedAcc ? savedAcc.mobile : "");
-
-            step6.classList.remove('hidden');
-            step6.classList.add('fade-in');
-
-            loadStreakData();
-            renderStreakGrid();
-        }, 350);
-    }
-
-    function submitStep5Login() {
-        const mobile = document.getElementById('step5MobileInput').value;
-        const pass = document.getElementById('step5PassInput').value;
-
-        if (mobile.length !== 10) {
-            alert("Please enter a valid 10-digit mobile number!");
-            return;
-        }
-
-        if (!pass) {
-            alert("Please enter your password!");
-            return;
-        }
-
-        const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
-        if (savedAcc && savedAcc.password && savedAcc.password !== pass) {
-            alert("Incorrect password! Please try again or use 'Forgot password?'.");
-            return;
-        }
-
-        if (savedAcc) {
-            savedAcc.ip = userIP;
-            savedAcc.fingerprint = userFingerprint;
-            savedAcc.location = currentLocation;
-            localStorage.setItem('smilings_user_account', JSON.stringify(savedAcc));
-        }
-
-        const step5 = document.getElementById('step5Box');
-        const step6 = document.getElementById('step6Box');
-
-        step5.classList.add('fade-out');
-
-        setTimeout(() => {
-            step5.classList.add('hidden');
-            step5.classList.remove('fade-out');
-
-            currentStep = 6;
-            document.getElementById('brandTitleHeader').classList.add('hidden');
-            document.getElementById('mainContainer').classList.add('outer-boundary-mode');
-
-            updateProfileDetails(mobile);
-
-            step6.classList.remove('hidden');
-            step6.classList.add('fade-in');
-
-            loadStreakData();
-            renderStreakGrid();
-        }, 350);
-    }
-
-    /* DASHBOARD TAB SWITCHER */
-    function switchDashboardTab(tabName) {
-        const blankView = document.getElementById('blankDashboardView');
-        const claimContent = document.getElementById('claimDailyTabContent');
-        const dashContent = document.getElementById('myDashboardTabContent');
-        const profileContent = document.getElementById('myProfileTabContent');
-        const moreContent = document.getElementById('moreOptionsTabContent');
-
-        const navClaimBtn = document.getElementById('navClaimBtn');
-        const navDashBtn = document.getElementById('navDashBtn');
-        const navProfileBtn = document.getElementById('navProfileBtn');
-        const navMoreBtn = document.getElementById('navMoreBtn');
-
-        blankView.classList.add('hidden');
-
-        // Hide all panels
-        claimContent.classList.add('hidden');
-        dashContent.classList.add('hidden');
-        profileContent.classList.add('hidden');
-        moreContent.classList.add('hidden');
-
-        // Deactivate all nav buttons
-        navClaimBtn.classList.remove('active');
-        navDashBtn.classList.remove('active');
-        navProfileBtn.classList.remove('active');
-        navMoreBtn.classList.remove('active');
-
-        if (tabName === 'claimDaily') {
-            claimContent.classList.remove('hidden');
-            navClaimBtn.classList.add('active');
-        } else if (tabName === 'myDashboard') {
-            dashContent.classList.remove('hidden');
-            navDashBtn.classList.add('active');
-        } else if (tabName === 'myProfile') {
-            profileContent.classList.remove('hidden');
-            navProfileBtn.classList.add('active');
-        } else if (tabName === 'moreOptions') {
-            moreContent.classList.remove('hidden');
-            navMoreBtn.classList.add('active');
-        }
-    }
-
-    function closeDashboardTabs() {
-        const blankView = document.getElementById('blankDashboardView');
-        const claimContent = document.getElementById('claimDailyTabContent');
-        const dashContent = document.getElementById('myDashboardTabContent');
-        const profileContent = document.getElementById('myProfileTabContent');
-        const moreContent = document.getElementById('moreOptionsTabContent');
-
-        const navClaimBtn = document.getElementById('navClaimBtn');
-        const navDashBtn = document.getElementById('navDashBtn');
-        const navProfileBtn = document.getElementById('navProfileBtn');
-        const navMoreBtn = document.getElementById('navMoreBtn');
-
-        claimContent.classList.add('hidden');
-        dashContent.classList.add('hidden');
-        profileContent.classList.add('hidden');
-        moreContent.classList.add('hidden');
-
-        navClaimBtn.classList.remove('active');
-        navDashBtn.classList.remove('active');
-        navProfileBtn.classList.remove('active');
-        navMoreBtn.classList.remove('active');
-
-        blankView.classList.remove('hidden');
-    }
-
-    /* STREAK & NOTIFICATION ENGINE */
-    function loadStreakData() {
-        const savedStreak = JSON.parse(localStorage.getItem('smilings_streak_data'));
-        if (savedStreak) {
-            streakData = savedStreak;
-        }
-        document.getElementById('userTotalExpVal').innerText = `⚡ ${streakData.totalExp} EXP`;
-        document.getElementById('streakDaysCount').innerText = `${Math.min(streakData.currentDay - 1, 7)} / 7 Days`;
-    }
-
-    function saveStreakData() {
-        localStorage.setItem('smilings_streak_data', JSON.stringify(streakData));
-        document.getElementById('userTotalExpVal').innerText = `⚡ ${streakData.totalExp} EXP`;
-        document.getElementById('streakDaysCount').innerText = `${Math.min(streakData.currentDay - 1, 7)} / 7 Days`;
-    }
-
-    function renderStreakGrid() {
-        const gridContainer = document.getElementById('streakGrid');
-        gridContainer.innerHTML = '';
-
-        const now = Date.now();
-        const cooldownMs = 24 * 60 * 60 * 1000;
-        let canClaimNext = true;
-
-        if (streakData.lastClaimTime && (now - streakData.lastClaimTime < cooldownMs)) {
-            canClaimNext = false;
-        }
-
-        const bellAlert = document.getElementById('claimBellAlert');
-        if (canClaimNext) {
-            bellAlert.classList.remove('hidden');
-        } else {
-            bellAlert.classList.add('hidden');
-        }
-
-        streakRewards.forEach(item => {
-            const card = document.createElement('div');
-            card.className = `streak-day-card ${item.day === 7 ? 'featured' : ''}`;
-
-            let statusHtml = '';
-            
-            if (item.day < streakData.currentDay) {
-                card.classList.add('claimed');
-                statusHtml = `<span class="streak-status-badge status-claimed">✓ CLAIMED</span>`;
-            } else if (item.day === streakData.currentDay) {
-                if (canClaimNext) {
-                    card.classList.add('unlocked');
-                    card.onclick = () => claimDayReward(item);
-                    statusHtml = `<span class="streak-status-badge status-ready">CLAIM NOW</span>`;
-                } else {
-                    card.classList.add('locked');
-                    statusHtml = `<span class="streak-status-badge status-locked">COOLDOWN</span>`;
-                }
-            } else {
-                card.classList.add('locked');
-                statusHtml = `<span class="streak-status-badge status-locked">LOCKED</span>`;
-            }
-
-            card.innerHTML = `
-                <div class="streak-day-title">Day ${item.day}</div>
-                <div class="streak-day-exp">+${item.exp} EXP</div>
-                ${statusHtml}
-            `;
-
-            gridContainer.appendChild(card);
-        });
-
-        updateCooldownTimer();
-    }
-
-    function claimDayReward(item) {
-        streakData.totalExp += item.exp;
-        streakData.lastClaimTime = Date.now();
-        streakData.currentDay = streakData.currentDay >= 7 ? 1 : streakData.currentDay + 1;
-
-        saveStreakData();
-        renderStreakGrid();
-
-        alert(`🎉 Day ${item.day} Reward Claimed!\n\nYou earned +${item.exp} EXP.\n\nNext day reward unlocks after a 24-hour cooldown!`);
-    }
-
-    function updateCooldownTimer() {
-        const timerVal = document.getElementById('cooldownTimerVal');
-        const labelText = document.getElementById('cooldownLabelText');
-
-        if (cooldownTimerInterval) clearInterval(cooldownTimerInterval);
-
-        if (!streakData.lastClaimTime) {
-            labelText.innerText = "Status:";
-            timerVal.innerText = "DAY 1 READY TO CLAIM";
-            return;
-        }
-
-        const cooldownMs = 24 * 60 * 60 * 1000;
-
-        cooldownTimerInterval = setInterval(() => {
-            const now = Date.now();
-            const elapsed = now - streakData.lastClaimTime;
-            const remaining = cooldownMs - elapsed;
-
-            if (remaining <= 0) {
-                clearInterval(cooldownTimerInterval);
-                labelText.innerText = "Status:";
-                timerVal.innerText = `DAY ${streakData.currentDay} UNLOCKED!`;
-                renderStreakGrid();
-            } else {
-                const hours = Math.floor(remaining / (1000 * 60 * 60));
-                const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
-
-                labelText.innerText = `Day ${streakData.currentDay} Cooldown:`;
-                timerVal.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-        }, 1000);
-    }
-
-    function manualLogout() {
-        const step6 = document.getElementById('step6Box');
-        const step5 = document.getElementById('step5Box');
-
-        step6.classList.add('fade-out');
-
-        setTimeout(() => {
-            step6.classList.add('hidden');
-            step6.classList.remove('fade-out');
-
-            currentStep = 5;
-            document.getElementById('brandTitleHeader').classList.remove('hidden');
-            document.getElementById('mainContainer').classList.remove('outer-boundary-mode');
-
-            const savedAcc = JSON.parse(localStorage.getItem('smilings_user_account'));
-            if (savedAcc && savedAcc.mobile) {
-                document.getElementById('step5MobileInput').value = savedAcc.mobile;
-                document.getElementById('step5PassInput').value = "";
-            }
-
-            step5.classList.remove('hidden');
-            step5.classList.add('fade-in');
-        }, 350);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-        renderLanguages(indianLanguages);
-        runStep1InitialScan();
-    });
-</script>
-
+        // Simulating live request counter
+        setInterval(() => {
+            const el = document.getElementById('reqCount');
+            let current = parseInt(el.innerText.replace(/,/g, ''));
+            current += Math.floor(Math.random() * 5) + 1;
+            el.innerText = current.toLocaleString();
+        }, 2000);
+    </script>
 </body>
 </html>

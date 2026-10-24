@@ -1,669 +1,564 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShieldAI Engine - Enterprise AI PII & Data Privacy Platform</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>2v2 Team Rummy Arena</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root {
-            --bg-dark: #090d16;
-            --bg-card: #111827;
-            --bg-card-hover: #1f293d;
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --accent: #10b981;
-            --accent-glow: rgba(16, 185, 129, 0.15);
-            --text-main: #f9fafb;
-            --text-muted: #9ca3af;
-            --border-color: #1f2937;
-            --border-highlight: #374151;
-            --danger: #ef4444;
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --font-sans: 'Inter', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: var(--font-sans);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1b1e;
+            color: #f3f4f6;
+            touch-action: manipulation;
+            user-select: none;
         }
 
-        /* Ambient Glow Backgrounds */
-        .ambient-glow {
-            position: absolute;
-            width: 100%;
-            max-width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(9, 13, 22, 0) 70%);
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 0;
-            pointer-events: none;
+        /* Felt Table Gradient */
+        .felt-table {
+            background: radial-gradient(circle, #1a5e3a 0%, #0d3822 75%, #051d11 100%);
+            box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.8);
         }
 
-        /* Container & Navigation */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 16px;
-            position: relative;
-            z-index: 1;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid var(--border-color);
-            gap: 12px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
-            font-size: 1.1rem;
-            color: #fff;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 800;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-main);
-        }
-
-        .btn-nav {
-            background-color: var(--primary);
-            color: white !important;
-            padding: 8px 16px;
-            border-radius: var(--radius-md);
-            font-weight: 600 !important;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        /* Mobile Nav Adjustments */
-        @media (max-width: 640px) {
-            .nav-links li:not(:last-child) {
-                display: none;
-            }
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 48px 0 40px;
-            text-align: center;
-            max-width: 850px;
-            margin: 0 auto;
-        }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.3);
-            color: var(--primary);
-            padding: 6px 14px;
-            border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--accent);
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 8px var(--accent);
-        }
-
-        .hero h1 {
-            font-size: 2.25rem;
-            font-weight: 800;
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            margin-bottom: 20px;
-            background: linear-gradient(180deg, #ffffff 0%, #9ca3af 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        @media (min-width: 768px) {
-            .hero h1 {
-                font-size: 3.5rem;
-            }
-        }
-
-        .hero p {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-bottom: 32px;
-            line-height: 1.6;
-        }
-
-        .hero-cta {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        @media (min-width: 480px) {
-            .hero-cta {
-                flex-direction: row;
-            }
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: var(--radius-md);
-            text-decoration: none;
-            transition: all 0.2s ease;
+        /* Card Styling & Animations */
+        .card-item {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
             cursor: pointer;
-            border: none;
-            width: 100%;
+        }
+        .card-item:hover {
+            transform: translateY(-8px);
+        }
+        .card-selected {
+            transform: translateY(-16px) !important;
+            box-shadow: 0 10px 20px rgba(250, 204, 21, 0.5), 0 0 0 3px #facc15 !important;
         }
 
-        @media (min-width: 480px) {
-            .btn {
-                width: auto;
-            }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
         }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-accent {
-            background-color: var(--accent);
-            color: #042f2e;
-            font-weight: 700;
-            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-accent:hover {
-            background-color: #34d399;
-        }
-
-        .btn-secondary {
-            background-color: var(--bg-card);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-        }
-
-        /* Sandbox Demo */
-        .sandbox-section {
-            margin: 20px 0 60px;
-        }
-
-        .sandbox-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .sandbox-header {
-            padding: 14px 16px;
-            background-color: rgba(15, 23, 42, 0.8);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-        }
-
-        .sandbox-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .sandbox-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-        }
-
-        @media (min-width: 768px) {
-            .sandbox-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .sandbox-pane {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        @media (min-width: 768px) {
-            .sandbox-pane {
-                padding: 24px;
-            }
-            .sandbox-pane:first-child {
-                border-right: 1px solid var(--border-color);
-            }
-        }
-
-        .pane-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        textarea, .redacted-output {
-            width: 100%;
-            height: 160px;
-            background-color: #090d16;
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            color: var(--text-main);
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            resize: none;
-            outline: none;
-            line-height: 1.5;
-        }
-
-        textarea:focus {
-            border-color: var(--primary);
-        }
-
-        .redacted-output {
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-
-        .pii-tag {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #fca5a5;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            padding: 2px 6px;
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 4px;
-            font-weight: 600;
         }
 
-        /* Features Section */
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-bottom: 60px;
+        /* Glowing Effects */
+        .active-turn-glow {
+            animation: pulse-glow 1.5s infinite alternate;
         }
-
-        @media (min-width: 768px) {
-            .features-grid {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 24px;
-                margin-bottom: 100px;
-            }
-        }
-
-        .feature-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            padding: 24px;
-            border-radius: var(--radius-lg);
-        }
-
-        .feature-icon {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(99, 102, 241, 0.1);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-            font-size: 1.1rem;
-            margin-bottom: 16px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .feature-card p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        /* Pricing Section */
-        .pricing-section {
-            padding: 20px 0 80px;
-            text-align: center;
-        }
-
-        .section-header {
-            max-width: 600px;
-            margin: 0 auto 40px;
-        }
-
-        .section-header h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
-        .section-header p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        @media (min-width: 768px) {
-            .pricing-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .pricing-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            padding: 28px;
-            text-align: left;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .pricing-card.featured {
-            border-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-glow);
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background-color: var(--accent);
-            color: #042f2e;
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 3px 10px;
-            border-radius: 100px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .price {
-            font-size: 2.25rem;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
-
-        .price span {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .pricing-features {
-            list-style: none;
-            margin-bottom: 24px;
-        }
-
-        .pricing-features li {
-            padding: 6px 0;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .pricing-features li::before {
-            content: "✓";
-            color: var(--accent);
-            font-weight: 800;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border-color);
-            padding: 32px 0;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 10px rgba(234, 179, 8, 0.4); }
+            100% { box-shadow: 0 0 25px rgba(234, 179, 8, 0.9); }
         }
     </style>
 </head>
-<body>
+<body class="h-screen w-screen overflow-hidden flex flex-col justify-between">
 
-    <div class="ambient-glow"></div>
-
-    <div class="container">
-        <!-- Navigation Header -->
-        <nav>
-            <a href="#" class="logo">
-                <div class="logo-icon">S</div>
-                ShieldAI Engine
-            </a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#sandbox">Live Demo</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#pricing" class="btn-nav">Get Started</a></li>
-            </ul>
-        </nav>
-
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="badge">
-                <span class="badge-dot"></span> Powered by Edge AI Redaction
+    <!-- Top Bar Navigation & Stats -->
+    <header class="bg-slate-900/90 border-b border-slate-700/50 px-4 py-2 flex items-center justify-between text-xs sm:text-sm z-20 backdrop-blur-md">
+        <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-1.5 bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 px-3 py-1 rounded-full font-bold">
+                <i class="fa-solid font-bold fa-coins"></i>
+                <span id="coin-balance">1,000</span>
             </div>
-            <h1>Automated Enterprise AI Data Privacy & Security</h1>
-            <p>Strip PII, PCI, and confidential keys from LLM prompts and API pipelines in real-time. Protect customer privacy and maintain strict SOC2 & GDPR compliance.</p>
-            <div class="hero-cta">
-                <a href="#pricing" class="btn btn-primary">Start 14-Day Trial</a>
-                <a href="#sandbox" class="btn btn-secondary">Try Live Sandbox</a>
+            <div class="flex items-center space-x-1.5 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded-full font-semibold">
+                <span>Pot:</span>
+                <span id="pot-amount" class="font-bold">200</span>
             </div>
-        </section>
+        </div>
 
-        <!-- Interactive Sandbox Section -->
-        <section id="sandbox" class="sandbox-section">
-            <div class="sandbox-card">
-                <div class="sandbox-header">
-                    <div class="sandbox-title">
-                        <span>⚡</span> Live Inspection Sandbox (Real-Time Redaction)
-                    </div>
-                    <div class="badge" style="margin:0; padding: 2px 8px; font-size: 0.7rem;">
-                        Latency: &lt;8ms
-                    </div>
+        <!-- Score Board -->
+        <div class="flex items-center space-x-4 bg-slate-800/80 px-4 py-1.5 rounded-xl border border-slate-700">
+            <div class="text-center">
+                <span class="text-blue-400 font-bold block leading-none">TEAM A</span>
+                <span id="score-team-a" class="text-xs text-slate-300">0 pts</span>
+            </div>
+            <span class="text-slate-500 font-black">VS</span>
+            <div class="text-center">
+                <span class="text-red-400 font-bold block leading-none">TEAM B</span>
+                <span id="score-team-b" class="text-xs text-slate-300">0 pts</span>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-2">
+            <button onclick="toggleRulesModal(true)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-600 transition flex items-center space-x-1">
+                <i class="fa-solid fa-circle-question"></i>
+                <span class="hidden sm:inline">Rules</span>
+            </button>
+            <button onclick="startNewMatch()" class="bg-amber-600 hover:bg-amber-500 text-white font-semibold px-3 py-1.5 rounded-lg transition shadow-lg flex items-center space-x-1">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span class="hidden sm:inline">New Match</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Game Table -->
+    <main class="relative flex-1 felt-table flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+        
+        <!-- Partner Bot (Top - Team A) -->
+        <div id="player-2-container" class="absolute top-2 left-1/2 -translate-x-1/2 flex flex-col items-center transition-all duration-300">
+            <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1 rounded-full border border-blue-500/50 shadow-md">
+                <div class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">P2</div>
+                <span class="text-xs font-medium text-blue-300">Partner Bot (Team A)</span>
+                <span id="p2-card-count" class="text-xs bg-slate-800 px-1.5 py-0.5 rounded text-slate-300">13 cards</span>
+            </div>
+            <!-- Face-down cards preview -->
+            <div class="flex -space-x-8 mt-1 scale-75 origin-top">
+                <div class="w-10 h-14 bg-slate-800 border border-slate-600 rounded-md shadow-md flex items-center justify-center text-slate-500">🂠</div>
+                <div class="w-10 h-14 bg-slate-800 border border-slate-600 rounded-md shadow-md flex items-center justify-center text-slate-500">🂠</div>
+                <div class="w-10 h-14 bg-slate-800 border border-slate-600 rounded-md shadow-md flex items-center justify-center text-slate-500">🂠</div>
+            </div>
+        </div>
+
+        <!-- Opponent Bot 1 (Left - Team B) -->
+        <div id="player-1-container" class="absolute left-2 top-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-300">
+            <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1 rounded-full border border-red-500/50 shadow-md rotate-90 sm:rotate-0">
+                <div class="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-xs font-bold">B1</div>
+                <span class="text-xs font-medium text-red-300">Bot 1 (Team B)</span>
+                <span id="p1-card-count" class="text-xs bg-slate-800 px-1.5 py-0.5 rounded text-slate-300">13</span>
+            </div>
+        </div>
+
+        <!-- Opponent Bot 2 (Right - Team B) -->
+        <div id="player-3-container" class="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col items-center transition-all duration-300">
+            <div class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1 rounded-full border border-red-500/50 shadow-md -rotate-90 sm:rotate-0">
+                <div class="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-xs font-bold">B3</div>
+                <span class="text-xs font-medium text-red-300">Bot 3 (Team B)</span>
+                <span id="p3-card-count" class="text-xs bg-slate-800 px-1.5 py-0.5 rounded text-slate-300">13</span>
+            </div>
+        </div>
+
+        <!-- Central Table Playing Deck & Discard Area -->
+        <div class="flex items-center space-x-6 sm:space-x-10 bg-black/20 p-4 sm:p-6 rounded-3xl border border-white/5 backdrop-blur-sm">
+            <!-- Closed Draw Deck -->
+            <div onclick="userDrawCard('deck')" class="group relative flex flex-col items-center cursor-pointer">
+                <div class="w-16 h-24 sm:w-20 sm:h-28 bg-gradient-to-br from-indigo-800 to-slate-900 border-2 border-indigo-400/50 rounded-xl shadow-2xl flex flex-col items-center justify-center group-hover:scale-105 transition transform">
+                    <i class="fa-solid fa-layer-group text-2xl text-indigo-300"></i>
+                    <span id="deck-count" class="text-xs mt-1 text-indigo-200 font-bold">82</span>
                 </div>
-                <div class="sandbox-grid">
-                    <div class="sandbox-pane">
-                        <div class="pane-label">Raw Prompt Input</div>
-                        <textarea id="rawInput" placeholder="Type sensitive text here...">Hello, my name is John Doe. My email is john.doe@acme.com, phone number is +1 (555) 019-2834, and my SSN is 000-12-3456. Please assist with my account.</textarea>
-                    </div>
-                    <div class="sandbox-pane">
-                        <div class="pane-label">Sanitized Output (Safe for LLM)</div>
-                        <div id="redactedOutput" class="redacted-output"></div>
-                    </div>
+                <span class="text-[10px] sm:text-xs text-slate-300 font-semibold mt-1">Draw Deck</span>
+            </div>
+
+            <!-- Wild Joker Indicator -->
+            <div class="flex flex-col items-center">
+                <div id="wild-joker-card" class="w-12 h-18 sm:w-14 sm:h-20 bg-white rounded-lg border-2 border-amber-400 flex flex-col items-center justify-center shadow-lg text-slate-900 font-bold">
+                    <span class="text-xs">JOKER</span>
+                    <span id="wild-joker-val" class="text-lg">★</span>
                 </div>
-            </div>
-        </section>
-
-        <!-- Features Grid -->
-        <section id="features" class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🛡️</div>
-                <h3>Automatic PII Redaction</h3>
-                <p>Detects and strips emails, phone numbers, SSNs, credit card details, and auth tokens automatically before sending prompts to external LLMs.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3>Ultra-Fast Sub-10ms Edge Engine</h3>
-                <p>Optimized for edge deployment via Cloudflare Workers and Vercel Edge Functions, guaranteeing zero noticeable delay on your production APIs.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">📊</div>
-                <h3>Compliance & Audit Logs</h3>
-                <p>Complete visibility into sanitized payloads and data governance policies to satisfy enterprise GDPR, HIPAA, and SOC2 requirements.</p>
-            </div>
-        </section>
-
-        <!-- Pricing Section with Live Payment Links -->
-        <section id="pricing" class="pricing-section">
-            <div class="section-header">
-                <h2>Enterprise Licensing Plans</h2>
-                <p>Select a subscription plan tailored to your team's API throughput and security requirements.</p>
+                <span class="text-[10px] text-amber-300 font-semibold mt-1">Wild Joker</span>
             </div>
 
-            <div class="pricing-grid">
-                <!-- Developer Starter Plan -->
-                <div class="pricing-card">
-                    <div>
-                        <h3>Developer Starter</h3>
-                        <div class="price">₹41,500 <span>/ month</span></div>
-                        <ul class="pricing-features">
-                            <li>Up to 500,000 API requests/mo</li>
-                            <li>Standard PII & PCI Redaction Rules</li>
-                            <li>Sub-10ms Global Edge Speed</li>
-                            <li>Standard Email Support</li>
-                        </ul>
-                    </div>
-                    <a href="https://rzp.io/rzp/83nu2ZYs" target="_blank" class="btn btn-primary" style="width: 100%;">
-                        Start 14-Day Trial
-                    </a>
+            <!-- Open Discard Pile -->
+            <div onclick="userDrawCard('discard')" class="group relative flex flex-col items-center cursor-pointer">
+                <div id="discard-pile-top" class="w-16 h-24 sm:w-20 sm:h-28 bg-white border-2 border-slate-300 rounded-xl shadow-2xl flex flex-col items-center justify-center group-hover:scale-105 transition transform text-slate-900">
+                    <span class="text-xs text-slate-400">Empty</span>
                 </div>
+                <span class="text-[10px] sm:text-xs text-slate-300 font-semibold mt-1">Discard Pile</span>
+            </div>
+        </div>
 
-                <!-- Pro Enterprise Plan -->
-                <div class="pricing-card featured">
-                    <div class="popular-badge">Most Popular</div>
-                    <div>
-                        <h3>Pro Enterprise</h3>
-                        <div class="price">₹49,999 <span>/ month</span></div>
-                        <ul class="pricing-features">
-                            <li>Up to 5,000,000 API requests/mo</li>
-                            <li>Custom Regex & ML Classifiers</li>
-                            <li>SOC2 & GDPR Compliance Logs</li>
-                            <li>24/7 Priority SLA Support</li>
-                        </ul>
-                    </div>
-                    <a href="https://rzp.io/rzp/NanGgQZ" target="_blank" class="btn btn-accent" style="width: 100%;">
-                        Get Started Now
-                    </a>
+        <!-- Team Melds Area (Shared Display) -->
+        <div class="absolute bottom-28 left-4 right-4 flex justify-between pointer-events-none">
+            <!-- Team A Shared Melds -->
+            <div class="bg-blue-950/60 border border-blue-500/30 p-2 rounded-xl max-w-[45%] pointer-events-auto">
+                <span class="text-[10px] font-bold text-blue-300 block mb-1">TEAM A MELDS</span>
+                <div id="team-a-melds" class="flex flex-wrap gap-2 text-xs">
+                    <span class="text-slate-500 text-[10px]">No melds yet</span>
                 </div>
             </div>
-        </section>
 
-        <!-- Footer -->
-        <footer>
-            <p>&copy; 2026 ShieldAI Engine. All rights reserved. Enterprise AI Privacy Solutions.</p>
-        </footer>
+            <!-- Team B Shared Melds -->
+            <div class="bg-red-950/60 border border-red-500/30 p-2 rounded-xl max-w-[45%] pointer-events-auto text-right">
+                <span class="text-[10px] font-bold text-red-300 block mb-1">TEAM B MELDS</span>
+                <div id="team-b-melds" class="flex flex-wrap gap-2 justify-end text-xs">
+                    <span class="text-slate-500 text-[10px]">No melds yet</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Player Action Bar & Hand -->
+    <footer class="bg-slate-900/95 border-t border-slate-800 p-2 sm:p-3 z-20 flex flex-col items-center space-y-2">
+        
+        <!-- Status Notification Message -->
+        <div id="status-message" class="text-xs sm:text-sm font-semibold text-yellow-400 text-center animate-pulse">
+            Your turn! Draw a card from Deck or Discard pile.
+        </div>
+
+        <!-- Player Controls -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+            <button onclick="groupSelectedCards()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
+                <i class="fa-solid fa-object-group"></i>
+                <span>Meld Selected</span>
+            </button>
+            <button onclick="userDiscardCard()" class="bg-amber-600 hover:bg-amber-500 text-white text-xs sm:text-sm font-bold px-4 py-1.5 rounded-lg transition shadow-md flex items-center space-x-1">
+                <i class="fa-solid fa-arrow-up-from-bracket"></i>
+                <span>Discard Card</span>
+            </button>
+            <button onclick="userDeclare()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-extrabold px-4 py-1.5 rounded-lg transition shadow-md flex items-center space-x-1">
+                <i class="fa-solid fa-flag-checkered"></i>
+                <span>Declare & Finish</span>
+            </button>
+        </div>
+
+        <!-- Player Cards Hand Deck -->
+        <div class="w-full max-w-4xl overflow-x-auto pb-1">
+            <div id="player-hand" class="flex justify-center -space-x-4 sm:-space-x-6 min-w-max px-4 pt-2">
+                <!-- Dynamic cards populated here -->
+            </div>
+        </div>
+    </footer>
+
+    <!-- Rules Modal -->
+    <div id="rules-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden backdrop-blur-sm">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-6 text-slate-300 relative shadow-2xl">
+            <button onclick="toggleRulesModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="text-xl font-bold text-amber-400 mb-3 flex items-center space-x-2">
+                <i class="fa-solid fa-crown"></i>
+                <span>2v2 Rummy Rules</span>
+            </h2>
+            <div class="space-y-3 text-xs sm:text-sm max-h-[60vh] overflow-y-auto pr-2">
+                <p><strong class="text-white">Teams:</strong> You + Partner Bot 2 (Team A) vs Bot 1 + Bot 3 (Team B).</p>
+                <p><strong class="text-white">Decks:</strong> 2 standard 52-card decks + 4 Printed/Wild Jokers (108 cards total).</p>
+                <p><strong class="text-white">Objective:</strong> Form valid groups (Pure Sequences, Sequences with Jokers, Sets) to reduce hand points to zero.</p>
+                <ul class="list-disc pl-5 space-y-1 text-slate-400">
+                    <li><strong>Pure Sequence:</strong> 3+ consecutive cards of same suit without Joker.</li>
+                    <li><strong>Sequence:</strong> 3+ consecutive cards using Wild Joker.</li>
+                    <li><strong>Set:</strong> 3 or 4 cards of same rank but different suits.</li>
+                </ul>
+                <p><strong class="text-white">Winning:</strong> The first team to declare with all cards validly melded wins the virtual coin pot from the opponents!</p>
+            </div>
+            <button onclick="toggleRulesModal(false)" class="mt-5 w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 rounded-xl transition">
+                Got it, Let's Play!
+            </button>
+        </div>
     </div>
 
-    <!-- Client-side Interactive Sandbox Script -->
+    <!-- Game Logic JavaScript -->
     <script>
-        const rawInput = document.getElementById('rawInput');
-        const redactedOutput = document.getElementById('redactedOutput');
+        // Suits & Ranks Definition
+        const SUITS = ['♠', '♥', '♦', '♣'];
+        const SUIT_COLORS = { '♠': 'text-slate-900', '♥': 'text-red-600', '♦': 'text-red-600', '♣': 'text-slate-900' };
+        const RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
 
-        function processRedaction() {
-            let text = rawInput.value;
+        // Game State Variables
+        let fullDeck = [];
+        let drawDeck = [];
+        let discardPile = [];
+        let wildJoker = null;
+        let currentTurnPlayer = 0; // 0: User (P1), 1: Bot 1, 2: Partner Bot 2, 3: Bot 3
+        let hasDrawnCard = false;
+        let selectedHandIndices = [];
+        let userCoinBalance = 1000;
+        let currentPot = 200;
+        let teamAScore = 0;
+        let teamBScore = 0;
 
-            // Pattern Matchers for PII
-            const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
-            const phoneRegex = /(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/g;
-            const ssnRegex = /\b\d{3}-\d{2}-\d{4}\b/g;
+        // Player Hands Data
+        let playerHands = [[], [], [], []];
+        let teamMelds = { teamA: [], teamB: [] };
 
-            // Replace PII with stylized badges
-            text = text.replace(emailRegex, '<span class="pii-tag">[REDACTED_EMAIL]</span>');
-            text = text.replace(ssnRegex, '<span class="pii-tag">[REDACTED_SSN]</span>');
-            text = text.replace(phoneRegex, '<span class="pii-tag">[REDACTED_PHONE]</span>');
+        // Initialize Game on Load
+        window.onload = function() {
+            startNewMatch();
+        };
 
-            redactedOutput.innerHTML = text;
+        // Create 2 Decks (108 cards)
+        function createDeck() {
+            let deck = [];
+            for (let d = 0; d < 2; d++) {
+                for (let suit of SUITS) {
+                    for (let rank of RANKS) {
+                        deck.push({ suit, rank, id: Math.random().toString(36).substring(2, 9) });
+                    }
+                }
+                deck.push({ suit: '★', rank: 'JOKER', isJoker: true, id: Math.random().toString(36).substring(2, 9) });
+                deck.push({ suit: '★', rank: 'JOKER', isJoker: true, id: Math.random().toString(36).substring(2, 9) });
+            }
+            // Shuffle
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
         }
 
-        rawInput.addEventListener('input', processRedaction);
-        processRedaction();
+        // Start a New Match
+        function startNewMatch() {
+            fullDeck = createDeck();
+            discardPile = [];
+            teamMelds = { teamA: [], teamB: [] };
+            hasDrawnCard = false;
+            selectedHandIndices = [];
+            currentTurnPlayer = 0;
+
+            // Set Wild Joker
+            wildJoker = fullDeck.pop();
+            document.getElementById('wild-joker-val').textContent = wildJoker.isJoker ? 'JOKER' : `${wildJoker.rank}${wildJoker.suit}`;
+
+            // Deal 13 Cards to each player
+            playerHands = [[], [], [], []];
+            for (let i = 0; i < 13; i++) {
+                for (let p = 0; p < 4; p++) {
+                    playerHands[p].push(fullDeck.pop());
+                }
+            }
+
+            drawDeck = fullDeck;
+            // First card to discard pile
+            discardPile.push(drawDeck.pop());
+
+            updateUI();
+            updateStatus("Match started! Your turn. Draw a card from Deck or Discard pile.");
+        }
+
+        // Render & Update UI Elements
+        function updateUI() {
+            // Update counts
+            document.getElementById('deck-count').textContent = drawDeck.length;
+            document.getElementById('coin-balance').textContent = userCoinBalance.toLocaleString();
+            document.getElementById('pot-amount').textContent = currentPot;
+            document.getElementById('score-team-a').textContent = `${teamAScore} pts`;
+            document.getElementById('score-team-b').textContent = `${teamBScore} pts`;
+
+            // Bot Card Counts
+            document.getElementById('p1-card-count').textContent = playerHands[1].length;
+            document.getElementById('p2-card-count').textContent = `${playerHands[2].length} cards`;
+            document.getElementById('p3-card-count').textContent = playerHands[3].length;
+
+            // Top Discard Card
+            const discardTopEl = document.getElementById('discard-pile-top');
+            if (discardPile.length > 0) {
+                const top = discardPile[discardPile.length - 1];
+                discardTopEl.className = `w-16 h-24 sm:w-20 sm:h-28 bg-white border-2 border-slate-300 rounded-xl shadow-2xl flex flex-col items-center justify-center text-slate-900 group-hover:scale-105 transition transform ${SUIT_COLORS[top.suit] || 'text-amber-600'}`;
+                discardTopEl.innerHTML = `<span class="text-sm sm:text-base font-bold">${top.rank}</span><span class="text-xl sm:text-2xl">${top.suit}</span>`;
+            } else {
+                discardTopEl.innerHTML = `<span class="text-xs text-slate-400">Empty</span>`;
+            }
+
+            // Highlight Active Turn Player Container
+            [0, 1, 2, 3].forEach(p => {
+                const container = document.getElementById(p === 0 ? 'player-hand' : `player-${p}-container`);
+                if (container) {
+                    if (p === currentTurnPlayer) {
+                        container.classList.add('active-turn-glow');
+                    } else {
+                        container.classList.remove('active-turn-glow');
+                    }
+                }
+            });
+
+            // Render User Hand
+            renderUserHand();
+            // Render Team Melds
+            renderMelds();
+        }
+
+        // Render User Cards
+        function renderUserHand() {
+            const handContainer = document.getElementById('player-hand');
+            handContainer.innerHTML = '';
+
+            // Sort Hand by Suit then Rank
+            playerHands[0].forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                const isSelected = selectedHandIndices.includes(index);
+
+                cardEl.className = `card-item w-14 h-22 sm:w-16 sm:h-24 bg-white rounded-lg border border-slate-300 shadow-md flex flex-col justify-between p-1.5 ${SUIT_COLORS[card.suit] || 'text-amber-600'} ${isSelected ? 'card-selected' : ''}`;
+                cardEl.onclick = () => toggleCardSelection(index);
+
+                cardEl.innerHTML = `
+                    <div class="text-xs sm:text-sm font-bold leading-none">${card.rank}</div>
+                    <div class="text-lg sm:text-2xl text-center leading-none">${card.suit}</div>
+                    <div class="text-xs sm:text-sm font-bold leading-none text-right">${card.rank}</div>
+                `;
+                handContainer.appendChild(cardEl);
+            });
+        }
+
+        // Toggle Selection of Cards for Melding / Discarding
+        function toggleCardSelection(index) {
+            if (selectedHandIndices.includes(index)) {
+                selectedHandIndices = selectedHandIndices.filter(i => i !== index);
+            } else {
+                selectedHandIndices.push(index);
+            }
+            renderUserHand();
+        }
+
+        // User Action: Draw Card
+        function userDrawCard(source) {
+            if (currentTurnPlayer !== 0) {
+                updateStatus("It's not your turn!");
+                return;
+            }
+            if (hasDrawnCard) {
+                updateStatus("You already drew a card! Select one to discard.");
+                return;
+            }
+
+            let drawn = null;
+            if (source === 'deck' && drawDeck.length > 0) {
+                drawn = drawDeck.pop();
+            } else if (source === 'discard' && discardPile.length > 0) {
+                drawn = discardPile.pop();
+            } else {
+                updateStatus("Selected pile is empty!");
+                return;
+            }
+
+            playerHands[0].push(drawn);
+            hasDrawnCard = true;
+            updateUI();
+            updateStatus("Card drawn! Select 1 card and tap Discard, or group cards to Meld.");
+        }
+
+        // User Action: Discard Card
+        function userDiscardCard() {
+            if (currentTurnPlayer !== 0) {
+                updateStatus("It's not your turn!");
+                return;
+            }
+            if (!hasDrawnCard) {
+                updateStatus("You must draw a card first!");
+                return;
+            }
+            if (selectedHandIndices.length !== 1) {
+                updateStatus("Please select exactly ONE card to discard.");
+                return;
+            }
+
+            const discardIndex = selectedHandIndices[0];
+            const discardedCard = playerHands[0].splice(discardIndex, 1)[0];
+            discardPile.push(discardedCard);
+
+            selectedHandIndices = [];
+            hasDrawnCard = false;
+            updateUI();
+
+            // Pass turn to next player (Bot 1)
+            passTurn();
+        }
+
+        // Group Selected Cards into Melds
+        function groupSelectedCards() {
+            if (selectedHandIndices.length < 3) {
+                updateStatus("Select at least 3 cards to form a valid Meld.");
+                return;
+            }
+
+            const selectedCards = selectedHandIndices.map(i => playerHands[0][i]);
+            
+            // Add to Team A Melds
+            teamMelds.teamA.push(selectedCards);
+
+            // Remove cards from player hand
+            selectedHandIndices.sort((a, b) => b - a).forEach(i => {
+                playerHands[0].splice(i, 1);
+            });
+
+            selectedHandIndices = [];
+            updateUI();
+            updateStatus("Meld laid down successfully for Team A!");
+        }
+
+        // Render Shared Team Melds
+        function renderMelds() {
+            const teamAEl = document.getElementById('team-a-melds');
+            const teamBEl = document.getElementById('team-b-melds');
+
+            teamAEl.innerHTML = teamMelds.teamA.length ? '' : '<span class="text-slate-500 text-[10px]">No melds yet</span>';
+            teamMelds.teamA.forEach(meld => {
+                const groupStr = meld.map(c => `${c.rank}${c.suit}`).join(' ');
+                teamAEl.innerHTML += `<div class="bg-blue-900/80 px-2 py-0.5 rounded border border-blue-400/30 text-blue-200">${groupStr}</div>`;
+            });
+
+            teamBEl.innerHTML = teamMelds.teamB.length ? '' : '<span class="text-slate-500 text-[10px]">No melds yet</span>';
+            teamMelds.teamB.forEach(meld => {
+                const groupStr = meld.map(c => `${c.rank}${c.suit}`).join(' ');
+                teamBEl.innerHTML += `<div class="bg-red-900/80 px-2 py-0.5 rounded border border-red-400/30 text-red-200">${groupStr}</div>`;
+            });
+        }
+
+        // User Action: Declare Win
+        function userDeclare() {
+            if (currentTurnPlayer !== 0) {
+                updateStatus("You can only declare on your turn!");
+                return;
+            }
+            if (!hasDrawnCard) {
+                updateStatus("Draw a card before declaring.");
+                return;
+            }
+
+            // Award Virtual Coins & Points
+            userCoinBalance += currentPot;
+            teamAScore += 100;
+            updateUI();
+            updateStatus("🎉 VALID DECLARE! Team A wins the round and collects the pot!");
+            setTimeout(startNewMatch, 3000);
+        }
+
+        // Pass Turn to Next Player
+        function passTurn() {
+            currentTurnPlayer = (currentTurnPlayer + 1) % 4;
+            updateUI();
+
+            const names = ["Your", "Bot 1 (Team B)", "Partner Bot 2 (Team A)", "Bot 3 (Team B)"];
+            updateStatus(`Turn passed to ${names[currentTurnPlayer]}.`);
+
+            if (currentTurnPlayer !== 0) {
+                // Execute AI Turn with delay
+                setTimeout(executeAITurn, 1500);
+            }
+        }
+
+        // Automated AI Bot Turns
+        function executeAITurn() {
+            const botHand = playerHands[currentTurnPlayer];
+
+            // 1. Draw Card
+            if (drawDeck.length > 0) {
+                botHand.push(drawDeck.pop());
+            } else if (discardPile.length > 0) {
+                botHand.push(discardPile.pop());
+            }
+
+            // 2. Discard Random Card
+            const discardIdx = Math.floor(Math.random() * botHand.length);
+            const discarded = botHand.splice(discardIdx, 1)[0];
+            discardPile.push(discarded);
+
+            updateUI();
+
+            // Pass Turn
+            passTurn();
+        }
+
+        // Status Message Helper
+        function updateStatus(msg) {
+            document.getElementById('status-message').textContent = msg;
+        }
+
+        // Toggle Rules Modal
+        function toggleRulesModal(show) {
+            document.getElementById('rules-modal').classList.toggle('hidden', !show);
+        }
     </script>
 </body>
 </html>
+```

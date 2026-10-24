@@ -189,7 +189,6 @@
     display: flex;
     overflow-x: auto;
     padding: 14px 4px 6px 4px;
-    gap: -15px; /* Overlap cards */
   }
   .hand-cards .card {
     margin-right: -18px; /* Negative margin for card overlap */
@@ -308,15 +307,14 @@
   let deck = [];
   let wildJoker = null;
   let discardPile = [];
-  let players = [[], [], [], []]; // 0: You (A), 1: Bot1 (B), 2: Partner (A), 3: Bot3 (B)
+  let players = [[], [], [], []]; 
   let selectedIndices = [];
-  let turn = 0; // 0: You, 1: Bot1, 2: Partner, 3: Bot3
+  let turn = 0; 
   let hasDrawn = false;
   let teamAMelds = [];
   let teamBMelds = [];
 
   function initGame() {
-    // 2 Decks + 4 Jokers = 108 cards
     deck = [];
     for (let d = 0; d < 2; d++) {
       for (let s of SUITS) {
@@ -329,7 +327,6 @@
     }
     deck.sort(() => Math.random() - 0.5);
 
-    // Deal 13 cards each
     players = [[], [], [], []];
     for (let i = 0; i < 13; i++) {
       for (let p = 0; p < 4; p++) {
@@ -337,11 +334,9 @@
       }
     }
 
-    // Set Wild Joker
     wildJoker = deck.pop();
     document.getElementById('wild-joker').innerText = `${wildJoker.val}${wildJoker.suit}`;
 
-    // Initial Discard
     discardPile = [deck.pop()];
     
     turn = 0;
@@ -355,7 +350,6 @@
   }
 
   function render() {
-    // Render Player Hand
     const handEl = document.getElementById('player-hand');
     handEl.innerHTML = '';
     players[0].forEach((card, idx) => {
@@ -365,14 +359,12 @@
       handEl.appendChild(cardEl);
     });
 
-    // Update Counts & Decks
     document.getElementById('deck-count').innerText = deck.length;
     document.getElementById('count-p1').innerText = players[1].length;
     document.getElementById('count-p2').innerText = players[2].length;
     document.getElementById('count-p3').innerText = players[3].length;
     document.getElementById('selected-count').innerText = selectedIndices.length;
 
-    // Discard top card
     const topDiscard = discardPile[discardPile.length - 1];
     const discardEl = document.getElementById('discard-card-view');
     discardEl.innerHTML = '';
@@ -382,11 +374,9 @@
       discardEl.innerText = 'Empty';
     }
 
-    // Buttons
     document.getElementById('btn-meld').disabled = selectedIndices.length < 3 || !hasDrawn || turn !== 0;
     document.getElementById('btn-discard').disabled = selectedIndices.length !== 1 || !hasDrawn || turn !== 0;
 
-    // Highlight Active Turn
     for (let i = 0; i < 4; i++) {
       const slot = document.getElementById(`slot-p${i}`);
       if (i === turn) slot.classList.add('active');
@@ -435,10 +425,8 @@
     selectedIndices.sort((a,b) => b - a);
     const meldedCards = selectedIndices.map(i => players[0][i]);
     
-    // Add to team melds
     teamAMelds.push(meldedCards);
     
-    // Remove from hand
     selectedIndices.forEach(i => players[0].splice(i, 1));
     selectedIndices = [];
     setMessage("Meld laid down!");
@@ -478,12 +466,10 @@
     const names = ["You", "Bot 1", "Partner Bot", "Bot 3"];
     setMessage(`${names[turn]}'s turn...`);
     
-    // Bot draws
     const drawnCard = deck.pop();
     players[turn].push(drawnCard);
 
     setTimeout(() => {
-      // Bot discards
       const discarded = players[turn].pop();
       discardPile.push(discarded);
       setMessage(`${names[turn]} discarded ${discarded.val}${discarded.suit}`);

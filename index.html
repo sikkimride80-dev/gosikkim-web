@@ -17,50 +17,23 @@
   }
 
   body {
-    background: radial-gradient(circle at 50% 10%, #1e293b 0%, #0f172a 60%, #020617 100%);
+    background: #0b1329;
     color: #f8fafc;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 16px;
-    overflow-x: hidden;
-  }
-
-  /* Shimmer effect for titles, labels, and buttons */
-  .gold-shimmer-text {
-    background: linear-gradient(110deg, #ffffff 10%, #fef08a 30%, #fbbf24 50%, #ffffff 70%, #d97706 90%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: goldShimmer 2.5s linear infinite;
-    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.4));
-  }
-
-  /* Gold Ambient Background Glow */
-  .glow-bg {
-    position: absolute;
-    width: 320px;
-    height: 320px;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.2) 100%);
-    filter: blur(80px);
-    opacity: 0.6;
-    border-radius: 50%;
-    z-index: 0;
   }
 
   .card {
-    position: relative;
-    z-index: 10;
-    background: rgba(15, 23, 42, 0.88);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1.5px solid rgba(251, 191, 36, 0.35);
+    background: #141e33;
+    border: 1.5px solid #d97706;
     border-radius: 24px;
     width: 100%;
     max-width: 400px;
     padding: 32px 24px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(254, 240, 138, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
   }
 
   .header {
@@ -68,16 +41,18 @@
     margin-bottom: 26px;
   }
 
-  .header h2 {
+  .gold-title {
     font-size: 24px;
     font-weight: 800;
+    color: #fef08a;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
+    text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
   }
 
   .header p {
     font-size: 13.5px;
-    color: #cbd5e1;
+    color: #94a3b8;
     font-weight: 500;
   }
 
@@ -89,6 +64,7 @@
     display: block;
     font-size: 11.5px;
     font-weight: 700;
+    color: #fbbf24;
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -97,28 +73,26 @@
   .phone-container {
     display: flex;
     align-items: center;
-    background: rgba(30, 41, 59, 0.8);
-    border: 1.5px solid rgba(251, 191, 36, 0.25);
+    background: #0f172a;
+    border: 1.5px solid #b45309;
     border-radius: 14px;
     overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
 
   .phone-container:focus-within {
     border-color: #fbbf24;
-    box-shadow: 0 0 18px rgba(251, 191, 36, 0.4);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
   }
 
   .country-code {
     padding: 14px;
     background: rgba(255, 255, 255, 0.05);
+    color: #fbbf24;
     font-weight: 700;
     font-size: 15px;
-    border-right: 1px solid rgba(251, 191, 36, 0.2);
+    border-right: 1px solid #b45309;
   }
 
-  /* Standard inputs with crystal clear readable white text */
   input[type="tel"],
   input[type="text"],
   input[type="email"] {
@@ -145,8 +119,8 @@
 
   .captcha-display {
     flex: 1;
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
-    border: 1.5px solid rgba(251, 191, 36, 0.5);
+    background: #090d16;
+    border: 1.5px solid #f59e0b;
     border-radius: 12px;
     padding: 12px;
     text-align: center;
@@ -154,11 +128,14 @@
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 8px;
+    color: #fef08a;
+    text-shadow: 0 0 10px rgba(254, 240, 138, 0.5);
   }
 
   .action-btn {
-    background: rgba(30, 41, 59, 0.9);
-    border: 1.5px solid rgba(251, 191, 36, 0.35);
+    background: #0f172a;
+    border: 1.5px solid #b45309;
+    color: #fbbf24;
     width: 46px;
     height: 46px;
     border-radius: 12px;
@@ -167,35 +144,28 @@
     justify-content: center;
     align-items: center;
     font-size: 19px;
-    transition: all 0.2s ease;
   }
 
-  .action-btn:hover {
-    background: rgba(245, 158, 11, 0.2);
-    border-color: #fef08a;
-    transform: translateY(-2px);
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
+  .action-btn:active {
+    background: #f59e0b;
+    color: #0f172a;
   }
 
   .input-standard {
-    background: rgba(30, 41, 59, 0.8);
-    border: 1.5px solid rgba(251, 191, 36, 0.25);
+    background: #0f172a;
+    border: 1.5px solid #b45309;
     border-radius: 14px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
 
   .input-standard:focus-within {
     border-color: #fbbf24;
-    box-shadow: 0 0 18px rgba(251, 191, 36, 0.4);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
   }
 
   .btn-submit {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(110deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
-    background-size: 200% auto;
-    animation: goldShimmer 4s linear infinite;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
     color: #0f172a;
     border: none;
     border-radius: 14px;
@@ -203,18 +173,11 @@
     font-weight: 800;
     cursor: pointer;
     margin-top: 10px;
-    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45);
-    transition: all 0.2s ease;
-    letter-spacing: 0.3px;
-  }
-
-  .btn-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(245, 158, 11, 0.65);
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
   }
 
   .btn-submit:active {
-    transform: translateY(0);
+    transform: scale(0.98);
   }
 
   .message {
@@ -225,7 +188,6 @@
     display: none;
     padding: 12px;
     border-radius: 10px;
-    animation: fadeIn 0.3s ease;
   }
 
   .message.error {
@@ -246,11 +208,9 @@
     display: none;
     text-align: center;
     padding: 12px 0;
-    animation: fadeIn 0.4s ease;
   }
 
   .success-icon-wrap {
-    position: relative;
     width: 72px;
     height: 72px;
     margin: 0 auto 20px auto;
@@ -267,23 +227,26 @@
     align-items: center;
     font-size: 34px;
     font-weight: 900;
-    box-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
   }
 
   .connected-screen h3 {
     font-size: 22px;
     font-weight: 800;
+    color: #fef08a;
     margin-bottom: 8px;
   }
 
   .connected-screen p {
     font-size: 14.5px;
+    color: #cbd5e1;
     font-weight: 600;
     margin-bottom: 6px;
   }
 
   .timer-text {
     font-size: 13px;
+    color: #fbbf24;
     margin-top: 14px;
     font-weight: 700;
     background: rgba(245, 158, 11, 0.15);
@@ -292,48 +255,32 @@
     display: inline-block;
     border: 1px solid rgba(251, 191, 36, 0.3);
   }
-
-  @keyframes goldShimmer {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
 </style>
 </head>
 <body>
-
-<div class="glow-bg"></div>
 
 <div class="card">
   <!-- Step 1: Mobile & CAPTCHA -->
   <div id="auth-form">
     <div class="header">
-      <h2 class="gold-shimmer-text">Enter Mobile Number</h2>
+      <h2 class="gold-title">Enter Mobile Number</h2>
       <p>Verify details to connect with the app</p>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer-text">Mobile Number</label>
+      <label class="label">Mobile Number</label>
       <div class="phone-container">
-        <span class="country-code gold-shimmer-text">+91</span>
+        <span class="country-code">+91</span>
         <input type="tel" id="phone" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer-text">Security Check</label>
+      <label class="label">Security Check</label>
       <div class="captcha-box">
-        <div class="captcha-display gold-shimmer-text" id="captcha-code">----</div>
-        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">
-          <span class="gold-shimmer-text">🔊</span>
-        </button>
-        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">
-          <span class="gold-shimmer-text">↻</span>
-        </button>
+        <div class="captcha-display" id="captcha-code">-----</div>
+        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">🔊</button>
+        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">↻</button>
       </div>
       <div class="input-standard">
         <input type="text" id="captcha-input" placeholder="Enter CAPTCHA shown above" autocomplete="off">
@@ -349,19 +296,19 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-shimmer-text">Successfully Connected</h3>
-    <p id="connected-phone-display" class="gold-shimmer-text">+91 ----------</p>
+    <h3 class="gold-title">Successfully Connected</h3>
+    <p id="connected-phone-display">+91 ----------</p>
   </div>
 
   <!-- Step 2: Email Address Input -->
   <div id="email-form" style="display: none;">
     <div class="header">
-      <h2 class="gold-shimmer-text">Email Address</h2>
+      <h2 class="gold-title">Email Address</h2>
       <p>Where should order updates be sent?</p>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer-text">Email Address</label>
+      <label class="label">Email Address</label>
       <div class="input-standard">
         <input type="email" id="email" placeholder="example@domain.com">
       </div>
@@ -376,22 +323,22 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-shimmer-text">Email Saved</h3>
-    <p id="saved-email-display" class="gold-shimmer-text">Email: ----------</p>
-    <div class="timer-text gold-shimmer-text" id="email-redirect-timer">Redirecting in 4 seconds...</div>
+    <h3 class="gold-title">Email Saved</h3>
+    <p id="saved-email-display">Email: ----------</p>
+    <div class="timer-text" id="email-redirect-timer">Redirecting in 4 seconds...</div>
   </div>
 
   <!-- Step 3: WhatsApp Number Input -->
   <div id="whatsapp-form" style="display: none;">
     <div class="header">
-      <h2 class="gold-shimmer-text">WhatsApp Number</h2>
+      <h2 class="gold-title">WhatsApp Number</h2>
       <p>Enter your WhatsApp number for instant alerts</p>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer-text">WhatsApp Number</label>
+      <label class="label">WhatsApp Number</label>
       <div class="phone-container">
-        <span class="country-code gold-shimmer-text">+91</span>
+        <span class="country-code">+91</span>
         <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
@@ -405,10 +352,10 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-shimmer-text">Setup Complete</h3>
-    <p id="final-phone-display" class="gold-shimmer-text">Mobile: +91 ----------</p>
-    <p id="final-email-display" class="gold-shimmer-text">Email: ----------</p>
-    <p id="final-whatsapp-display" class="gold-shimmer-text">WhatsApp: +91 ----------</p>
+    <h3 class="gold-title">Setup Complete</h3>
+    <p id="final-phone-display">Mobile: +91 ----------</p>
+    <p id="final-email-display">Email: ----------</p>
+    <p id="final-whatsapp-display">WhatsApp: +91 ----------</p>
   </div>
 </div>
 
@@ -424,7 +371,7 @@
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     currentCaptcha = code;
-    document.getElementById("captcha-code").innerText = code;
+    document.getElementById("captcha-code").textContent = code;
     document.getElementById("captcha-input").value = "";
   }
 
@@ -442,7 +389,7 @@
 
   function showMessage(elementId, text, type) {
     const msgBox = document.getElementById(elementId);
-    msgBox.innerText = text;
+    msgBox.textContent = text;
     msgBox.className = "message " + type;
   }
 
@@ -464,7 +411,7 @@
     userPhone = phoneInput;
     
     document.getElementById("auth-form").style.display = "none";
-    document.getElementById("connected-phone-display").innerText = "+91 " + userPhone;
+    document.getElementById("connected-phone-display").textContent = "+91 " + userPhone;
     document.getElementById("phone-verified-screen").style.display = "block";
 
     setTimeout(() => {
@@ -485,7 +432,7 @@
     userEmail = emailInput;
 
     document.getElementById("email-form").style.display = "none";
-    document.getElementById("saved-email-display").innerText = "Email: " + userEmail;
+    document.getElementById("saved-email-display").textContent = "Email: " + userEmail;
     document.getElementById("email-verified-screen").style.display = "block";
 
     let timeLeft = 4;
@@ -494,7 +441,7 @@
     const countdown = setInterval(() => {
       timeLeft--;
       if (timeLeft > 0) {
-        timerElem.innerText = `Redirecting in ${timeLeft} seconds...`;
+        timerElem.textContent = `Redirecting in ${timeLeft} seconds...`;
       } else {
         clearInterval(countdown);
         document.getElementById("email-verified-screen").style.display = "none";
@@ -513,13 +460,13 @@
     }
 
     document.getElementById("whatsapp-form").style.display = "none";
-    document.getElementById("final-phone-display").innerText = "Mobile: +91 " + userPhone;
-    document.getElementById("final-email-display").innerText = "Email: " + userEmail;
-    document.getElementById("final-whatsapp-display").innerText = "WhatsApp: +91 " + whatsappInput;
+    document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
+    document.getElementById("final-email-display").textContent = "Email: " + userEmail;
+    document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + whatsappInput;
     document.getElementById("final-screen").style.display = "block";
   }
 
-  window.onload = generateCaptcha;
+  document.addEventListener("DOMContentLoaded", generateCaptcha);
 </script>
 
 </body>

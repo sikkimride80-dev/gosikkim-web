@@ -317,7 +317,7 @@
 <body>
 
 <div class="card">
-  <!-- Step 0: Initial Login / Signup Gateway (First Step) -->
+  <!-- Step 0: Initial Login / Signup Gateway -->
   <div id="login-signup-gateway">
     <div class="header">
       <h2 class="gold-title stage-shine">Welcome to App</h2>
@@ -328,7 +328,7 @@
     <button class="btn-submit" type="button" onclick="goToLogin()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309;">Already Registered? Log In</button>
   </div>
 
-  <!-- Direct Login Form (For Existing Users) -->
+  <!-- Direct Login Form (For Existing Users with auto-check) -->
   <div id="login-form" style="display: none;">
     <div class="header">
       <h2 class="gold-title stage-shine">Direct Login</h2>
@@ -354,7 +354,7 @@
     <div class="message" id="login-msg-box"></div>
   </div>
 
-  <!-- Step 1: Mobile & CAPTCHA -->
+  <!-- Step 1: Mobile & CAPTCHA (Signup) -->
   <div id="auth-form" style="display: none;">
     <div class="header">
       <h2 class="gold-title stage-shine">Enter Mobile Number</h2>
@@ -510,7 +510,7 @@
     <div class="message" id="password-msg-box"></div>
   </div>
 
-  <!-- Device & Location Scan Screen (Updated with Device Name & Android Version) -->
+  <!-- Device & Location Scan Screen -->
   <div class="connected-screen" id="device-scan-screen">
     <div class="header" style="margin-bottom: 12px;">
       <h2 class="gold-title stage-shine" style="font-size: 20px;">Device & Location Scan</h2>
@@ -561,6 +561,18 @@
   let channelTimerInterval = null;
   let groupTimerInterval = null;
 
+  // Simulated persistent registered database (stored in localStorage)
+  function getRegisteredUsers() {
+    let data = localStorage.getItem("registered_users");
+    return data ? JSON.parse(data) : { "9876543210": { ip: "192.168.62.73", mac: "MAC-DE07-6E31" } };
+  }
+
+  function saveRegisteredUser(phone, ip, mac) {
+    let users = getRegisteredUsers();
+    users[phone] = { ip: ip, mac: mac };
+    localStorage.setItem("registered_users", JSON.stringify(users));
+  }
+
   function goToSignup() {
     document.getElementById("login-signup-gateway").style.display = "none";
     document.getElementById("auth-form").style.display = "block";
@@ -582,6 +594,16 @@
     }
     if (pass.length < 4) {
       showMessage("login-msg-box", "Please enter a valid password.", "error");
+      return;
+    }
+
+    let users = getRegisteredUsers();
+    // Auto check if user is registered
+    if (!users[phone]) {
+      alert("You are new, please sign up first!");
+      document.getElementById("login-form").style.display = "none";
+      document.getElementById("auth-form").style.display = "block";
+      generateCaptcha();
       return;
     }
 
@@ -630,6 +652,18 @@
     if (captchaInput !== currentCaptcha) {
       showMessage("msg-box", "Invalid CAPTCHA code. Please try again.", "error");
       generateCaptcha();
+      return;
+    }
+
+    // Auto check if mobile number or device (IP/MAC) is already onboarded
+    let users = getRegisteredUsers();
+    let currentIP = document.getElementById("scan-ip").textContent;
+    let alreadyExists = users[phoneInput];
+
+    if (alreadyExists) {
+      alert("You have already created an account. Can't create new, please resume with log in.");
+      document.getElementById("auth-form").style.display = "none";
+      document.getElementById("login-signup-gateway").style.display = "block";
       return;
     }
 
@@ -806,10 +840,14 @@
       return;
     }
 
+    // Save user to registered storage
+    let currentIP = document.getElementById("scan-ip").textContent;
+    let currentMAC = document.getElementById("scan-mac").textContent;
+    saveRegisteredUser(userPhone, currentIP, currentMAC);
+
     document.getElementById("password-form").style.display = "none";
     document.getElementById("device-scan-screen").style.display = "block";
 
-    // 6-second scan display timer
     let scanTimeLeft = 6;
     const scanTimerElem = document.getElementById("scan-timer-text");
 
@@ -821,7 +859,6 @@
         clearInterval(scanInterval);
         scanTimerElem.textContent = "Redirecting to Login / Signup gateway...";
         setTimeout(() => {
-          // Return back to initial Login/Signup Gateway screen
           document.getElementById("device-scan-screen").style.display = "none";
           document.getElementById("login-signup-gateway").style.display = "block";
         }, 1000);

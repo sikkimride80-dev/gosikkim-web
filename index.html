@@ -192,31 +192,6 @@
     border: 1px solid rgba(34, 197, 94, 0.3);
   }
 
-  .notify-options {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-  }
-
-  .notify-option {
-    flex: 1;
-    padding: 10px;
-    background: #0f172a;
-    border: 1.5px solid #334155;
-    border-radius: 8px;
-    text-align: center;
-    font-size: 13px;
-    color: #94a3b8;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .notify-option.active {
-    border-color: #3b82f6;
-    color: #38bdf8;
-    background: rgba(59, 130, 246, 0.1);
-  }
-
   .connected-screen {
     display: none;
     text-align: center;
@@ -298,7 +273,7 @@
     <p id="connected-phone-display">+91 ----------</p>
   </div>
 
-  <!-- Step 2: Email & Notification Preference -->
+  <!-- Step 2: Email Address Input (Preferred Alert Channel Options Removed) -->
   <div id="email-form" style="display: none;">
     <div class="header">
       <h2>Email Address</h2>
@@ -312,32 +287,51 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label class="label">Preferred Alert Channel</label>
-      <div class="notify-options">
-        <div class="notify-option active" id="opt-email" onclick="selectOption('email')">✉ Email</div>
-        <div class="notify-option" id="opt-sms" onclick="selectOption('sms')">💬 SMS / Message</div>
-      </div>
-    </div>
-
     <button class="btn-submit" type="button" onclick="validateStep2()">Save & Continue</button>
     <div class="message" id="email-msg-box"></div>
   </div>
 
-  <!-- Screen 2: Final Verification Success Screen -->
+  <!-- Screen 2: Email Verification Complete Screen with 4s Timer -->
+  <div class="connected-screen" id="email-verified-screen">
+    <div class="success-icon">✓</div>
+    <h3>Email Saved</h3>
+    <p id="saved-email-display">Email: ----------</p>
+    <div class="timer-text" id="email-redirect-timer">Redirecting in 4 seconds...</div>
+  </div>
+
+  <!-- Step 3: WhatsApp Number Input -->
+  <div id="whatsapp-form" style="display: none;">
+    <div class="header">
+      <h2>WhatsApp Number</h2>
+      <p>Enter your WhatsApp number for instant alerts</p>
+    </div>
+
+    <div class="form-group">
+      <label class="label">WhatsApp Number</label>
+      <div class="phone-container">
+        <span class="country-code">+91</span>
+        <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
+      </div>
+    </div>
+
+    <button class="btn-submit" type="button" onclick="validateStep3()">Save WhatsApp Number</button>
+    <div class="message" id="whatsapp-msg-box"></div>
+  </div>
+
+  <!-- Screen 3: Final Success Screen -->
   <div class="connected-screen" id="final-screen">
     <div class="success-icon">✓</div>
-    <h3>Verification Complete</h3>
+    <h3>Setup Complete</h3>
     <p id="final-phone-display">+91 ----------</p>
     <p id="final-email-display">Email: ----------</p>
-    <div class="timer-text" id="redirect-timer">Redirecting in 4 seconds...</div>
+    <p id="final-whatsapp-display">WhatsApp: +91 ----------</p>
   </div>
 </div>
 
 <script>
   let currentCaptcha = "";
   let userPhone = "";
-  let selectedChannel = "email";
+  let userEmail = "";
 
   function generateCaptcha() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -368,12 +362,6 @@
     msgBox.className = "message " + type;
   }
 
-  function selectOption(type) {
-    selectedChannel = type;
-    document.getElementById("opt-email").classList.toggle("active", type === 'email');
-    document.getElementById("opt-sms").classList.toggle("active", type === 'sms');
-  }
-
   function validateStep1() {
     const phoneInput = document.getElementById("phone").value.trim();
     const captchaInput = document.getElementById("captcha-input").value.trim().toUpperCase();
@@ -391,7 +379,7 @@
 
     userPhone = phoneInput;
     
-    // Hide phone form & show verified screen (Matches Screenshot 1)
+    // Hide phone form & show verified screen
     document.getElementById("auth-form").style.display = "none";
     document.getElementById("connected-phone-display").innerText = "+91 " + userPhone;
     document.getElementById("phone-verified-screen").style.display = "block";
@@ -412,15 +400,15 @@
       return;
     }
 
-    // Hide Email Form & Display Final Success Screen
-    document.getElementById("email-form").style.display = "none";
-    document.getElementById("final-phone-display").innerText = "+91 " + userPhone;
-    document.getElementById("final-email-display").innerText = "Email: " + emailInput;
-    document.getElementById("final-screen").style.display = "block";
+    userEmail = emailInput;
 
-    // 4-Second Countdown Timer then loop/redirect back
+    // Hide Email Form & Display 4-Second Redirect Screen
+    document.getElementById("email-form").style.display = "none";
+    document.getElementById("saved-email-display").innerText = "Email: " + userEmail;
+    document.getElementById("email-verified-screen").style.display = "block";
+
     let timeLeft = 4;
-    const timerElem = document.getElementById("redirect-timer");
+    const timerElem = document.getElementById("email-redirect-timer");
 
     const countdown = setInterval(() => {
       timeLeft--;
@@ -428,13 +416,28 @@
         timerElem.innerText = `Redirecting in ${timeLeft} seconds...`;
       } else {
         clearInterval(countdown);
-        // Directs back after 4 seconds complete
-        document.getElementById("final-screen").style.display = "none";
-        document.getElementById("auth-form").style.display = "block";
-        document.getElementById("phone").value = "";
-        generateCaptcha();
+        // Redirect to WhatsApp Step after 4 seconds
+        document.getElementById("email-verified-screen").style.display = "none";
+        document.getElementById("whatsapp-phone").value = userPhone; // Pre-fill with primary phone for convenience
+        document.getElementById("whatsapp-form").style.display = "block";
       }
     }, 1000);
+  }
+
+  function validateStep3() {
+    const whatsappInput = document.getElementById("whatsapp-phone").value.trim();
+
+    if (!/^\d{10}$/.test(whatsappInput)) {
+      showMessage("whatsapp-msg-box", "Please enter a valid 10-digit WhatsApp number.", "error");
+      return;
+    }
+
+    // Display Final Setup Complete Screen
+    document.getElementById("whatsapp-form").style.display = "none";
+    document.getElementById("final-phone-display").innerText = "Mobile: +91 " + userPhone;
+    document.getElementById("final-email-display").innerText = "Email: " + userEmail;
+    document.getElementById("final-whatsapp-display").innerText = "WhatsApp: +91 " + whatsappInput;
+    document.getElementById("final-screen").style.display = "block";
   }
 
   window.onload = generateCaptcha;

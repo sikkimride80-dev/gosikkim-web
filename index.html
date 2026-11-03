@@ -1,502 +1,760 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>2v2 Rummy Pro</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
-  body {
-    background: #0d1b12;
-    color: #fff;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
-  }
-  
-  header {
-    background: #08110b;
-    padding: 8px 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #1a3a23;
-    font-size: 13px;
-  }
-  .stat-badge {
-    background: #142a1b;
-    padding: 4px 8px;
-    border-radius: 12px;
-    border: 1px solid #234d2c;
-    color: #ffd700;
-    font-weight: bold;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wild Bandito Slot</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Cinzel:wght@700;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
 
-  .table-container {
-    flex: 1;
-    position: relative;
-    background: radial-gradient(circle, #1a4d28 0%, #0c2b15 80%, #06170b 100%);
-    margin: 8px;
-    border-radius: 20px;
-    border: 6px solid #2d1810;
-    box-shadow: inset 0 0 40px #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 8px;
-    min-height: 480px;
-  }
+        body {
+            font-family: 'Teko', sans-serif;
+            background: #090306;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-  /* Player Slots */
-  .player-slot {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(0,0,0,0.4);
-    padding: 4px 8px;
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.1);
-    font-size: 11px;
-    width: fit-content;
-    margin: 0 auto;
-  }
-  .player-slot.active {
-    border-color: #ffd700;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-  }
-  .avatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 10px;
-  }
-  .team-a { border: 2px solid #3b82f6; }
-  .team-b { border: 2px solid #ef4444; }
+        .game-screen {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 900px;
+            background: radial-gradient(circle at center, #2e0919 0%, #17040d 60%, #080104 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 0 50px rgba(234, 179, 8, 0.2);
+            border: 2px solid #521d09;
+        }
 
-  .middle-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px 0;
-  }
+        /* Festive Border Accent */
+        .game-screen::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 4px solid #f59e0b;
+            pointer-events: none;
+            z-index: 40;
+            opacity: 0.3;
+        }
 
-  /* Center Table Decks */
-  .center-board {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-  }
-  .deck-pile {
-    width: 54px;
-    height: 76px;
-    border-radius: 6px;
-    border: 2px solid #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    position: relative;
-  }
-  .deck-closed {
-    background: linear-gradient(135deg, #1e3a8a, #0f172a);
-    color: #fff;
-  }
-  .deck-open {
-    background: #fff;
-    color: #000;
-  }
-  .joker-indicator {
-    position: absolute;
-    bottom: -18px;
-    font-size: 10px;
-    background: #ffd700;
-    color: #000;
-    padding: 1px 4px;
-    border-radius: 4px;
-    white-space: nowrap;
-  }
+        .font-western {
+            font-family: 'Rye', cursive;
+        }
 
-  /* Team Melds Display */
-  .melds-area {
-    background: rgba(0,0,0,0.3);
-    border-radius: 8px;
-    padding: 4px 8px;
-    margin: 4px 0;
-    font-size: 10px;
-    min-height: 32px;
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-  }
-  .meld-group {
-    background: rgba(255,255,255,0.15);
-    padding: 2px 4px;
-    border-radius: 4px;
-    display: flex;
-    gap: 2px;
-  }
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
 
-  /* Playing Card Style */
-  .card {
-    width: 42px;
-    height: 60px;
-    background: #fff;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 2px 3px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #000;
-    box-shadow: 1px 2px 5px rgba(0,0,0,0.3);
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.15s ease;
-    flex-shrink: 0;
-  }
-  .card.red { color: #dc2626; }
-  .card.black { color: #111827; }
-  .card.joker { color: #7c3aed; background: #f3e8ff; }
-  .card.selected {
-    transform: translateY(-12px);
-    border: 2px solid #3b82f6;
-    box-shadow: 0 0 8px #3b82f6;
-  }
-  .card .suit { font-size: 14px; line-height: 1; }
+        /* Gold Framed Special Symbol Glowing Border */
+        .gold-framed-symbol {
+            position: relative;
+            box-shadow: inset 0 0 12px #facc15, 0 0 15px #eab308 !important;
+            border: 3px solid #facc15 !important;
+            border-radius: 8px;
+            animation: gold-pulse 1.2s infinite alternate;
+        }
 
-  /* Player Hand */
-  .hand-container {
-    background: rgba(0,0,0,0.5);
-    padding: 8px;
-    border-radius: 12px;
-  }
-  .hand-cards {
-    display: flex;
-    overflow-x: auto;
-    padding: 14px 4px 6px 4px;
-  }
-  .hand-cards .card {
-    margin-right: -18px; /* Negative margin for card overlap */
-  }
+        @keyframes gold-pulse {
+            0% { border-color: #eab308; box-shadow: inset 0 0 8px #eab308, 0 0 10px #f59e0b; }
+            100% { border-color: #fef08a; box-shadow: inset 0 0 18px #fef08a, 0 0 22px #eab308; }
+        }
 
-  /* Action Buttons */
-  .controls {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 6px;
-  }
-  .btn {
-    background: linear-gradient(180deg, #22c55e, #15803d);
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 12px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-  }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .btn-danger { background: linear-gradient(180deg, #ef4444, #b91c1c); }
-  .btn-secondary { background: linear-gradient(180deg, #6b7280, #374151); }
+        /* Reel Cell CSS Grid */
+        .reel-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            background: rgba(10, 2, 6, 0.85);
+            padding: 6px;
+            border-radius: 12px;
+            border: 4px solid #b45309;
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.9), 0 0 15px rgba(245, 158, 11, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
 
-  .msg-box {
-    text-align: center;
-    font-size: 11px;
-    color: #ffd700;
-    margin: 4px 0;
-    height: 16px;
-  }
-</style>
+        .symbol-cell {
+            aspect-ratio: 1 / 1.15;
+            background: radial-gradient(circle, rgba(55,14,35,0.9) 0%, rgba(20,4,12,0.95) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .symbol-cell.win-highlight {
+            animation: win-bounce 0.6s infinite alternate;
+            border-color: #ef4444 !important;
+            z-index: 10;
+        }
+
+        @keyframes win-bounce {
+            0% { transform: scale(0.95); filter: brightness(1); }
+            100% { transform: scale(1.08); filter: brightness(1.4); }
+        }
+
+        /* Spin Controls Styling */
+        .spin-btn-container {
+            position: relative;
+            width: 84px;
+            height: 84px;
+        }
+
+        .spin-btn {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fef08a 0%, #eab308 50%, #854d0e 100%);
+            border: 4px solid #fef08a;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.8), inset 0 -4px 8px rgba(0,0,0,0.6), 0 0 25px rgba(234, 179, 8, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s active;
+        }
+
+        .spin-btn:active {
+            transform: scale(0.92);
+        }
+
+        .spin-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.6);
+        }
+
+        /* Custom Scrollbar for Paytable */
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 4, 9, 0.6);
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border-radius: 3px;
+        }
+
+        /* Win Text Banner Popup */
+        .win-banner {
+            position: absolute;
+            top: 42%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            z-index: 35;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+        }
+
+        .win-banner.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <div><b>2v2 RUMMY</b></div>
-  <div class="stat-badge">🪙 <span id="coins">1,000</span></div>
-  <div class="stat-badge">POT: <span id="pot">200</span></div>
-</header>
+    <div class="game-screen">
 
-<div class="table-container">
+        <!-- Top Header Bar (User Avatar, Balance, Clock & Settings) -->
+        <header class="h-14 bg-gradient-to-b from-black via-slate-950 to-transparent px-3 pt-2 flex items-center justify-between z-30">
+            <!-- User Avatar -->
+            <div class="relative flex items-center">
+                <div class="w-10 h-10 rounded-full border-2 border-amber-400 bg-slate-800 overflow-hidden shadow-lg flex items-center justify-center">
+                    <i class="fa-solid fa-user-ninja text-amber-300 text-lg"></i>
+                </div>
+                <button onclick="togglePaytable(true)" class="ml-2 w-8 h-8 rounded-lg bg-amber-950/80 border border-amber-500/50 flex items-center justify-center text-amber-300 hover:bg-amber-900 transition">
+                    <i class="fa-solid fa-border-all"></i>
+                </button>
+            </div>
 
-  <!-- Top: Partner Bot (Team A) -->
-  <div class="player-slot team-a" id="slot-p2">
-    <div class="avatar">P2</div>
-    <div>Partner (Team A) - <span id="count-p2">13</span> cards</div>
-  </div>
+            <!-- Balance Counter -->
+            <div class="bg-black/80 border border-amber-500/50 px-4 py-0.5 rounded-full flex items-center space-x-2 shadow-inner">
+                <i class="fa-solid fa-coins text-amber-400 text-sm"></i>
+                <span id="balance-display" class="text-xl font-bold tracking-wider text-amber-300 font-cinzel">1,000.00</span>
+                <button onclick="addBalance()" class="w-5 h-5 rounded-full bg-emerald-600 flex items-center justify-center text-white text-xs font-bold shadow hover:bg-emerald-500">+</button>
+            </div>
 
-  <!-- Middle: Opponents & Deck -->
-  <div class="middle-row">
-    <!-- Left Opponent: Bot 1 (Team B) -->
-    <div class="player-slot team-b" id="slot-p1">
-      <div class="avatar">B1</div>
-      <div>Bot 1 (B)<br><span id="count-p1">13</span> cards</div>
+            <!-- Clock & Paytable Menu Toggle -->
+            <div class="flex items-center space-x-2 text-amber-300">
+                <button onclick="togglePaytable(true)" class="w-8 h-8 rounded-lg bg-amber-950/80 border border-amber-500/50 flex items-center justify-center hover:bg-amber-900 transition">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Slot Main Stage Header Logo -->
+        <div class="flex flex-col items-center pt-1 relative z-10">
+            <h1 class="font-western text-3xl sm:text-4xl text-transparent bg-clip-text bg-gradient-to-b from-amber-200 via-amber-400 to-amber-600 drop-shadow-[0_4px_4px_rgba(0,0,0,0.9)] tracking-wider">
+                WILD BANDITO
+            </h1>
+            <div class="text-[11px] font-bold tracking-widest text-emerald-400 uppercase bg-black/60 px-3 py-0.5 rounded-full border border-emerald-500/30">
+                CASCADING SYMBOLS & GOLD REELS
+            </div>
+        </div>
+
+        <!-- Slot Matrix (5 Reels x 4 Rows) -->
+        <div class="px-2 my-auto z-10">
+            <div id="reel-grid" class="reel-grid">
+                <!-- 20 Symbol Cells populated dynamically -->
+            </div>
+        </div>
+
+        <!-- Big Win Popover -->
+        <div id="win-banner" class="win-banner bg-gradient-to-b from-amber-500 via-amber-600 to-amber-800 border-4 border-amber-300 px-8 py-4 rounded-3xl shadow-2xl text-center">
+            <div class="font-western text-amber-100 text-xl tracking-widest uppercase">BIG WIN!</div>
+            <div id="win-banner-amount" class="font-cinzel text-4xl font-extrabold text-white drop-shadow-md">0.00</div>
+        </div>
+
+        <!-- Footer Control Dashboard -->
+        <footer class="bg-gradient-to-t from-black via-slate-950 to-transparent p-3 pt-2 z-30 flex flex-col items-center">
+            
+            <!-- Win Display Bar -->
+            <div class="w-full flex justify-between items-center px-4 py-1 mb-2 bg-slate-950/90 border border-amber-500/30 rounded-full shadow-inner">
+                <div class="text-amber-400 text-sm font-semibold tracking-wider">LAST WIN</div>
+                <div id="win-display" class="text-amber-300 text-xl font-bold font-cinzel">0.00</div>
+            </div>
+
+            <!-- Total Bet & Spin Buttons Bar -->
+            <div class="w-full flex items-center justify-between px-2">
+                
+                <!-- Bet Selector Controls -->
+                <div class="flex items-center space-x-1.5 bg-black/80 border border-amber-500/40 p-1.5 rounded-xl">
+                    <button onclick="adjustBet(-0.5)" class="w-8 h-8 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-black text-lg flex items-center justify-center border border-emerald-500 shadow active:scale-95 transition">-</button>
+                    <div class="flex flex-col items-center px-2">
+                        <span class="text-[9px] text-amber-400 font-bold uppercase leading-none">BET</span>
+                        <span id="bet-display" class="text-lg font-extrabold text-white leading-tight font-cinzel">1.00</span>
+                    </div>
+                    <button onclick="adjustBet(0.5)" class="w-8 h-8 rounded-lg bg-emerald-800 hover:bg-emerald-700 text-white font-black text-lg flex items-center justify-center border border-emerald-500 shadow active:scale-95 transition">+</button>
+                </div>
+
+                <!-- Spin Center Button -->
+                <div class="spin-btn-container">
+                    <button id="spin-btn" onclick="triggerSpin()" class="spin-btn">
+                        <span class="font-western text-slate-950 text-2xl tracking-wider font-extrabold">SPIN</span>
+                    </button>
+                </div>
+
+                <!-- Turbo Speed Mode Toggle -->
+                <button id="turbo-btn" onclick="toggleTurbo()" class="flex flex-col items-center justify-center w-14 h-12 rounded-xl bg-slate-900 border border-amber-500/40 text-amber-400 shadow active:scale-95 transition">
+                    <i class="fa-solid fa-bolt text-lg"></i>
+                    <span id="turbo-text" class="text-[10px] font-bold leading-none mt-0.5">1.0X</span>
+                </button>
+            </div>
+        </footer>
+
+        <!-- Paytable Modal Overlay (Identical layout to screenshot) -->
+        <div id="paytable-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-3 hidden backdrop-blur-md">
+            <div class="bg-gradient-to-b from-[#2a0b17] to-[#120309] border-4 border-amber-600/80 rounded-2xl max-w-sm w-full p-4 text-amber-100 relative shadow-2xl flex flex-col max-h-[85vh]">
+                
+                <!-- Paytable Header -->
+                <div class="text-center mb-3 border-b border-amber-500/30 pb-2">
+                    <div class="font-western text-2xl text-transparent bg-clip-text bg-gradient-to-b from-amber-200 to-amber-500 tracking-wider">
+                        PAYTABLE
+                    </div>
+                    <div class="text-amber-400/80 text-xs uppercase font-bold">Symbol Payout Values</div>
+                </div>
+
+                <!-- Scrollable Symbol Payout Matrix -->
+                <div class="custom-scroll overflow-y-auto space-y-3 pr-1">
+                    
+                    <!-- Special Symbols Explanation -->
+                    <div class="grid grid-cols-2 gap-2 bg-black/40 p-2 rounded-xl border border-amber-500/20">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 flex-shrink-0 bg-purple-950/80 border border-purple-400 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-skull-crossbones text-purple-300 text-xl"></i>
+                            </div>
+                            <div class="text-[11px] leading-tight">
+                                <span class="text-purple-300 font-bold block">SCATTER</span>
+                                Free Spins
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-10 h-10 flex-shrink-0 bg-amber-950/80 border border-amber-400 rounded-lg flex items-center justify-center">
+                                <i class="fa-solid fa-shield-halved text-amber-300 text-xl"></i>
+                            </div>
+                            <div class="text-[11px] leading-tight">
+                                <span class="text-amber-300 font-bold block">WILD</span>
+                                Substitutes All
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- High Pay Symbols -->
+                    <div class="space-y-2">
+                        <!-- Bandito / Cowboy -->
+                        <div class="flex items-center justify-between bg-black/30 p-2 rounded-lg border border-amber-500/15">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🤠</span>
+                                <span class="text-xs font-bold text-amber-200">Bandito</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-emerald-400 space-x-2">
+                                <span>5: 25.00</span>
+                                <span>4: 12.50</span>
+                                <span>3: 5.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Guitar -->
+                        <div class="flex items-center justify-between bg-black/30 p-2 rounded-lg border border-amber-500/15">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🎸</span>
+                                <span class="text-xs font-bold text-amber-200">Guitar</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-emerald-400 space-x-2">
+                                <span>5: 20.00</span>
+                                <span>4: 10.00</span>
+                                <span>3: 4.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Tequila Drink -->
+                        <div class="flex items-center justify-between bg-black/30 p-2 rounded-lg border border-amber-500/15">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🍹</span>
+                                <span class="text-xs font-bold text-amber-200">Tequila</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-emerald-400 space-x-2">
+                                <span>5: 15.00</span>
+                                <span>4: 7.50</span>
+                                <span>3: 3.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Maracas -->
+                        <div class="flex items-center justify-between bg-black/30 p-2 rounded-lg border border-amber-500/15">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🪇</span>
+                                <span class="text-xs font-bold text-amber-200">Maracas</span>
+                            </div>
+                            <div class="text-[11px] font-bold text-emerald-400 space-x-2">
+                                <span>5: 7.50</span>
+                                <span>4: 5.00</span>
+                                <span>3: 2.50</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Low Pay Royals (A, K, Q, J, 10) -->
+                    <div class="grid grid-cols-2 gap-1.5 text-[10px] text-amber-300 font-bold">
+                        <div class="bg-black/40 p-1.5 rounded flex justify-between"><span>A</span><span>5:6.0 | 3:1.5</span></div>
+                        <div class="bg-black/40 p-1.5 rounded flex justify-between"><span>K</span><span>5:5.0 | 3:1.0</span></div>
+                        <div class="bg-black/40 p-1.5 rounded flex justify-between"><span>Q</span><span>5:4.0 | 3:1.0</span></div>
+                        <div class="bg-black/40 p-1.5 rounded flex justify-between"><span>J / 10</span><span>5:3.0 | 3:0.5</span></div>
+                    </div>
+
+                    <!-- Rules Bullet Points -->
+                    <div class="text-[11px] text-amber-200/90 space-y-1.5 bg-black/50 p-2.5 rounded-xl border border-amber-500/30">
+                        <p class="flex items-start"><i class="fa-solid fa-square-check text-amber-400 mt-0.5 mr-1.5"></i> Wild symbol substitutes for all symbols except Scatter symbol.</p>
+                        <p class="flex items-start"><i class="fa-solid fa-square-check text-amber-400 mt-0.5 mr-1.5"></i> Gold Framed symbols appear on reels 2, 3 and 4 only.</p>
+                        <p class="flex items-start"><i class="fa-solid fa-square-check text-amber-400 mt-0.5 mr-1.5"></i> When Gold Framed symbols form wins, they transform into WILD for cascading falls!</p>
+                    </div>
+
+                </div>
+
+                <!-- Back to Game Button (Matches screenshot) -->
+                <button onclick="togglePaytable(false)" class="mt-3 w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-slate-950 font-western text-lg tracking-widest shadow-lg hover:brightness-110 active:scale-98 transition">
+                    BACK TO GAME
+                </button>
+
+            </div>
+        </div>
+
     </div>
 
-    <!-- Center Decks -->
-    <div class="center-board">
-      <div class="deck-pile deck-closed" id="draw-deck" onclick="drawFromDeck()">
-        <div>DECK</div>
-        <div id="deck-count" style="font-size:14px;margin-top:2px;">82</div>
-        <div class="joker-indicator">Joker: <span id="wild-joker">?</span></div>
-      </div>
-      <div class="deck-pile deck-open" id="discard-deck" onclick="drawFromDiscard()">
-        <div id="discard-card-view">Empty</div>
-      </div>
-    </div>
+    <!-- Game Logic & Sound Synthesizer Script -->
+    <script>
+        // ==========================================
+        // 1. SOUND SYNTHESIZER (WEB AUDIO API)
+        // ==========================================
+        class SoundEffects {
+            constructor() {
+                this.ctx = null;
+            }
 
-    <!-- Right Opponent: Bot 3 (Team B) -->
-    <div class="player-slot team-b" id="slot-p3">
-      <div class="avatar">B3</div>
-      <div>Bot 3 (B)<br><span id="count-p3">13</span> cards</div>
-    </div>
-  </div>
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioCtx();
+                }
+            }
 
-  <!-- Team Melds Area -->
-  <div style="font-size:10px; color:#aaa; margin-top:2px;">TEAM A MELDS (You & Partner)</div>
-  <div class="melds-area" id="melds-team-a"><i>No melds created yet</i></div>
+            playSpin() {
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.exponentialRampToValueAtTime(60, now + 0.2);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            }
 
-  <div style="font-size:10px; color:#aaa;">TEAM B MELDS (Opponents)</div>
-  <div class="melds-area" id="melds-team-b"><i>No melds created yet</i></div>
+            playWin() {
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                    gain.gain.setValueAtTime(0.25, now + idx * 0.08);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now + idx * 0.08);
+                    osc.stop(now + idx * 0.08 + 0.3);
+                });
+            }
 
-  <!-- Message Log -->
-  <div class="msg-box" id="game-msg">Game started! Your turn. Draw a card.</div>
-
-  <!-- Bottom: Player (You - Team A) -->
-  <div class="hand-container">
-    <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; margin-bottom:4px;">
-      <span class="player-slot team-a active" id="slot-p0" style="margin:0;">
-        <div class="avatar">YOU</div> Team A (Your Hand)
-      </span>
-      <span>Selected: <b id="selected-count">0</b></span>
-    </div>
-
-    <!-- Hand Cards -->
-    <div class="hand-cards" id="player-hand"></div>
-
-    <!-- Action Controls -->
-    <div class="controls">
-      <button class="btn" id="btn-meld" onclick="meldSelected()" disabled>Meld Selected</button>
-      <button class="btn btn-danger" id="btn-discard" onclick="discardSelected()" disabled>Discard Card</button>
-      <button class="btn btn-secondary" onclick="sortHand()">Sort</button>
-    </div>
-  </div>
-
-</div>
-
-<script>
-  const SUITS = ['♠', '♥', '♦', '♣'];
-  const VALUES = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  
-  let deck = [];
-  let wildJoker = null;
-  let discardPile = [];
-  let players = [[], [], [], []]; 
-  let selectedIndices = [];
-  let turn = 0; 
-  let hasDrawn = false;
-  let teamAMelds = [];
-  let teamBMelds = [];
-
-  function initGame() {
-    deck = [];
-    for (let d = 0; d < 2; d++) {
-      for (let s of SUITS) {
-        for (let v of VALUES) {
-          deck.push({ suit: s, val: v, isJoker: false });
+            playCascade() {
+                this.init();
+                if (!this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            }
         }
-      }
-      deck.push({ suit: '★', val: 'JOKER', isJoker: true });
-      deck.push({ suit: '★', val: 'JOKER', isJoker: true });
-    }
-    deck.sort(() => Math.random() - 0.5);
 
-    players = [[], [], [], []];
-    for (let i = 0; i < 13; i++) {
-      for (let p = 0; p < 4; p++) {
-        players[p].push(deck.pop());
-      }
-    }
+        const sfx = new SoundEffects();
 
-    wildJoker = deck.pop();
-    document.getElementById('wild-joker').innerText = `${wildJoker.val}${wildJoker.suit}`;
+        // ==========================================
+        // 2. SLOT SYMBOL DEFINITIONS & PAYTABLE
+        // ==========================================
+        const SYMBOLS = [
+            { id: 'WILD', name: 'Wild', icon: '⚡', color: 'text-amber-400', isWild: true, pay: { 5: 30, 4: 15, 3: 6 } },
+            { id: 'SCATTER', name: 'Scatter', icon: '💀', color: 'text-purple-400', isScatter: true, pay: { 5: 50, 4: 25, 3: 10 } },
+            { id: 'BANDITO', name: 'Bandito', icon: '🤠', color: 'text-amber-200', pay: { 5: 25, 4: 12.5, 3: 5 } },
+            { id: 'GUITAR', name: 'Guitar', icon: '🎸', color: 'text-pink-400', pay: { 5: 20, 4: 10, 3: 4 } },
+            { id: 'TEQUILA', name: 'Tequila', icon: '🍹', color: 'text-emerald-400', pay: { 5: 15, 4: 7.5, 3: 3 } },
+            { id: 'MARACAS', name: 'Maracas', icon: '🪇', color: 'text-yellow-400', pay: { 5: 7.5, 4: 5, 3: 2.5 } },
+            { id: 'A', name: 'A', icon: 'A', color: 'text-amber-300', pay: { 5: 6, 4: 2.5, 3: 1.5 } },
+            { id: 'K', name: 'K', icon: 'K', color: 'text-teal-300', pay: { 5: 5, 4: 2, 3: 1.0 } },
+            { id: 'Q', name: 'Q', icon: 'Q', color: 'text-blue-400', pay: { 5: 4, 4: 1.8, 3: 1.0 } },
+            { id: 'J', name: 'J', icon: 'J', color: 'text-purple-400', pay: { 5: 3, 4: 1.5, 3: 0.5 } },
+            { id: '10', name: '10', icon: '10', color: 'text-rose-400', pay: { 5: 3, 4: 1.5, 3: 0.5 } }
+        ];
 
-    discardPile = [deck.pop()];
-    
-    turn = 0;
-    hasDrawn = false;
-    selectedIndices = [];
-    teamAMelds = [];
-    teamBMelds = [];
+        // 5 Reels x 4 Rows Matrix State
+        let matrix = Array(4).fill(null).map(() => Array(5).fill(null));
+        let balance = 1000.00;
+        let bet = 1.00;
+        let isSpinning = false;
+        let turboMode = false;
 
-    render();
-    setMessage("Your turn! Draw from Deck or Discard pile.");
-  }
+        // On Window Load -> Initialize Grid
+        window.onload = function() {
+            initMatrix();
+            renderMatrix();
+        };
 
-  function render() {
-    const handEl = document.getElementById('player-hand');
-    handEl.innerHTML = '';
-    players[0].forEach((card, idx) => {
-      const cardEl = createCardEl(card);
-      if (selectedIndices.includes(idx)) cardEl.classList.add('selected');
-      cardEl.onclick = () => toggleSelectCard(idx);
-      handEl.appendChild(cardEl);
-    });
+        function getRandomSymbol(reelIndex) {
+            // Weights for symbols
+            const rand = Math.random();
+            let sym;
+            if (rand < 0.05) sym = SYMBOLS.find(s => s.id === 'SCATTER');
+            else if (rand < 0.10) sym = SYMBOLS.find(s => s.id === 'WILD');
+            else if (rand < 0.22) sym = SYMBOLS.find(s => s.id === 'BANDITO');
+            else if (rand < 0.35) sym = SYMBOLS.find(s => s.id === 'GUITAR');
+            else if (rand < 0.50) sym = SYMBOLS.find(s => s.id === 'TEQUILA');
+            else if (rand < 0.65) sym = SYMBOLS.find(s => s.id === 'MARACAS');
+            else {
+                const lowPay = ['A', 'K', 'Q', 'J', '10'];
+                const pick = lowPay[Math.floor(Math.random() * lowPay.length)];
+                sym = SYMBOLS.find(s => s.id === pick);
+            }
 
-    document.getElementById('deck-count').innerText = deck.length;
-    document.getElementById('count-p1').innerText = players[1].length;
-    document.getElementById('count-p2').innerText = players[2].length;
-    document.getElementById('count-p3').innerText = players[3].length;
-    document.getElementById('selected-count').innerText = selectedIndices.length;
+            // Gold Framed symbols appear on reels 2, 3 and 4 only (indices 1, 2, 3)
+            let isGold = false;
+            if (reelIndex >= 1 && reelIndex <= 3 && !sym.isWild && !sym.isScatter && Math.random() < 0.25) {
+                isGold = true;
+            }
 
-    const topDiscard = discardPile[discardPile.length - 1];
-    const discardEl = document.getElementById('discard-card-view');
-    discardEl.innerHTML = '';
-    if (topDiscard) {
-      discardEl.appendChild(createCardEl(topDiscard));
-    } else {
-      discardEl.innerText = 'Empty';
-    }
+            return { ...sym, isGold, instanceId: Math.random().toString(36).substr(2, 9) };
+        }
 
-    document.getElementById('btn-meld').disabled = selectedIndices.length < 3 || !hasDrawn || turn !== 0;
-    document.getElementById('btn-discard').disabled = selectedIndices.length !== 1 || !hasDrawn || turn !== 0;
+        function initMatrix() {
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 5; c++) {
+                    matrix[r][c] = getRandomSymbol(c);
+                }
+            }
+        }
 
-    for (let i = 0; i < 4; i++) {
-      const slot = document.getElementById(`slot-p${i}`);
-      if (i === turn) slot.classList.add('active');
-      else slot.classList.remove('active');
-    }
+        function renderMatrix(winningCells = []) {
+            const container = document.getElementById('reel-grid');
+            container.innerHTML = '';
 
-    renderMelds('melds-team-a', teamAMelds);
-    renderMelds('melds-team-b', teamBMelds);
-  }
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 5; c++) {
+                    const cellData = matrix[r][c];
+                    const isWinning = winningCells.some(w => w.r === r && w.c === c);
 
-  function createCardEl(card) {
-    const el = document.createElement('div');
-    const isRed = card.suit === '♥' || card.suit === '♦';
-    el.className = `card ${card.isJoker ? 'joker' : isRed ? 'red' : 'black'}`;
-    el.innerHTML = `<div>${card.val}</div><div class="suit">${card.suit}</div>`;
-    return el;
-  }
+                    const cellEl = document.createElement('div');
+                    cellEl.className = `symbol-cell ${cellData.isGold ? 'gold-framed-symbol' : ''} ${isWinning ? 'win-highlight' : ''}`;
+                    
+                    if (cellData.isWild) {
+                        cellEl.innerHTML = `<span class="text-3xl font-black text-amber-300 drop-shadow-[0_0_8px_#f59e0b]">WILD</span>`;
+                    } else if (cellData.isScatter) {
+                        cellEl.innerHTML = `<span class="text-3xl">💀</span><span class="text-[9px] font-bold text-purple-300 uppercase leading-none mt-1">SCATTER</span>`;
+                    } else {
+                        const isTextIcon = ['A', 'K', 'Q', 'J', '10'].includes(cellData.icon);
+                        if (isTextIcon) {
+                            cellEl.innerHTML = `<span class="text-3xl font-black ${cellData.color} font-cinzel">${cellData.icon}</span>`;
+                        } else {
+                            cellEl.innerHTML = `<span class="text-3xl">${cellData.icon}</span>`;
+                        }
+                    }
 
-  function toggleSelectCard(idx) {
-    if (selectedIndices.includes(idx)) {
-      selectedIndices = selectedIndices.filter(i => i !== idx);
-    } else {
-      selectedIndices.push(idx);
-    }
-    render();
-  }
+                    container.appendChild(cellEl);
+                }
+            }
+        }
 
-  function drawFromDeck() {
-    if (turn !== 0 || hasDrawn) return;
-    players[0].push(deck.pop());
-    hasDrawn = true;
-    setMessage("Card drawn. Select cards to Meld or select 1 card to Discard.");
-    render();
-  }
+        // ==========================================
+        // 3. SPIN & CASCADING LOGIC
+        // ==========================================
+        async function triggerSpin() {
+            if (isSpinning) return;
+            if (balance < bet) {
+                alert("Insufficient balance! Tap '+' to top up virtual coins.");
+                return;
+            }
 
-  function drawFromDiscard() {
-    if (turn !== 0 || hasDrawn || discardPile.length === 0) return;
-    players[0].push(discardPile.pop());
-    hasDrawn = true;
-    setMessage("Drawn from Discard. Play your turn.");
-    render();
-  }
+            isSpinning = true;
+            balance -= bet;
+            updateUI();
+            setSpinButtonState(false);
+            document.getElementById('win-display').innerText = "0.00";
 
-  function meldSelected() {
-    if (selectedIndices.length < 3) return;
-    selectedIndices.sort((a,b) => b - a);
-    const meldedCards = selectedIndices.map(i => players[0][i]);
-    
-    teamAMelds.push(meldedCards);
-    
-    selectedIndices.forEach(i => players[0].splice(i, 1));
-    selectedIndices = [];
-    setMessage("Meld laid down!");
-    render();
-  }
+            sfx.playSpin();
 
-  function discardSelected() {
-    if (selectedIndices.length !== 1 || !hasDrawn) return;
-    const card = players[0].splice(selectedIndices[0], 1)[0];
-    discardPile.push(card);
-    selectedIndices = [];
-    hasDrawn = false;
-    render();
-    nextTurn();
-  }
+            // Animate spin / blur
+            const grid = document.getElementById('reel-grid');
+            grid.style.filter = "blur(3px)";
+            grid.style.transform = "translateY(4px)";
 
-  function sortHand() {
-    players[0].sort((a,b) => {
-      if (a.suit === b.suit) return VALUES.indexOf(a.val) - VALUES.indexOf(b.val);
-      return a.suit.localeCompare(b.suit);
-    });
-    selectedIndices = [];
-    render();
-  }
+            const spinDuration = turboMode ? 200 : 450;
+            await new Promise(res => setTimeout(res, spinDuration));
 
-  function nextTurn() {
-    turn = (turn + 1) % 4;
-    render();
-    if (turn !== 0) {
-      setTimeout(botTurn, 1000);
-    } else {
-      setMessage("Your turn! Draw a card.");
-    }
-  }
+            grid.style.filter = "none";
+            grid.style.transform = "none";
 
-  function botTurn() {
-    const names = ["You", "Bot 1", "Partner Bot", "Bot 3"];
-    setMessage(`${names[turn]}'s turn...`);
-    
-    const drawnCard = deck.pop();
-    players[turn].push(drawnCard);
+            // Populate fresh symbols
+            initMatrix();
+            renderMatrix();
 
-    setTimeout(() => {
-      const discarded = players[turn].pop();
-      discardPile.push(discarded);
-      setMessage(`${names[turn]} discarded ${discarded.val}${discarded.suit}`);
-      nextTurn();
-    }, 1000);
-  }
+            // Evaluate Wins with Cascade Loop
+            let cascade = true;
+            let totalWinThisSpin = 0;
 
-  function renderMelds(containerId, melds) {
-    const el = document.getElementById(containerId);
-    if (melds.length === 0) {
-      el.innerHTML = '<i>No melds yet</i>';
-      return;
-    }
-    el.innerHTML = '';
-    melds.forEach(m => {
-      const g = document.createElement('div');
-      g.className = 'meld-group';
-      m.forEach(c => g.appendChild(createCardEl(c)));
-      el.appendChild(g);
-    });
-  }
+            while (cascade) {
+                const evalResult = evaluateMatrixWins();
+                if (evalResult.winAmount > 0) {
+                    totalWinThisSpin += evalResult.winAmount;
+                    sfx.playWin();
 
-  function setMessage(msg) {
-    document.getElementById('game-msg').innerText = msg;
-  }
+                    // Render highlight wins
+                    renderMatrix(evalResult.winningCells);
+                    document.getElementById('win-display').innerText = totalWinThisSpin.toFixed(2);
+                    
+                    await new Promise(res => setTimeout(res, turboMode ? 350 : 700));
 
-  initGame();
-</script>
+                    // Transform Gold Framed winning symbols into Wilds, remove normal winning symbols
+                    sfx.playCascade();
+                    processCascades(evalResult.winningCells);
+                    renderMatrix();
+                    
+                    await new Promise(res => setTimeout(res, turboMode ? 200 : 400));
+                } else {
+                    cascade = false;
+                }
+            }
+
+            if (totalWinThisSpin > 0) {
+                balance += totalWinThisSpin;
+                if (totalWinThisSpin >= bet * 5) {
+                    showBigWin(totalWinThisSpin);
+                }
+            }
+
+            updateUI();
+            setSpinButtonState(true);
+            isSpinning = false;
+        }
+
+        function evaluateMatrixWins() {
+            let winningCells = [];
+            let totalWin = 0;
+
+            // Check adjacent matching symbols from left to right across 5 reels
+            SYMBOLS.filter(s => !s.isScatter).forEach(targetSym => {
+                let matchColumns = [];
+
+                for (let c = 0; c < 5; c++) {
+                    let colMatches = [];
+                    for (let r = 0; r < 4; r++) {
+                        const cell = matrix[r][c];
+                        if (cell.id === targetSym.id || cell.isWild) {
+                            colMatches.push({ r, c });
+                        }
+                    }
+                    if (colMatches.length > 0) {
+                        matchColumns.push(colMatches);
+                    } else {
+                        break; // Must connect left-to-right starting from column 0
+                    }
+                }
+
+                if (matchColumns.length >= 3) {
+                    const matchCount = matchColumns.length;
+                    const payoutMult = targetSym.pay[matchCount] || 0;
+                    
+                    // Count ways
+                    let ways = 1;
+                    matchColumns.forEach(col => ways *= col.length);
+                    
+                    totalWin += (payoutMult * (bet / 10)) * ways;
+
+                    // Collect winning cell coordinates
+                    matchColumns.forEach(col => {
+                        col.forEach(cell => winningCells.push(cell));
+                    });
+                }
+            });
+
+            return { winAmount: totalWin, winningCells };
+        }
+
+        function processCascades(winningCells) {
+            // 1. Mark Gold symbols to convert to WILDs, clear normal winning symbols
+            winningCells.forEach(cell => {
+                const current = matrix[cell.r][cell.c];
+                if (current.isGold) {
+                    // Gold framed winning symbol transforms to WILD!
+                    const wildSym = SYMBOLS.find(s => s.id === 'WILD');
+                    matrix[cell.r][cell.c] = { ...wildSym, isGold: false, instanceId: Math.random().toString() };
+                } else {
+                    matrix[cell.r][cell.c] = null;
+                }
+            });
+
+            // 2. Tumbling/Falling down effect per column
+            for (let c = 0; c < 5; c++) {
+                let columnSymbols = [];
+                for (let r = 3; r >= 0; r--) {
+                    if (matrix[r][c] !== null) {
+                        columnSymbols.push(matrix[r][c]);
+                    }
+                }
+                
+                // Refill column top with new random symbols
+                while (columnSymbols.length < 4) {
+                    columnSymbols.push(getRandomSymbol(c));
+                }
+
+                // Place back into matrix from bottom (row 3) to top (row 0)
+                for (let r = 3; r >= 0; r--) {
+                    matrix[r][c] = columnSymbols[3 - r];
+                }
+            }
+        }
+
+        // ==========================================
+        // 4. UI HELPERS & CONTROLS
+        // ==========================================
+        function updateUI() {
+            document.getElementById('balance-display').innerText = balance.toFixed(2);
+            document.getElementById('bet-display').innerText = bet.toFixed(2);
+        }
+
+        function adjustBet(delta) {
+            if (isSpinning) return;
+            bet = Math.max(0.5, Math.min(100, bet + delta));
+            updateUI();
+        }
+
+        function addBalance() {
+            balance += 500;
+            updateUI();
+        }
+
+        function toggleTurbo() {
+            turboMode = !turboMode;
+            const btn = document.getElementById('turbo-btn');
+            const txt = document.getElementById('turbo-text');
+            if (turboMode) {
+                btn.classList.add('bg-amber-600', 'text-black');
+                txt.innerText = "2.0X";
+            } else {
+                btn.classList.remove('bg-amber-600', 'text-black');
+                txt.innerText = "1.0X";
+            }
+        }
+
+        function setSpinButtonState(enabled) {
+            const btn = document.getElementById('spin-btn');
+            if (enabled) {
+                btn.classList.remove('disabled');
+            } else {
+                btn.classList.add('disabled');
+            }
+        }
+
+        function showBigWin(amount) {
+            const banner = document.getElementById('win-banner');
+            document.getElementById('win-banner-amount').innerText = amount.toFixed(2);
+            banner.classList.add('active');
+            setTimeout(() => {
+                banner.classList.remove('active');
+            }, 2200);
+        }
+
+        function togglePaytable(show) {
+            document.getElementById('paytable-modal').classList.toggle('hidden', !show);
+        }
+    </script>
 </body>
 </html>
+```

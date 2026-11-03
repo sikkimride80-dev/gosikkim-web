@@ -27,7 +27,6 @@
     overflow: hidden;
   }
 
-  /* Moving Stage-Light Spotlight Shimmer Keyframes */
   @keyframes stageSpotlight {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
@@ -50,7 +49,6 @@
     text-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
-  /* Frosted Glass Card Container */
   .card {
     position: relative;
     background: rgba(17, 26, 46, 0.82);
@@ -176,20 +174,10 @@
     text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
   }
 
-  .action-btn:active {
-    background: #f59e0b;
-    color: #090e1a;
-  }
-
   .input-standard {
     background: rgba(9, 14, 26, 0.85);
     border: 1.5px solid #b45309;
     border-radius: 14px;
-  }
-
-  .input-standard:focus-within {
-    border-color: #fbbf24;
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
   .btn-submit {
@@ -220,41 +208,6 @@
     transform: scale(0.98);
   }
 
-  .btn-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 10px;
-  }
-
-  .btn-half {
-    flex: 1;
-    padding: 14px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    border: none;
-    letter-spacing: 0.5px;
-  }
-
-  .btn-yes {
-    background: linear-gradient(90deg, #16a34a, #22c55e);
-    color: #ffffff;
-    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-  }
-
-  .btn-no {
-    background: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
-    border: 1.5px solid rgba(239, 68, 68, 0.4);
-  }
-
-  .btn-locked {
-    opacity: 0.4;
-    cursor: not-allowed !important;
-    pointer-events: none;
-  }
-
   .message {
     margin-top: 16px;
     font-size: 13.5px;
@@ -270,6 +223,13 @@
     background: rgba(239, 68, 68, 0.15);
     color: #fca5a5;
     border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .message.success {
+    display: block;
+    background: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+    border: 1px solid rgba(34, 197, 94, 0.3);
   }
 
   .connected-screen {
@@ -298,19 +258,6 @@
     box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
   }
 
-  .connected-screen h3 {
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 8px;
-  }
-
-  .connected-screen p {
-    font-size: 14.5px;
-    color: #cbd5e1;
-    font-weight: 600;
-    margin-bottom: 6px;
-  }
-
   .timer-text {
     font-size: 13px;
     margin-top: 14px;
@@ -332,14 +279,8 @@
     color: #cbd5e1;
     margin-bottom: 16px;
   }
-
-  .device-info-box p {
-    margin-bottom: 5px;
-    font-weight: 600;
-  }
-  .device-info-box span {
-    color: #fef08a;
-  }
+  .device-info-box p { margin-bottom: 5px; font-weight: 600; }
+  .device-info-box span { color: #fef08a; }
 </style>
 </head>
 <body>
@@ -383,6 +324,28 @@
     <div class="message" id="login-msg-box"></div>
   </div>
 
+  <!-- Forgot / Reset Password Screen (Max 3 times a day) -->
+  <div id="reset-pass-form" style="display: none;">
+    <div class="header">
+      <h2 class="gold-title stage-shine">Create New Password</h2>
+      <p id="reset-limit-text">Password mismatch. Create a new password.</p>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">New Password</label>
+      <div class="input-standard">
+        <input type="password" id="new-pass1" placeholder="Min 4 characters">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Confirm Password</label>
+      <div class="input-standard">
+        <input type="password" id="new-pass2" placeholder="Re-enter password">
+      </div>
+    </div>
+    <button class="btn-submit" type="button" onclick="saveNewPassword()">Update Password</button>
+    <div class="message" id="reset-msg-box"></div>
+  </div>
+
   <!-- Signup Step 1: Mobile & CAPTCHA -->
   <div id="auth-form" style="display: none;">
     <div class="header">
@@ -402,8 +365,8 @@
       <label class="label stage-shine">Security Check</label>
       <div class="captcha-box">
         <div class="captcha-display" id="captcha-code">-----</div>
-        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">🔊</button>
-        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">↻</button>
+        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen">🔊</button>
+        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh">↻</button>
       </div>
       <div class="input-standard">
         <input type="text" id="captcha-input" placeholder="Enter CAPTCHA shown above" autocomplete="off">
@@ -416,9 +379,7 @@
 
   <!-- Screen 1: Phone Verification Success State -->
   <div class="connected-screen" id="phone-verified-screen">
-    <div class="success-icon-wrap">
-      <div class="success-icon">✓</div>
-    </div>
+    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
     <h3 class="gold-title stage-shine">Successfully Connected</h3>
     <p id="connected-phone-display" class="stage-shine">+91 ----------</p>
   </div>
@@ -429,23 +390,19 @@
       <h2 class="gold-title stage-shine">Email Address</h2>
       <p>Where should order updates be sent?</p>
     </div>
-
     <div class="form-group">
       <label class="label stage-shine">Email Address</label>
       <div class="input-standard">
         <input type="email" id="email" placeholder="example@domain.com">
       </div>
     </div>
-
     <button class="btn-submit" type="button" onclick="validateStep2()">Save & Continue</button>
     <div class="message" id="email-msg-box"></div>
   </div>
 
   <!-- Screen 2: Email Verification Complete Screen with 4s Timer -->
   <div class="connected-screen" id="email-verified-screen">
-    <div class="success-icon-wrap">
-      <div class="success-icon">✓</div>
-    </div>
+    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
     <h3 class="gold-title stage-shine">Email Saved</h3>
     <p id="saved-email-display" class="stage-shine">Email: ----------</p>
     <div class="timer-text stage-shine" id="email-redirect-timer">Redirecting in 4 seconds...</div>
@@ -457,7 +414,6 @@
       <h2 class="gold-title stage-shine">WhatsApp Number</h2>
       <p>Enter your WhatsApp number for instant alerts</p>
     </div>
-
     <div class="form-group">
       <label class="label stage-shine">WhatsApp Number</label>
       <div class="phone-container">
@@ -465,7 +421,6 @@
         <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
-
     <button class="btn-submit" type="button" onclick="validateStep3()">Save & Open Channel</button>
     <div class="message" id="whatsapp-msg-box"></div>
   </div>
@@ -506,9 +461,7 @@
 
   <!-- Final Success Screen -->
   <div class="connected-screen" id="final-screen">
-    <div class="success-icon-wrap">
-      <div class="success-icon">✓</div>
-    </div>
+    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
     <h3 class="gold-title stage-shine">Setup Complete</h3>
     <p id="final-phone-display" class="stage-shine">Mobile: +91 ----------</p>
     <p id="final-email-display" class="stage-shine">Email: ----------</p>
@@ -522,21 +475,14 @@
       <h2 class="gold-title stage-shine">Set Secure Password</h2>
       <p>Must be at least 4 characters long</p>
     </div>
-
     <div class="form-group">
       <label class="label stage-shine">Create Password</label>
-      <div class="input-standard">
-        <input type="password" id="pass1" placeholder="Enter password (min 4 chars)">
-      </div>
+      <div class="input-standard"><input type="password" id="pass1" placeholder="Enter password (min 4 chars)"></div>
     </div>
-
     <div class="form-group">
       <label class="label stage-shine">Confirm Password</label>
-      <div class="input-standard">
-        <input type="password" id="pass2" placeholder="Re-enter password">
-      </div>
+      <div class="input-standard"><input type="password" id="pass2" placeholder="Re-enter password"></div>
     </div>
-
     <button class="btn-submit" type="button" onclick="validatePassword()">Save Password</button>
     <div class="message" id="password-msg-box"></div>
   </div>
@@ -547,7 +493,6 @@
       <h2 class="gold-title stage-shine" style="font-size: 20px;">Device & Location Scan</h2>
       <p style="font-size: 12px;">Please read and verify your security parameters</p>
     </div>
-
     <div class="device-info-box">
       <p><strong>Device Name:</strong> <span id="scan-devname">Galaxy A54 / Pixel 7</span></p>
       <p><strong>Android Version:</strong> <span id="scan-android">Android 14.0 (API 34)</span></p>
@@ -555,11 +500,18 @@
       <p><strong>Device MAC / ID:</strong> <span id="scan-mac">MAC-DE07-6E31</span></p>
       <p><strong>Map Location:</strong> <span id="scan-location">Gangtok, Sikkim, India</span></p>
     </div>
-
     <div class="timer-text stage-shine" id="scan-timer-text">Redirecting in 6 seconds...</div>
   </div>
 
-  <!-- Popup Modal for Channel Verification with 10s Countdown Lock -->
+  <!-- Dashboard Screen (After successful login or scan completion) -->
+  <div class="connected-screen" id="dashboard-screen">
+    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
+    <h3 class="gold-title stage-shine">Dashboard</h3>
+    <p class="stage-shine">Welcome to your app dashboard!</p>
+    <button class="btn-submit" type="button" onclick="location.reload()" style="margin-top: 20px;">Log Out</button>
+  </div>
+
+  <!-- Modals for Channel & Group verification -->
   <div class="modal-overlay" id="channel-modal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 86%; background: rgba(15, 23, 42, 0.96); border: 1.5px solid #f59e0b; border-radius: 18px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: none; text-align: center; z-index: 10;">
     <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you followed the channel?</p>
     <p id="channel-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="channel-countdown">10</span>s to answer...</p>
@@ -570,7 +522,6 @@
     <div class="message" id="channel-msg-box" style="margin-top:12px;"></div>
   </div>
 
-  <!-- Popup Modal for Group Verification with 10s Countdown Lock -->
   <div class="modal-overlay" id="group-modal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 86%; background: rgba(15, 23, 42, 0.96); border: 1.5px solid #f59e0b; border-radius: 18px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: none; text-align: center; z-index: 10;">
     <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you joined the group?</p>
     <p id="group-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="group-countdown">10</span>s to answer...</p>
@@ -587,30 +538,31 @@
   let userPhone = "";
   let userEmail = "";
   let userWhatsapp = "";
+  let currentLoginPhone = "";
   let channelTimerInterval = null;
   let groupTimerInterval = null;
 
   function getRegisteredUsers() {
     let data = localStorage.getItem("registered_users");
-    // Returns default sample users or saved ones
-    return data ? JSON.parse(data) : { "9876543210": { ip: "192.168.62.73", mac: "MAC-DE07-6E31" } };
+    return data ? JSON.parse(data) : {};
   }
 
-  function saveRegisteredUser(phone, ip, mac) {
+  function saveRegisteredUser(phone, ip, mac, pass) {
     let users = getRegisteredUsers();
-    users[phone] = { ip: ip, mac: mac };
+    users[phone] = { ip: ip, mac: mac, password: pass };
     localStorage.setItem("registered_users", JSON.stringify(users));
   }
 
-  // Auto check when clicking "New User? Sign Up"
+  // 1. AUTO-CHECK WHEN CLICKING SIGN UP
   function handleGatewaySignup() {
     let users = getRegisteredUsers();
     let currentIP = document.getElementById("scan-ip").textContent;
-    
-    // Check if device/IP already has an account registered
-    let existingAccount = Object.values(users).some(u => u.ip === currentIP);
-    
-    if (existingAccount) {
+    let currentMAC = document.getElementById("scan-mac").textContent;
+
+    // Check if this device/IP is already registered
+    let existingUser = Object.values(users).some(u => u.ip === currentIP || u.mac === currentMAC);
+
+    if (existingUser) {
       showMessage("gateway-msg-box", "You have already created an account. Can't create new, please resume with log in.", "error");
       return;
     }
@@ -620,12 +572,16 @@
     generateCaptcha();
   }
 
-  // Auto check when clicking "Already Registered? Log In"
+  // 2. AUTO-CHECK WHEN CLICKING LOG IN
   function handleGatewayLogin() {
     let users = getRegisteredUsers();
-    
-    // Check if there are any registered users at all in storage
-    if (Object.keys(users).length === 0) {
+    let currentIP = document.getElementById("scan-ip").textContent;
+    let currentMAC = document.getElementById("scan-mac").textContent;
+
+    // Check if this device/IP exists in records
+    let existingUserKey = Object.keys(users).find(phone => users[phone].ip === currentIP || users[phone].mac === currentMAC);
+
+    if (!existingUserKey) {
       showMessage("gateway-msg-box", "You are new, please sign up first!", "error");
       setTimeout(() => {
         handleGatewaySignup();
@@ -633,6 +589,7 @@
       return;
     }
 
+    // Found match, proceed to login form
     document.getElementById("login-signup-gateway").style.display = "none";
     document.getElementById("login-form").style.display = "block";
   }
@@ -645,21 +602,76 @@
       showMessage("login-msg-box", "Please enter a valid 10-digit mobile number.", "error");
       return;
     }
-    if (pass.length < 4) {
-      showMessage("login-msg-box", "Please enter a valid password.", "error");
+
+    let users = getRegisteredUsers();
+    if (!users[phone]) {
+      showMessage("login-msg-box", "You are new, please sign up first!", "error");
+      setTimeout(() => {
+        document.getElementById("login-form").style.display = "none";
+        handleGatewaySignup();
+      }, 1500);
+      return;
+    }
+
+    // Check password
+    if (users[phone].password !== pass) {
+      currentLoginPhone = phone;
+      checkResetLimit();
+      return;
+    }
+
+    // Success checkmark & Direct to Dashboard
+    document.getElementById("login-form").style.display = "none";
+    document.getElementById("dashboard-screen").style.display = "block";
+  }
+
+  // Password reset limit check (Max 3 times a day)
+  function checkResetLimit() {
+    let today = new Date().toISOString().slice(0, 10);
+    let resetData = JSON.parse(localStorage.getItem("password_resets") || "{}");
+    
+    if (resetData.date !== today) {
+      resetData = { date: today, count: 0 };
+    }
+
+    if (resetData.count >= 3) {
+      showMessage("login-msg-box", "Password change limit reached (Max 3 times a day). Try again tomorrow.", "error");
+      return;
+    }
+
+    document.getElementById("login-form").style.display = "none";
+    document.getElementById("reset-pass-form").style.display = "block";
+    document.getElementById("reset-limit-text").textContent = `Password incorrect. You can change your password (${3 - resetData.count} attempts left today).`;
+  }
+
+  function saveNewPassword() {
+    const p1 = document.getElementById("new-pass1").value.trim();
+    const p2 = document.getElementById("new-pass2").value.trim();
+
+    if (p1.length < 4) {
+      showMessage("reset-msg-box", "Password must be at least 4 characters long.", "error");
+      return;
+    }
+    if (p1 !== p2) {
+      showMessage("reset-msg-box", "Passwords do not match.", "error");
       return;
     }
 
     let users = getRegisteredUsers();
-    if (!users[phone]) {
-      alert("You are new, please sign up first!");
-      document.getElementById("login-form").style.display = "none";
-      handleGatewaySignup();
-      return;
+    if (users[currentLoginPhone]) {
+      users[currentLoginPhone].password = p1;
+      localStorage.setItem("registered_users", JSON.stringify(users));
     }
 
-    alert("Login successful! Redirecting to dashboard...");
-    window.location.href = "#dashboard";
+    // Track daily limit count
+    let today = new Date().toISOString().slice(0, 10);
+    let resetData = JSON.parse(localStorage.getItem("password_resets") || `{"date": "${today}", "count": 0}`);
+    resetData.count++;
+    localStorage.setItem("password_resets", JSON.stringify(resetData));
+
+    alert("Password updated successfully! Logging you in...");
+    document.getElementById("reset-pass-form").style.display = "none";
+    document.getElementById("dashboard-screen").style.display = "block";
   }
 
   function generateCaptcha() {
@@ -676,12 +688,9 @@
   function speakCaptcha() {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const spokenText = currentCaptcha.split('').join(', ');
-      const utterance = new SpeechSynthesisUtterance(spokenText);
+      const utterance = new SpeechSynthesisUtterance(currentCaptcha.split('').join(', '));
       utterance.rate = 0.8;
       window.speechSynthesis.speak(utterance);
-    } else {
-      alert("Audio feature is not supported in your browser.");
     }
   }
 
@@ -715,7 +724,6 @@
     }
 
     userPhone = phoneInput;
-    
     document.getElementById("auth-form").style.display = "none";
     document.getElementById("connected-phone-display").textContent = "+91 " + userPhone;
     document.getElementById("phone-verified-screen").style.display = "block";
@@ -728,22 +736,17 @@
 
   function validateStep2() {
     const emailInput = document.getElementById("email").value.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(emailInput)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
       showMessage("email-msg-box", "Please enter a valid email address.", "error");
       return;
     }
-
     userEmail = emailInput;
-
     document.getElementById("email-form").style.display = "none";
     document.getElementById("saved-email-display").textContent = "Email: " + userEmail;
     document.getElementById("email-verified-screen").style.display = "block";
 
     let timeLeft = 4;
     const timerElem = document.getElementById("email-redirect-timer");
-
     const countdown = setInterval(() => {
       timeLeft--;
       if (timeLeft > 0) {
@@ -759,27 +762,18 @@
 
   function validateStep3() {
     const whatsappInput = document.getElementById("whatsapp-phone").value.trim();
-
     if (!/^\d{10}$/.test(whatsappInput)) {
       showMessage("whatsapp-msg-box", "Please enter a valid 10-digit WhatsApp number.", "error");
       return;
     }
-
     userWhatsapp = whatsappInput;
-
     document.getElementById("whatsapp-form").style.display = "none";
     document.getElementById("channel-screen").style.display = "block";
-
     window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";
   }
 
-  function reopenChannel() {
-    window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";
-  }
-
-  function reopenGroup() {
-    window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
-  }
+  function reopenChannel() { window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40"; }
+  function reopenGroup() { window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ"; }
 
   function onReturnFromChannel() {
     document.getElementById("channel-screen").style.display = "none";
@@ -802,7 +796,6 @@
 
     yesBtn.classList.add("btn-locked");
     noBtn.classList.add("btn-locked");
-
     if (channelTimerInterval) clearInterval(channelTimerInterval);
 
     channelTimerInterval = setInterval(() => {
@@ -827,7 +820,6 @@
 
     yesBtn.classList.add("btn-locked");
     noBtn.classList.add("btn-locked");
-
     if (groupTimerInterval) clearInterval(groupTimerInterval);
 
     groupTimerInterval = setInterval(() => {
@@ -847,11 +839,9 @@
     if (followed) {
       document.getElementById("channel-modal").style.display = "none";
       document.getElementById("channel-loader").style.display = "block";
-
       setTimeout(() => {
         document.getElementById("channel-loader").style.display = "none";
         document.getElementById("group-screen").style.display = "block";
-
         window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
       }, 1200);
     } else {
@@ -863,7 +853,6 @@
     if (joined) {
       document.getElementById("group-modal").style.display = "none";
       document.getElementById("group-loader").style.display = "block";
-
       setTimeout(() => {
         document.getElementById("group-loader").style.display = "none";
         document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
@@ -889,33 +878,30 @@
       showMessage("password-msg-box", "Password must be at least 4 characters long.", "error");
       return;
     }
-
     if (p1 !== p2) {
       showMessage("password-msg-box", "Passwords do not match. Please re-confirm.", "error");
       return;
     }
 
+    // Save user profile with created password and hardware info
     let currentIP = document.getElementById("scan-ip").textContent;
     let currentMAC = document.getElementById("scan-mac").textContent;
-    saveRegisteredUser(userPhone, currentIP, currentMAC);
+    saveRegisteredUser(userPhone, currentIP, currentMAC, p1);
 
     document.getElementById("password-form").style.display = "none";
     document.getElementById("device-scan-screen").style.display = "block";
 
     let scanTimeLeft = 6;
     const scanTimerElem = document.getElementById("scan-timer-text");
-
     const scanInterval = setInterval(() => {
       scanTimeLeft--;
       if (scanTimeLeft > 0) {
         scanTimerElem.textContent = `Please read details. Redirecting in ${scanTimeLeft} seconds...`;
       } else {
         clearInterval(scanInterval);
-        scanTimerElem.textContent = "Redirecting to Login / Signup gateway...";
-        setTimeout(() => {
-          document.getElementById("device-scan-screen").style.display = "none";
-          document.getElementById("login-signup-gateway").style.display = "block";
-        }, 1000);
+        // Direct to user dashboard after setup scan
+        document.getElementById("device-scan-screen").style.display = "none";
+        document.getElementById("dashboard-screen").style.display = "block";
       }
     }, 1000);
   }

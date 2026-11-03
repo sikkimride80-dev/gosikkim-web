@@ -122,7 +122,8 @@
 
   input[type="tel"],
   input[type="text"],
-  input[type="email"] {
+  input[type="email"],
+  input[type="password"] {
     width: 100%;
     padding: 14px;
     background: transparent;
@@ -219,42 +220,6 @@
     transform: scale(0.98);
   }
 
-  .btn-row {
-    display: flex;
-    gap: 12px;
-    margin-top: 10px;
-  }
-
-  .btn-half {
-    flex: 1;
-    padding: 14px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-weight: 800;
-    cursor: pointer;
-    border: none;
-    letter-spacing: 0.5px;
-  }
-
-  .btn-yes {
-    background: linear-gradient(90deg, #16a34a, #22c55e);
-    color: #ffffff;
-    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
-  }
-
-  .btn-no {
-    background: rgba(239, 68, 68, 0.2);
-    color: #fca5a5;
-    border: 1.5px solid rgba(239, 68, 68, 0.4);
-  }
-
-  /* Locked / Disabled Button State */
-  .btn-locked {
-    opacity: 0.4;
-    cursor: not-allowed !important;
-    pointer-events: none;
-  }
-
   .message {
     margin-top: 16px;
     font-size: 13.5px;
@@ -270,6 +235,13 @@
     background: rgba(239, 68, 68, 0.15);
     color: #fca5a5;
     border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .message.success {
+    display: block;
+    background: rgba(34, 197, 94, 0.15);
+    color: #86efac;
+    border: 1px solid rgba(34, 197, 94, 0.3);
   }
 
   .connected-screen {
@@ -322,40 +294,23 @@
     border: 1px solid rgba(251, 191, 36, 0.3);
   }
 
-  .loader-overlay {
-    display: none;
-    text-align: center;
-    padding: 20px 0;
-  }
-  .spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(251, 191, 36, 0.2);
-    border-top: 4px solid #fbbf24;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 16px auto;
-  }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .device-info-box {
+    background: rgba(5, 8, 17, 0.85);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: left;
+    font-size: 13px;
+    color: #cbd5e1;
+    margin-bottom: 16px;
   }
 
-  /* Modal Overlay Style */
-  .modal-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 86%;
-    background: rgba(15, 23, 42, 0.96);
-    border: 1.5px solid #f59e0b;
-    border-radius: 18px;
-    padding: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-    display: none;
-    text-align: center;
-    z-index: 10;
+  .device-info-box p {
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .device-info-box span {
+    color: #fef08a;
   }
 </style>
 </head>
@@ -468,20 +423,20 @@
   </div>
 
   <!-- Channel Loader Screen -->
-  <div class="loader-overlay" id="channel-loader">
-    <div class="spinner"></div>
+  <div class="loader-overlay" id="channel-loader" style="display:none; text-align:center; padding:20px 0;">
+    <div class="spinner" style="width:48px;height:48px;border:4px solid rgba(251,191,36,0.2);border-top:4px solid #fbbf24;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px auto;"></div>
     <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Verifying Channel...</h3>
     <p style="font-size: 13px; color: #94a3b8;">Checking status...</p>
   </div>
 
   <!-- Group Loader Screen -->
-  <div class="loader-overlay" id="group-loader">
-    <div class="spinner"></div>
+  <div class="loader-overlay" id="group-loader" style="display:none; text-align:center; padding:20px 0;">
+    <div class="spinner" style="width:48px;height:48px;border:4px solid rgba(251,191,36,0.2);border-top:4px solid #fbbf24;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px auto;"></div>
     <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Verifying Group...</h3>
     <p style="font-size: 13px; color: #94a3b8;">Checking status...</p>
   </div>
 
-  <!-- Final Success Screen -->
+  <!-- Final Success Screen (Before 5s auto transition to Password) -->
   <div class="connected-screen" id="final-screen">
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
@@ -490,29 +445,49 @@
     <p id="final-phone-display" class="stage-shine">Mobile: +91 ----------</p>
     <p id="final-email-display" class="stage-shine">Email: ----------</p>
     <p id="final-whatsapp-display" class="stage-shine">WhatsApp: +91 ----------</p>
-    <div class="timer-text stage-shine">All steps verified successfully!</div>
+    <div class="timer-text stage-shine" id="setup-complete-timer">Securing profile in 5 seconds...</div>
   </div>
 
-  <!-- Popup Modal for Channel Verification with 10s Countdown Lock -->
-  <div class="modal-overlay" id="channel-modal">
-    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you followed the channel?</p>
-    <p id="channel-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="channel-countdown">10</span>s to answer...</p>
-    <div class="btn-row">
-      <button class="btn-half btn-yes btn-locked" id="channel-yes-btn" type="button" onclick="verifyChannel(true)">Yes, Followed</button>
-      <button class="btn-half btn-no btn-locked" id="channel-no-btn" type="button" onclick="verifyChannel(false)">No, Not Yet</button>
+  <!-- New Password Creation Screen -->
+  <div id="password-form" style="display: none;">
+    <div class="header">
+      <h2 class="gold-title stage-shine">Set Secure Password</h2>
+      <p>Must be at least 4 characters long</p>
     </div>
-    <div class="message" id="channel-msg-box" style="margin-top:12px;"></div>
+
+    <div class="form-group">
+      <label class="label stage-shine">Create Password</label>
+      <div class="input-standard">
+        <input type="password" id="pass1" placeholder="Enter password (min 4 chars)">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="label stage-shine">Confirm Password</label>
+      <div class="input-standard">
+        <input type="password" id="pass2" placeholder="Re-enter password">
+      </div>
+    </div>
+
+    <button class="btn-submit" type="button" onclick="validatePassword()">Save Password</button>
+    <div class="message" id="password-msg-box"></div>
   </div>
 
-  <!-- Popup Modal for Group Verification with 10s Countdown Lock -->
-  <div class="modal-overlay" id="group-modal">
-    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you joined the group?</p>
-    <p id="group-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="group-countdown">10</span>s to answer...</p>
-    <div class="btn-row">
-      <button class="btn-half btn-yes btn-locked" id="group-yes-btn" type="button" onclick="verifyGroup(true)">Yes, Joined</button>
-      <button class="btn-half btn-no btn-locked" id="group-no-btn" type="button" onclick="verifyGroup(false)">No, Not Yet</button>
+  <!-- Device & Location Scan Screen -->
+  <div class="connected-screen" id="device-scan-screen">
+    <div class="header" style="margin-bottom: 14px;">
+      <h2 class="gold-title stage-shine" style="font-size: 20px;">Device & Location Scan</h2>
+      <p style="font-size: 12.5px;">Please read and verify your security parameters</p>
     </div>
-    <div class="message" id="group-msg-box" style="margin-top:12px;"></div>
+
+    <div class="device-info-box">
+      <p><strong>IP Address:</strong> <span id="scan-ip">192.168.29.45</span></p>
+      <p><strong>Device MAC / ID:</strong> <span id="scan-mac">MAC-88F4-B92A</span></p>
+      <p><strong>Device Model:</strong> <span id="scan-model">Mobile (Android / iOS Touch)</span></p>
+      <p><strong>Map Location:</strong> <span id="scan-location">Gangtok, Sikkim, India</span></p>
+    </div>
+
+    <div class="timer-text stage-shine" id="scan-timer-text">Redirecting in 10 seconds...</div>
   </div>
 </div>
 
@@ -523,8 +498,6 @@
   let userWhatsapp = "";
   let waitingForChannelReturn = false;
   let waitingForGroupReturn = false;
-  let channelTimerInterval = null;
-  let groupTimerInterval = null;
 
   function generateCaptcha() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -626,7 +599,6 @@
     document.getElementById("whatsapp-form").style.display = "none";
     document.getElementById("channel-screen").style.display = "block";
 
-    // Open WhatsApp Channel instantly
     waitingForChannelReturn = true;
     window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";
   }
@@ -639,56 +611,6 @@
     window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
   }
 
-  function startChannelTimer() {
-    let timeLeft = 10;
-    const countdownElem = document.getElementById("channel-countdown");
-    const timerDisplay = document.getElementById("channel-timer-display");
-    const yesBtn = document.getElementById("channel-yes-btn");
-    const noBtn = document.getElementById("channel-no-btn");
-
-    yesBtn.classList.add("btn-locked");
-    noBtn.classList.add("btn-locked");
-
-    if (channelTimerInterval) clearInterval(channelTimerInterval);
-
-    channelTimerInterval = setInterval(() => {
-      timeLeft--;
-      if (timeLeft > 0) {
-        countdownElem.textContent = timeLeft;
-      } else {
-        clearInterval(channelTimerInterval);
-        timerDisplay.textContent = "You can now answer below:";
-        yesBtn.classList.remove("btn-locked");
-        noBtn.classList.remove("btn-locked");
-      }
-    }, 1000);
-  }
-
-  function startGroupTimer() {
-    let timeLeft = 10;
-    const countdownElem = document.getElementById("group-countdown");
-    const timerDisplay = document.getElementById("group-timer-display");
-    const yesBtn = document.getElementById("group-yes-btn");
-    const noBtn = document.getElementById("group-no-btn");
-
-    yesBtn.classList.add("btn-locked");
-    noBtn.classList.add("btn-locked");
-
-    if (groupTimerInterval) clearInterval(groupTimerInterval);
-
-    groupTimerInterval = setInterval(() => {
-      timeLeft--;
-      if (timeLeft > 0) {
-        countdownElem.textContent = timeLeft;
-      } else {
-        clearInterval(groupTimerInterval);
-        timerDisplay.textContent = "You can now answer below:";
-        yesBtn.classList.remove("btn-locked");
-        noBtn.classList.remove("btn-locked");
-      }
-    }, 1000);
-  }
-
   function verifyChannel(followed) {
     if (followed) {
       document.getElementById("channel-modal").style.display = "none";
@@ -699,7 +621,6 @@
         document.getElementById("channel-loader").style.display = "none";
         document.getElementById("group-screen").style.display = "block";
 
-        // Open WhatsApp Group instantly
         waitingForGroupReturn = true;
         window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
       }, 1200);
@@ -720,21 +641,94 @@
         document.getElementById("final-email-display").textContent = "Email: " + userEmail;
         document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + userWhatsapp;
         document.getElementById("final-screen").style.display = "block";
+
+        // After Setup Complete screen appears, wait 5 seconds then go to password form
+        setTimeout(() => {
+          document.getElementById("final-screen").style.display = "none";
+          document.getElementById("password-form").style.display = "block";
+        }, 5000);
       }, 1200);
     } else {
       showMessage("group-msg-box", "Please join the community group to complete setup.", "error");
     }
   }
 
-  // When user returns back to the web app tab from WhatsApp, trigger the modal and start the 10s lock timer
+  function validatePassword() {
+    const p1 = document.getElementById("pass1").value.trim();
+    const p2 = document.getElementById("pass2").value.trim();
+
+    if (p1.length < 4) {
+      showMessage("password-msg-box", "Password must be at least 4 characters long.", "error");
+      return;
+    }
+
+    if (p1 !== p2) {
+      showMessage("password-msg-box", "Passwords do not match. Please re-confirm.", "error");
+      return;
+    }
+
+    // Move to Device & Location Scan Screen
+    document.getElementById("password-form").style.display = "none";
+    document.getElementById("device-scan-screen").style.display = "block";
+
+    // Randomize/Generate simulated device metadata
+    document.getElementById("scan-ip").textContent = "192.168." + Math.floor(Math.random()*200) + "." + Math.floor(Math.random()*200);
+    document.getElementById("scan-mac").textContent = "MAC-" + Math.random().toString(16).substring(2, 6).toUpperCase() + "-" + Math.random().toString(16).substring(2, 6).toUpperCase();
+    
+    // 10-second read timer, then 3-second redirect to Login/Signup page
+    let scanTimeLeft = 10;
+    const scanTimerElem = document.getElementById("scan-timer-text");
+
+    const scanInterval = setInterval(() => {
+      scanTimeLeft--;
+      if (scanTimeLeft > 0) {
+        scanTimerElem.textContent = `Please read details. Redirecting in ${scanTimeLeft} seconds...`;
+      } else {
+        clearInterval(scanInterval);
+        scanTimerElem.textContent = "Redirecting to Login / Signup in 3 seconds...";
+        
+        let finalRedirect = 3;
+        const finalInterval = setInterval(() => {
+          finalRedirect--;
+          if (finalRedirect > 0) {
+            scanTimerElem.textContent = `Redirecting to Login / Signup in ${finalRedirect} seconds...`;
+          } else {
+            clearInterval(finalInterval);
+            // Redirect to Login / Signup page (Simulated or target URL)
+            window.location.href = "#login-signup";
+            alert("Redirecting to Login/Signup Dashboard!");
+          }
+        }, 1000);
+      }
+    }, 1000);
+  }
+
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {
       if (waitingForChannelReturn && document.getElementById("channel-screen").style.display === "block") {
-        document.getElementById("channel-modal").style.display = "block";
-        startChannelTimer();
+        document.getElementById("channel-screen").style.display = "none";
+        document.getElementById("channel-loader").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("channel-loader").style.display = "none";
+          document.getElementById("group-screen").style.display = "block";
+          waitingForGroupReturn = true;
+          window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
+        }, 1000);
       } else if (waitingForGroupReturn && document.getElementById("group-screen").style.display === "block") {
-        document.getElementById("group-modal").style.display = "block";
-        startGroupTimer();
+        document.getElementById("group-screen").style.display = "none";
+        document.getElementById("group-loader").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("group-loader").style.display = "none";
+          document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
+          document.getElementById("final-email-display").textContent = "Email: " + userEmail;
+          document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + userWhatsapp;
+          document.getElementById("final-screen").style.display = "block";
+
+          setTimeout(() => {
+            document.getElementById("final-screen").style.display = "none";
+            document.getElementById("password-form").style.display = "block";
+          }, 5000);
+        }, 1000);
       }
     }
   });

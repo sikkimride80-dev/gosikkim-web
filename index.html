@@ -87,16 +87,16 @@
   }
 
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .label {
     display: block;
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
   }
 
   .phone-container {
@@ -114,27 +114,32 @@
   }
 
   .country-code {
-    padding: 14px;
+    padding: 12px;
     background: rgba(255, 255, 255, 0.05);
     color: #fef08a;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     border-right: 1px solid #b45309;
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
   }
 
   input[type="tel"],
   input[type="text"],
   input[type="email"],
-  input[type="password"] {
+  input[type="password"],
+  select {
     width: 100%;
-    padding: 14px;
+    padding: 12px 14px;
     background: transparent;
     border: none;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     outline: none;
+  }
+
+  select option {
+    background: #090e1a;
+    color: #ffffff;
   }
 
   input::placeholder {
@@ -160,7 +165,7 @@
     font-weight: 800;
     letter-spacing: 8px;
     color: #fffbeb;
-    text-shadow: 0 0 12px #fbbf24, 0 0 20px #d97706;
+    text-shadow: 0 0 12px #fbbf24;
     box-shadow: inset 0 0 12px rgba(245, 158, 11, 0.3);
   }
 
@@ -168,14 +173,14 @@
     background: rgba(9, 14, 26, 0.9);
     border: 1.5px solid #b45309;
     color: #fef08a;
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     border-radius: 12px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 19px;
+    font-size: 18px;
   }
 
   .input-standard {
@@ -186,7 +191,7 @@
 
   .btn-submit {
     width: 100%;
-    padding: 16px;
+    padding: 14px;
     background: linear-gradient(
       90deg, 
       #d97706 0%, 
@@ -200,7 +205,7 @@
     color: #090e1a;
     border: none;
     border-radius: 14px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     cursor: pointer;
     margin-top: 10px;
@@ -213,12 +218,12 @@
   }
 
   .message {
-    margin-top: 16px;
-    font-size: 13.5px;
+    margin-top: 14px;
+    font-size: 13px;
     font-weight: 600;
     text-align: center;
     display: none;
-    padding: 12px;
+    padding: 10px;
     border-radius: 10px;
   }
 
@@ -236,9 +241,9 @@
   }
 
   .success-icon-wrap {
-    width: 72px;
-    height: 72px;
-    margin: 0 auto 20px auto;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px auto;
   }
 
   .success-icon {
@@ -250,17 +255,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 34px;
+    font-size: 30px;
     font-weight: 900;
-    box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
   }
 
   .timer-text {
-    font-size: 13px;
-    margin-top: 14px;
+    font-size: 12.5px;
+    margin-top: 12px;
     font-weight: 700;
     background: rgba(245, 158, 11, 0.15);
-    padding: 8px 14px;
+    padding: 8px 12px;
     border-radius: 20px;
     display: inline-block;
     border: 1px solid rgba(251, 191, 36, 0.3);
@@ -270,13 +275,13 @@
     background: rgba(5, 8, 17, 0.85);
     border: 1px solid rgba(245, 158, 11, 0.4);
     border-radius: 14px;
-    padding: 14px;
+    padding: 12px;
     text-align: left;
-    font-size: 12.5px;
+    font-size: 12px;
     color: #cbd5e1;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
-  .device-info-box p { margin-bottom: 5px; font-weight: 600; }
+  .device-info-box p { margin-bottom: 4px; font-weight: 600; }
   .device-info-box span { color: #fef08a; }
 
   /* Animated Spinner */
@@ -322,7 +327,6 @@
     font-weight: 800;
     font-size: 16px;
     box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
-    cursor: pointer;
   }
 
   .hamburger-menu {
@@ -361,63 +365,6 @@
     font-weight: 800;
     margin-bottom: 8px;
     line-height: 1.3;
-  }
-
-  .shipping-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 20px;
-  }
-
-  .shipping-option {
-    background: rgba(9, 14, 26, 0.85);
-    border: 1.5px solid #b45309;
-    border-radius: 16px;
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .shipping-option:active {
-    border-color: #fbbf24;
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
-    transform: scale(0.98);
-  }
-
-  .option-info {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .option-icon {
-    font-size: 26px;
-  }
-
-  .option-text {
-    text-align: left;
-  }
-
-  .option-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-  }
-
-  .option-desc {
-    font-size: 11.5px;
-    color: #94a3b8;
-    margin-top: 2px;
-  }
-
-  .arrow-icon {
-    color: #fef08a;
-    font-weight: 800;
-    font-size: 18px;
   }
 </style>
 </head>
@@ -621,16 +568,14 @@
     <div class="timer-text stage-shine" id="scan-timer-text">Redirecting to login in 6 seconds...</div>
   </div>
 
-  <!-- Spinning Connection Dashboard View (Active for 4-5 Seconds) -->
+  <!-- Dashboard Connecting Screen with 4s Spin Circle -->
   <div class="connected-screen" id="dashboard-screen">
     <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
     <h3 class="gold-title stage-shine">Dashboard</h3>
     <p class="stage-shine" style="margin-bottom: 12px;">Welcome to your app dashboard!</p>
-
-    <!-- Animated Spinning Loader & Connecting Box -->
     <div class="spin-ring"></div>
     <div style="background: rgba(9, 14, 26, 0.85); border: 1.5px solid #b45309; border-radius: 14px; padding: 14px; color: #fef08a; font-weight: 700; font-size: 13.5px;">
-      Wait while we connect you to your dashboard...
+      Please fill up the form to start your journey
     </div>
   </div>
 
@@ -656,7 +601,7 @@
   </div>
 </div>
 
-<!-- Main Home Dashboard Opened After 4-5 Seconds -->
+<!-- Main Home Dashboard Opened After 4 Seconds -->
 <div id="main-home-dashboard">
   <!-- Top Bar with Profile Icon & Hamburger -->
   <div class="top-navbar">
@@ -668,45 +613,78 @@
     </div>
   </div>
 
-  <!-- Transparent Options Card -->
-  <div class="home-card">
-    <h2 class="home-title stage-shine">How would you like to ship?</h2>
-    <p style="font-size: 12px; color: #94a3b8; font-weight: 500;">Select your business category to view transparent rates</p>
+  <!-- Form H Dashboard Card -->
+  <div class="home-card" style="text-align: left; max-height: 75vh; overflow-y: auto;">
+    <h2 class="home-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 16px;">Form H: Business Details</h2>
 
-    <div class="shipping-grid">
-      <div class="shipping-option">
-        <div class="option-info">
-          <div class="option-icon">🍽️</div>
-          <div class="option-text">
-            <div class="option-title">Restaurant</div>
-            <div class="option-desc">Food delivery & kitchen supplies</div>
-          </div>
-        </div>
-        <div class="arrow-icon">➔</div>
+    <form onsubmit="event.preventDefault(); alert('Form submitted successfully!');">
+      <!-- Q1 -->
+      <div class="form-group">
+        <label class="label stage-shine">1. Hotel/Restaurant Name</label>
+        <div class="input-standard"><input type="text" placeholder="Enter business name" required></div>
       </div>
 
-      <div class="shipping-option">
-        <div class="option-info">
-          <div class="option-icon">🏨</div>
-          <div class="option-text">
-            <div class="option-title">Hotel</div>
-            <div class="option-desc">Amenities & guest inventory</div>
-          </div>
-        </div>
-        <div class="arrow-icon">➔</div>
+      <!-- Q2 -->
+      <div class="form-group">
+        <label class="label stage-shine">2. Owner Name</label>
+        <div class="input-standard"><input type="text" placeholder="Enter owner's name" required></div>
       </div>
 
-      <div class="shipping-option">
-        <div class="option-info">
-          <div class="option-icon">📦</div>
-          <div class="option-text">
-            <div class="option-title">Others</div>
-            <div class="option-desc">Retail & commercial packages</div>
-          </div>
+      <!-- Q3 -->
+      <div class="form-group">
+        <label class="label stage-shine">3. Google Rating</label>
+        <div class="input-standard">
+          <select required>
+            <option value="" disabled selected>Select rating</option>
+            <option value="5">⭐⭐⭐⭐⭐ (5.0)</option>
+            <option value="4">⭐⭐⭐⭐ (4.0 - 4.9)</option>
+            <option value="3">⭐⭐⭐ (3.0 - 3.9)</option>
+            <option value="new">New / Unrated</option>
+          </select>
         </div>
-        <div class="arrow-icon">➔</div>
       </div>
-    </div>
+
+      <!-- Q4 -->
+      <div class="form-group">
+        <label class="label stage-shine">4. Location / Address</label>
+        <div class="input-standard"><input type="text" placeholder="Enter location" required></div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="form-group">
+        <label class="label stage-shine">5. Number of Staffs</label>
+        <div class="input-standard"><input type="number" placeholder="e.g. 10" required></div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="form-group">
+        <label class="label stage-shine">6. Number of Tables</label>
+        <div class="input-standard"><input type="number" placeholder="e.g. 15" required></div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="form-group">
+        <label class="label stage-shine">7. Opening & Closing Time</label>
+        <div class="input-standard"><input type="text" placeholder="e.g. 10:00 AM - 11:00 PM" required></div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="form-group">
+        <label class="label stage-shine">8. Things Available (Select from Menu)</label>
+        <div class="input-standard">
+          <select required>
+            <option value="" disabled selected>Select menu category</option>
+            <option value="dine-in">Dine-in Menu & Cutlery</option>
+            <option value="takeaway">Takeaway Packaging & Boxes</option>
+            <option value="perishables">Daily Perishable Supplies</option>
+            <option value="beverages">Beverages & Bar Essentials</option>
+            <option value="all">All Available Services</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-submit" type="submit" style="margin-top: 10px;">Submit Form H</button>
+    </form>
   </div>
 </div>
 
@@ -790,7 +768,7 @@
       return;
     }
 
-    // Display spinning loading view for 4-5 seconds then open the home dashboard
+    // Display spinning loading view for 4 seconds then open Form H dashboard
     document.getElementById("login-form").style.display = "none";
     document.getElementById("dashboard-screen").style.display = "block";
     
@@ -801,7 +779,7 @@
     setTimeout(() => {
       document.getElementById("flow-card").style.display = "none";
       document.getElementById("main-home-dashboard").style.display = "block";
-    }, 4500);
+    }, 4000);
   }
 
   function checkResetLimit() {

@@ -248,6 +248,13 @@
     border: 1.5px solid rgba(239, 68, 68, 0.4);
   }
 
+  /* Locked / Disabled Button State */
+  .btn-locked {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+
   .message {
     margin-top: 16px;
     font-size: 13.5px;
@@ -334,14 +341,14 @@
     100% { transform: rotate(360deg); }
   }
 
-  /* Overlay Modal Style matching your screenshot */
+  /* Modal Overlay Style */
   .modal-overlay {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 86%;
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(15, 23, 42, 0.96);
     border: 1.5px solid #f59e0b;
     border-radius: 18px;
     padding: 20px;
@@ -438,7 +445,7 @@
       </div>
     </div>
 
-    <button class="btn-submit" type="button" onclick="validateStep3()">Save & Continue</button>
+    <button class="btn-submit" type="button" onclick="validateStep3()">Save & Open Channel</button>
     <div class="message" id="whatsapp-msg-box"></div>
   </div>
 
@@ -486,22 +493,24 @@
     <div class="timer-text stage-shine">All steps verified successfully!</div>
   </div>
 
-  <!-- Popup Modal for Channel Verification matching screenshot -->
+  <!-- Popup Modal for Channel Verification with 10s Countdown Lock -->
   <div class="modal-overlay" id="channel-modal">
-    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 16px;">Have you followed the channel?</p>
+    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you followed the channel?</p>
+    <p id="channel-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="channel-countdown">10</span>s to answer...</p>
     <div class="btn-row">
-      <button class="btn-half btn-yes" type="button" onclick="verifyChannel(true)">Yes, Followed</button>
-      <button class="btn-half btn-no" type="button" onclick="verifyChannel(false)">No, Not Yet</button>
+      <button class="btn-half btn-yes btn-locked" id="channel-yes-btn" type="button" onclick="verifyChannel(true)">Yes, Followed</button>
+      <button class="btn-half btn-no btn-locked" id="channel-no-btn" type="button" onclick="verifyChannel(false)">No, Not Yet</button>
     </div>
     <div class="message" id="channel-msg-box" style="margin-top:12px;"></div>
   </div>
 
-  <!-- Popup Modal for Group Verification -->
+  <!-- Popup Modal for Group Verification with 10s Countdown Lock -->
   <div class="modal-overlay" id="group-modal">
-    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 16px;">Have you joined the group?</p>
+    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you joined the group?</p>
+    <p id="group-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="group-countdown">10</span>s to answer...</p>
     <div class="btn-row">
-      <button class="btn-half btn-yes" type="button" onclick="verifyGroup(true)">Yes, Joined</button>
-      <button class="btn-half btn-no" type="button" onclick="verifyGroup(false)">No, Not Yet</button>
+      <button class="btn-half btn-yes btn-locked" id="group-yes-btn" type="button" onclick="verifyGroup(true)">Yes, Joined</button>
+      <button class="btn-half btn-no btn-locked" id="group-no-btn" type="button" onclick="verifyGroup(false)">No, Not Yet</button>
     </div>
     <div class="message" id="group-msg-box" style="margin-top:12px;"></div>
   </div>
@@ -514,6 +523,8 @@
   let userWhatsapp = "";
   let waitingForChannelReturn = false;
   let waitingForGroupReturn = false;
+  let channelTimerInterval = null;
+  let groupTimerInterval = null;
 
   function generateCaptcha() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -615,7 +626,7 @@
     document.getElementById("whatsapp-form").style.display = "none";
     document.getElementById("channel-screen").style.display = "block";
 
-    // Immediately open WhatsApp Channel instantly
+    // Open WhatsApp Channel instantly
     waitingForChannelReturn = true;
     window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";
   }
@@ -628,6 +639,56 @@
     window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
   }
 
+  function startChannelTimer() {
+    let timeLeft = 10;
+    const countdownElem = document.getElementById("channel-countdown");
+    const timerDisplay = document.getElementById("channel-timer-display");
+    const yesBtn = document.getElementById("channel-yes-btn");
+    const noBtn = document.getElementById("channel-no-btn");
+
+    yesBtn.classList.add("btn-locked");
+    noBtn.classList.add("btn-locked");
+
+    if (channelTimerInterval) clearInterval(channelTimerInterval);
+
+    channelTimerInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        countdownElem.textContent = timeLeft;
+      } else {
+        clearInterval(channelTimerInterval);
+        timerDisplay.textContent = "You can now answer below:";
+        yesBtn.classList.remove("btn-locked");
+        noBtn.classList.remove("btn-locked");
+      }
+    }, 1000);
+  }
+
+  function startGroupTimer() {
+    let timeLeft = 10;
+    const countdownElem = document.getElementById("group-countdown");
+    const timerDisplay = document.getElementById("group-timer-display");
+    const yesBtn = document.getElementById("group-yes-btn");
+    const noBtn = document.getElementById("group-no-btn");
+
+    yesBtn.classList.add("btn-locked");
+    noBtn.classList.add("btn-locked");
+
+    if (groupTimerInterval) clearInterval(groupTimerInterval);
+
+    groupTimerInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        countdownElem.textContent = timeLeft;
+      } else {
+        clearInterval(groupTimerInterval);
+        timerDisplay.textContent = "You can now answer below:";
+        yesBtn.classList.remove("btn-locked");
+        noBtn.classList.remove("btn-locked");
+      }
+    }, 1000);
+  }
+
   function verifyChannel(followed) {
     if (followed) {
       document.getElementById("channel-modal").style.display = "none";
@@ -638,7 +699,7 @@
         document.getElementById("channel-loader").style.display = "none";
         document.getElementById("group-screen").style.display = "block";
 
-        // Immediately open WhatsApp Group instantly
+        // Open WhatsApp Group instantly
         waitingForGroupReturn = true;
         window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
       }, 1200);
@@ -665,13 +726,15 @@
     }
   }
 
-  // When user returns back to the web app tab from WhatsApp, show the single modal prompt
+  // When user returns back to the web app tab from WhatsApp, trigger the modal and start the 10s lock timer
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) {
       if (waitingForChannelReturn && document.getElementById("channel-screen").style.display === "block") {
         document.getElementById("channel-modal").style.display = "block";
+        startChannelTimer();
       } else if (waitingForGroupReturn && document.getElementById("group-screen").style.display === "block") {
         document.getElementById("group-modal").style.display = "block";
+        startGroupTimer();
       }
     }
   });

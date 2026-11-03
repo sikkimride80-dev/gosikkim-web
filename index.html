@@ -171,7 +171,6 @@
     justify-content: center;
     align-items: center;
     font-size: 19px;
-    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
   }
 
   .input-standard {
@@ -223,13 +222,6 @@
     background: rgba(239, 68, 68, 0.15);
     color: #fca5a5;
     border: 1px solid rgba(239, 68, 68, 0.3);
-  }
-
-  .message.success {
-    display: block;
-    background: rgba(34, 197, 94, 0.15);
-    color: #86efac;
-    border: 1px solid rgba(34, 197, 94, 0.3);
   }
 
   .connected-screen {
@@ -324,7 +316,7 @@
     <div class="message" id="login-msg-box"></div>
   </div>
 
-  <!-- Forgot / Reset Password Screen (Max 3 times a day) -->
+  <!-- Reset Password Screen -->
   <div id="reset-pass-form" style="display: none;">
     <div class="header">
       <h2 class="gold-title stage-shine">Create New Password</h2>
@@ -332,15 +324,11 @@
     </div>
     <div class="form-group">
       <label class="label stage-shine">New Password</label>
-      <div class="input-standard">
-        <input type="password" id="new-pass1" placeholder="Min 4 characters">
-      </div>
+      <div class="input-standard"><input type="password" id="new-pass1" placeholder="Min 4 characters"></div>
     </div>
     <div class="form-group">
       <label class="label stage-shine">Confirm Password</label>
-      <div class="input-standard">
-        <input type="password" id="new-pass2" placeholder="Re-enter password">
-      </div>
+      <div class="input-standard"><input type="password" id="new-pass2" placeholder="Re-enter password"></div>
     </div>
     <button class="btn-submit" type="button" onclick="saveNewPassword()">Update Password</button>
     <div class="message" id="reset-msg-box"></div>
@@ -392,9 +380,7 @@
     </div>
     <div class="form-group">
       <label class="label stage-shine">Email Address</label>
-      <div class="input-standard">
-        <input type="email" id="email" placeholder="example@domain.com">
-      </div>
+      <div class="input-standard"><input type="email" id="email" placeholder="example@domain.com"></div>
     </div>
     <button class="btn-submit" type="button" onclick="validateStep2()">Save & Continue</button>
     <div class="message" id="email-msg-box"></div>
@@ -487,7 +473,7 @@
     <div class="message" id="password-msg-box"></div>
   </div>
 
-  <!-- Device & Location Scan Screen -->
+  <!-- Device & Location Scan Screen (6 seconds, then redirects to Step 1 Login Gateway) -->
   <div class="connected-screen" id="device-scan-screen">
     <div class="header" style="margin-bottom: 12px;">
       <h2 class="gold-title stage-shine" style="font-size: 20px;">Device & Location Scan</h2>
@@ -500,15 +486,15 @@
       <p><strong>Device MAC / ID:</strong> <span id="scan-mac">MAC-DE07-6E31</span></p>
       <p><strong>Map Location:</strong> <span id="scan-location">Gangtok, Sikkim, India</span></p>
     </div>
-    <div class="timer-text stage-shine" id="scan-timer-text">Redirecting in 6 seconds...</div>
+    <div class="timer-text stage-shine" id="scan-timer-text">Redirecting to login in 6 seconds...</div>
   </div>
 
-  <!-- Dashboard Screen (After successful login or scan completion) -->
+  <!-- Dashboard Screen (Appears ONLY after successful direct login) -->
   <div class="connected-screen" id="dashboard-screen">
     <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
     <h3 class="gold-title stage-shine">Dashboard</h3>
-    <p class="stage-shine">Welcome to your app dashboard!</p>
-    <button class="btn-submit" type="button" onclick="location.reload()" style="margin-top: 20px;">Log Out</button>
+    <p class="stage-shine" style="margin-bottom: 20px;">Welcome to your app dashboard!</p>
+    <button class="btn-submit" type="button" onclick="location.reload()">Log Out</button>
   </div>
 
   <!-- Modals for Channel & Group verification -->
@@ -553,15 +539,13 @@
     localStorage.setItem("registered_users", JSON.stringify(users));
   }
 
-  // 1. AUTO-CHECK WHEN CLICKING SIGN UP
+  // Gateway Signup Check
   function handleGatewaySignup() {
     let users = getRegisteredUsers();
     let currentIP = document.getElementById("scan-ip").textContent;
     let currentMAC = document.getElementById("scan-mac").textContent;
 
-    // Check if this device/IP is already registered
     let existingUser = Object.values(users).some(u => u.ip === currentIP || u.mac === currentMAC);
-
     if (existingUser) {
       showMessage("gateway-msg-box", "You have already created an account. Can't create new, please resume with log in.", "error");
       return;
@@ -572,13 +556,12 @@
     generateCaptcha();
   }
 
-  // 2. AUTO-CHECK WHEN CLICKING LOG IN
+  // Gateway Login Check
   function handleGatewayLogin() {
     let users = getRegisteredUsers();
     let currentIP = document.getElementById("scan-ip").textContent;
     let currentMAC = document.getElementById("scan-mac").textContent;
 
-    // Check if this device/IP exists in records
     let existingUserKey = Object.keys(users).find(phone => users[phone].ip === currentIP || users[phone].mac === currentMAC);
 
     if (!existingUserKey) {
@@ -589,7 +572,6 @@
       return;
     }
 
-    // Found match, proceed to login form
     document.getElementById("login-signup-gateway").style.display = "none";
     document.getElementById("login-form").style.display = "block";
   }
@@ -613,19 +595,17 @@
       return;
     }
 
-    // Check password
     if (users[phone].password !== pass) {
       currentLoginPhone = phone;
       checkResetLimit();
       return;
     }
 
-    // Success checkmark & Direct to Dashboard
+    // SUCCESSFUL LOGIN: Shows dashboard screenshot view
     document.getElementById("login-form").style.display = "none";
     document.getElementById("dashboard-screen").style.display = "block";
   }
 
-  // Password reset limit check (Max 3 times a day)
   function checkResetLimit() {
     let today = new Date().toISOString().slice(0, 10);
     let resetData = JSON.parse(localStorage.getItem("password_resets") || "{}");
@@ -641,7 +621,7 @@
 
     document.getElementById("login-form").style.display = "none";
     document.getElementById("reset-pass-form").style.display = "block";
-    document.getElementById("reset-limit-text").textContent = `Password incorrect. You can change your password (${3 - resetData.count} attempts left today).`;
+    document.getElementById("reset-limit-text").textContent = `Password incorrect. Change your password (${3 - resetData.count} attempts left today).`;
   }
 
   function saveNewPassword() {
@@ -663,7 +643,6 @@
       localStorage.setItem("registered_users", JSON.stringify(users));
     }
 
-    // Track daily limit count
     let today = new Date().toISOString().slice(0, 10);
     let resetData = JSON.parse(localStorage.getItem("password_resets") || `{"date": "${today}", "count": 0}`);
     resetData.count++;
@@ -688,9 +667,7 @@
   function speakCaptcha() {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentCaptcha.split('').join(', '));
-      utterance.rate = 0.8;
-      window.speechSynthesis.speak(utterance);
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentCaptcha.split('').join(', ')));
     }
   }
 
@@ -883,7 +860,7 @@
       return;
     }
 
-    // Save user profile with created password and hardware info
+    // Save profile info and password
     let currentIP = document.getElementById("scan-ip").textContent;
     let currentMAC = document.getElementById("scan-mac").textContent;
     saveRegisteredUser(userPhone, currentIP, currentMAC, p1);
@@ -891,17 +868,17 @@
     document.getElementById("password-form").style.display = "none";
     document.getElementById("device-scan-screen").style.display = "block";
 
+    // 6-second scan display timer, then redirects back to Step 1 Gateway
     let scanTimeLeft = 6;
     const scanTimerElem = document.getElementById("scan-timer-text");
     const scanInterval = setInterval(() => {
       scanTimeLeft--;
       if (scanTimeLeft > 0) {
-        scanTimerElem.textContent = `Please read details. Redirecting in ${scanTimeLeft} seconds...`;
+        scanTimerElem.textContent = `Redirecting to login in ${scanTimeLeft} seconds...`;
       } else {
         clearInterval(scanInterval);
-        // Direct to user dashboard after setup scan
         document.getElementById("device-scan-screen").style.display = "none";
-        document.getElementById("dashboard-screen").style.display = "block";
+        document.getElementById("login-signup-gateway").style.display = "block";
       }
     }, 1000);
   }

@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>App Connect - Form H & Onboarding</title>
+<title>App Connect - Razorpay Onboarding</title>
+<!-- Razorpay Standard Checkout SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
@@ -417,8 +419,9 @@
 </head>
 <body onload="checkActiveSession()">
 
-<!-- Login & Flow Container -->
+<!-- Main Container for Authentication & Onboarding Screens -->
 <div class="card" id="flow-card">
+
   <!-- Step 1: Gateway -->
   <div id="login-signup-gateway">
     <div class="header">
@@ -658,42 +661,42 @@
     <div class="timer-text stage-shine" id="approval-timer-text">Processing in 2:00 minutes...</div>
   </div>
 
-  <!-- Plan Selection Screen -->
+  <!-- Plan Selection Screen (Directly accessed once onboarding is completed) -->
   <div class="connected-screen" id="plan-selection-screen" style="text-align: left;">
     <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 6px;">Successfully Onboarded!</h3>
     <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please select your recurring revenue plan to continue</p>
     
-    <div class="plan-card" onclick="selectPlan('Daily ₹100')">
+    <div class="plan-card" onclick="payWithRazorpay('Daily Plan', 100)">
       <div class="plan-title">1. Daily Plan</div>
       <div class="plan-price">₹100 / Day</div>
       <div class="plan-desc">Billed daily for active services.</div>
     </div>
 
-    <div class="plan-card" onclick="selectPlan('14 Days ₹1000')">
+    <div class="plan-card" onclick="payWithRazorpay('Two Weeks Plan', 1000)">
       <div class="plan-title">2. Two Weeks Plan</div>
       <div class="plan-price">₹1,000 / 14 Days</div>
       <div class="plan-desc">Save big with bi-weekly subscription.</div>
     </div>
 
-    <div class="plan-card" onclick="selectPlan('21 Days ₹1650')">
+    <div class="plan-card" onclick="payWithRazorpay('Three Weeks Plan', 1650)">
       <div class="plan-title">3. Three Weeks Plan</div>
       <div class="plan-price">₹1,650 / 21 Days</div>
       <div class="plan-desc">Optimized for medium-term growth.</div>
     </div>
 
-    <div class="plan-card" onclick="selectPlan('Monthly Dynamic')">
+    <div class="plan-card" onclick="payWithRazorpay('Whole Month Plan', 3500)">
       <div class="plan-title">4. Whole Month Plan</div>
       <div class="plan-price">₹3,500 / Month</div>
       <div class="plan-desc">Calculated based on total days in current month (prorated if joining mid-month).</div>
     </div>
 
-    <div class="plan-card" onclick="selectPlan('Daily Auto-Debit ₹800')">
+    <div class="plan-card" onclick="payWithRazorpay('Auto-Debit Weekly/Daily Setup', 801)">
       <div class="plan-title">5. Auto-Debit Weekly / Daily Plan</div>
       <div class="plan-price">₹800 + ₹1 Auto-Pay Setup</div>
       <div class="plan-desc">Requires ₹1 authorization fee to activate secure auto-pay setup.</div>
     </div>
 
-    <div class="plan-card" onclick="selectPlan('Yearly Monthly Auto-Debit ₹2500')">
+    <div class="plan-card" onclick="payWithRazorpay('Yearly Monthly Auto-Debit Setup', 2502)">
       <div class="plan-title">6. Yearly Monthly Auto-Debit Plan</div>
       <div class="plan-price">₹2,500/mo + ₹2 Auto-Pay Setup</div>
       <div class="plan-desc">Requires ₹2 authorization fee to activate annual recurring monthly billing.</div>
@@ -701,7 +704,7 @@
   </div>
 </div>
 
-<!-- Main Home Dashboard Opened After Session Check (Form H) -->
+<!-- Main Home Dashboard Form H (Shown only on first-time onboarding) -->
 <div id="main-home-dashboard">
   <!-- Top Bar with Profile Icon & Hamburger -->
   <div class="top-navbar">
@@ -716,8 +719,8 @@
   <!-- Form H Dashboard Card -->
   <div class="home-card" style="max-height: 78vh; overflow-y: auto;">
     <div class="welcome-banner">
-      <h4 class="stage-shine">warm welcome to our platform!</h4>
-      <p>heartfull thanks for choosing us to grow your business journey.</p>
+      <h4 class="stage-shine">Warm Welcome To Our Platform!</h4>
+      <p>Heartfull thanks for choosing us to grow your business journey.</p>
     </div>
 
     <h2 class="home-title stage-shine">Form H: Business Details</h2>
@@ -881,10 +884,8 @@
   let userEmail = "";
   let userWhatsapp = "";
   let currentLoginPhone = "";
-  let channelTimerInterval = null;
-  let groupTimerInterval = null;
 
-  // Formatting helper for Q1: Word-to-word capitalization
+  // Helper for Word-to-Word Capitalization (Q1)
   function formatWordCapitalized(input) {
     let words = input.value.split(" ");
     for (let i = 0; i < words.length; i++) {
@@ -895,7 +896,7 @@
     input.value = words.join(" ");
   }
 
-  // Formatting helper for other fields: First letter capitalized, space handled, others small
+  // Helper for Sentence/Word Formatting (First char capitalized)
   function formatSentenceCapitalized(input) {
     let val = input.value.toLowerCase();
     let words = val.split(" ");
@@ -907,22 +908,32 @@
     input.value = words.join(" ");
   }
 
-  // Strict session persistence check on page load (tab close, restart, or refresh)
+  // Session and Onboarding persistence handler
   function checkActiveSession() {
     let sessionExpiry = localStorage.getItem("session_expiry");
-    let isSubmitted = localStorage.getItem("form_submitted");
+    let isFullyOnboarded = localStorage.getItem("onboarded_completed");
 
     if (sessionExpiry) {
       let now = new Date().getTime();
       if (now < parseInt(sessionExpiry)) {
-        document.getElementById("flow-card").style.display = "none";
-        document.getElementById("main-home-dashboard").style.display = "block";
+        document.getElementById("flow-card").style.display = "block";
+        document.getElementById("login-signup-gateway").style.display = "none";
+        
+        // If already onboarded previously, show plan selection directly bypassing Form H & login
+        if (isFullyOnboarded === "true") {
+          document.getElementById("plan-selection-screen").style.display = "block";
+        } else {
+          document.getElementById("main-home-dashboard").style.display = "block";
+          document.getElementById("flow-card").style.display = "none";
+        }
         return;
       } else {
         localStorage.removeItem("session_expiry");
-        localStorage.removeItem("form_submitted");
       }
     }
+    
+    // Default Gateway View for new or expired sessions
+    document.getElementById("login-signup-gateway").style.display = "block";
     document.getElementById("flow-card").style.display = "block";
     document.getElementById("main-home-dashboard").style.display = "none";
   }
@@ -1014,18 +1025,25 @@
   function startDashboardConnection() {
     setTimeout(() => {
       document.getElementById("flow-card").style.display = "none";
-      document.getElementById("main-home-dashboard").style.display = "block";
+      let isFullyOnboarded = localStorage.getItem("onboarded_completed");
+      if (isFullyOnboarded === "true") {
+        document.getElementById("flow-card").style.display = "block";
+        document.getElementById("dashboard-screen").style.display = "none";
+        document.getElementById("plan-selection-screen").style.display = "block";
+      } else {
+        document.getElementById("main-home-dashboard").style.display = "block";
+      }
     }, 4000);
   }
 
   function submitFormH(event) {
     event.preventDefault();
+    
     document.getElementById("main-home-dashboard").style.display = "none";
+    document.getElementById("login-signup-gateway").style.display = "none";
+    
     document.getElementById("flow-card").style.display = "block";
     document.getElementById("approval-screen").style.display = "block";
-
-    // Save backend persistence state
-    localStorage.setItem("form_submitted", "true");
 
     // 2 minutes approval timer (120 seconds)
     let timeLeft = 120;
@@ -1038,61 +1056,37 @@
 
       if (timeLeft <= 0) {
         clearInterval(interval);
+        // Mark user permanently onboarded so they never need to fill form H again
+        localStorage.setItem("onboarded_completed", "true");
         document.getElementById("approval-screen").style.display = "none";
         document.getElementById("plan-selection-screen").style.display = "block";
       }
     }, 1000);
   }
 
-  function selectPlan(planName) {
-    alert(`Selected Plan: ${planName}. Redirecting to secure checkout...`);
-  }
-
-  function checkResetLimit() {
-    let today = new Date().toISOString().slice(0, 10);
-    let resetData = JSON.parse(localStorage.getItem("password_resets") || "{}");
-    if (resetData.date !== today) resetData = { date: today, count: 0 };
-
-    if (resetData.count >= 3) {
-      showMessage("login-msg-box", "Password change limit reached (Max 3 times a day). Try again tomorrow.", "error");
-      return;
-    }
-
-    document.getElementById("login-form").style.display = "none";
-    document.getElementById("reset-pass-form").style.display = "block";
-    document.getElementById("reset-limit-text").textContent = `Password incorrect. Change your password (${3 - resetData.count} attempts left today).`;
-  }
-
-  function saveNewPassword() {
-    const p1 = document.getElementById("new-pass1").value.trim();
-    const p2 = document.getElementById("new-pass2").value.trim();
-
-    if (p1.length < 4) {
-      showMessage("reset-msg-box", "Password must be at least 4 characters long.", "error");
-      return;
-    }
-    if (p1 !== p2) {
-      showMessage("reset-msg-box", "Passwords do not match.", "error");
-      return;
-    }
-
-    let users = getRegisteredUsers();
-    if (users[currentLoginPhone]) {
-      users[currentLoginPhone].password = p1;
-      localStorage.setItem("registered_users", JSON.stringify(users));
-    }
-
-    let today = new Date().toISOString().slice(0, 10);
-    let resetData = JSON.parse(localStorage.getItem("password_resets") || `{"date": "${today}", "count": 0}`);
-    resetData.count++;
-    localStorage.setItem("password_resets", JSON.stringify(resetData));
-
-    localStorage.setItem("session_expiry", new Date().getTime() + 3600 * 1000);
-
-    alert("Password updated successfully! Logging you in...");
-    document.getElementById("reset-pass-form").style.display = "none";
-    document.getElementById("dashboard-screen").style.display = "block";
-    startDashboardConnection();
+  // Razorpay Checkout Integration
+  function payWithRazorpay(planName, amountInINR) {
+    const options = {
+      "key": "rzp_test_YOUR_KEY_HERE", // Replace with your live or test Razorpay Key ID
+      "amount": amountInINR * 100, // Amount in paise
+      "currency": "INR",
+      "name": "App Onboarding",
+      "description": "Subscription for " + planName,
+      "image": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+      "handler": function (response) {
+        alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id + "\nPlan Activated: " + planName);
+      },
+      "prefill": {
+        "name": "Hotel Owner",
+        "email": userEmail || "owner@example.com",
+        "contact": userPhone || "9800000000"
+      },
+      "theme": {
+        "color": "#f59e0b"
+      }
+    };
+    const rzp = new Razorpay(options);
+    rzp.open();
   }
 
   function generateCaptcha() {
@@ -1129,14 +1123,6 @@
     if (captchaInput !== currentCaptcha) {
       showMessage("msg-box", "Invalid CAPTCHA code. Please try again.", "error");
       generateCaptcha();
-      return;
-    }
-
-    let users = getRegisteredUsers();
-    if (users[phoneInput]) {
-      alert("You have already created an account. Can't create new, please resume with log in.");
-      document.getElementById("auth-form").style.display = "none";
-      document.getElementById("login-signup-gateway").style.display = "block";
       return;
     }
 
@@ -1183,142 +1169,10 @@
       showMessage("whatsapp-msg-box", "Please enter a valid 10-digit WhatsApp number.", "error");
       return;
     }
-    userWhatsapp = whatsappInput;
+    userWhatsapp = WhatsAppInput;
     document.getElementById("whatsapp-form").style.display = "none";
     document.getElementById("channel-screen").style.display = "block";
     window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";
-  }
-
-  function reopenChannel() { window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40"; }
-  function reopenGroup() { window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ"; }
-
-  function onReturnFromChannel() {
-    document.getElementById("channel-screen").style.display = "none";
-    document.getElementById("channel-modal").style.display = "block";
-    startChannelTimer();
-  }
-
-  function onReturnFromGroup() {
-    document.getElementById("group-screen").style.display = "none";
-    document.getElementById("group-modal").style.display = "block";
-    startGroupTimer();
-  }
-
-  function startChannelTimer() {
-    let timeLeft = 10;
-    const countdownElem = document.getElementById("channel-countdown");
-    const timerDisplay = document.getElementById("channel-timer-display");
-    const yesBtn = document.getElementById("channel-yes-btn");
-    const noBtn = document.getElementById("channel-no-btn");
-
-    yesBtn.classList.add("btn-locked");
-    noBtn.classList.add("btn-locked");
-    if (channelTimerInterval) clearInterval(channelTimerInterval);
-
-    channelTimerInterval = setInterval(() => {
-      timeLeft--;
-      if (timeLeft > 0) {
-        countdownElem.textContent = timeLeft;
-      } else {
-        clearInterval(channelTimerInterval);
-        timerDisplay.textContent = "You can now answer below:";
-        yesBtn.classList.remove("btn-locked");
-        noBtn.classList.remove("btn-locked");
-      }
-    }, 1000);
-  }
-
-  function startGroupTimer() {
-    let timeLeft = 10;
-    const countdownElem = document.getElementById("group-countdown");
-    const timerDisplay = document.getElementById("group-timer-display");
-    const yesBtn = document.getElementById("group-yes-btn");
-    const noBtn = document.getElementById("group-no-btn");
-
-    yesBtn.classList.add("btn-locked");
-    noBtn.classList.add("btn-locked");
-    if (groupTimerInterval) clearInterval(groupTimerInterval);
-
-    groupTimerInterval = setInterval(() => {
-      timeLeft--;
-      if (timeLeft > 0) {
-        countdownElem.textContent = timeLeft;
-      } else {
-        clearInterval(groupTimerInterval);
-        timerDisplay.textContent = "You can now answer below:";
-        yesBtn.classList.remove("btn-locked");
-        noBtn.classList.remove("btn-locked");
-      }
-    }, 1000);
-  }
-
-  function verifyChannel(followed) {
-    if (followed) {
-      document.getElementById("channel-modal").style.display = "none";
-      document.getElementById("channel-loader").style.display = "block";
-      setTimeout(() => {
-        document.getElementById("channel-loader").style.display = "none";
-        document.getElementById("group-screen").style.display = "block";
-        window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
-      }, 1200);
-    } else {
-      showMessage("channel-msg-box", "Please follow the channel first to move forward.", "error");
-    }
-  }
-
-  function verifyGroup(joined) {
-    if (joined) {
-      document.getElementById("group-modal").style.display = "none";
-      document.getElementById("group-loader").style.display = "block";
-      setTimeout(() => {
-        document.getElementById("group-loader").style.display = "none";
-        document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
-        document.getElementById("final-email-display").textContent = "Email: " + userEmail;
-        document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + userWhatsapp;
-        document.getElementById("final-screen").style.display = "block";
-
-        setTimeout(() => {
-          document.getElementById("final-screen").style.display = "none";
-          document.getElementById("password-form").style.display = "block";
-        }, 5000);
-      }, 1200);
-    } else {
-      showMessage("group-msg-box", "Please join the community group to complete setup.", "error");
-    }
-  }
-
-  function validatePassword() {
-    const p1 = document.getElementById("pass1").value.trim();
-    const p2 = document.getElementById("pass2").value.trim();
-
-    if (p1.length < 4) {
-      showMessage("password-msg-box", "Password must be at least 4 characters long.", "error");
-      return;
-    }
-    if (p1 !== p2) {
-      showMessage("password-msg-box", "Passwords do not match. Please re-confirm.", "error");
-      return;
-    }
-
-    let currentIP = document.getElementById("scan-ip") ? document.getElementById("scan-ip").textContent : "192.168.62.73";
-    let currentMAC = document.getElementById("scan-mac") ? document.getElementById("scan-mac").textContent : "MAC-DE07-6E31";
-    saveRegisteredUser(userPhone, currentIP, currentMAC, p1);
-
-    document.getElementById("password-form").style.display = "none";
-    document.getElementById("device-scan-screen").style.display = "block";
-
-    let scanTimeLeft = 6;
-    const scanTimerElem = document.getElementById("scan-timer-text");
-    const scanInterval = setInterval(() => {
-      scanTimeLeft--;
-      if (scanTimeLeft > 0) {
-        scanTimerElem.textContent = `Redirecting to login in ${scanTimeLeft} seconds...`;
-      } else {
-        clearInterval(scanInterval);
-        document.getElementById("device-scan-screen").style.display = "none";
-        document.getElementById("login-signup-gateway").style.display = "block";
-      }
-    }, 1000);
   }
 </script>
 

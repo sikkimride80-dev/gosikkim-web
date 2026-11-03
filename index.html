@@ -27,14 +27,14 @@
     overflow-x: hidden;
   }
 
-  /* Elegant Gold & Amber Ambient Glow */
+  /* Vibrant Gold Ambient Glow */
   .glow-bg {
     position: absolute;
     width: 320px;
     height: 320px;
-    background: linear-gradient(135deg, rgba(217, 119, 6, 0.25) 0%, rgba(245, 158, 11, 0.1) 100%);
-    filter: blur(90px);
-    opacity: 0.5;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.2) 100%);
+    filter: blur(80px);
+    opacity: 0.6;
     border-radius: 50%;
     z-index: 0;
   }
@@ -42,15 +42,15 @@
   .card {
     position: relative;
     z-index: 10;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(15, 23, 42, 0.88);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1.5px solid rgba(245, 158, 11, 0.25);
+    border: 1.5px solid rgba(251, 191, 36, 0.35);
     border-radius: 24px;
     width: 100%;
     max-width: 400px;
     padding: 32px 24px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(245, 158, 11, 0.2);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(254, 240, 138, 0.3);
   }
 
   .header {
@@ -61,9 +61,11 @@
   .header h2 {
     font-size: 24px;
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #fef3c7 50%, #d97706 100%);
+    background: linear-gradient(110deg, #fff 20%, #fef08a 40%, #fbbf24 60%, #fff 80%);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    animation: goldShimmer 3s linear infinite;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
   }
@@ -86,31 +88,32 @@
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
   }
 
   .phone-container {
     display: flex;
     align-items: center;
     background: rgba(30, 41, 59, 0.8);
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(251, 191, 36, 0.25);
     border-radius: 14px;
     overflow: hidden;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
 
   .phone-container:focus-within {
     border-color: #fbbf24;
-    box-shadow: 0 0 16px rgba(251, 191, 36, 0.25);
+    box-shadow: 0 0 18px rgba(251, 191, 36, 0.4);
   }
 
   .country-code {
     padding: 14px;
     background: rgba(255, 255, 255, 0.05);
-    color: #cbd5e1;
+    color: #fef08a;
     font-weight: 700;
     font-size: 15px;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(251, 191, 36, 0.2);
   }
 
   input[type="tel"],
@@ -137,11 +140,11 @@
     margin-bottom: 12px;
   }
 
-  /* Diamond Gold Shimmer CAPTCHA Display */
+  /* Animated Dynamic Diamond-Gold CAPTCHA */
   .captcha-display {
     flex: 1;
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
-    border: 1.5px solid rgba(245, 158, 11, 0.4);
+    border: 1.5px solid rgba(251, 191, 36, 0.5);
     border-radius: 12px;
     padding: 12px;
     text-align: center;
@@ -149,16 +152,19 @@
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 8px;
-    /* Diamond Gold Shimmer gradient on text */
-    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 30%, #f59e0b 70%, #d97706 100%);
+
+    /* Continuous Animated Diamond Gold Metallic Reflection */
+    background: linear-gradient(110deg, #fbbf24 10%, #fffbeb 30%, #f59e0b 50%, #ffffff 70%, #d97706 90%);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.4));
+    animation: goldShimmer 2.5s linear infinite;
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
   }
 
   .action-btn {
     background: rgba(30, 41, 59, 0.9);
-    border: 1.5px solid rgba(245, 158, 11, 0.3);
+    border: 1.5px solid rgba(251, 191, 36, 0.35);
     color: #fbbf24;
     width: 46px;
     height: 46px;
@@ -172,44 +178,46 @@
   }
 
   .action-btn:hover {
-    background: rgba(245, 158, 11, 0.15);
-    border-color: #fbbf24;
+    background: rgba(245, 158, 11, 0.2);
+    border-color: #fef08a;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
   .input-standard {
     background: rgba(30, 41, 59, 0.8);
-    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(251, 191, 36, 0.25);
     border-radius: 14px;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   }
 
   .input-standard:focus-within {
     border-color: #fbbf24;
-    box-shadow: 0 0 16px rgba(251, 191, 36, 0.25);
+    box-shadow: 0 0 18px rgba(251, 191, 36, 0.4);
   }
 
   .btn-submit {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
-    color: #ffffff;
+    background: linear-gradient(110deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+    background-size: 200% auto;
+    animation: goldShimmer 4s linear infinite;
+    color: #0f172a;
     border: none;
     border-radius: 14px;
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     margin-top: 10px;
-    box-shadow: 0 8px 20px rgba(217, 119, 6, 0.35);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.45);
     transition: all 0.2s ease;
     letter-spacing: 0.3px;
   }
 
   .btn-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(217, 119, 6, 0.5);
+    box-shadow: 0 12px 30px rgba(245, 158, 11, 0.65);
   }
 
   .btn-submit:active {
@@ -258,15 +266,15 @@
   .success-icon {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: #ffffff;
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    color: #0f172a;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 34px;
-    font-weight: bold;
-    box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
+    font-weight: 900;
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.6);
   }
 
   .connected-screen h3 {
@@ -288,11 +296,17 @@
     color: #fbbf24;
     margin-top: 14px;
     font-weight: 700;
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(245, 158, 11, 0.15);
     padding: 8px 14px;
     border-radius: 20px;
     display: inline-block;
-    border: 1px solid rgba(245, 158, 11, 0.25);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+
+  /* Shimmer Keyframe Animation */
+  @keyframes goldShimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
   }
 
   @keyframes fadeIn {

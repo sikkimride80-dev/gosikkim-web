@@ -5,44 +5,63 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>App Connect</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
     user-select: none;
     -webkit-user-select: none;
   }
 
   body {
-    background: #0b1329;
+    background: #090e1a;
     color: #f8fafc;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 16px;
+    overflow: hidden;
   }
 
-  /* Zero-Lag Diamond Gold Shimmer Glow for All Text */
-  .gold-shimmer {
-    color: #fef08a;
-    background: linear-gradient(135deg, #ffffff 0%, #fef08a 40%, #fbbf24 70%, #d97706 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 12px rgba(251, 191, 36, 0.35);
-  }
-
+  /* GPU-Accelerated Card Container */
   .card {
-    background: #141e33;
+    position: relative;
+    background: #111a2e;
     border: 1.5px solid #d97706;
     border-radius: 24px;
     width: 100%;
     max-width: 400px;
     padding: 32px 24px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    overflow: hidden;
+  }
+
+  /* Smooth GPU Shimmer Sweep Overlay across Card */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 45%,
+      rgba(254, 240, 138, 0.08) 50%,
+      transparent 55%
+    );
+    transform: translate3d(0, 0, 0);
+    animation: sweepShimmer 4s infinite linear;
+    pointer-events: none;
+  }
+
+  @keyframes sweepShimmer {
+    0% { transform: translate3d(-30%, -30%, 0); }
+    100% { transform: translate3d(30%, 30%, 0); }
   }
 
   .header {
@@ -50,18 +69,20 @@
     margin-bottom: 26px;
   }
 
+  /* Diamond Gold Glowing Title */
   .gold-title {
     font-size: 24px;
     font-weight: 800;
+    color: #fef08a;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5), 0 0 20px rgba(217, 119, 6, 0.3);
   }
 
   .header p {
     font-size: 13.5px;
-    color: #cbd5e1;
+    color: #94a3b8;
     font-weight: 500;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
   }
 
   .form-group {
@@ -72,15 +93,17 @@
     display: block;
     font-size: 11.5px;
     font-weight: 700;
+    color: #fbbf24;
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    text-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
   }
 
   .phone-container {
     display: flex;
     align-items: center;
-    background: #0f172a;
+    background: #090e1a;
     border: 1.5px solid #b45309;
     border-radius: 14px;
     overflow: hidden;
@@ -88,15 +111,17 @@
 
   .phone-container:focus-within {
     border-color: #fbbf24;
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
   .country-code {
     padding: 14px;
     background: rgba(255, 255, 255, 0.05);
+    color: #fef08a;
     font-weight: 700;
     font-size: 15px;
     border-right: 1px solid #b45309;
+    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
   }
 
   input[type="tel"],
@@ -123,9 +148,10 @@
     margin-bottom: 12px;
   }
 
+  /* Reliable 100% Solid Visible Metallic Diamond CAPTCHA Display */
   .captcha-display {
     flex: 1;
-    background: #090d16;
+    background: #050811;
     border: 1.5px solid #f59e0b;
     border-radius: 12px;
     padding: 12px;
@@ -134,11 +160,15 @@
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 8px;
+    color: #fffbeb;
+    text-shadow: 0 0 12px #fbbf24, 0 0 24px #d97706;
+    box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.2);
   }
 
   .action-btn {
-    background: #0f172a;
+    background: #090e1a;
     border: 1.5px solid #b45309;
+    color: #fbbf24;
     width: 46px;
     height: 46px;
     border-radius: 12px;
@@ -151,32 +181,33 @@
 
   .action-btn:active {
     background: #f59e0b;
+    color: #090e1a;
   }
 
   .input-standard {
-    background: #0f172a;
+    background: #090e1a;
     border: 1.5px solid #b45309;
     border-radius: 14px;
   }
 
   .input-standard:focus-within {
     border-color: #fbbf24;
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
   .btn-submit {
     width: 100%;
     padding: 16px;
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: #0b1329;
+    color: #090e1a;
     border: none;
     border-radius: 14px;
     font-size: 16px;
     font-weight: 800;
     cursor: pointer;
     margin-top: 10px;
-    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.3);
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    letter-spacing: 0.5px;
   }
 
   .btn-submit:active {
@@ -223,30 +254,34 @@
     width: 100%;
     height: 100%;
     background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-    color: #0b1329;
+    color: #090e1a;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 34px;
     font-weight: 900;
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
   }
 
   .connected-screen h3 {
     font-size: 22px;
     font-weight: 800;
+    color: #fef08a;
     margin-bottom: 8px;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
   }
 
   .connected-screen p {
     font-size: 14.5px;
+    color: #cbd5e1;
     font-weight: 600;
     margin-bottom: 6px;
   }
 
   .timer-text {
     font-size: 13px;
+    color: #fbbf24;
     margin-top: 14px;
     font-weight: 700;
     background: rgba(245, 158, 11, 0.15);
@@ -263,22 +298,22 @@
   <!-- Step 1: Mobile & CAPTCHA -->
   <div id="auth-form">
     <div class="header">
-      <h2 class="gold-title gold-shimmer">Enter Mobile Number</h2>
+      <h2 class="gold-title">Enter Mobile Number</h2>
       <p>Verify details to connect with the app</p>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer">Mobile Number</label>
+      <label class="label">Mobile Number</label>
       <div class="phone-container">
-        <span class="country-code gold-shimmer">+91</span>
+        <span class="country-code">+91</span>
         <input type="tel" id="phone" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer">Security Check</label>
+      <label class="label">Security Check</label>
       <div class="captcha-box">
-        <div class="captcha-display gold-shimmer" id="captcha-code">-----</div>
+        <div class="captcha-display" id="captcha-code">-----</div>
         <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">🔊</button>
         <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">↻</button>
       </div>
@@ -296,19 +331,19 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-title gold-shimmer">Successfully Connected</h3>
-    <p id="connected-phone-display" class="gold-shimmer">+91 ----------</p>
+    <h3 class="gold-title">Successfully Connected</h3>
+    <p id="connected-phone-display">+91 ----------</p>
   </div>
 
   <!-- Step 2: Email Address Input -->
   <div id="email-form" style="display: none;">
     <div class="header">
-      <h2 class="gold-title gold-shimmer">Email Address</h2>
+      <h2 class="gold-title">Email Address</h2>
       <p>Where should order updates be sent?</p>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer">Email Address</label>
+      <label class="label">Email Address</label>
       <div class="input-standard">
         <input type="email" id="email" placeholder="example@domain.com">
       </div>
@@ -323,22 +358,22 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-title gold-shimmer">Email Saved</h3>
-    <p id="saved-email-display" class="gold-shimmer">Email: ----------</p>
-    <div class="timer-text gold-shimmer" id="email-redirect-timer">Redirecting in 4 seconds...</div>
+    <h3 class="gold-title">Email Saved</h3>
+    <p id="saved-email-display">Email: ----------</p>
+    <div class="timer-text" id="email-redirect-timer">Redirecting in 4 seconds...</div>
   </div>
 
   <!-- Step 3: WhatsApp Number Input -->
   <div id="whatsapp-form" style="display: none;">
     <div class="header">
-      <h2 class="gold-title gold-shimmer">WhatsApp Number</h2>
+      <h2 class="gold-title">WhatsApp Number</h2>
       <p>Enter your WhatsApp number for instant alerts</p>
     </div>
 
     <div class="form-group">
-      <label class="label gold-shimmer">WhatsApp Number</label>
+      <label class="label">WhatsApp Number</label>
       <div class="phone-container">
-        <span class="country-code gold-shimmer">+91</span>
+        <span class="country-code">+91</span>
         <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
@@ -352,10 +387,10 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-title gold-shimmer">Setup Complete</h3>
-    <p id="final-phone-display" class="gold-shimmer">Mobile: +91 ----------</p>
-    <p id="final-email-display" class="gold-shimmer">Email: ----------</p>
-    <p id="final-whatsapp-display" class="gold-shimmer">WhatsApp: +91 ----------</p>
+    <h3 class="gold-title">Setup Complete</h3>
+    <p id="final-phone-display">Mobile: +91 ----------</p>
+    <p id="final-email-display">Email: ----------</p>
+    <p id="final-whatsapp-display">WhatsApp: +91 ----------</p>
   </div>
 </div>
 
@@ -466,7 +501,7 @@
     document.getElementById("final-screen").style.display = "block";
   }
 
-  document.addEventListener("DOMContentLoaded", generateCaptcha);
+  window.addEventListener("load", generateCaptcha);
 </script>
 
 </body>

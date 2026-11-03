@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,7 +28,17 @@
     overflow-x: hidden;
   }
 
-  /* Vibrant Gold Ambient Glow */
+  /* Universal Shimmer Class for all headings, labels, button text, and inputs */
+  .gold-shimmer-text {
+    background: linear-gradient(110deg, #ffffff 10%, #fef08a 30%, #fbbf24 50%, #ffffff 70%, #d97706 90%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: goldShimmer 2.5s linear infinite;
+    filter: drop-shadow(0 0 4px rgba(251, 191, 36, 0.4));
+  }
+
+  /* Gold Ambient Background Glow */
   .glow-bg {
     position: absolute;
     width: 320px;
@@ -61,18 +72,13 @@
   .header h2 {
     font-size: 24px;
     font-weight: 800;
-    background: linear-gradient(110deg, #fff 20%, #fef08a 40%, #fbbf24 60%, #fff 80%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: goldShimmer 3s linear infinite;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
   }
 
   .header p {
     font-size: 13.5px;
-    color: #94a3b8;
+    color: #cbd5e1;
     font-weight: 500;
   }
 
@@ -84,11 +90,9 @@
     display: block;
     font-size: 11.5px;
     font-weight: 700;
-    color: #fbbf24;
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    text-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
   }
 
   .phone-container {
@@ -110,7 +114,6 @@
   .country-code {
     padding: 14px;
     background: rgba(255, 255, 255, 0.05);
-    color: #fef08a;
     font-weight: 700;
     font-size: 15px;
     border-right: 1px solid rgba(251, 191, 36, 0.2);
@@ -123,7 +126,6 @@
     padding: 14px;
     background: transparent;
     border: none;
-    color: #ffffff;
     font-size: 15px;
     font-weight: 600;
     outline: none;
@@ -140,7 +142,6 @@
     margin-bottom: 12px;
   }
 
-  /* Animated Dynamic Diamond-Gold CAPTCHA */
   .captcha-display {
     flex: 1;
     background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
@@ -152,20 +153,11 @@
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 8px;
-
-    /* Continuous Animated Diamond Gold Metallic Reflection */
-    background: linear-gradient(110deg, #fbbf24 10%, #fffbeb 30%, #f59e0b 50%, #ffffff 70%, #d97706 90%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: goldShimmer 2.5s linear infinite;
-    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
   }
 
   .action-btn {
     background: rgba(30, 41, 59, 0.9);
     border: 1.5px solid rgba(251, 191, 36, 0.35);
-    color: #fbbf24;
     width: 46px;
     height: 46px;
     border-radius: 12px;
@@ -280,20 +272,17 @@
   .connected-screen h3 {
     font-size: 22px;
     font-weight: 800;
-    color: #ffffff;
     margin-bottom: 8px;
   }
 
   .connected-screen p {
     font-size: 14.5px;
-    color: #cbd5e1;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 6px;
   }
 
   .timer-text {
     font-size: 13px;
-    color: #fbbf24;
     margin-top: 14px;
     font-weight: 700;
     background: rgba(245, 158, 11, 0.15);
@@ -323,27 +312,31 @@
   <!-- Step 1: Mobile & CAPTCHA -->
   <div id="auth-form">
     <div class="header">
-      <h2>Enter Mobile Number</h2>
+      <h2 class="gold-shimmer-text">Enter Mobile Number</h2>
       <p>Verify details to connect with the app</p>
     </div>
 
     <div class="form-group">
-      <label class="label">Mobile Number</label>
+      <label class="label gold-shimmer-text">Mobile Number</label>
       <div class="phone-container">
-        <span class="country-code">+91</span>
-        <input type="tel" id="phone" placeholder="Enter 10-digit number" maxlength="10">
+        <span class="country-code gold-shimmer-text">+91</span>
+        <input type="tel" id="phone" class="gold-shimmer-text" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="label">Security Check</label>
+      <label class="label gold-shimmer-text">Security Check</label>
       <div class="captcha-box">
-        <div class="captcha-display" id="captcha-code">----</div>
-        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">🔊</button>
-        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">↻</button>
+        <div class="captcha-display gold-shimmer-text" id="captcha-code">----</div>
+        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">
+          <span class="gold-shimmer-text">🔊</span>
+        </button>
+        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">
+          <span class="gold-shimmer-text">↻</span>
+        </button>
       </div>
       <div class="input-standard">
-        <input type="text" id="captcha-input" placeholder="Enter CAPTCHA shown above" autocomplete="off">
+        <input type="text" id="captcha-input" class="gold-shimmer-text" placeholder="Enter CAPTCHA shown above" autocomplete="off">
       </div>
     </div>
 
@@ -356,21 +349,21 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3>Successfully Connected</h3>
-    <p id="connected-phone-display">+91 ----------</p>
+    <h3 class="gold-shimmer-text">Successfully Connected</h3>
+    <p id="connected-phone-display" class="gold-shimmer-text">+91 ----------</p>
   </div>
 
   <!-- Step 2: Email Address Input -->
   <div id="email-form" style="display: none;">
     <div class="header">
-      <h2>Email Address</h2>
+      <h2 class="gold-shimmer-text">Email Address</h2>
       <p>Where should order updates be sent?</p>
     </div>
 
     <div class="form-group">
-      <label class="label">Email Address</label>
+      <label class="label gold-shimmer-text">Email Address</label>
       <div class="input-standard">
-        <input type="email" id="email" placeholder="example@domain.com">
+        <input type="email" id="email" class="gold-shimmer-text" placeholder="example@domain.com">
       </div>
     </div>
 
@@ -383,23 +376,23 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3>Email Saved</h3>
-    <p id="saved-email-display">Email: ----------</p>
-    <div class="timer-text" id="email-redirect-timer">Redirecting in 4 seconds...</div>
+    <h3 class="gold-shimmer-text">Email Saved</h3>
+    <p id="saved-email-display" class="gold-shimmer-text">Email: ----------</p>
+    <div class="timer-text gold-shimmer-text" id="email-redirect-timer">Redirecting in 4 seconds...</div>
   </div>
 
   <!-- Step 3: WhatsApp Number Input -->
   <div id="whatsapp-form" style="display: none;">
     <div class="header">
-      <h2>WhatsApp Number</h2>
+      <h2 class="gold-shimmer-text">WhatsApp Number</h2>
       <p>Enter your WhatsApp number for instant alerts</p>
     </div>
 
     <div class="form-group">
-      <label class="label">WhatsApp Number</label>
+      <label class="label gold-shimmer-text">WhatsApp Number</label>
       <div class="phone-container">
-        <span class="country-code">+91</span>
-        <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
+        <span class="country-code gold-shimmer-text">+91</span>
+        <input type="tel" id="whatsapp-phone" class="gold-shimmer-text" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
 
@@ -412,10 +405,10 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3>Setup Complete</h3>
-    <p id="final-phone-display">Mobile: +91 ----------</p>
-    <p id="final-email-display">Email: ----------</p>
-    <p id="final-whatsapp-display">WhatsApp: +91 ----------</p>
+    <h3 class="gold-shimmer-text">Setup Complete</h3>
+    <p id="final-phone-display" class="gold-shimmer-text">Mobile: +91 ----------</p>
+    <p id="final-email-display" class="gold-shimmer-text">Email: ----------</p>
+    <p id="final-whatsapp-display" class="gold-shimmer-text">WhatsApp: +91 ----------</p>
   </div>
 </div>
 

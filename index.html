@@ -244,9 +244,16 @@
   }
 
   .connected-screen p {
-    font-size: 13px;
+    font-size: 14px;
     color: #94a3b8;
     margin-bottom: 4px;
+  }
+
+  .timer-text {
+    font-size: 12px;
+    color: #38bdf8;
+    margin-top: 10px;
+    font-weight: 600;
   }
 </style>
 </head>
@@ -284,6 +291,13 @@
     <div class="message" id="msg-box"></div>
   </div>
 
+  <!-- Screen 1: Phone Verification Success State -->
+  <div class="connected-screen" id="phone-verified-screen">
+    <div class="success-icon">✓</div>
+    <h3>Successfully Connected</h3>
+    <p id="connected-phone-display">+91 ----------</p>
+  </div>
+
   <!-- Step 2: Email & Notification Preference -->
   <div id="email-form" style="display: none;">
     <div class="header">
@@ -310,13 +324,13 @@
     <div class="message" id="email-msg-box"></div>
   </div>
 
-  <!-- Final Screen -->
-  <div class="connected-screen" id="connected-screen">
+  <!-- Screen 2: Final Verification Success Screen -->
+  <div class="connected-screen" id="final-screen">
     <div class="success-icon">✓</div>
-    <h3>Setup Complete</h3>
-    <p id="connected-phone">+91 ----------</p>
-    <p id="connected-email">Email: ----------</p>
-    <p id="connected-method" style="color: #38bdf8; font-weight: 600; margin-top: 8px;"></p>
+    <h3>Verification Complete</h3>
+    <p id="final-phone-display">+91 ----------</p>
+    <p id="final-email-display">Email: ----------</p>
+    <div class="timer-text" id="redirect-timer">Redirecting in 4 seconds...</div>
   </div>
 </div>
 
@@ -376,12 +390,17 @@
     }
 
     userPhone = phoneInput;
-    showMessage("msg-box", "Verified! Proceeding...", "success");
+    
+    // Hide phone form & show verified screen (Matches Screenshot 1)
+    document.getElementById("auth-form").style.display = "none";
+    document.getElementById("connected-phone-display").innerText = "+91 " + userPhone;
+    document.getElementById("phone-verified-screen").style.display = "block";
 
+    // Transition to Email input form
     setTimeout(() => {
-      document.getElementById("auth-form").style.display = "none";
+      document.getElementById("phone-verified-screen").style.display = "none";
       document.getElementById("email-form").style.display = "block";
-    }, 800);
+    }, 1200);
   }
 
   function validateStep2() {
@@ -393,15 +412,29 @@
       return;
     }
 
-    showMessage("email-msg-box", "Saving details...", "success");
+    // Hide Email Form & Display Final Success Screen
+    document.getElementById("email-form").style.display = "none";
+    document.getElementById("final-phone-display").innerText = "+91 " + userPhone;
+    document.getElementById("final-email-display").innerText = "Email: " + emailInput;
+    document.getElementById("final-screen").style.display = "block";
 
-    setTimeout(() => {
-      document.getElementById("email-form").style.display = "none";
-      document.getElementById("connected-phone").innerText = "+91 " + userPhone;
-      document.getElementById("connected-email").innerText = emailInput;
-      document.getElementById("connected-method").innerText = "Notifications via: " + (selectedChannel === 'email' ? 'Email' : 'Direct Message / SMS');
-      document.getElementById("connected-screen").style.display = "block";
-    }, 800);
+    // 4-Second Countdown Timer then loop/redirect back
+    let timeLeft = 4;
+    const timerElem = document.getElementById("redirect-timer");
+
+    const countdown = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        timerElem.innerText = `Redirecting in ${timeLeft} seconds...`;
+      } else {
+        clearInterval(countdown);
+        // Directs back after 4 seconds complete
+        document.getElementById("final-screen").style.display = "none";
+        document.getElementById("auth-form").style.display = "block";
+        document.getElementById("phone").value = "";
+        generateCaptcha();
+      }
+    }, 1000);
   }
 
   window.onload = generateCaptcha;

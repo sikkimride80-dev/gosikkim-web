@@ -623,7 +623,7 @@
   </div>
 </div>
 
-<!-- Main Home Dashboard Opened After 4 Seconds (Form H) -->
+<!-- Main Home Dashboard Opened After Session Check (Form H) -->
 <div id="main-home-dashboard">
   <!-- Top Bar with Profile Icon & Hamburger -->
   <div class="top-navbar">
@@ -684,10 +684,37 @@
         <div class="input-standard"><input type="number" placeholder="e.g. 15" required></div>
       </div>
 
-      <!-- Q7 -->
+      <!-- Q7: Opening & Closing Time Dropdown Selectors -->
       <div class="form-group">
         <label class="label stage-shine">7. Opening & Closing Time</label>
-        <div class="input-standard"><input type="text" placeholder="e.g. 10:00 AM - 11:00 PM" required></div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <!-- Opening Time -->
+          <div class="input-standard" style="flex: 1;">
+            <select id="open-time" required>
+              <option value="" disabled selected>Opening Time</option>
+              <option value="06:00 AM">06:00 AM</option>
+              <option value="07:00 AM">07:00 AM</option>
+              <option value="08:00 AM">08:00 AM</option>
+              <option value="09:00 AM">09:00 AM</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="11:00 AM">11:00 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
+            </select>
+          </div>
+          <span style="color: #fef08a; font-weight: 700;">to</span>
+          <!-- Closing Time -->
+          <div class="input-standard" style="flex: 1;">
+            <select id="close-time" required>
+              <option value="" disabled selected>Closing Time</option>
+              <option value="09:00 PM">09:00 PM</option>
+              <option value="10:00 PM">10:00 PM</option>
+              <option value="11:00 PM">11:00 PM</option>
+              <option value="12:00 AM">12:00 AM</option>
+              <option value="01:00 AM">01:00 AM</option>
+              <option value="02:00 AM">02:00 AM</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <!-- Q8 -->
@@ -719,17 +746,24 @@
   let channelTimerInterval = null;
   let groupTimerInterval = null;
 
-  // Check active session on page load to bypass gateway if active
+  // Strict session persistence check on page load (tab close, restart, or refresh)
   function checkActiveSession() {
     let sessionExpiry = localStorage.getItem("session_expiry");
     if (sessionExpiry) {
       let now = new Date().getTime();
       if (now < parseInt(sessionExpiry)) {
-        // Session active, bypass gateway and show Form H dashboard directly
+        // Session active, bypass gateway and show dashboard directly
         document.getElementById("flow-card").style.display = "none";
         document.getElementById("main-home-dashboard").style.display = "block";
+        return;
+      } else {
+        // Expired, clear session so user must re-login
+        localStorage.removeItem("session_expiry");
       }
     }
+    // If no active session, show gateway
+    document.getElementById("flow-card").style.display = "block";
+    document.getElementById("main-home-dashboard").style.display = "none";
   }
 
   function getRegisteredUsers() {
@@ -745,8 +779,8 @@
 
   function handleGatewaySignup() {
     let users = getRegisteredUsers();
-    let currentIP = document.getElementById("scan-ip").textContent;
-    let currentMAC = document.getElementById("scan-mac").textContent;
+    let currentIP = document.getElementById("scan-ip") ? document.getElementById("scan-ip").textContent : "192.168.62.73";
+    let currentMAC = document.getElementById("scan-mac") ? document.getElementById("scan-mac").textContent : "MAC-DE07-6E31";
 
     let existingUser = Object.values(users).some(u => u.ip === currentIP || u.mac === currentMAC);
     if (existingUser) {
@@ -761,8 +795,8 @@
 
   function handleGatewayLogin() {
     let users = getRegisteredUsers();
-    let currentIP = document.getElementById("scan-ip").textContent;
-    let currentMAC = document.getElementById("scan-mac").textContent;
+    let currentIP = document.getElementById("scan-ip") ? document.getElementById("scan-ip").textContent : "192.168.62.73";
+    let currentMAC = document.getElementById("scan-mac") ? document.getElementById("scan-mac").textContent : "MAC-DE07-6E31";
 
     let existingUserKey = Object.keys(users).find(phone => users[phone].ip === currentIP || users[phone].mac === currentMAC);
 
@@ -805,13 +839,13 @@
       return;
     }
 
-    // Calculate session expiry timestamp
+    // Calculate and lock session duration across restarts/tabs
     let totalMillis = (hours * 3600 + mins * 60) * 1000;
     if (totalMillis === 0) totalMillis = 3600 * 1000; // default 1 hour if 0 selected
     let expiryTime = new Date().getTime() + totalMillis;
     localStorage.setItem("session_expiry", expiryTime);
 
-    // Display spinning loading view for 4 seconds then open Form H dashboard
+    // Display spinning loading view for 4 seconds then open dashboard
     document.getElementById("login-form").style.display = "none";
     document.getElementById("dashboard-screen").style.display = "block";
     

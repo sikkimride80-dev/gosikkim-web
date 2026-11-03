@@ -102,27 +102,25 @@
   .captcha-box {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     margin-bottom: 10px;
   }
 
   .captcha-display {
     flex: 1;
-    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-    border: 1px dashed #64748b;
+    background: #0f172a;
+    border: 1.5px solid #334155;
     border-radius: 8px;
     padding: 10px;
     text-align: center;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 6px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 8px;
     color: #38bdf8;
-    text-decoration: line-through;
-    font-style: italic;
   }
 
-  .refresh-btn {
+  .action-btn {
     background: #334155;
     border: none;
     color: #cbd5e1;
@@ -137,7 +135,7 @@
     transition: background 0.2s;
   }
 
-  .refresh-btn:hover {
+  .action-btn:hover {
     background: #475569;
   }
 
@@ -228,7 +226,7 @@
 <body>
 
 <div class="card">
-  <!-- Authentication Form -->
+  <!-- Form Section -->
   <div id="auth-form">
     <div class="header">
       <h2>Enter Mobile Number</h2>
@@ -247,7 +245,8 @@
       <label class="label">Security Check</label>
       <div class="captcha-box">
         <div class="captcha-display" id="captcha-code">----</div>
-        <button class="refresh-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">↻</button>
+        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">🔊</button>
+        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">↻</button>
       </div>
       <div class="input-standard">
         <input type="text" id="captcha-input" placeholder="Enter CAPTCHA shown above" autocomplete="off">
@@ -258,7 +257,7 @@
     <div class="message" id="msg-box"></div>
   </div>
 
-  <!-- Connected Success State -->
+  <!-- Connected Success Screen -->
   <div class="connected-screen" id="connected-screen">
     <div class="success-icon">✓</div>
     <h3>Successfully Connected</h3>
@@ -280,6 +279,19 @@
     document.getElementById("captcha-input").value = "";
   }
 
+  function speakCaptcha() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      // Read out characters slowly with spaces in between
+      const spokenText = currentCaptcha.split('').join(', ');
+      const utterance = new SpeechSynthesisUtterance(spokenText);
+      utterance.rate = 0.8;
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Audio feature is not supported in your browser.");
+    }
+  }
+
   function showMessage(text, type) {
     const msgBox = document.getElementById("msg-box");
     msgBox.innerText = text;
@@ -290,20 +302,17 @@
     const phoneInput = document.getElementById("phone").value.trim();
     const captchaInput = document.getElementById("captcha-input").value.trim().toUpperCase();
 
-    // Validate phone number (10 digits)
     if (!/^\d{10}$/.test(phoneInput)) {
       showMessage("Please enter a valid 10-digit mobile number.", "error");
       return;
     }
 
-    // Validate CAPTCHA
     if (captchaInput !== currentCaptcha) {
       showMessage("Invalid CAPTCHA code. Please try again.", "error");
       generateCaptcha();
       return;
     }
 
-    // Success - Connect with app
     showMessage("Verified! Connecting...", "success");
 
     setTimeout(() => {
@@ -313,7 +322,6 @@
     }, 1000);
   }
 
-  // Generate initial CAPTCHA on page load
   window.onload = generateCaptcha;
 </script>
 

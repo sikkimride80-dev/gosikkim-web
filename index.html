@@ -219,6 +219,35 @@
     transform: scale(0.98);
   }
 
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .btn-half {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-yes {
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+  }
+
+  .btn-no {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border: 1.5px solid rgba(239, 68, 68, 0.4);
+  }
+
   .message {
     margin-top: 16px;
     font-size: 13.5px;
@@ -384,24 +413,40 @@
     <div class="message" id="whatsapp-msg-box"></div>
   </div>
 
-  <!-- Step 4: Channel Follow Prompt Screen -->
+  <!-- Step 4: Channel Follow Prompt & Verification Screen -->
   <div class="connected-screen" id="channel-screen">
-    <div class="success-icon-wrap">
-      <div class="success-icon" style="font-size: 24px;">📢</div>
+    <div class="header" style="margin-bottom: 16px;">
+      <h2 class="gold-title stage-shine">Follow WhatsApp Channel</h2>
+      <p>Click below to open and follow our official channel</p>
     </div>
-    <h3 class="gold-title stage-shine">Follow WhatsApp Channel</h3>
-    <p style="margin-bottom: 16px; font-size: 13.5px; color: #94a3b8;">Click below to open and follow our official channel first.</p>
-    <button class="btn-submit" type="button" onclick="openChannelAndProceed()">Open WhatsApp Channel</button>
+    <button class="btn-submit" type="button" onclick="openChannelLink()" style="margin-bottom: 20px;">Open WhatsApp Channel</button>
+    
+    <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 14px; border: 1px solid rgba(245,158,11,0.2);">
+      <p style="font-size: 13.5px; font-weight: 700; color: #fef08a; margin-bottom: 12px;">Have you followed the channel?</p>
+      <div class="btn-row">
+        <button class="btn-half btn-yes" type="button" onclick="verifyChannel(true)">Yes, Followed</button>
+        <button class="btn-half btn-no" type="button" onclick="verifyChannel(false)">No</button>
+      </div>
+    </div>
+    <div class="message" id="channel-msg-box"></div>
   </div>
 
-  <!-- Step 5: Group Follow Prompt Screen -->
+  <!-- Step 5: Group Join Prompt & Verification Screen -->
   <div class="connected-screen" id="group-screen">
-    <div class="success-icon-wrap">
-      <div class="success-icon" style="font-size: 24px;">👥</div>
+    <div class="header" style="margin-bottom: 16px;">
+      <h2 class="gold-title stage-shine">Join Community Group</h2>
+      <p>Click below to join our community group</p>
     </div>
-    <h3 class="gold-title stage-shine">Join Community Group</h3>
-    <p style="margin-bottom: 16px; font-size: 13.5px; color: #94a3b8;">Great! Now join our community group to unlock full access.</p>
-    <button class="btn-submit" type="button" onclick="openGroupAndFinish()">Join Community Group</button>
+    <button class="btn-submit" type="button" onclick="openGroupLink()" style="margin-bottom: 20px;">Open Community Group</button>
+
+    <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 14px; border: 1px solid rgba(245,158,11,0.2);">
+      <p style="font-size: 13.5px; font-weight: 700; color: #fef08a; margin-bottom: 12px;">Have you joined the group?</p>
+      <div class="btn-row">
+        <button class="btn-half btn-yes" type="button" onclick="verifyGroup(true)">Yes, Joined</button>
+        <button class="btn-half btn-no" type="button" onclick="verifyGroup(false)">No</button>
+      </div>
+    </div>
+    <div class="message" id="group-msg-box"></div>
   </div>
 
   <!-- Final Success Screen -->
@@ -524,25 +569,33 @@
     document.getElementById("channel-screen").style.display = "block";
   }
 
-  function openChannelAndProceed() {
-    // Open WhatsApp Channel in a new tab/window
+  function openChannelLink() {
     window.open("https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40", "_blank");
-    
-    // Switch view to Group step when user returns
-    document.getElementById("channel-screen").style.display = "none";
-    document.getElementById("group-screen").style.display = "block";
   }
 
-  function openGroupAndFinish() {
-    // Open WhatsApp Group/Community link
-    window.open("https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ", "_blank");
+  function verifyChannel(followed) {
+    if (followed) {
+      document.getElementById("channel-screen").style.display = "none";
+      document.getElementById("group-screen").style.display = "block";
+    } else {
+      showMessage("channel-msg-box", "Please follow the channel first to move forward.", "error");
+    }
+  }
 
-    // Show final success screen
-    document.getElementById("group-screen").style.display = "none";
-    document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
-    document.getElementById("final-email-display").textContent = "Email: " + userEmail;
-    document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + userWhatsapp;
-    document.getElementById("final-screen").style.display = "block";
+  function openGroupLink() {
+    window.open("https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ", "_blank");
+  }
+
+  function verifyGroup(joined) {
+    if (joined) {
+      document.getElementById("group-screen").style.display = "none";
+      document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
+      document.getElementById("final-email-display").textContent = "Email: " + userEmail;
+      document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + userWhatsapp;
+      document.getElementById("final-screen").style.display = "block";
+    } else {
+      showMessage("group-msg-box", "Please join the community group to complete setup.", "error");
+    }
   }
 
   window.addEventListener("load", generateCaptcha);

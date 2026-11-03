@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>App Connect</title>
+<title>App Connect - Form H & Onboarding</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
@@ -62,26 +62,26 @@
     border: 1.5px solid rgba(245, 158, 11, 0.6);
     border-radius: 24px;
     width: 100%;
-    max-width: 400px;
-    padding: 32px 24px;
+    max-width: 420px;
+    padding: 28px 20px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(254, 240, 138, 0.2);
     overflow: hidden;
   }
 
   .header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
 
   .gold-title {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
   }
 
   .header p {
-    font-size: 13.5px;
+    font-size: 13px;
     color: #94a3b8;
     font-weight: 500;
   }
@@ -126,6 +126,8 @@
   input[type="text"],
   input[type="email"],
   input[type="password"],
+  input[type="number"],
+  textarea,
   select {
     width: 100%;
     padding: 12px 14px;
@@ -137,12 +139,17 @@
     outline: none;
   }
 
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
   select option {
     background: #090e1a;
     color: #ffffff;
   }
 
-  input::placeholder {
+  input::placeholder, textarea::placeholder {
     color: #64748b;
   }
 
@@ -357,14 +364,55 @@
     border-radius: 24px;
     padding: 24px 20px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-    text-align: center;
+    text-align: left;
   }
 
   .home-title {
     font-size: 18px;
     font-weight: 800;
     margin-bottom: 14px;
+    text-align: center;
   }
+
+  .welcome-banner {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .welcome-banner h4 { color: #fef08a; font-size: 14px; font-weight: 800; margin-bottom: 4px; }
+  .welcome-banner p { color: #cbd5e1; font-size: 12px; }
+
+  .warning-box {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    font-size: 11px;
+    color: #fca5a5;
+    font-weight: 600;
+  }
+
+  .plan-card {
+    background: rgba(9, 14, 26, 0.9);
+    border: 1.5px solid #b45309;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .plan-card:hover {
+    border-color: #fbbf24;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+  }
+  .plan-title { font-size: 15px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
+  .plan-price { font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom: 8px; }
+  .plan-desc { font-size: 12px; color: #94a3b8; }
 </style>
 </head>
 <body onload="checkActiveSession()">
@@ -601,25 +649,55 @@
     </div>
   </div>
 
-  <!-- Modals -->
-  <div class="modal-overlay" id="channel-modal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 86%; background: rgba(15, 23, 42, 0.96); border: 1.5px solid #f59e0b; border-radius: 18px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: none; text-align: center; z-index: 10;">
-    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you followed the channel?</p>
-    <p id="channel-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="channel-countdown">10</span>s to answer...</p>
-    <div class="btn-row" style="display: flex; gap: 12px;">
-      <button class="btn-half btn-yes btn-locked" id="channel-yes-btn" type="button" onclick="verifyChannel(true)" style="flex:1; padding:12px; border-radius:12px; font-weight:800; border:none;">Yes, Followed</button>
-      <button class="btn-half btn-no btn-locked" id="channel-no-btn" type="button" onclick="verifyChannel(false)" style="flex:1; padding:12px; border-radius:12px; font-weight:800; border:none;">No, Not Yet</button>
-    </div>
-    <div class="message" id="channel-msg-box" style="margin-top:12px;"></div>
+  <!-- Wait While We Approve Screen -->
+  <div class="connected-screen" id="approval-screen">
+    <div class="success-icon-wrap"><div class="success-icon">⏳</div></div>
+    <h3 class="gold-title stage-shine">Wait While We Approve You</h3>
+    <div class="spin-ring"></div>
+    <p class="stage-shine" style="font-size: 13px; margin-top: 10px;">Your submission is being verified and securely stored in our backend.</p>
+    <div class="timer-text stage-shine" id="approval-timer-text">Processing in 2:00 minutes...</div>
   </div>
 
-  <div class="modal-overlay" id="group-modal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 86%; background: rgba(15, 23, 42, 0.96); border: 1.5px solid #f59e0b; border-radius: 18px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); display: none; text-align: center; z-index: 10;">
-    <p style="font-size: 14px; font-weight: 700; color: #fef08a; margin-bottom: 6px;">Have you joined the group?</p>
-    <p id="group-timer-display" style="font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please wait <span id="group-countdown">10</span>s to answer...</p>
-    <div class="btn-row" style="display: flex; gap: 12px;">
-      <button class="btn-half btn-yes btn-locked" id="group-yes-btn" type="button" onclick="verifyGroup(true)" style="flex:1; padding:12px; border-radius:12px; font-weight:800; border:none;">Yes, Joined</button>
-      <button class="btn-half btn-no btn-locked" id="group-no-btn" type="button" onclick="verifyGroup(false)" style="flex:1; padding:12px; border-radius:12px; font-weight:800; border:none;">No, Not Yet</button>
+  <!-- Plan Selection Screen -->
+  <div class="connected-screen" id="plan-selection-screen" style="text-align: left;">
+    <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 6px;">Successfully Onboarded!</h3>
+    <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please select your recurring revenue plan to continue</p>
+    
+    <div class="plan-card" onclick="selectPlan('Daily ₹100')">
+      <div class="plan-title">1. Daily Plan</div>
+      <div class="plan-price">₹100 / Day</div>
+      <div class="plan-desc">Billed daily for active services.</div>
     </div>
-    <div class="message" id="group-msg-box" style="margin-top:12px;"></div>
+
+    <div class="plan-card" onclick="selectPlan('14 Days ₹1000')">
+      <div class="plan-title">2. Two Weeks Plan</div>
+      <div class="plan-price">₹1,000 / 14 Days</div>
+      <div class="plan-desc">Save big with bi-weekly subscription.</div>
+    </div>
+
+    <div class="plan-card" onclick="selectPlan('21 Days ₹1650')">
+      <div class="plan-title">3. Three Weeks Plan</div>
+      <div class="plan-price">₹1,650 / 21 Days</div>
+      <div class="plan-desc">Optimized for medium-term growth.</div>
+    </div>
+
+    <div class="plan-card" onclick="selectPlan('Monthly Dynamic')">
+      <div class="plan-title">4. Whole Month Plan</div>
+      <div class="plan-price">₹3,500 / Month</div>
+      <div class="plan-desc">Calculated based on total days in current month (prorated if joining mid-month).</div>
+    </div>
+
+    <div class="plan-card" onclick="selectPlan('Daily Auto-Debit ₹800')">
+      <div class="plan-title">5. Auto-Debit Weekly / Daily Plan</div>
+      <div class="plan-price">₹800 + ₹1 Auto-Pay Setup</div>
+      <div class="plan-desc">Requires ₹1 authorization fee to activate secure auto-pay setup.</div>
+    </div>
+
+    <div class="plan-card" onclick="selectPlan('Yearly Monthly Auto-Debit ₹2500')">
+      <div class="plan-title">6. Yearly Monthly Auto-Debit Plan</div>
+      <div class="plan-price">₹2,500/mo + ₹2 Auto-Pay Setup</div>
+      <div class="plan-desc">Requires ₹2 authorization fee to activate annual recurring monthly billing.</div>
+    </div>
   </div>
 </div>
 
@@ -636,20 +714,25 @@
   </div>
 
   <!-- Form H Dashboard Card -->
-  <div class="home-card" style="text-align: left; max-height: 75vh; overflow-y: auto;">
-    <h2 class="home-title stage-shine" style="text-align: center;">Form H: Business Details</h2>
+  <div class="home-card" style="max-height: 78vh; overflow-y: auto;">
+    <div class="welcome-banner">
+      <h4 class="stage-shine">warm welcome to our platform!</h4>
+      <p>heartfull thanks for choosing us to grow your business journey.</p>
+    </div>
 
-    <form onsubmit="event.preventDefault(); alert('Form submitted successfully!');">
-      <!-- Q1 -->
+    <h2 class="home-title stage-shine">Form H: Business Details</h2>
+
+    <form id="form-h" onsubmit="submitFormH(event)">
+      <!-- Q1: Capitalized word to word -->
       <div class="form-group">
         <label class="label stage-shine">1. Hotel/Restaurant Name</label>
-        <div class="input-standard"><input type="text" placeholder="Enter business name" required></div>
+        <div class="input-standard"><input type="text" id="q1" placeholder="Enter business name" oninput="formatWordCapitalized(this)" required></div>
       </div>
 
-      <!-- Q2 -->
+      <!-- Q2: First letter capitalized, space handled, others small -->
       <div class="form-group">
         <label class="label stage-shine">2. Owner Name</label>
-        <div class="input-standard"><input type="text" placeholder="Enter owner's name" required></div>
+        <div class="input-standard"><input type="text" placeholder="Enter owner's name" oninput="formatSentenceCapitalized(this)" required></div>
       </div>
 
       <!-- Q3 -->
@@ -669,7 +752,7 @@
       <!-- Q4 -->
       <div class="form-group">
         <label class="label stage-shine">4. Location / Address</label>
-        <div class="input-standard"><input type="text" placeholder="Enter location" required></div>
+        <div class="input-standard"><input type="text" placeholder="Enter location" oninput="formatSentenceCapitalized(this)" required></div>
       </div>
 
       <!-- Q5 -->
@@ -684,11 +767,10 @@
         <div class="input-standard"><input type="number" placeholder="e.g. 15" required></div>
       </div>
 
-      <!-- Q7: Opening & Closing Time Dropdown Selectors -->
+      <!-- Q7: Opening & Closing Time Dropdowns -->
       <div class="form-group">
         <label class="label stage-shine">7. Opening & Closing Time</label>
         <div style="display: flex; gap: 8px; align-items: center;">
-          <!-- Opening Time -->
           <div class="input-standard" style="flex: 1;">
             <select id="open-time" required>
               <option value="" disabled selected>Opening Time</option>
@@ -702,7 +784,6 @@
             </select>
           </div>
           <span style="color: #fef08a; font-weight: 700;">to</span>
-          <!-- Closing Time -->
           <div class="input-standard" style="flex: 1;">
             <select id="close-time" required>
               <option value="" disabled selected>Closing Time</option>
@@ -717,19 +798,76 @@
         </div>
       </div>
 
-      <!-- Q8 -->
+      <!-- New Questionnaire Fields -->
       <div class="form-group">
-        <label class="label stage-shine">8. Things Available (Select from Menu)</label>
+        <label class="label stage-shine">8. How long this hotel/restaurant have been established?</label>
+        <div class="input-standard"><input type="text" placeholder="e.g. 3 years or 6 months" oninput="formatSentenceCapitalized(this)" required></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">9. Do you have license of the hotel/restaurant?</label>
         <div class="input-standard">
           <select required>
-            <option value="" disabled selected>Select menu category</option>
-            <option value="dine-in">Dine-in Menu & Cutlery</option>
-            <option value="takeaway">Takeaway Packaging & Boxes</option>
-            <option value="perishables">Daily Perishable Supplies</option>
-            <option value="beverages">Beverages & Bar Essentials</option>
-            <option value="all">All Available Services</option>
+            <option value="" disabled selected>Select option</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="processing">Under Process</option>
           </select>
         </div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">10. Upload Digital License Photo (PDF, JPG, PNG)</label>
+        <div class="input-standard" style="padding: 8px;"><input type="file" accept=".pdf,.jpg,.jpeg,.png" required style="color: #cbd5e1; font-size: 12px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">11. Upload Live Shop Photos (Interior, Kitchen, Front Door, Cash Counter)</label>
+        <div class="warning-box">⚠️ Warning: Blurry screenshots will be rejected! Must be clicked live.</div>
+        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">12. External Photo (Left side & Horizontal Middle with Name Board)</label>
+        <div class="warning-box">⚠️ Warning: Only HORIZONTAL name board photos accepted. No vertical shots!</div>
+        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">13. How many restaurants/hotels do you have?</label>
+        <div class="input-standard"><input type="number" placeholder="Enter count" required></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">14. Aadhaar Number & Front/Back Photos</label>
+        <div class="input-standard" style="margin-bottom: 6px;"><input type="text" placeholder="Enter 12-digit Aadhaar number" maxlength="12" required></div>
+        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">15. PAN Number & Front/Back Photos</label>
+        <div class="input-standard" style="margin-bottom: 6px;"><input type="text" placeholder="Enter PAN number" oninput="this.value = this.value.toUpperCase()" required></div>
+        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">16. GST Number (Optional)</label>
+        <div class="input-standard"><input type="text" placeholder="Enter GST number (Optional)" oninput="this.value = this.value.toUpperCase()"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">17. Business Description (20 to 500 words)</label>
+        <div class="input-standard"><textarea placeholder="Enter detailed description..." oninput="formatSentenceCapitalized(this)" required></textarea></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">18. Owner's Photo (or ID if owner absent)</label>
+        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" required style="color: #cbd5e1; font-size: 12px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="label stage-shine">19. Hotel/Restaurant Staff Photo</label>
+        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" required style="color: #cbd5e1; font-size: 12px;"></div>
       </div>
 
       <button class="btn-submit" type="submit" style="margin-top: 10px;">Submit Form H</button>
@@ -746,22 +884,45 @@
   let channelTimerInterval = null;
   let groupTimerInterval = null;
 
+  // Formatting helper for Q1: Word-to-word capitalization
+  function formatWordCapitalized(input) {
+    let words = input.value.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].length > 0) {
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+      }
+    }
+    input.value = words.join(" ");
+  }
+
+  // Formatting helper for other fields: First letter capitalized, space handled, others small
+  function formatSentenceCapitalized(input) {
+    let val = input.value.toLowerCase();
+    let words = val.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].length > 0) {
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+      }
+    }
+    input.value = words.join(" ");
+  }
+
   // Strict session persistence check on page load (tab close, restart, or refresh)
   function checkActiveSession() {
     let sessionExpiry = localStorage.getItem("session_expiry");
+    let isSubmitted = localStorage.getItem("form_submitted");
+
     if (sessionExpiry) {
       let now = new Date().getTime();
       if (now < parseInt(sessionExpiry)) {
-        // Session active, bypass gateway and show dashboard directly
         document.getElementById("flow-card").style.display = "none";
         document.getElementById("main-home-dashboard").style.display = "block";
         return;
       } else {
-        // Expired, clear session so user must re-login
         localStorage.removeItem("session_expiry");
+        localStorage.removeItem("form_submitted");
       }
     }
-    // If no active session, show gateway
     document.getElementById("flow-card").style.display = "block";
     document.getElementById("main-home-dashboard").style.display = "none";
   }
@@ -839,13 +1000,11 @@
       return;
     }
 
-    // Calculate and lock session duration across restarts/tabs
     let totalMillis = (hours * 3600 + mins * 60) * 1000;
-    if (totalMillis === 0) totalMillis = 3600 * 1000; // default 1 hour if 0 selected
+    if (totalMillis === 0) totalMillis = 3600 * 1000;
     let expiryTime = new Date().getTime() + totalMillis;
     localStorage.setItem("session_expiry", expiryTime);
 
-    // Display spinning loading view for 4 seconds then open dashboard
     document.getElementById("login-form").style.display = "none";
     document.getElementById("dashboard-screen").style.display = "block";
     
@@ -857,6 +1016,36 @@
       document.getElementById("flow-card").style.display = "none";
       document.getElementById("main-home-dashboard").style.display = "block";
     }, 4000);
+  }
+
+  function submitFormH(event) {
+    event.preventDefault();
+    document.getElementById("main-home-dashboard").style.display = "none";
+    document.getElementById("flow-card").style.display = "block";
+    document.getElementById("approval-screen").style.display = "block";
+
+    // Save backend persistence state
+    localStorage.setItem("form_submitted", "true");
+
+    // 2 minutes approval timer (120 seconds)
+    let timeLeft = 120;
+    const timerElem = document.getElementById("approval-timer-text");
+    const interval = setInterval(() => {
+      timeLeft--;
+      let mins = Math.floor(timeLeft / 60);
+      let secs = timeLeft % 60;
+      timerElem.textContent = `Processing in ${mins}:${secs < 10 ? '0' : ''}${secs} minutes...`;
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        document.getElementById("approval-screen").style.display = "none";
+        document.getElementById("plan-selection-screen").style.display = "block";
+      }
+    }, 1000);
+  }
+
+  function selectPlan(planName) {
+    alert(`Selected Plan: ${planName}. Redirecting to secure checkout...`);
   }
 
   function checkResetLimit() {
@@ -898,7 +1087,6 @@
     resetData.count++;
     localStorage.setItem("password_resets", JSON.stringify(resetData));
 
-    // Set default 1 hour session on password reset success
     localStorage.setItem("session_expiry", new Date().getTime() + 3600 * 1000);
 
     alert("Password updated successfully! Logging you in...");

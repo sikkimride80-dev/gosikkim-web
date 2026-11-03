@@ -322,7 +322,6 @@
     border: 1px solid rgba(251, 191, 36, 0.3);
   }
 
-  /* Loader Overlay Styling */
   .loader-overlay {
     display: none;
     text-align: center;
@@ -429,7 +428,7 @@
       </div>
     </div>
 
-    <button class="btn-submit" type="button" onclick="validateStep3()">Save & Continue</button>
+    <button class="btn-submit" type="button" onclick="validateStep3()">Save & Open Channel</button>
     <div class="message" id="whatsapp-msg-box"></div>
   </div>
 
@@ -437,9 +436,8 @@
   <div class="connected-screen" id="channel-screen">
     <div class="header" style="margin-bottom: 16px;">
       <h2 class="gold-title stage-shine">Follow WhatsApp Channel</h2>
-      <p>Click below to open and follow our official channel</p>
+      <p>Channel opened! Return here after following.</p>
     </div>
-    <button class="btn-submit" type="button" onclick="openChannelLink()" style="margin-bottom: 20px;">Open WhatsApp Channel</button>
     
     <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 14px; border: 1px solid rgba(245,158,11,0.2);">
       <p style="font-size: 13.5px; font-weight: 700; color: #fef08a; margin-bottom: 12px;">Have you followed the channel?</p>
@@ -454,17 +452,16 @@
   <!-- Channel Loader Screen -->
   <div class="loader-overlay" id="channel-loader">
     <div class="spinner"></div>
-    <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Live Checking Channel...</h3>
-    <p style="font-size: 13px; color: #94a3b8;" id="channel-status-text">Detecting return from WhatsApp...</p>
+    <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Verifying Channel...</h3>
+    <p style="font-size: 13px; color: #94a3b8;">Checking status...</p>
   </div>
 
   <!-- Step 5: Group Join Prompt & Verification Screen -->
   <div class="connected-screen" id="group-screen">
     <div class="header" style="margin-bottom: 16px;">
       <h2 class="gold-title stage-shine">Join Community Group</h2>
-      <p>Click below to join our community group</p>
+      <p>Group opened! Return here after joining.</p>
     </div>
-    <button class="btn-submit" type="button" onclick="openGroupLink()" style="margin-bottom: 20px;">Open Community Group</button>
 
     <div style="background: rgba(255,255,255,0.05); padding: 16px; border-radius: 14px; border: 1px solid rgba(245,158,11,0.2);">
       <p style="font-size: 13.5px; font-weight: 700; color: #fef08a; margin-bottom: 12px;">Have you joined the group?</p>
@@ -479,8 +476,8 @@
   <!-- Group Loader Screen -->
   <div class="loader-overlay" id="group-loader">
     <div class="spinner"></div>
-    <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Live Checking Membership...</h3>
-    <p style="font-size: 13px; color: #94a3b8;" id="group-status-text">Detecting return from WhatsApp...</p>
+    <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Verifying Group...</h3>
+    <p style="font-size: 13px; color: #94a3b8;">Checking status...</p>
   </div>
 
   <!-- Final Success Screen -->
@@ -501,8 +498,6 @@
   let userPhone = "";
   let userEmail = "";
   let userWhatsapp = "";
-  let waitingForChannelReturn = false;
-  let waitingForGroupReturn = false;
 
   function generateCaptcha() {
     const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -603,10 +598,8 @@
 
     document.getElementById("whatsapp-form").style.display = "none";
     document.getElementById("channel-screen").style.display = "block";
-  }
 
-  function openChannelLink() {
-    waitingForChannelReturn = true;
+    // Open WhatsApp Channel immediately
     window.open("https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40", "_blank");
   }
 
@@ -614,26 +607,17 @@
     if (followed) {
       document.getElementById("channel-screen").style.display = "none";
       document.getElementById("channel-loader").style.display = "block";
-      
-      let statusElem = document.getElementById("channel-status-text");
-      if (!waitingForChannelReturn) {
-        statusElem.textContent = "Checking your follow status...";
-      } else {
-        statusElem.textContent = "Verified user return from WhatsApp! Finalizing...";
-      }
 
       setTimeout(() => {
         document.getElementById("channel-loader").style.display = "none";
         document.getElementById("group-screen").style.display = "block";
-      }, 2000);
+
+        // Open WhatsApp Group immediately
+        window.open("https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ", "_blank");
+      }, 1200);
     } else {
       showMessage("channel-msg-box", "Please follow the channel first to move forward.", "error");
     }
-  }
-
-  function openGroupLink() {
-    waitingForGroupReturn = true;
-    window.open("https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ", "_blank");
   }
 
   function verifyGroup(joined) {
@@ -641,37 +625,17 @@
       document.getElementById("group-screen").style.display = "none";
       document.getElementById("group-loader").style.display = "block";
 
-      let statusElem = document.getElementById("group-status-text");
-      if (!waitingForGroupReturn) {
-        statusElem.textContent = "Checking group membership...";
-      } else {
-        statusElem.textContent = "Verified user return from WhatsApp! Finalizing...";
-      }
-
       setTimeout(() => {
         document.getElementById("group-loader").style.display = "none";
         document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
         document.getElementById("final-email-display").textContent = "Email: " + userEmail;
         document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + userWhatsapp;
         document.getElementById("final-screen").style.display = "block";
-      }, 2000);
+      }, 1200);
     } else {
       showMessage("group-msg-box", "Please join the community group to complete setup.", "error");
     }
   }
-
-  // Live browser visibility detection when user returns from WhatsApp app/tab
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) {
-      if (waitingForChannelReturn && document.getElementById("channel-screen").style.display === "block") {
-        document.getElementById("channel-status-text").textContent = "Welcome back! Auto-verifying channel follow...";
-        setTimeout(() => verifyChannel(true), 800);
-      } else if (waitingForGroupReturn && document.getElementById("group-screen").style.display === "block") {
-        document.getElementById("group-status-text").textContent = "Welcome back! Auto-verifying group join...";
-        setTimeout(() => verifyGroup(true), 800);
-      }
-    }
-  });
 
   window.addEventListener("load", generateCaptcha);
 </script>

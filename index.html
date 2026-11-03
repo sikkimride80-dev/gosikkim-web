@@ -220,6 +220,41 @@
     transform: scale(0.98);
   }
 
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .btn-half {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-yes {
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
+  }
+
+  .btn-no {
+    background: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+    border: 1.5px solid rgba(239, 68, 68, 0.4);
+  }
+
+  .btn-locked {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+
   .message {
     margin-top: 16px;
     font-size: 13.5px;
@@ -235,13 +270,6 @@
     background: rgba(239, 68, 68, 0.15);
     color: #fca5a5;
     border: 1px solid rgba(239, 68, 68, 0.3);
-  }
-
-  .message.success {
-    display: block;
-    background: rgba(34, 197, 94, 0.15);
-    color: #86efac;
-    border: 1px solid rgba(34, 197, 94, 0.3);
   }
 
   .connected-screen {
@@ -317,18 +345,19 @@
 <body>
 
 <div class="card">
-  <!-- Step 0: Initial Login / Signup Gateway -->
+  <!-- Step 1: Initial Login / Signup Gateway -->
   <div id="login-signup-gateway">
     <div class="header">
       <h2 class="gold-title stage-shine">Welcome to App</h2>
       <p>Choose an option to get started</p>
     </div>
 
-    <button class="btn-submit" type="button" onclick="goToSignup()" style="margin-bottom: 12px;">New User? Sign Up</button>
-    <button class="btn-submit" type="button" onclick="goToLogin()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309;">Already Registered? Log In</button>
+    <button class="btn-submit" type="button" onclick="handleGatewaySignup()" style="margin-bottom: 12px;">New User? Sign Up</button>
+    <button class="btn-submit" type="button" onclick="handleGatewayLogin()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309;">Already Registered? Log In</button>
+    <div class="message" id="gateway-msg-box"></div>
   </div>
 
-  <!-- Direct Login Form (For Existing Users with auto-check) -->
+  <!-- Direct Login Form -->
   <div id="login-form" style="display: none;">
     <div class="header">
       <h2 class="gold-title stage-shine">Direct Login</h2>
@@ -354,7 +383,7 @@
     <div class="message" id="login-msg-box"></div>
   </div>
 
-  <!-- Step 1: Mobile & CAPTCHA (Signup) -->
+  <!-- Signup Step 1: Mobile & CAPTCHA -->
   <div id="auth-form" style="display: none;">
     <div class="header">
       <h2 class="gold-title stage-shine">Enter Mobile Number</h2>
@@ -447,7 +476,8 @@
       <h2 class="gold-title stage-shine">Follow WhatsApp Channel</h2>
       <p>Channel opened! Return here after following.</p>
     </div>
-    <button class="btn-submit" type="button" onclick="reopenChannel()">Re-open Channel</button>
+    <button class="btn-submit" type="button" onclick="reopenChannel()" style="margin-bottom: 12px;">Re-open Channel</button>
+    <button class="btn-submit" type="button" onclick="onReturnFromChannel()" style="background: linear-gradient(90deg, #16a34a, #22c55e); color: #fff;">I've Followed - Continue</button>
   </div>
 
   <!-- Step 5: Group Join Prompt Screen -->
@@ -456,7 +486,8 @@
       <h2 class="gold-title stage-shine">Join Community Group</h2>
       <p>Group opened! Return here after joining.</p>
     </div>
-    <button class="btn-submit" type="button" onclick="reopenGroup()">Re-open Group</button>
+    <button class="btn-submit" type="button" onclick="reopenGroup()" style="margin-bottom: 12px;">Re-open Group</button>
+    <button class="btn-submit" type="button" onclick="onReturnFromGroup()" style="background: linear-gradient(90deg, #16a34a, #22c55e); color: #fff;">I've Joined - Continue</button>
   </div>
 
   <!-- Channel Loader Screen -->
@@ -556,14 +587,12 @@
   let userPhone = "";
   let userEmail = "";
   let userWhatsapp = "";
-  let waitingForChannelReturn = false;
-  let waitingForGroupReturn = false;
   let channelTimerInterval = null;
   let groupTimerInterval = null;
 
-  // Simulated persistent registered database (stored in localStorage)
   function getRegisteredUsers() {
     let data = localStorage.getItem("registered_users");
+    // Returns default sample users or saved ones
     return data ? JSON.parse(data) : { "9876543210": { ip: "192.168.62.73", mac: "MAC-DE07-6E31" } };
   }
 
@@ -573,13 +602,37 @@
     localStorage.setItem("registered_users", JSON.stringify(users));
   }
 
-  function goToSignup() {
+  // Auto check when clicking "New User? Sign Up"
+  function handleGatewaySignup() {
+    let users = getRegisteredUsers();
+    let currentIP = document.getElementById("scan-ip").textContent;
+    
+    // Check if device/IP already has an account registered
+    let existingAccount = Object.values(users).some(u => u.ip === currentIP);
+    
+    if (existingAccount) {
+      showMessage("gateway-msg-box", "You have already created an account. Can't create new, please resume with log in.", "error");
+      return;
+    }
+
     document.getElementById("login-signup-gateway").style.display = "none";
     document.getElementById("auth-form").style.display = "block";
     generateCaptcha();
   }
 
-  function goToLogin() {
+  // Auto check when clicking "Already Registered? Log In"
+  function handleGatewayLogin() {
+    let users = getRegisteredUsers();
+    
+    // Check if there are any registered users at all in storage
+    if (Object.keys(users).length === 0) {
+      showMessage("gateway-msg-box", "You are new, please sign up first!", "error");
+      setTimeout(() => {
+        handleGatewaySignup();
+      }, 1500);
+      return;
+    }
+
     document.getElementById("login-signup-gateway").style.display = "none";
     document.getElementById("login-form").style.display = "block";
   }
@@ -598,12 +651,10 @@
     }
 
     let users = getRegisteredUsers();
-    // Auto check if user is registered
     if (!users[phone]) {
       alert("You are new, please sign up first!");
       document.getElementById("login-form").style.display = "none";
-      document.getElementById("auth-form").style.display = "block";
-      generateCaptcha();
+      handleGatewaySignup();
       return;
     }
 
@@ -655,12 +706,8 @@
       return;
     }
 
-    // Auto check if mobile number or device (IP/MAC) is already onboarded
     let users = getRegisteredUsers();
-    let currentIP = document.getElementById("scan-ip").textContent;
-    let alreadyExists = users[phoneInput];
-
-    if (alreadyExists) {
+    if (users[phoneInput]) {
       alert("You have already created an account. Can't create new, please resume with log in.");
       document.getElementById("auth-form").style.display = "none";
       document.getElementById("login-signup-gateway").style.display = "block";
@@ -723,7 +770,6 @@
     document.getElementById("whatsapp-form").style.display = "none";
     document.getElementById("channel-screen").style.display = "block";
 
-    waitingForChannelReturn = true;
     window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";
   }
 
@@ -733,6 +779,18 @@
 
   function reopenGroup() {
     window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
+  }
+
+  function onReturnFromChannel() {
+    document.getElementById("channel-screen").style.display = "none";
+    document.getElementById("channel-modal").style.display = "block";
+    startChannelTimer();
+  }
+
+  function onReturnFromGroup() {
+    document.getElementById("group-screen").style.display = "none";
+    document.getElementById("group-modal").style.display = "block";
+    startGroupTimer();
   }
 
   function startChannelTimer() {
@@ -788,14 +846,12 @@
   function verifyChannel(followed) {
     if (followed) {
       document.getElementById("channel-modal").style.display = "none";
-      document.getElementById("channel-screen").style.display = "none";
       document.getElementById("channel-loader").style.display = "block";
 
       setTimeout(() => {
         document.getElementById("channel-loader").style.display = "none";
         document.getElementById("group-screen").style.display = "block";
 
-        waitingForGroupReturn = true;
         window.location.href = "https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ";
       }, 1200);
     } else {
@@ -806,7 +862,6 @@
   function verifyGroup(joined) {
     if (joined) {
       document.getElementById("group-modal").style.display = "none";
-      document.getElementById("group-screen").style.display = "none";
       document.getElementById("group-loader").style.display = "block";
 
       setTimeout(() => {
@@ -840,7 +895,6 @@
       return;
     }
 
-    // Save user to registered storage
     let currentIP = document.getElementById("scan-ip").textContent;
     let currentMAC = document.getElementById("scan-mac").textContent;
     saveRegisteredUser(userPhone, currentIP, currentMAC);
@@ -865,18 +919,6 @@
       }
     }, 1000);
   }
-
-  document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) {
-      if (waitingForChannelReturn && document.getElementById("channel-screen").style.display === "block") {
-        document.getElementById("channel-modal").style.display = "block";
-        startChannelTimer();
-      } else if (waitingForGroupReturn && document.getElementById("group-screen").style.display === "block") {
-        document.getElementById("group-modal").style.display = "block";
-        startGroupTimer();
-      }
-    }
-  });
 </script>
 
 </body>

@@ -110,7 +110,6 @@
     box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
-  /* Solid Bright Gold Country Code for Perfect Visibility */
   .country-code {
     padding: 14px;
     background: rgba(255, 255, 255, 0.05);
@@ -145,7 +144,6 @@
     margin-bottom: 12px;
   }
 
-  /* Solid Bright Glowing Diamond CAPTCHA Display */
   .captcha-display {
     flex: 1;
     background: rgba(5, 8, 17, 0.95);
@@ -193,7 +191,6 @@
     box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
-  /* Stage Spotlight Shimmer on Submit Button */
   .btn-submit {
     width: 100%;
     padding: 16px;
@@ -383,11 +380,31 @@
       </div>
     </div>
 
-    <button class="btn-submit" type="button" onclick="validateStep3()">Save WhatsApp Number</button>
+    <button class="btn-submit" type="button" onclick="validateStep3()">Save & Continue</button>
     <div class="message" id="whatsapp-msg-box"></div>
   </div>
 
-  <!-- Screen 3: Final Success Screen -->
+  <!-- Step 4: Channel Follow Prompt Screen -->
+  <div class="connected-screen" id="channel-screen">
+    <div class="success-icon-wrap">
+      <div class="success-icon" style="font-size: 24px;">📢</div>
+    </div>
+    <h3 class="gold-title stage-shine">Follow WhatsApp Channel</h3>
+    <p style="margin-bottom: 16px; font-size: 13.5px; color: #94a3b8;">Click below to open and follow our official channel first.</p>
+    <button class="btn-submit" type="button" onclick="openChannelAndProceed()">Open WhatsApp Channel</button>
+  </div>
+
+  <!-- Step 5: Group Follow Prompt Screen -->
+  <div class="connected-screen" id="group-screen">
+    <div class="success-icon-wrap">
+      <div class="success-icon" style="font-size: 24px;">👥</div>
+    </div>
+    <h3 class="gold-title stage-shine">Join Community Group</h3>
+    <p style="margin-bottom: 16px; font-size: 13.5px; color: #94a3b8;">Great! Now join our community group to unlock full access.</p>
+    <button class="btn-submit" type="button" onclick="openGroupAndFinish()">Join Community Group</button>
+  </div>
+
+  <!-- Final Success Screen -->
   <div class="connected-screen" id="final-screen">
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
@@ -396,7 +413,7 @@
     <p id="final-phone-display" class="stage-shine">Mobile: +91 ----------</p>
     <p id="final-email-display" class="stage-shine">Email: ----------</p>
     <p id="final-whatsapp-display" class="stage-shine">WhatsApp: +91 ----------</p>
-    <div class="timer-text stage-shine" id="whatsapp-launch-timer">Opening WhatsApp in 2 seconds...</div>
+    <div class="timer-text stage-shine">All steps verified successfully!</div>
   </div>
 </div>
 
@@ -504,24 +521,28 @@
     userWhatsapp = whatsappInput;
 
     document.getElementById("whatsapp-form").style.display = "none";
+    document.getElementById("channel-screen").style.display = "block";
+  }
+
+  function openChannelAndProceed() {
+    // Open WhatsApp Channel in a new tab/window
+    window.open("https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40", "_blank");
+    
+    // Switch view to Group step when user returns
+    document.getElementById("channel-screen").style.display = "none";
+    document.getElementById("group-screen").style.display = "block";
+  }
+
+  function openGroupAndFinish() {
+    // Open WhatsApp Group/Community link
+    window.open("https://chat.whatsapp.com/C5t4mafI80wK0tDgj2wtRZ", "_blank");
+
+    // Show final success screen
+    document.getElementById("group-screen").style.display = "none";
     document.getElementById("final-phone-display").textContent = "Mobile: +91 " + userPhone;
     document.getElementById("final-email-display").textContent = "Email: " + userEmail;
     document.getElementById("final-whatsapp-display").textContent = "WhatsApp: +91 " + userWhatsapp;
     document.getElementById("final-screen").style.display = "block";
-
-    // Automatically open WhatsApp directly after 2 seconds
-    let launchTimeLeft = 2;
-    const launchTimerElem = document.getElementById("whatsapp-launch-timer");
-
-    const launchCountdown = setInterval(() => {
-      launchTimeLeft--;
-      if (launchTimeLeft > 0) {
-        launchTimerElem.textContent = `Opening WhatsApp in ${launchTimeLeft} seconds...`;
-      } else {
-        clearInterval(launchCountdown);
-        window.location.href = `https://wa.me/91${userWhatsapp}`;
-      }
-    }, 1000);
   }
 
   window.addEventListener("load", generateCaptcha);

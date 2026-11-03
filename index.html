@@ -27,7 +27,29 @@
     overflow: hidden;
   }
 
-  /* GPU-Accelerated Card Container */
+  /* Stage Spotlight Shimmer Effect for Text & Elements */
+  @keyframes stageSpotlight {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  .stage-shine {
+    background: linear-gradient(
+      90deg, 
+      #fef08a 0%, 
+      #fffbeb 25%, 
+      #ffffff 50%, 
+      #fbbf24 75%, 
+      #d97706 100%
+    );
+    background-size: 200% auto;
+    color: #fef08a;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: stageSpotlight 3s linear infinite;
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+  }
+
   .card {
     position: relative;
     background: #111a2e;
@@ -40,43 +62,16 @@
     overflow: hidden;
   }
 
-  /* Smooth GPU Shimmer Sweep Overlay across Card */
-  .card::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      45deg,
-      transparent 45%,
-      rgba(254, 240, 138, 0.08) 50%,
-      transparent 55%
-    );
-    transform: translate3d(0, 0, 0);
-    animation: sweepShimmer 4s infinite linear;
-    pointer-events: none;
-  }
-
-  @keyframes sweepShimmer {
-    0% { transform: translate3d(-30%, -30%, 0); }
-    100% { transform: translate3d(30%, 30%, 0); }
-  }
-
   .header {
     text-align: center;
     margin-bottom: 26px;
   }
 
-  /* Diamond Gold Glowing Title */
   .gold-title {
     font-size: 24px;
     font-weight: 800;
-    color: #fef08a;
     margin-bottom: 6px;
     letter-spacing: -0.5px;
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5), 0 0 20px rgba(217, 119, 6, 0.3);
   }
 
   .header p {
@@ -93,11 +88,9 @@
     display: block;
     font-size: 11.5px;
     font-weight: 700;
-    color: #fbbf24;
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 1px;
-    text-shadow: 0 0 6px rgba(251, 191, 36, 0.4);
   }
 
   .phone-container {
@@ -117,11 +110,9 @@
   .country-code {
     padding: 14px;
     background: rgba(255, 255, 255, 0.05);
-    color: #fef08a;
     font-weight: 700;
     font-size: 15px;
     border-right: 1px solid #b45309;
-    text-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
   }
 
   input[type="tel"],
@@ -148,7 +139,7 @@
     margin-bottom: 12px;
   }
 
-  /* Reliable 100% Solid Visible Metallic Diamond CAPTCHA Display */
+  /* Stage Spotlight Shimmer on CAPTCHA Display */
   .captcha-display {
     flex: 1;
     background: #050811;
@@ -160,15 +151,12 @@
     font-size: 24px;
     font-weight: 800;
     letter-spacing: 8px;
-    color: #fffbeb;
-    text-shadow: 0 0 12px #fbbf24, 0 0 24px #d97706;
-    box-shadow: inset 0 0 10px rgba(245, 158, 11, 0.2);
+    box-shadow: inset 0 0 12px rgba(245, 158, 11, 0.3);
   }
 
   .action-btn {
     background: #090e1a;
     border: 1.5px solid #b45309;
-    color: #fbbf24;
     width: 46px;
     height: 46px;
     border-radius: 12px;
@@ -181,7 +169,6 @@
 
   .action-btn:active {
     background: #f59e0b;
-    color: #090e1a;
   }
 
   .input-standard {
@@ -195,10 +182,20 @@
     box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
   }
 
+  /* Stage Spotlight Shimmer on Submit Button */
   .btn-submit {
     width: 100%;
     padding: 16px;
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: linear-gradient(
+      90deg, 
+      #d97706 0%, 
+      #f59e0b 25%, 
+      #fef08a 50%, 
+      #f59e0b 75%, 
+      #d97706 100%
+    );
+    background-size: 200% auto;
+    animation: stageSpotlight 3s linear infinite;
     color: #090e1a;
     border: none;
     border-radius: 14px;
@@ -267,9 +264,7 @@
   .connected-screen h3 {
     font-size: 22px;
     font-weight: 800;
-    color: #fef08a;
     margin-bottom: 8px;
-    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
   }
 
   .connected-screen p {
@@ -281,7 +276,6 @@
 
   .timer-text {
     font-size: 13px;
-    color: #fbbf24;
     margin-top: 14px;
     font-weight: 700;
     background: rgba(245, 158, 11, 0.15);
@@ -298,24 +292,28 @@
   <!-- Step 1: Mobile & CAPTCHA -->
   <div id="auth-form">
     <div class="header">
-      <h2 class="gold-title">Enter Mobile Number</h2>
+      <h2 class="gold-title stage-shine">Enter Mobile Number</h2>
       <p>Verify details to connect with the app</p>
     </div>
 
     <div class="form-group">
-      <label class="label">Mobile Number</label>
+      <label class="label stage-shine">Mobile Number</label>
       <div class="phone-container">
-        <span class="country-code">+91</span>
+        <span class="country-code stage-shine">+91</span>
         <input type="tel" id="phone" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
 
     <div class="form-group">
-      <label class="label">Security Check</label>
+      <label class="label stage-shine">Security Check</label>
       <div class="captcha-box">
-        <div class="captcha-display" id="captcha-code">-----</div>
-        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">🔊</button>
-        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">↻</button>
+        <div class="captcha-display stage-shine" id="captcha-code">-----</div>
+        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen to CAPTCHA">
+          <span class="stage-shine" style="font-size: 18px;">🔊</span>
+        </button>
+        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh CAPTCHA">
+          <span class="stage-shine" style="font-size: 18px;">↻</span>
+        </button>
       </div>
       <div class="input-standard">
         <input type="text" id="captcha-input" placeholder="Enter CAPTCHA shown above" autocomplete="off">
@@ -331,19 +329,19 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-title">Successfully Connected</h3>
-    <p id="connected-phone-display">+91 ----------</p>
+    <h3 class="gold-title stage-shine">Successfully Connected</h3>
+    <p id="connected-phone-display" class="stage-shine">+91 ----------</p>
   </div>
 
   <!-- Step 2: Email Address Input -->
   <div id="email-form" style="display: none;">
     <div class="header">
-      <h2 class="gold-title">Email Address</h2>
+      <h2 class="gold-title stage-shine">Email Address</h2>
       <p>Where should order updates be sent?</p>
     </div>
 
     <div class="form-group">
-      <label class="label">Email Address</label>
+      <label class="label stage-shine">Email Address</label>
       <div class="input-standard">
         <input type="email" id="email" placeholder="example@domain.com">
       </div>
@@ -358,22 +356,22 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-title">Email Saved</h3>
-    <p id="saved-email-display">Email: ----------</p>
-    <div class="timer-text" id="email-redirect-timer">Redirecting in 4 seconds...</div>
+    <h3 class="gold-title stage-shine">Email Saved</h3>
+    <p id="saved-email-display" class="stage-shine">Email: ----------</p>
+    <div class="timer-text stage-shine" id="email-redirect-timer">Redirecting in 4 seconds...</div>
   </div>
 
   <!-- Step 3: WhatsApp Number Input -->
   <div id="whatsapp-form" style="display: none;">
     <div class="header">
-      <h2 class="gold-title">WhatsApp Number</h2>
+      <h2 class="gold-title stage-shine">WhatsApp Number</h2>
       <p>Enter your WhatsApp number for instant alerts</p>
     </div>
 
     <div class="form-group">
-      <label class="label">WhatsApp Number</label>
+      <label class="label stage-shine">WhatsApp Number</label>
       <div class="phone-container">
-        <span class="country-code">+91</span>
+        <span class="country-code stage-shine">+91</span>
         <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
       </div>
     </div>
@@ -387,10 +385,10 @@
     <div class="success-icon-wrap">
       <div class="success-icon">✓</div>
     </div>
-    <h3 class="gold-title">Setup Complete</h3>
-    <p id="final-phone-display">Mobile: +91 ----------</p>
-    <p id="final-email-display">Email: ----------</p>
-    <p id="final-whatsapp-display">WhatsApp: +91 ----------</p>
+    <h3 class="gold-title stage-shine">Setup Complete</h3>
+    <p id="final-phone-display" class="stage-shine">Mobile: +91 ----------</p>
+    <p id="final-email-display" class="stage-shine">Email: ----------</p>
+    <p id="final-whatsapp-display" class="stage-shine">WhatsApp: +91 ----------</p>
   </div>
 </div>
 

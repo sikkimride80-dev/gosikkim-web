@@ -661,7 +661,7 @@
     <div class="timer-text stage-shine" id="approval-timer-text">Processing in 2:00 minutes...</div>
   </div>
 
-  <!-- Plan Selection Screen (Directly accessed with Razorpay MID Integration) -->
+  <!-- Plan Selection Screen (Configured with your exact Razorpay Test Key & Account ID) -->
   <div class="connected-screen" id="plan-selection-screen" style="text-align: left;">
     <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 6px;">Successfully Onboarded!</h3>
     <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please select your recurring revenue plan to continue</p>
@@ -1063,10 +1063,10 @@
     }, 1000);
   }
 
-  // Razorpay Checkout Integration with your Account ID: acc_TiMZJnUcP5m6dN & MID: TiMZJnUcP5m6dN
+  // Razorpay Checkout Integration with your Test Key ID and Account ID acc_TiMZJnUcP5m6dN
   function payWithRazorpay(planName, amountInINR) {
     const options = {
-      "key": "rzp_test_YOUR_KEY_HERE", // Replace with your live or test Razorpay Key ID
+      "key": "rzp_test_TvuAQZ6fAw4f9f", // Your Razorpay Test Key ID
       "amount": amountInINR * 100, // Amount in paise
       "currency": "INR",
       "name": "Uttam Rai (App Onboarding)",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>App Connect - Razorpay Onboarding</title>
+<title>App Connect - Dashboard</title>
 <!-- Razorpay Standard Checkout SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
@@ -65,9 +65,8 @@
     border-radius: 24px;
     width: 100%;
     max-width: 420px;
-    padding: 28px 20px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(254, 240, 138, 0.2);
-    overflow: hidden;
+    padding: 24px 16px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
   }
 
   .header {
@@ -82,14 +81,8 @@
     letter-spacing: -0.5px;
   }
 
-  .header p {
-    font-size: 13px;
-    color: #94a3b8;
-    font-weight: 500;
-  }
-
   .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .label {
@@ -101,27 +94,10 @@
     letter-spacing: 0.8px;
   }
 
-  .phone-container {
-    display: flex;
-    align-items: center;
+  .input-standard {
     background: rgba(9, 14, 26, 0.85);
     border: 1.5px solid #b45309;
     border-radius: 14px;
-    overflow: hidden;
-  }
-
-  .phone-container:focus-within {
-    border-color: #fbbf24;
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.4);
-  }
-
-  .country-code {
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    color: #fef08a;
-    font-weight: 700;
-    font-size: 14px;
-    border-right: 1px solid #b45309;
   }
 
   input[type="tel"],
@@ -139,63 +115,6 @@
     font-size: 14px;
     font-weight: 600;
     outline: none;
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-
-  select option {
-    background: #090e1a;
-    color: #ffffff;
-  }
-
-  input::placeholder, textarea::placeholder {
-    color: #64748b;
-  }
-
-  .captcha-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-
-  .captcha-display {
-    flex: 1;
-    background: rgba(5, 8, 17, 0.95);
-    border: 1.5px solid #f59e0b;
-    border-radius: 12px;
-    padding: 12px;
-    text-align: center;
-    font-family: 'Courier New', monospace;
-    font-size: 24px;
-    font-weight: 800;
-    letter-spacing: 8px;
-    color: #fffbeb;
-    text-shadow: 0 0 12px #fbbf24;
-    box-shadow: inset 0 0 12px rgba(245, 158, 11, 0.3);
-  }
-
-  .action-btn {
-    background: rgba(9, 14, 26, 0.9);
-    border: 1.5px solid #b45309;
-    color: #fef08a;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px;
-  }
-
-  .input-standard {
-    background: rgba(9, 14, 26, 0.85);
-    border: 1.5px solid #b45309;
-    border-radius: 14px;
   }
 
   .btn-submit {
@@ -219,11 +138,6 @@
     cursor: pointer;
     margin-top: 10px;
     box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-    letter-spacing: 0.5px;
-  }
-
-  .btn-submit:active {
-    transform: scale(0.98);
   }
 
   .btn-skip {
@@ -238,29 +152,6 @@
     cursor: pointer;
     margin-top: 14px;
     text-align: center;
-    transition: all 0.2s ease;
-  }
-
-  .btn-skip:hover {
-    background: rgba(245, 158, 11, 0.15);
-    border-color: #fbbf24;
-  }
-
-  .message {
-    margin-top: 14px;
-    font-size: 13px;
-    font-weight: 600;
-    text-align: center;
-    display: none;
-    padding: 10px;
-    border-radius: 10px;
-  }
-
-  .message.error {
-    display: block;
-    background: rgba(239, 68, 68, 0.15);
-    color: #fca5a5;
-    border: 1px solid rgba(239, 68, 68, 0.3);
   }
 
   .connected-screen {
@@ -286,34 +177,8 @@
     align-items: center;
     font-size: 30px;
     font-weight: 900;
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.6);
   }
 
-  .timer-text {
-    font-size: 12.5px;
-    margin-top: 12px;
-    font-weight: 700;
-    background: rgba(245, 158, 11, 0.15);
-    padding: 8px 12px;
-    border-radius: 20px;
-    display: inline-block;
-    border: 1px solid rgba(251, 191, 36, 0.3);
-  }
-
-  .device-info-box {
-    background: rgba(5, 8, 17, 0.85);
-    border: 1.5px solid rgba(245, 158, 11, 0.4);
-    border-radius: 14px;
-    padding: 12px;
-    text-align: left;
-    font-size: 12px;
-    color: #cbd5e1;
-    margin-bottom: 14px;
-  }
-  .device-info-box p { margin-bottom: 4px; font-weight: 600; }
-  .device-info-box span { color: #fef08a; }
-
-  /* Animated Spinner */
   .spin-ring {
     width: 44px;
     height: 44px;
@@ -340,7 +205,7 @@
     backdrop-filter: blur(16px);
     border: 1.5px solid rgba(245, 158, 11, 0.5);
     border-radius: 20px;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 
@@ -355,6 +220,7 @@
     align-items: center;
     font-weight: 800;
     font-size: 16px;
+    cursor: pointer;
     box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
   }
 
@@ -384,16 +250,11 @@
     backdrop-filter: blur(16px);
     border: 1.5px solid rgba(245, 158, 11, 0.6);
     border-radius: 24px;
-    padding: 24px 20px;
+    padding: 20px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
     text-align: left;
-  }
-
-  .home-title {
-    font-size: 18px;
-    font-weight: 800;
-    margin-bottom: 14px;
-    text-align: center;
+    max-height: 72vh;
+    overflow-y: auto;
   }
 
   .welcome-banner {
@@ -401,22 +262,29 @@
     border: 1px solid rgba(251, 191, 36, 0.4);
     border-radius: 14px;
     padding: 12px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     text-align: center;
   }
   .welcome-banner h4 { color: #fef08a; font-size: 14px; font-weight: 800; margin-bottom: 4px; }
   .welcome-banner p { color: #cbd5e1; font-size: 12px; }
 
-  .warning-box {
-    background: rgba(239, 68, 68, 0.12);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    border-radius: 10px;
-    padding: 10px;
-    margin-top: 6px;
-    margin-bottom: 10px;
-    font-size: 11px;
-    color: #fca5a5;
-    font-weight: 600;
+  /* VIP Banner Popup */
+  #vip-banner-popup {
+    background: linear-gradient(135deg, rgba(217, 119, 6, 0.25), rgba(245, 158, 11, 0.15));
+    border: 1.5px solid #fbbf24;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 14px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+  }
+  .vip-banner-title { font-size: 15px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
+  .vip-banner-desc { font-size: 12px; color: #cbd5e1; margin-bottom: 10px; }
+  .vip-close-btn {
+    position: absolute;
+    top: 10px; right: 12px;
+    background: none; border: none;
+    color: #fef08a; font-size: 18px; cursor: pointer;
   }
 
   .plan-card {
@@ -426,17 +294,12 @@
     padding: 16px;
     margin-bottom: 12px;
     cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .plan-card:hover {
-    border-color: #fbbf24;
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
   }
   .plan-title { font-size: 15px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
   .plan-price { font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom: 8px; }
   .plan-desc { font-size: 12px; color: #94a3b8; }
 
-  /* Bottom Navigation Bar for Homepage */
+  /* Bottom Navigation Bar */
   .bottom-nav {
     display: flex;
     justify-content: space-around;
@@ -445,8 +308,7 @@
     border: 1.5px solid rgba(245, 158, 11, 0.5);
     border-radius: 16px;
     padding: 10px;
-    margin-top: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin-top: 12px;
   }
 
   .nav-item {
@@ -461,13 +323,10 @@
     align-items: center;
     gap: 4px;
   }
+  .nav-item.active { color: #fef08a; }
 
-  .nav-item.active {
-    color: #fef08a;
-  }
-
-  /* Menu Manager Modal Banner */
-  #menu-manager-modal {
+  /* Modals */
+  .modal-overlay {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -478,8 +337,7 @@
     align-items: center;
     padding: 16px;
   }
-
-  .menu-modal-content {
+  .modal-content {
     background: rgba(17, 26, 46, 0.95);
     border: 1.5px solid #f59e0b;
     border-radius: 20px;
@@ -490,7 +348,6 @@
     max-height: 85vh;
     overflow-y: auto;
   }
-
   .menu-item-row {
     display: flex;
     gap: 8px;
@@ -501,566 +358,142 @@
 </head>
 <body onload="checkActiveSession()">
 
-<!-- Main Container for Authentication & Onboarding Screens -->
-<div class="card" id="flow-card">
-
-  <!-- Step 1: Gateway -->
+<!-- Onboarding / Auth Container (Hidden if already onboarded) -->
+<div class="card" id="flow-card" style="display: none;">
   <div id="login-signup-gateway">
     <div class="header">
       <h2 class="gold-title stage-shine">Welcome to App</h2>
-      <p>Choose an option to get started</p>
+      <p style="color:#94a3b8; font-size:13px;">Choose an option to get started</p>
     </div>
     <button class="btn-submit" type="button" onclick="handleGatewaySignup()" style="margin-bottom: 12px;">New User? Sign Up</button>
     <button class="btn-submit" type="button" onclick="handleGatewayLogin()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309;">Already Registered? Log In</button>
-    <div class="message" id="gateway-msg-box"></div>
   </div>
 
-  <!-- Direct Login Form with Stay Logged In Option -->
-  <div id="login-form" style="display: none;">
-    <div class="header">
-      <h2 class="gold-title stage-shine">Direct Login</h2>
-      <p>Enter your details & stay logged in duration</p>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Mobile Number</label>
-      <div class="phone-container">
-        <span class="country-code">+91</span>
-        <input type="tel" id="login-phone" placeholder="Enter 10-digit number" maxlength="10">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Password</label>
-      <div class="input-standard"><input type="password" id="login-pass" placeholder="Enter your password"></div>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">How long do you want to stay logged in?</label>
-      <div style="display: flex; gap: 10px;">
-        <div class="input-standard" style="flex: 1;">
-          <select id="login-hours">
-            <option value="0">0 Hours</option>
-            <option value="1" selected>1 Hour</option>
-            <option value="2">2 Hours</option>
-            <option value="6">6 Hours</option>
-            <option value="12">12 Hours</option>
-            <option value="24">24 Hours</option>
-          </select>
-        </div>
-        <div class="input-standard" style="flex: 1;">
-          <select id="login-mins">
-            <option value="0" selected>0 Mins</option>
-            <option value="15">15 Mins</option>
-            <option value="30">30 Mins</option>
-            <option value="45">45 Mins</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <button class="btn-submit" type="button" onclick="submitLogin()">Log In</button>
-    <div class="message" id="login-msg-box"></div>
-  </div>
-
-  <!-- Signup Step 1 -->
-  <div id="auth-form" style="display: none;">
-    <div class="header">
-      <h2 class="gold-title stage-shine">Enter Mobile Number</h2>
-      <p>Verify details to connect with the app</p>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Mobile Number</label>
-      <div class="phone-container">
-        <span class="country-code">+91</span>
-        <input type="tel" id="phone" placeholder="Enter 10-digit number" maxlength="10">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Security Check</label>
-      <div class="captcha-box">
-        <div class="captcha-display" id="captcha-code">-----</div>
-        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen">🔊</button>
-        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh">↻</button>
-      </div>
-      <div class="input-standard"><input type="text" id="captcha-input" placeholder="Enter CAPTCHA shown above" autocomplete="off"></div>
-    </div>
-    <button class="btn-submit" type="button" onclick="validateStep1()">Connect</button>
-    <div class="message" id="msg-box"></div>
-  </div>
-
-  <!-- Phone Verified Screen -->
-  <div class="connected-screen" id="phone-verified-screen">
-    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
-    <h3 class="gold-title stage-shine">Successfully Connected</h3>
-    <p id="connected-phone-display" class="stage-shine">+91 ----------</p>
-  </div>
-
-  <!-- Step 2: Email -->
-  <div id="email-form" style="display: none;">
-    <div class="header">
-      <h2 class="gold-title stage-shine">Email Address</h2>
-      <p>Where should order updates be sent?</p>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Email Address</label>
-      <div class="input-standard"><input type="email" id="email" placeholder="example@domain.com"></div>
-    </div>
-    <button class="btn-submit" type="button" onclick="validateStep2()">Save & Continue</button>
-    <div class="message" id="email-msg-box"></div>
-  </div>
-
-  <!-- Email Saved Screen -->
-  <div class="connected-screen" id="email-verified-screen">
-    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
-    <h3 class="gold-title stage-shine">Email Saved</h3>
-    <p id="saved-email-display" class="stage-shine">Email: ----------</p>
-    <div class="timer-text stage-shine" id="email-redirect-timer">Redirecting in 4 seconds...</div>
-  </div>
-
-  <!-- Step 3: WhatsApp -->
-  <div id="whatsapp-form" style="display: none;">
-    <div class="header">
-      <h2 class="gold-title stage-shine">WhatsApp Number</h2>
-      <p>Enter your WhatsApp number for instant alerts</p>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">WhatsApp Number</label>
-      <div class="phone-container">
-        <span class="country-code">+91</span>
-        <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
-      </div>
-    </div>
-    <button class="btn-submit" type="button" onclick="validateStep3()">Save & Open Channel</button>
-    <div class="message" id="whatsapp-msg-box"></div>
-  </div>
-
-  <!-- Step 4 & 5 Screens -->
-  <div class="connected-screen" id="channel-screen">
-    <div class="header" style="margin-bottom: 20px;">
-      <h2 class="gold-title stage-shine">Follow WhatsApp Channel</h2>
-      <p>Channel opened! Return here after following.</p>
-    </div>
-    <button class="btn-submit" type="button" onclick="reopenChannel()" style="margin-bottom: 12px;">Re-open Channel</button>
-    <button class="btn-submit" type="button" onclick="onReturnFromChannel()" style="background: linear-gradient(90deg, #16a34a, #22c55e); color: #fff;">I've Followed - Continue</button>
-  </div>
-
-  <div class="connected-screen" id="group-screen">
-    <div class="header" style="margin-bottom: 20px;">
-      <h2 class="gold-title stage-shine">Join Community Group</h2>
-      <p>Group opened! Return here after joining.</p>
-    </div>
-    <button class="btn-submit" type="button" onclick="reopenGroup()" style="margin-bottom: 12px;">Re-open Group</button>
-    <button class="btn-submit" type="button" onclick="onReturnFromGroup()" style="background: linear-gradient(90deg, #16a34a, #22c55e); color: #fff;">I've Joined - Continue</button>
-  </div>
-
-  <!-- Loaders -->
-  <div class="loader-overlay" id="channel-loader" style="display:none; text-align:center; padding:20px 0;">
-    <div class="spin-ring"></div>
-    <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Verifying Channel...</h3>
-  </div>
-
-  <div class="loader-overlay" id="group-loader" style="display:none; text-align:center; padding:20px 0;">
-    <div class="spin-ring"></div>
-    <h3 class="gold-title stage-shine" style="font-size: 18px; margin-bottom: 6px;">Verifying Group...</h3>
-  </div>
-
-  <!-- Final Screen -->
-  <div class="connected-screen" id="final-screen">
-    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
-    <h3 class="gold-title stage-shine">Setup Complete</h3>
-    <p id="final-phone-display" class="stage-shine">Mobile: +91 ----------</p>
-    <p id="final-email-display" class="stage-shine">Email: ----------</p>
-    <p id="final-whatsapp-display" class="stage-shine">WhatsApp: +91 ----------</p>
-    <div class="timer-text stage-shine" id="setup-complete-timer">Securing profile in 5 seconds...</div>
-  </div>
-
-  <!-- Dashboard Connecting Screen with 4s Spin Circle -->
-  <div class="connected-screen" id="dashboard-screen">
-    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
-    <h3 class="gold-title stage-shine">Dashboard</h3>
-    <p class="stage-shine" style="margin-bottom: 12px;">Welcome to your app dashboard!</p>
-    <div class="spin-ring"></div>
-    <div style="background: rgba(9, 14, 26, 0.85); border: 1.5px solid #b45309; border-radius: 14px; padding: 14px; color: #fef08a; font-weight: 700; font-size: 13.5px;">
-      Please fill up the form to start your journey
-    </div>
-  </div>
-
-  <!-- Wait While We Approve Screen -->
-  <div class="connected-screen" id="approval-screen">
-    <div class="success-icon-wrap"><div class="success-icon">⏳</div></div>
-    <h3 class="gold-title stage-shine">Wait While We Approve You</h3>
-    <div class="spin-ring"></div>
-    <p class="stage-shine" style="font-size: 13px; margin-top: 10px;">Your submission is being verified and securely stored in our backend.</p>
-    <div class="timer-text stage-shine" id="approval-timer-text">Processing in 2:00 minutes...</div>
-  </div>
-
-  <!-- Plan Selection Screen with Skip Option -->
+  <!-- Plan Selection Screen -->
   <div class="connected-screen" id="plan-selection-screen" style="text-align: left;">
-    <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 6px;">Successfully Onboarded!</h3>
-    <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Select your recurring revenue plan to continue, or skip to pay later</p>
+    <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 6px;">Select Subscription</h3>
+    <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Choose a recurring revenue plan or pay later</p>
     
     <div class="plan-card" onclick="payWithRazorpay('Daily Plan', 100)">
       <div class="plan-title">1. Daily Plan</div>
       <div class="plan-price">₹100 / Day</div>
       <div class="plan-desc">Billed daily for active services.</div>
     </div>
-
     <div class="plan-card" onclick="payWithRazorpay('Two Weeks Plan', 1000)">
       <div class="plan-title">2. Two Weeks Plan</div>
       <div class="plan-price">₹1,000 / 14 Days</div>
       <div class="plan-desc">Save big with bi-weekly subscription.</div>
     </div>
-
-    <div class="plan-card" onclick="payWithRazorpay('Three Weeks Plan', 1650)">
-      <div class="plan-title">3. Three Weeks Plan</div>
-      <div class="plan-price">₹1,650 / 21 Days</div>
-      <div class="plan-desc">Optimized for medium-term growth.</div>
-    </div>
-
     <div class="plan-card" onclick="payWithRazorpay('Whole Month Plan', 3500)">
-      <div class="plan-title">4. Whole Month Plan</div>
+      <div class="plan-title">3. Whole Month Plan</div>
       <div class="plan-price">₹3,500 / Month</div>
-      <div class="plan-desc">Calculated based on total days in current month (prorated if joining mid-month).</div>
+      <div class="plan-desc">Full month service subscription.</div>
     </div>
-
-    <div class="plan-card" onclick="payWithRazorpay('Auto-Debit Weekly/Daily Setup', 801)">
-      <div class="plan-title">5. Auto-Debit Weekly / Daily Plan</div>
-      <div class="plan-price">₹800 + ₹1 Auto-Pay Setup</div>
-      <div class="plan-desc">Requires ₹1 authorization fee to activate secure auto-pay setup.</div>
-    </div>
-
-    <div class="plan-card" onclick="payWithRazorpay('Yearly Monthly Auto-Debit Setup', 2502)">
-      <div class="plan-title">6. Yearly Monthly Auto-Debit Plan</div>
-      <div class="plan-price">₹2,500/mo + ₹2 Auto-Pay Setup</div>
-      <div class="plan-desc">Requires ₹2 authorization fee to activate annual recurring monthly billing.</div>
-    </div>
-
     <button class="btn-skip" type="button" onclick="skipToDashboard()">Skip for Now (Pay Later) ➔</button>
   </div>
 </div>
 
-<!-- Main Home Dashboard Form H -->
+<!-- Main Home Dashboard -->
 <div id="main-home-dashboard">
-  <!-- Top Bar with Profile Icon & Hamburger -->
   <div class="top-navbar">
-    <div class="profile-icon">U</div>
-    <div class="hamburger-menu">
+    <div class="profile-icon" onclick="openProfileModal()">U</div>
+    <div class="hamburger-menu" onclick="openProfileModal()">
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
       <div class="hamburger-line"></div>
     </div>
   </div>
 
-  <!-- Form H Dashboard Card -->
-  <div class="home-card" style="max-height: 70vh; overflow-y: auto;">
+  <div class="home-card">
+    <!-- VIP / Pay Now Get Benefits Banner -->
+    <div id="vip-banner-popup">
+      <button class="vip-close-btn" onclick="closeVipBanner()">✕</button>
+      <div class="vip-banner-title stage-shine">⭐ Pay Now & Get VIP Benefits!</div>
+      <div class="vip-banner-desc">Unlock advanced analytics, priority support, and instant auto-pay features.</div>
+      <button class="btn-submit" type="button" onclick="switchToPlansTab()" style="margin-top: 4px; padding: 10px; font-size: 13px;">View Plans & Upgrade</button>
+    </div>
+
     <div class="welcome-banner">
       <h4 class="stage-shine">Warm Welcome To Our Platform!</h4>
       <p>Heartfull thanks for choosing us to grow your business journey.</p>
     </div>
 
-    <h2 class="home-title stage-shine">Form H: Business Details</h2>
-
-    <form id="form-h" onsubmit="submitFormH(event)">
-      <div class="form-group">
-        <label class="label stage-shine">1. Hotel/Restaurant Name</label>
-        <div class="input-standard"><input type="text" id="q1" placeholder="Enter business name" oninput="formatWordCapitalized(this)" required></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">2. Owner Name</label>
-        <div class="input-standard"><input type="text" placeholder="Enter owner's name" oninput="formatSentenceCapitalized(this)" required></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">3. Google Rating</label>
-        <div class="input-standard">
-          <select required>
-            <option value="" disabled selected>Select rating</option>
-            <option value="5">⭐⭐⭐⭐⭐ (5.0)</option>
-            <option value="4">⭐⭐⭐⭐ (4.0 - 4.9)</option>
-            <option value="3">⭐⭐⭐ (3.0 - 3.9)</option>
-            <option value="new">New / Unrated</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">4. Location / Address</label>
-        <div class="input-standard"><input type="text" placeholder="Enter location" oninput="formatSentenceCapitalized(this)" required></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">5. Number of Staffs</label>
-        <div class="input-standard"><input type="number" placeholder="e.g. 10" required></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">6. Number of Tables</label>
-        <div class="input-standard"><input type="number" placeholder="e.g. 15" required></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">7. Opening & Closing Time</label>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <div class="input-standard" style="flex: 1;">
-            <select id="open-time" required>
-              <option value="" disabled selected>Opening Time</option>
-              <option value="06:00 AM">06:00 AM</option>
-              <option value="07:00 AM">07:00 AM</option>
-              <option value="08:00 AM">08:00 AM</option>
-              <option value="09:00 AM">09:00 AM</option>
-              <option value="10:00 AM">10:00 AM</option>
-              <option value="11:00 AM">11:00 AM</option>
-              <option value="12:00 PM">12:00 PM</option>
-            </select>
-          </div>
-          <span style="color: #fef08a; font-weight: 700;">to</span>
-          <div class="input-standard" style="flex: 1;">
-            <select id="close-time" required>
-              <option value="" disabled selected>Closing Time</option>
-              <option value="09:00 PM">09:00 PM</option>
-              <option value="10:00 PM">10:00 PM</option>
-              <option value="11:00 PM">11:00 PM</option>
-              <option value="12:00 AM">12:00 AM</option>
-              <option value="01:00 AM">01:00 AM</option>
-              <option value="02:00 AM">02:00 AM</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">8. How long this hotel/restaurant have been established?</label>
-        <div class="input-standard"><input type="text" placeholder="e.g. 3 years or 6 months" oninput="formatSentenceCapitalized(this)" required></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">9. Do you have license of the hotel/restaurant?</label>
-        <div class="input-standard">
-          <select required>
-            <option value="" disabled selected>Select option</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="processing">Under Process</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">10. Upload Digital License Photo (PDF, JPG, PNG)</label>
-        <div class="input-standard" style="padding: 8px;"><input type="file" accept=".pdf,.jpg,.jpeg,.png" required style="color: #cbd5e1; font-size: 12px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">11. Upload Live Shop Photos (Interior, Kitchen, Front Door, Cash Counter)</label>
-        <div class="warning-box">⚠️ Warning: Blurry screenshots will be rejected! Must be clicked live.</div>
-        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">12. External Photo (Left side & Horizontal Middle with Name Board)</label>
-        <div class="warning-box">⚠️ Warning: Only HORIZONTAL name board photos accepted. No vertical shots!</div>
-        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">13. How many restaurants/hotels do you have?</label>
-        <div class="input-standard"><input type="number" placeholder="Enter count" required></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">14. Aadhaar Card Details & Front/Back Photos</label>
-        <div class="input-standard" style="margin-bottom: 6px;"><input type="text" placeholder="Enter 12-digit Aadhaar number" maxlength="12" required></div>
-        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">15. PAN Number & Front/Back Photos</label>
-        <div class="input-standard" style="margin-bottom: 6px;"><input type="text" placeholder="Enter PAN number" oninput="this.value = this.value.toUpperCase()" required></div>
-        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">16. GST Number (Optional)</label>
-        <div class="input-standard"><input type="text" placeholder="Enter GST number (Optional)" oninput="this.value = this.value.toUpperCase()"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">17. Business Description (20 to 500 words)</label>
-        <div class="input-standard"><textarea placeholder="Enter detailed description..." oninput="formatSentenceCapitalized(this)" required></textarea></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">18. Owner's Photo (or ID if owner absent)</label>
-        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" required style="color: #cbd5e1; font-size: 12px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label class="label stage-shine">19. Hotel/Restaurant Staff Photo</label>
-        <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" required style="color: #cbd5e1; font-size: 12px;"></div>
-      </div>
-
-      <button class="btn-submit" type="submit" style="margin-top: 10px;">Submit Form H</button>
-    </form>
+    <h2 class="gold-title stage-shine" style="font-size: 16px; margin-bottom: 10px;">Quick Overview</h2>
+    <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">
+      Your business profile is active. You can manage your menu items using the bottom navigation menu anytime.
+    </p>
   </div>
 
-  <!-- Bottom Navigation Bar on Homepage with Menu Option -->
+  <!-- Bottom Navigation Bar -->
   <div class="bottom-nav">
-    <button class="nav-item active" type="button" onclick="openHomeTab()">
+    <button class="nav-item active" id="nav-home" type="button" onclick="switchTab('home')">
       <span>🏠</span> Home
     </button>
-    <button class="nav-item" type="button" onclick="openMenuManagerModal()">
+    <button class="nav-item" id="nav-menu" type="button" onclick="openMenuManagerModal()">
       <span>🍽️</span> Menu
     </button>
-    <button class="nav-item" type="button" onclick="openPlansTab()">
+    <button class="nav-item" id="nav-plans" type="button" onclick="switchTab('plans')">
       <span>⭐</span> Plans
     </button>
   </div>
 </div>
 
-<!-- Standalone Menu Manager Modal (Banner Type) -->
-<div id="menu-manager-modal">
-  <div class="menu-modal-content">
+<!-- Menu Manager Modal -->
+<div class="modal-overlay" id="menu-manager-modal">
+  <div class="modal-content">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
       <h3 class="gold-title stage-shine" style="font-size: 18px; margin: 0;">Top Menu & Item List</h3>
       <button onclick="closeMenuManagerModal()" style="background:none; border:none; color:#fef08a; font-size:20px; cursor:pointer;">✕</button>
     </div>
-    <p style="font-size: 11.5px; color: #94a3b8; margin-bottom: 14px;">List your top items and set prices. Owners can edit or add items anytime from the bottom menu button.</p>
-
-    <div id="menu-items-container">
-      <!-- Dynamic rows injected via JS -->
-    </div>
-
+    <p style="font-size: 11.5px; color: #94a3b8; margin-bottom: 14px;">List your top items and set prices. Edit or add items anytime.</p>
+    <div id="menu-items-container"></div>
     <button class="btn-submit" type="button" onclick="addMenuItemRow()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309; padding: 10px; margin-bottom: 10px; font-size: 13px;">+ Add Another Item</button>
     <button class="btn-submit" type="button" onclick="saveAndExitMenu()" style="padding: 12px; font-size: 14px;">Save & Exit</button>
   </div>
 </div>
 
+<!-- Profile Modal (Opened via top left picture or hamburger) -->
+<div class="modal-overlay" id="profile-modal">
+  <div class="modal-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <h3 class="gold-title stage-shine" style="font-size: 18px; margin: 0;">User Profile & Details</h3>
+      <button onclick="closeProfileModal()" style="background:none; border:none; color:#fef08a; font-size:20px; cursor:pointer;">✕</button>
+    </div>
+    <div style="font-size: 13px; color: #cbd5e1; line-height: 1.8;" id="profile-details-box">
+      <p><strong>Mobile:</strong> <span id="prof-phone" style="color: #fef08a;">+91 9800000000</span></p>
+      <p><strong>Email:</strong> <span id="prof-email" style="color: #fef08a;">owner@example.com</span></p>
+      <p><strong>WhatsApp:</strong> <span id="prof-whatsapp" style="color: #fef08a;">+91 9800000000</span></p>
+      <p><strong>Account Status:</strong> <span style="color: #22c55e;">Active / Approved</span></p>
+    </div>
+    <button class="btn-submit" type="button" onclick="closeProfileModal()" style="margin-top: 16px;">Close</button>
+  </div>
+</div>
+
 <script>
-  let currentCaptcha = "";
-  let userPhone = "";
-  let userEmail = "";
-  let userWhatsapp = "";
-
-  function formatWordCapitalized(input) {
-    let words = input.value.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      if (words[i].length > 0) {
-        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
-      }
-    }
-    input.value = words.join(" ");
-  }
-
-  function formatSentenceCapitalized(input) {
-    let val = input.value.toLowerCase();
-    let words = val.split(" ");
-    for (let i = 0; i < words.length; i++) {
-      if (words[i].length > 0) {
-        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
-      }
-    }
-    input.value = words.join(" ");
-  }
-
   function checkActiveSession() {
-    let sessionExpiry = localStorage.getItem("session_expiry");
     let isFullyOnboarded = localStorage.getItem("onboarded_completed");
-
-    if (sessionExpiry) {
-      let now = new Date().getTime();
-      if (now < parseInt(sessionExpiry)) {
-        document.getElementById("flow-card").style.display = "block";
-        document.getElementById("login-signup-gateway").style.display = "none";
-        document.getElementById("login-form").style.display = "none";
-        
-        if (isFullyOnboarded === "true") {
-          document.getElementById("plan-selection-screen").style.display = "block";
-        } else {
-          document.getElementById("main-home-dashboard").style.display = "block";
-          document.getElementById("flow-card").style.display = "none";
-        }
-        return;
-      } else {
-        localStorage.removeItem("session_expiry");
-      }
-    }
     
-    document.getElementById("login-signup-gateway").style.display = "block";
-    document.getElementById("flow-card").style.display = "block";
-    document.getElementById("main-home-dashboard").style.display = "none";
-  }
-
-  function getRegisteredUsers() {
-    let data = localStorage.getItem("registered_users");
-    return data ? JSON.parse(data) : {};
+    // If first time or not onboarded, show flow card / gateway
+    if (!isFullyOnboarded) {
+      document.getElementById("flow-card").style.display = "block";
+      document.getElementById("login-signup-gateway").style.display = "block";
+      document.getElementById("main-home-dashboard").style.display = "none";
+    } else {
+      // Directly load main homepage dashboard
+      document.getElementById("flow-card").style.display = "none";
+      document.getElementById("main-home-dashboard").style.display = "block";
+    }
   }
 
   function handleGatewaySignup() {
-    let users = getRegisteredUsers();
-    let currentIP = "192.168.62.73";
-    let currentMAC = "MAC-DE07-6E31";
-
-    let existingUser = Object.values(users).some(u => u.ip === currentIP || u.mac === currentMAC);
-    if (existingUser) {
-      showMessage("gateway-msg-box", "You have already created an account. Please log in.", "error");
-      return;
-    }
-
+    localStorage.setItem("onboarded_completed", "true");
     document.getElementById("login-signup-gateway").style.display = "none";
-    document.getElementById("auth-form").style.display = "block";
-    generateCaptcha();
+    document.getElementById("plan-selection-screen").style.display = "block";
   }
 
   function handleGatewayLogin() {
-    document.getElementById("login-signup-gateway").style.display = "none";
-    document.getElementById("login-form").style.display = "block";
-  }
-
-  function submitLogin() {
-    const phone = document.getElementById("login-phone").value.trim();
-    const pass = document.getElementById("login-pass").value.trim();
-    if (!/^\d{10}$/.test(phone)) {
-      showMessage("login-msg-box", "Enter valid 10-digit number.", "error");
-      return;
-    }
-    let expiryTime = new Date().getTime() + 3600 * 1000;
-    localStorage.setItem("session_expiry", expiryTime);
-
-    document.getElementById("login-form").style.display = "none";
-    document.getElementById("dashboard-screen").style.display = "block";
-    
-    setTimeout(() => {
-      document.getElementById("flow-card").style.display = "none";
-      if (localStorage.getItem("onboarded_completed") === "true") {
-        document.getElementById("flow-card").style.display = "block";
-        document.getElementById("dashboard-screen").style.display = "none";
-        document.getElementById("plan-selection-screen").style.display = "block";
-      } else {
-        document.getElementById("main-home-dashboard").style.display = "block";
-      }
-    }, 3000);
-  }
-
-  function submitFormH(event) {
-    event.preventDefault();
-    document.getElementById("main-home-dashboard").style.display = "none";
-    document.getElementById("login-signup-gateway").style.display = "none";
-    document.getElementById("flow-card").style.display = "block";
-    document.getElementById("approval-screen").style.display = "block";
-
-    let timeLeft = 120;
-    const timerElem = document.getElementById("approval-timer-text");
-    const interval = setInterval(() => {
-      timeLeft--;
-      let mins = Math.floor(timeLeft / 60);
-      let secs = timeLeft % 60;
-      timerElem.textContent = `Processing in ${mins}:${secs < 10 ? '0' : ''}${secs} minutes...`;
-
-      if (timeLeft <= 0) {
-        clearInterval(interval);
-        localStorage.setItem("onboarded_completed", "true");
-        document.getElementById("approval-screen").style.display = "none";
-        document.getElementById("plan-selection-screen").style.display = "block";
-      }
-    }, 1000);
+    localStorage.setItem("onboarded_completed", "true");
+    skipToDashboard();
   }
 
   function skipToDashboard() {
@@ -1068,27 +501,49 @@
     document.getElementById("main-home-dashboard").style.display = "block";
   }
 
-  // Menu Manager Modal Functions
+  function closeVipBanner() {
+    document.getElementById("vip-banner-popup").style.display = "none";
+  }
+
+  function switchToPlansTab() {
+    document.getElementById("flow-card").style.display = "block";
+    document.getElementById("login-signup-gateway").style.display = "none";
+    document.getElementById("plan-selection-screen").style.display = "block";
+    document.getElementById("main-home-dashboard").style.display = "none";
+  }
+
+  function switchTab(tab) {
+    if (tab === 'home') {
+      document.getElementById("flow-card").style.display = "none";
+      document.getElementById("main-home-dashboard").style.display = "block";
+      document.getElementById("nav-home").classList.add("active");
+      document.getElementById("nav-plans").classList.remove("active");
+    } else if (tab === 'plans') {
+      document.getElementById("main-home-dashboard").style.display = "none";
+      document.getElementById("flow-card").style.display = "block";
+      document.getElementById("plan-selection-screen").style.display = "block";
+      document.getElementById("nav-plans").classList.add("active");
+      document.getElementById("nav-home").classList.remove("active");
+    }
+  }
+
+  // Menu Modal Actions
   function openMenuManagerModal() {
     loadSavedMenuItems();
     document.getElementById("menu-manager-modal").style.display = "flex";
   }
-
   function closeMenuManagerModal() {
     document.getElementById("menu-manager-modal").style.display = "none";
   }
-
   function loadSavedMenuItems() {
     const container = document.getElementById("menu-items-container");
     container.innerHTML = "";
     let savedMenu = JSON.parse(localStorage.getItem("hotel_menu_items") || '[{"name":"Signature Dish", "price":"250"}]');
-    
-    savedMenu.forEach((item, index) => {
-      addMenuItemRow(item.name, item.price, index);
+    savedMenu.forEach((item) => {
+      addMenuItemRow(item.name, item.price);
     });
   }
-
-  function addMenuItemRow(name = "", price = "", index = null) {
+  function addMenuItemRow(name = "", price = "") {
     const container = document.getElementById("menu-items-container");
     const row = document.createElement("div");
     row.className = "menu-item-row";
@@ -1099,36 +554,29 @@
     `;
     container.appendChild(row);
   }
-
   function saveAndExitMenu() {
     const names = document.querySelectorAll(".menu-item-name");
     const prices = document.querySelectorAll(".menu-item-price");
     let menuData = [];
-
     for (let i = 0; i < names.length; i++) {
       if (names[i].value.trim() !== "") {
-        menuData.push({
-          name: names[i].value.trim(),
-          price: prices[i].value.trim() || "0"
-        });
+        menuData.push({ name: names[i].value.trim(), price: prices[i].value.trim() || "0" });
       }
     }
-
     localStorage.setItem("hotel_menu_items", JSON.stringify(menuData));
     alert("Menu items saved successfully!");
     closeMenuManagerModal();
   }
 
-  function openHomeTab() {
-    document.getElementById("main-home-dashboard").style.display = "block";
+  // Profile Modal Actions
+  function openProfileModal() {
+    document.getElementById("profile-modal").style.display = "flex";
+  }
+  function closeProfileModal() {
+    document.getElementById("profile-modal").style.display = "none";
   }
 
-  function openPlansTab() {
-    document.getElementById("main-home-dashboard").style.display = "none";
-    document.getElementById("flow-card").style.display = "block";
-    document.getElementById("plan-selection-screen").style.display = "block";
-  }
-
+  // Razorpay Integration
   function payWithRazorpay(planName, amountInINR) {
     const options = {
       "key": "rzp_test_TvuAQZ6fAw4f9f",
@@ -1147,64 +595,6 @@
     };
     const rzp = new Razorpay(options);
     rzp.open();
-  }
-
-  function generateCaptcha() {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let code = "";
-    for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
-    currentCaptcha = code;
-    document.getElementById("captcha-code").textContent = code;
-    document.getElementById("captcha-input").value = "";
-  }
-
-  function speakCaptcha() {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentCaptcha.split('').join(', ')));
-    }
-  }
-
-  function showMessage(elementId, text, type) {
-    const msgBox = document.getElementById(elementId);
-    msgBox.textContent = text;
-    msgBox.className = "message " + type;
-  }
-
-  function validateStep1() {
-    const phoneInput = document.getElementById("phone").value.trim();
-    if (!/^\d{10}$/.test(phoneInput)) {
-      showMessage("msg-box", "Enter valid 10-digit number.", "error");
-      return;
-    }
-    userPhone = phoneInput;
-    document.getElementById("auth-form").style.display = "none";
-    document.getElementById("connected-phone-display").textContent = "+91 " + userPhone;
-    document.getElementById("phone-verified-screen").style.display = "block";
-    setTimeout(() => {
-      document.getElementById("phone-verified-screen").style.display = "none";
-      document.getElementById("email-form").style.display = "block";
-    }, 1200);
-  }
-
-  function validateStep2() {
-    const emailInput = document.getElementById("email").value.trim();
-    userEmail = emailInput;
-    document.getElementById("email-form").style.display = "none";
-    document.getElementById("saved-email-display").textContent = "Email: " + userEmail;
-    document.getElementById("email-verified-screen").style.display = "block";
-    setTimeout(() => {
-      document.getElementById("email-verified-screen").style.display = "none";
-      document.getElementById("whatsapp-phone").value = userPhone;
-      document.getElementById("whatsapp-form").style.display = "block";
-    }, 2000);
-  }
-
-  function validateStep3() {
-    userWhatsapp = document.getElementById("whatsapp-phone").value.trim();
-    document.getElementById("whatsapp-form").style.display = "none";
-    document.getElementById("channel-screen").style.display = "block";
-    window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";
   }
 </script>
 

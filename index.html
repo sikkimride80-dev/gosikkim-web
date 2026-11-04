@@ -435,6 +435,68 @@
   .plan-title { font-size: 15px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
   .plan-price { font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom: 8px; }
   .plan-desc { font-size: 12px; color: #94a3b8; }
+
+  /* Bottom Navigation Bar for Homepage */
+  .bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(17, 26, 46, 0.95);
+    border: 1.5px solid rgba(245, 158, 11, 0.5);
+    border-radius: 16px;
+    padding: 10px;
+    margin-top: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .nav-item {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .nav-item.active {
+    color: #fef08a;
+  }
+
+  /* Menu Manager Modal Banner */
+  #menu-manager-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(5, 8, 17, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+
+  .menu-modal-content {
+    background: rgba(17, 26, 46, 0.95);
+    border: 1.5px solid #f59e0b;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .menu-item-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+  }
 </style>
 </head>
 <body onload="checkActiveSession()">
@@ -495,24 +557,6 @@
     </div>
     <button class="btn-submit" type="button" onclick="submitLogin()">Log In</button>
     <div class="message" id="login-msg-box"></div>
-  </div>
-
-  <!-- Reset Password Screen -->
-  <div id="reset-pass-form" style="display: none;">
-    <div class="header">
-      <h2 class="gold-title stage-shine">Create New Password</h2>
-      <p id="reset-limit-text">Password mismatch. Create a new password.</p>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">New Password</label>
-      <div class="input-standard"><input type="password" id="new-pass1" placeholder="Min 4 characters"></div>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Confirm Password</label>
-      <div class="input-standard"><input type="password" id="new-pass2" placeholder="Re-enter password"></div>
-    </div>
-    <button class="btn-submit" type="button" onclick="saveNewPassword()">Update Password</button>
-    <div class="message" id="reset-msg-box"></div>
   </div>
 
   <!-- Signup Step 1 -->
@@ -627,40 +671,6 @@
     <div class="timer-text stage-shine" id="setup-complete-timer">Securing profile in 5 seconds...</div>
   </div>
 
-  <!-- Password Creation Screen -->
-  <div id="password-form" style="display: none;">
-    <div class="header">
-      <h2 class="gold-title stage-shine">Set Secure Password</h2>
-      <p>Must be at least 4 characters long</p>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Create Password</label>
-      <div class="input-standard"><input type="password" id="pass1" placeholder="Enter password (min 4 chars)"></div>
-    </div>
-    <div class="form-group">
-      <label class="label stage-shine">Confirm Password</label>
-      <div class="input-standard"><input type="password" id="pass2" placeholder="Re-enter password"></div>
-    </div>
-    <button class="btn-submit" type="button" onclick="validatePassword()">Save Password</button>
-    <div class="message" id="password-msg-box"></div>
-  </div>
-
-  <!-- Device Scan Screen -->
-  <div class="connected-screen" id="device-scan-screen">
-    <div class="header" style="margin-bottom: 12px;">
-      <h2 class="gold-title stage-shine" style="font-size: 20px;">Device & Location Scan</h2>
-      <p style="font-size: 12px;">Please read and verify your security parameters</p>
-    </div>
-    <div class="device-info-box">
-      <p><strong>Device Name:</strong> <span id="scan-devname">Galaxy A54 / Pixel 7</span></p>
-      <p><strong>Android Version:</strong> <span id="scan-android">Android 14.0 (API 34)</span></p>
-      <p><strong>IP Address:</strong> <span id="scan-ip">192.168.62.73</span></p>
-      <p><strong>Device MAC / ID:</strong> <span id="scan-mac">MAC-DE07-6E31</span></p>
-      <p><strong>Map Location:</strong> <span id="scan-location">Gangtok, Sikkim, India</span></p>
-    </div>
-    <div class="timer-text stage-shine" id="scan-timer-text">Redirecting to login in 6 seconds...</div>
-  </div>
-
   <!-- Dashboard Connecting Screen with 4s Spin Circle -->
   <div class="connected-screen" id="dashboard-screen">
     <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
@@ -722,12 +732,11 @@
       <div class="plan-desc">Requires ₹2 authorization fee to activate annual recurring monthly billing.</div>
     </div>
 
-    <!-- Skip Button for Paying Later -->
     <button class="btn-skip" type="button" onclick="skipToDashboard()">Skip for Now (Pay Later) ➔</button>
   </div>
 </div>
 
-<!-- Main Home Dashboard Form H (Shown only on first-time onboarding) -->
+<!-- Main Home Dashboard Form H -->
 <div id="main-home-dashboard">
   <!-- Top Bar with Profile Icon & Hamburger -->
   <div class="top-navbar">
@@ -740,7 +749,7 @@
   </div>
 
   <!-- Form H Dashboard Card -->
-  <div class="home-card" style="max-height: 78vh; overflow-y: auto;">
+  <div class="home-card" style="max-height: 70vh; overflow-y: auto;">
     <div class="welcome-banner">
       <h4 class="stage-shine">Warm Welcome To Our Platform!</h4>
       <p>Heartfull thanks for choosing us to grow your business journey.</p>
@@ -749,19 +758,16 @@
     <h2 class="home-title stage-shine">Form H: Business Details</h2>
 
     <form id="form-h" onsubmit="submitFormH(event)">
-      <!-- Q1: Capitalized word to word -->
       <div class="form-group">
         <label class="label stage-shine">1. Hotel/Restaurant Name</label>
         <div class="input-standard"><input type="text" id="q1" placeholder="Enter business name" oninput="formatWordCapitalized(this)" required></div>
       </div>
 
-      <!-- Q2: First letter capitalized, space handled, others small -->
       <div class="form-group">
         <label class="label stage-shine">2. Owner Name</label>
         <div class="input-standard"><input type="text" placeholder="Enter owner's name" oninput="formatSentenceCapitalized(this)" required></div>
       </div>
 
-      <!-- Q3 -->
       <div class="form-group">
         <label class="label stage-shine">3. Google Rating</label>
         <div class="input-standard">
@@ -775,25 +781,21 @@
         </div>
       </div>
 
-      <!-- Q4 -->
       <div class="form-group">
         <label class="label stage-shine">4. Location / Address</label>
         <div class="input-standard"><input type="text" placeholder="Enter location" oninput="formatSentenceCapitalized(this)" required></div>
       </div>
 
-      <!-- Q5 -->
       <div class="form-group">
         <label class="label stage-shine">5. Number of Staffs</label>
         <div class="input-standard"><input type="number" placeholder="e.g. 10" required></div>
       </div>
 
-      <!-- Q6 -->
       <div class="form-group">
         <label class="label stage-shine">6. Number of Tables</label>
         <div class="input-standard"><input type="number" placeholder="e.g. 15" required></div>
       </div>
 
-      <!-- Q7: Opening & Closing Time Dropdowns -->
       <div class="form-group">
         <label class="label stage-shine">7. Opening & Closing Time</label>
         <div style="display: flex; gap: 8px; align-items: center;">
@@ -824,7 +826,6 @@
         </div>
       </div>
 
-      <!-- New Questionnaire Fields -->
       <div class="form-group">
         <label class="label stage-shine">8. How long this hotel/restaurant have been established?</label>
         <div class="input-standard"><input type="text" placeholder="e.g. 3 years or 6 months" oninput="formatSentenceCapitalized(this)" required></div>
@@ -899,6 +900,37 @@
       <button class="btn-submit" type="submit" style="margin-top: 10px;">Submit Form H</button>
     </form>
   </div>
+
+  <!-- Bottom Navigation Bar on Homepage with Menu Option -->
+  <div class="bottom-nav">
+    <button class="nav-item active" type="button" onclick="openHomeTab()">
+      <span>🏠</span> Home
+    </button>
+    <button class="nav-item" type="button" onclick="openMenuManagerModal()">
+      <span>🍽️</span> Menu
+    </button>
+    <button class="nav-item" type="button" onclick="openPlansTab()">
+      <span>⭐</span> Plans
+    </button>
+  </div>
+</div>
+
+<!-- Standalone Menu Manager Modal (Banner Type) -->
+<div id="menu-manager-modal">
+  <div class="menu-modal-content">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <h3 class="gold-title stage-shine" style="font-size: 18px; margin: 0;">Top Menu & Item List</h3>
+      <button onclick="closeMenuManagerModal()" style="background:none; border:none; color:#fef08a; font-size:20px; cursor:pointer;">✕</button>
+    </div>
+    <p style="font-size: 11.5px; color: #94a3b8; margin-bottom: 14px;">List your top items and set prices. Owners can edit or add items anytime from the bottom menu button.</p>
+
+    <div id="menu-items-container">
+      <!-- Dynamic rows injected via JS -->
+    </div>
+
+    <button class="btn-submit" type="button" onclick="addMenuItemRow()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309; padding: 10px; margin-bottom: 10px; font-size: 13px;">+ Add Another Item</button>
+    <button class="btn-submit" type="button" onclick="saveAndExitMenu()" style="padding: 12px; font-size: 14px;">Save & Exit</button>
+  </div>
 </div>
 
 <script>
@@ -906,9 +938,7 @@
   let userPhone = "";
   let userEmail = "";
   let userWhatsapp = "";
-  let currentLoginPhone = "";
 
-  // Helper for Word-to-Word Capitalization (Q1)
   function formatWordCapitalized(input) {
     let words = input.value.split(" ");
     for (let i = 0; i < words.length; i++) {
@@ -919,7 +949,6 @@
     input.value = words.join(" ");
   }
 
-  // Helper for Sentence/Word Formatting (First char capitalized)
   function formatSentenceCapitalized(input) {
     let val = input.value.toLowerCase();
     let words = val.split(" ");
@@ -931,7 +960,6 @@
     input.value = words.join(" ");
   }
 
-  // Session and Onboarding persistence handler
   function checkActiveSession() {
     let sessionExpiry = localStorage.getItem("session_expiry");
     let isFullyOnboarded = localStorage.getItem("onboarded_completed");
@@ -955,7 +983,6 @@
       }
     }
     
-    // Default Gateway View for new or expired sessions
     document.getElementById("login-signup-gateway").style.display = "block";
     document.getElementById("flow-card").style.display = "block";
     document.getElementById("main-home-dashboard").style.display = "none";
@@ -966,20 +993,14 @@
     return data ? JSON.parse(data) : {};
   }
 
-  function saveRegisteredUser(phone, ip, mac, pass) {
-    let users = getRegisteredUsers();
-    users[phone] = { ip: ip, mac: mac, password: pass };
-    localStorage.setItem("registered_users", JSON.stringify(users));
-  }
-
   function handleGatewaySignup() {
     let users = getRegisteredUsers();
-    let currentIP = document.getElementById("scan-ip") ? document.getElementById("scan-ip").textContent : "192.168.62.73";
-    let currentMAC = document.getElementById("scan-mac") ? document.getElementById("scan-mac").textContent : "MAC-DE07-6E31";
+    let currentIP = "192.168.62.73";
+    let currentMAC = "MAC-DE07-6E31";
 
     let existingUser = Object.values(users).some(u => u.ip === currentIP || u.mac === currentMAC);
     if (existingUser) {
-      showMessage("gateway-msg-box", "You have already created an account. Can't create new, please resume with log in.", "error");
+      showMessage("gateway-msg-box", "You have already created an account. Please log in.", "error");
       return;
     }
 
@@ -989,20 +1010,6 @@
   }
 
   function handleGatewayLogin() {
-    let users = getRegisteredUsers();
-    let currentIP = document.getElementById("scan-ip") ? document.getElementById("scan-ip").textContent : "192.168.62.73";
-    let currentMAC = document.getElementById("scan-mac") ? document.getElementById("scan-mac").textContent : "MAC-DE07-6E31";
-
-    let existingUserKey = Object.keys(users).find(phone => users[phone].ip === currentIP || users[phone].mac === currentMAC);
-
-    if (!existingUserKey) {
-      showMessage("gateway-msg-box", "You are new, please sign up first!", "error");
-      setTimeout(() => {
-        handleGatewaySignup();
-      }, 1500);
-      return;
-    }
-
     document.getElementById("login-signup-gateway").style.display = "none";
     document.getElementById("login-form").style.display = "block";
   }
@@ -1010,66 +1017,35 @@
   function submitLogin() {
     const phone = document.getElementById("login-phone").value.trim();
     const pass = document.getElementById("login-pass").value.trim();
-    const hours = parseInt(document.getElementById("login-hours").value) || 0;
-    const mins = parseInt(document.getElementById("login-mins").value) || 0;
-
     if (!/^\d{10}$/.test(phone)) {
-      showMessage("login-msg-box", "Please enter a valid 10-digit mobile number.", "error");
+      showMessage("login-msg-box", "Enter valid 10-digit number.", "error");
       return;
     }
-
-    let users = getRegisteredUsers();
-    if (!users[phone]) {
-      showMessage("login-msg-box", "You are new, please sign up first!", "error");
-      setTimeout(() => {
-        document.getElementById("login-form").style.display = "none";
-        handleGatewaySignup();
-      }, 1500);
-      return;
-    }
-
-    if (users[phone].password !== pass) {
-      currentLoginPhone = phone;
-      checkResetLimit();
-      return;
-    }
-
-    let totalMillis = (hours * 3600 + mins * 60) * 1000;
-    if (totalMillis === 0) totalMillis = 3600 * 1000;
-    let expiryTime = new Date().getTime() + totalMillis;
+    let expiryTime = new Date().getTime() + 3600 * 1000;
     localStorage.setItem("session_expiry", expiryTime);
 
     document.getElementById("login-form").style.display = "none";
     document.getElementById("dashboard-screen").style.display = "block";
     
-    startDashboardConnection();
-  }
-
-  function startDashboardConnection() {
     setTimeout(() => {
       document.getElementById("flow-card").style.display = "none";
-      let isFullyOnboarded = localStorage.getItem("onboarded_completed");
-      if (isFullyOnboarded === "true") {
-        document.getElementById("login-signup-gateway").style.display = "none";
+      if (localStorage.getItem("onboarded_completed") === "true") {
         document.getElementById("flow-card").style.display = "block";
         document.getElementById("dashboard-screen").style.display = "none";
         document.getElementById("plan-selection-screen").style.display = "block";
       } else {
         document.getElementById("main-home-dashboard").style.display = "block";
       }
-    }, 4000);
+    }, 3000);
   }
 
   function submitFormH(event) {
     event.preventDefault();
-    
     document.getElementById("main-home-dashboard").style.display = "none";
     document.getElementById("login-signup-gateway").style.display = "none";
-    
     document.getElementById("flow-card").style.display = "block";
     document.getElementById("approval-screen").style.display = "block";
 
-    // 2 minutes approval timer (120 seconds)
     let timeLeft = 120;
     const timerElem = document.getElementById("approval-timer-text");
     const interval = setInterval(() => {
@@ -1087,37 +1063,87 @@
     }, 1000);
   }
 
-  // Bypass plan selection and go straight to app dashboard
   function skipToDashboard() {
     document.getElementById("flow-card").style.display = "none";
     document.getElementById("main-home-dashboard").style.display = "block";
   }
 
-  // Razorpay Checkout Integration with your Test Key ID and Account ID acc_TiMZJnUcP5m6dN
+  // Menu Manager Modal Functions
+  function openMenuManagerModal() {
+    loadSavedMenuItems();
+    document.getElementById("menu-manager-modal").style.display = "flex";
+  }
+
+  function closeMenuManagerModal() {
+    document.getElementById("menu-manager-modal").style.display = "none";
+  }
+
+  function loadSavedMenuItems() {
+    const container = document.getElementById("menu-items-container");
+    container.innerHTML = "";
+    let savedMenu = JSON.parse(localStorage.getItem("hotel_menu_items") || '[{"name":"Signature Dish", "price":"250"}]');
+    
+    savedMenu.forEach((item, index) => {
+      addMenuItemRow(item.name, item.price, index);
+    });
+  }
+
+  function addMenuItemRow(name = "", price = "", index = null) {
+    const container = document.getElementById("menu-items-container");
+    const row = document.createElement("div");
+    row.className = "menu-item-row";
+    row.innerHTML = `
+      <div class="input-standard" style="flex: 2;"><input type="text" class="menu-item-name" placeholder="Item Name" value="${name}"></div>
+      <div class="input-standard" style="flex: 1;"><input type="number" class="menu-item-price" placeholder="Price (₹)" value="${price}"></div>
+      <button type="button" onclick="this.parentElement.remove()" style="background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid rgba(239,68,68,0.4); border-radius:10px; width:36px; height:36px; cursor:pointer;">✕</button>
+    `;
+    container.appendChild(row);
+  }
+
+  function saveAndExitMenu() {
+    const names = document.querySelectorAll(".menu-item-name");
+    const prices = document.querySelectorAll(".menu-item-price");
+    let menuData = [];
+
+    for (let i = 0; i < names.length; i++) {
+      if (names[i].value.trim() !== "") {
+        menuData.push({
+          name: names[i].value.trim(),
+          price: prices[i].value.trim() || "0"
+        });
+      }
+    }
+
+    localStorage.setItem("hotel_menu_items", JSON.stringify(menuData));
+    alert("Menu items saved successfully!");
+    closeMenuManagerModal();
+  }
+
+  function openHomeTab() {
+    document.getElementById("main-home-dashboard").style.display = "block";
+  }
+
+  function openPlansTab() {
+    document.getElementById("main-home-dashboard").style.display = "none";
+    document.getElementById("flow-card").style.display = "block";
+    document.getElementById("plan-selection-screen").style.display = "block";
+  }
+
   function payWithRazorpay(planName, amountInINR) {
     const options = {
-      "key": "rzp_test_TvuAQZ6fAw4f9f", 
-      "amount": amountInINR * 100, 
+      "key": "rzp_test_TvuAQZ6fAw4f9f",
+      "amount": amountInINR * 100,
       "currency": "INR",
       "name": "Uttam Rai (App Onboarding)",
       "description": "Subscription for " + planName,
       "image": "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-      "notes": {
-        "merchant_id": "TiMZJnUcP5m6dN",
-        "account_id": "acc_TiMZJnUcP5m6dN"
-      },
+      "notes": { "merchant_id": "TiMZJnUcP5m6dN", "account_id": "acc_TiMZJnUcP5m6dN" },
       "handler": function (response) {
-        alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id + "\nPlan Activated: " + planName);
+        alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id);
         skipToDashboard();
       },
-      "prefill": {
-        "name": "Uttam Rai",
-        "email": userEmail || "owner@example.com",
-        "contact": userPhone || "9800000000"
-      },
-      "theme": {
-        "color": "#f59e0b"
-      }
+      "prefill": { "name": "Uttam Rai", "email": "owner@example.com", "contact": "9800000000" },
+      "theme": { "color": "#f59e0b" }
     };
     const rzp = new Razorpay(options);
     rzp.open();
@@ -1147,24 +1173,14 @@
 
   function validateStep1() {
     const phoneInput = document.getElementById("phone").value.trim();
-    const captchaInput = document.getElementById("captcha-input").value.trim().toUpperCase();
-
     if (!/^\d{10}$/.test(phoneInput)) {
-      showMessage("msg-box", "Please enter a valid 10-digit mobile number.", "error");
+      showMessage("msg-box", "Enter valid 10-digit number.", "error");
       return;
     }
-
-    if (captchaInput !== currentCaptcha) {
-      showMessage("msg-box", "Invalid CAPTCHA code. Please try again.", "error");
-      generateCaptcha();
-      return;
-    }
-
     userPhone = phoneInput;
     document.getElementById("auth-form").style.display = "none";
     document.getElementById("connected-phone-display").textContent = "+91 " + userPhone;
     document.getElementById("phone-verified-screen").style.display = "block";
-
     setTimeout(() => {
       document.getElementById("phone-verified-screen").style.display = "none";
       document.getElementById("email-form").style.display = "block";
@@ -1173,37 +1189,19 @@
 
   function validateStep2() {
     const emailInput = document.getElementById("email").value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
-      showMessage("email-msg-box", "Please enter a valid email address.", "error");
-      return;
-    }
     userEmail = emailInput;
     document.getElementById("email-form").style.display = "none";
     document.getElementById("saved-email-display").textContent = "Email: " + userEmail;
     document.getElementById("email-verified-screen").style.display = "block";
-
-    let timeLeft = 4;
-    const timerElem = document.getElementById("email-redirect-timer");
-    const countdown = setInterval(() => {
-      timeLeft--;
-      if (timeLeft > 0) {
-        timerElem.textContent = `Redirecting in ${timeLeft} seconds...`;
-      } else {
-        clearInterval(countdown);
-        document.getElementById("email-verified-screen").style.display = "none";
-        document.getElementById("whatsapp-phone").value = userPhone;
-        document.getElementById("whatsapp-form").style.display = "block";
-      }
-    }, 1000);
+    setTimeout(() => {
+      document.getElementById("email-verified-screen").style.display = "none";
+      document.getElementById("whatsapp-phone").value = userPhone;
+      document.getElementById("whatsapp-form").style.display = "block";
+    }, 2000);
   }
 
   function validateStep3() {
-    const whatsappInput = document.getElementById("whatsapp-phone").value.trim();
-    if (!/^\d{10}$/.test(whatsappInput)) {
-      showMessage("whatsapp-msg-box", "Please enter a valid 10-digit WhatsApp number.", "error");
-      return;
-    }
-    userWhatsapp = whatsappInput;
+    userWhatsapp = document.getElementById("whatsapp-phone").value.trim();
     document.getElementById("whatsapp-form").style.display = "none";
     document.getElementById("channel-screen").style.display = "block";
     window.location.href = "https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40";

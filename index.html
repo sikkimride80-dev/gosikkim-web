@@ -226,6 +226,26 @@
     transform: scale(0.98);
   }
 
+  .btn-skip {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fef08a;
+    border: 1.5px solid #b45309;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 14px;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .btn-skip:hover {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: #fbbf24;
+  }
+
   .message {
     margin-top: 14px;
     font-size: 13px;
@@ -661,10 +681,10 @@
     <div class="timer-text stage-shine" id="approval-timer-text">Processing in 2:00 minutes...</div>
   </div>
 
-  <!-- Plan Selection Screen (Configured with your exact Razorpay Test Key & Account ID) -->
+  <!-- Plan Selection Screen with Skip Option -->
   <div class="connected-screen" id="plan-selection-screen" style="text-align: left;">
     <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 6px;">Successfully Onboarded!</h3>
-    <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Please select your recurring revenue plan to continue</p>
+    <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Select your recurring revenue plan to continue, or skip to pay later</p>
     
     <div class="plan-card" onclick="payWithRazorpay('Daily Plan', 100)">
       <div class="plan-title">1. Daily Plan</div>
@@ -701,6 +721,9 @@
       <div class="plan-price">₹2,500/mo + ₹2 Auto-Pay Setup</div>
       <div class="plan-desc">Requires ₹2 authorization fee to activate annual recurring monthly billing.</div>
     </div>
+
+    <!-- Skip Button for Paying Later -->
+    <button class="btn-skip" type="button" onclick="skipToDashboard()">Skip for Now (Pay Later) ➔</button>
   </div>
 </div>
 
@@ -842,7 +865,7 @@
       </div>
 
       <div class="form-group">
-        <label class="label stage-shine">14. Aadhaar Number & Front/Back Photos</label>
+        <label class="label stage-shine">14. Aadhaar Card Details & Front/Back Photos</label>
         <div class="input-standard" style="margin-bottom: 6px;"><input type="text" placeholder="Enter 12-digit Aadhaar number" maxlength="12" required></div>
         <div class="input-standard" style="padding: 8px;"><input type="file" accept="image/*" multiple required style="color: #cbd5e1; font-size: 12px;"></div>
       </div>
@@ -918,8 +941,8 @@
       if (now < parseInt(sessionExpiry)) {
         document.getElementById("flow-card").style.display = "block";
         document.getElementById("login-signup-gateway").style.display = "none";
+        document.getElementById("login-form").style.display = "none";
         
-        // If already onboarded previously, show plan selection directly bypassing Form H & login
         if (isFullyOnboarded === "true") {
           document.getElementById("plan-selection-screen").style.display = "block";
         } else {
@@ -1027,6 +1050,7 @@
       document.getElementById("flow-card").style.display = "none";
       let isFullyOnboarded = localStorage.getItem("onboarded_completed");
       if (isFullyOnboarded === "true") {
+        document.getElementById("login-signup-gateway").style.display = "none";
         document.getElementById("flow-card").style.display = "block";
         document.getElementById("dashboard-screen").style.display = "none";
         document.getElementById("plan-selection-screen").style.display = "block";
@@ -1063,11 +1087,17 @@
     }, 1000);
   }
 
+  // Bypass plan selection and go straight to app dashboard
+  function skipToDashboard() {
+    document.getElementById("flow-card").style.display = "none";
+    document.getElementById("main-home-dashboard").style.display = "block";
+  }
+
   // Razorpay Checkout Integration with your Test Key ID and Account ID acc_TiMZJnUcP5m6dN
   function payWithRazorpay(planName, amountInINR) {
     const options = {
-      "key": "rzp_test_TvuAQZ6fAw4f9f", // Your Razorpay Test Key ID
-      "amount": amountInINR * 100, // Amount in paise
+      "key": "rzp_test_TvuAQZ6fAw4f9f", 
+      "amount": amountInINR * 100, 
       "currency": "INR",
       "name": "Uttam Rai (App Onboarding)",
       "description": "Subscription for " + planName,
@@ -1078,6 +1108,7 @@
       },
       "handler": function (response) {
         alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id + "\nPlan Activated: " + planName);
+        skipToDashboard();
       },
       "prefill": {
         "name": "Uttam Rai",

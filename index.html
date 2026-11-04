@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>App Connect - Dashboard</title>
+<title>App Connect - Complete Workflow</title>
 <!-- Razorpay Standard Checkout SDK -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <style>
@@ -65,13 +65,13 @@
     border-radius: 24px;
     width: 100%;
     max-width: 420px;
-    padding: 24px 16px;
+    padding: 24px 18px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
   }
 
   .header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
 
   .gold-title {
@@ -92,6 +92,24 @@
     margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+  }
+
+  .phone-container {
+    display: flex;
+    align-items: center;
+    background: rgba(9, 14, 26, 0.85);
+    border: 1.5px solid #b45309;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .country-code {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fef08a;
+    font-weight: 700;
+    font-size: 14px;
+    border-right: 1px solid #b45309;
   }
 
   .input-standard {
@@ -115,6 +133,44 @@
     font-size: 14px;
     font-weight: 600;
     outline: none;
+  }
+
+  textarea { resize: vertical; min-height: 80px; }
+  select option { background: #090e1a; color: #ffffff; }
+
+  .captcha-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .captcha-display {
+    flex: 1;
+    background: rgba(5, 8, 17, 0.95);
+    border: 1.5px solid #f59e0b;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: #fffbeb;
+  }
+
+  .action-btn {
+    background: rgba(9, 14, 26, 0.9);
+    border: 1.5px solid #b45309;
+    color: #fef08a;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
   }
 
   .btn-submit {
@@ -154,16 +210,32 @@
     text-align: center;
   }
 
+  .message {
+    margin-top: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: center;
+    display: none;
+    padding: 8px;
+    border-radius: 8px;
+  }
+  .message.error {
+    display: block;
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
   .connected-screen {
     display: none;
     text-align: center;
-    padding: 12px 0;
+    padding: 10px 0;
   }
 
   .success-icon-wrap {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 16px auto;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 14px auto;
   }
 
   .success-icon {
@@ -175,19 +247,43 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 900;
   }
 
+  .timer-text {
+    font-size: 12px;
+    margin-top: 10px;
+    font-weight: 700;
+    background: rgba(245, 158, 11, 0.15);
+    padding: 6px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+
   .spin-ring {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border: 4px solid rgba(251, 191, 36, 0.2);
     border-top: 4px solid #fbbf24;
     border-radius: 50%;
     animation: spinLoader 0.8s linear infinite;
-    margin: 16px auto;
+    margin: 14px auto;
   }
+
+  .device-info-box {
+    background: rgba(5, 8, 17, 0.85);
+    border: 1.5px solid rgba(245, 158, 11, 0.4);
+    border-radius: 14px;
+    padding: 12px;
+    text-align: left;
+    font-size: 12px;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+  }
+  .device-info-box p { margin-bottom: 4px; font-weight: 600; }
+  .device-info-box span { color: #fef08a; }
 
   /* Main Home Dashboard Layout */
   #main-home-dashboard {
@@ -206,12 +302,11 @@
     border: 1.5px solid rgba(245, 158, 11, 0.5);
     border-radius: 20px;
     margin-bottom: 14px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
 
   .profile-icon {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
     color: #090e1a;
@@ -219,14 +314,13 @@
     justify-content: center;
     align-items: center;
     font-weight: 800;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
-    box-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
   }
 
   .hamburger-menu {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
     background: rgba(9, 14, 26, 0.8);
     border: 1.5px solid #b45309;
@@ -234,12 +328,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     cursor: pointer;
   }
 
   .hamburger-line {
-    width: 20px;
+    width: 18px;
     height: 2px;
     background: #fef08a;
     border-radius: 2px;
@@ -268,7 +362,6 @@
   .welcome-banner h4 { color: #fef08a; font-size: 14px; font-weight: 800; margin-bottom: 4px; }
   .welcome-banner p { color: #cbd5e1; font-size: 12px; }
 
-  /* VIP Banner Popup */
   #vip-banner-popup {
     background: linear-gradient(135deg, rgba(217, 119, 6, 0.25), rgba(245, 158, 11, 0.15));
     border: 1.5px solid #fbbf24;
@@ -276,30 +369,26 @@
     padding: 14px;
     margin-bottom: 14px;
     position: relative;
-    box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
   }
-  .vip-banner-title { font-size: 15px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
-  .vip-banner-desc { font-size: 12px; color: #cbd5e1; margin-bottom: 10px; }
+  .vip-banner-title { font-size: 14.5px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
+  .vip-banner-desc { font-size: 11.5px; color: #cbd5e1; margin-bottom: 8px; }
   .vip-close-btn {
-    position: absolute;
-    top: 10px; right: 12px;
-    background: none; border: none;
-    color: #fef08a; font-size: 18px; cursor: pointer;
+    position: absolute; top: 10px; right: 12px;
+    background: none; border: none; color: #fef08a; font-size: 18px; cursor: pointer;
   }
 
   .plan-card {
     background: rgba(9, 14, 26, 0.9);
     border: 1.5px solid #b45309;
     border-radius: 16px;
-    padding: 16px;
+    padding: 14px;
     margin-bottom: 12px;
     cursor: pointer;
   }
-  .plan-title { font-size: 15px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
-  .plan-price { font-size: 18px; font-weight: 900; color: #ffffff; margin-bottom: 8px; }
-  .plan-desc { font-size: 12px; color: #94a3b8; }
+  .plan-title { font-size: 14px; font-weight: 800; color: #fef08a; margin-bottom: 4px; }
+  .plan-price { font-size: 16px; font-weight: 900; color: #ffffff; margin-bottom: 6px; }
+  .plan-desc { font-size: 11.5px; color: #94a3b8; }
 
-  /* Bottom Navigation Bar */
   .bottom-nav {
     display: flex;
     justify-content: space-around;
@@ -325,41 +414,29 @@
   }
   .nav-item.active { color: #fef08a; }
 
-  /* Modals */
   .modal-overlay {
     display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(5, 8, 17, 0.85);
-    backdrop-filter: blur(8px);
-    z-index: 999;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(5, 8, 17, 0.85); backdrop-filter: blur(8px);
+    z-index: 999; justify-content: center; align-items: center; padding: 16px;
   }
   .modal-content {
     background: rgba(17, 26, 46, 0.95);
-    border: 1.5px solid #f59e0b;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 400px;
-    padding: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-    max-height: 85vh;
-    overflow-y: auto;
+    border: 1.5px solid #f59e0b; border-radius: 20px;
+    width: 100%; max-width: 400px; padding: 20px;
+    max-height: 85vh; overflow-y: auto;
   }
   .menu-item-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 10px;
-    align-items: center;
+    display: flex; gap: 8px; margin-bottom: 10px; align-items: center;
   }
 </style>
 </head>
 <body onload="checkActiveSession()">
 
-<!-- Onboarding / Auth Container (Hidden if already onboarded) -->
-<div class="card" id="flow-card" style="display: none;">
+<!-- Onboarding / Authentication Flow Card -->
+<div class="card" id="flow-card">
+
+  <!-- Gateway: New User vs Login -->
   <div id="login-signup-gateway">
     <div class="header">
       <h2 class="gold-title stage-shine">Welcome to App</h2>
@@ -367,12 +444,167 @@
     </div>
     <button class="btn-submit" type="button" onclick="handleGatewaySignup()" style="margin-bottom: 12px;">New User? Sign Up</button>
     <button class="btn-submit" type="button" onclick="handleGatewayLogin()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309;">Already Registered? Log In</button>
+    <div class="message" id="gateway-msg-box"></div>
   </div>
 
-  <!-- Plan Selection Screen -->
+  <!-- Direct Login Form with Session Duration -->
+  <div id="login-form" style="display: none;">
+    <div class="header">
+      <h2 class="gold-title stage-shine">Direct Login</h2>
+      <p style="color:#94a3b8; font-size:12px;">Enter your credentials to resume session</p>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Mobile Number</label>
+      <div class="phone-container">
+        <span class="country-code">+91</span>
+        <input type="tel" id="login-phone" placeholder="Enter 10-digit number" maxlength="10">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Password</label>
+      <div class="input-standard"><input type="password" id="login-pass" placeholder="Enter password"></div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Stay Logged In Duration</label>
+      <div style="display: flex; gap: 8px;">
+        <div class="input-standard" style="flex: 1;">
+          <select id="login-hours">
+            <option value="1" selected>1 Hour</option>
+            <option value="6">6 Hours</option>
+            <option value="24">24 Hours</option>
+          </select>
+        </div>
+        <div class="input-standard" style="flex: 1;">
+          <select id="login-mins">
+            <option value="0" selected>0 Mins</option>
+            <option value="30">30 Mins</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button class="btn-submit" type="button" onclick="submitLogin()">Log In</button>
+    <div class="message" id="login-msg-box"></div>
+  </div>
+
+  <!-- Step 1: Mobile & Captcha -->
+  <div id="auth-form" style="display: none;">
+    <div class="header">
+      <h2 class="gold-title stage-shine">Enter Mobile Number</h2>
+      <p style="color:#94a3b8; font-size:12px;">Verify details to connect</p>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Mobile Number</label>
+      <div class="phone-container">
+        <span class="country-code">+91</span>
+        <input type="tel" id="phone" placeholder="Enter 10-digit number" maxlength="10">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Security Check</label>
+      <div class="captcha-box">
+        <div class="captcha-display" id="captcha-code">-----</div>
+        <button class="action-btn" type="button" onclick="speakCaptcha()" title="Listen">🔊</button>
+        <button class="action-btn" type="button" onclick="generateCaptcha()" title="Refresh">↻</button>
+      </div>
+      <div class="input-standard"><input type="text" id="captcha-input" placeholder="Enter CAPTCHA code"></div>
+    </div>
+    <button class="btn-submit" type="button" onclick="validateStep1()">Connect</button>
+    <div class="message" id="msg-box"></div>
+  </div>
+
+  <!-- Phone Verified Screen -->
+  <div class="connected-screen" id="phone-verified-screen">
+    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
+    <h3 class="gold-title stage-shine">Successfully Connected</h3>
+    <p id="connected-phone-display" class="stage-shine" style="color:#fef08a;">+91 ----------</p>
+  </div>
+
+  <!-- Step 2: Email -->
+  <div id="email-form" style="display: none;">
+    <div class="header">
+      <h2 class="gold-title stage-shine">Email Address</h2>
+      <p style="color:#94a3b8; font-size:12px;">Where should order updates be sent?</p>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Email Address</label>
+      <div class="input-standard"><input type="email" id="email" placeholder="example@domain.com"></div>
+    </div>
+    <button class="btn-submit" type="button" onclick="validateStep2()">Save & Continue</button>
+    <div class="message" id="email-msg-box"></div>
+  </div>
+
+  <!-- Email Saved Screen -->
+  <div class="connected-screen" id="email-verified-screen">
+    <div class="success-icon-wrap"><div class="success-icon">✓</div></div>
+    <h3 class="gold-title stage-shine">Email Saved</h3>
+    <p id="saved-email-display" class="stage-shine" style="color:#fef08a;">Email: ----------</p>
+    <div class="timer-text stage-shine" id="email-redirect-timer">Redirecting in 3 seconds...</div>
+  </div>
+
+  <!-- Step 3: WhatsApp -->
+  <div id="whatsapp-form" style="display: none;">
+    <div class="header">
+      <h2 class="gold-title stage-shine">WhatsApp Number</h2>
+      <p style="color:#94a3b8; font-size:12px;">Instant alerts & updates</p>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">WhatsApp Number</label>
+      <div class="phone-container">
+        <span class="country-code">+91</span>
+        <input type="tel" id="whatsapp-phone" placeholder="Enter 10-digit number" maxlength="10">
+      </div>
+    </div>
+    <button class="btn-submit" type="button" onclick="validateStep3()">Save & Open Channel</button>
+    <div class="message" id="whatsapp-msg-box"></div>
+  </div>
+
+  <!-- Step 4: WhatsApp Channel Screen -->
+  <div class="connected-screen" id="channel-screen">
+    <div class="header">
+      <h2 class="gold-title stage-shine">Follow WhatsApp Channel</h2>
+      <p style="color:#94a3b8; font-size:12px;">Channel opened! Return here after following.</p>
+    </div>
+    <button class="btn-submit" type="button" onclick="window.open('https://whatsapp.com/channel/0029VbE3S4rHgZWZi6kefk40', '_blank')" style="margin-bottom: 10px;">Re-open Channel</button>
+    <button class="btn-submit" type="button" onclick="onReturnFromChannel()" style="background: linear-gradient(90deg, #16a34a, #22c55e); color: #fff;">I've Followed - Continue</button>
+  </div>
+
+  <!-- Step 5: Password Setup -->
+  <div id="password-form" style="display: none;">
+    <div class="header">
+      <h2 class="gold-title stage-shine">Set Secure Password</h2>
+      <p style="color:#94a3b8; font-size:12px;">Minimum 4 characters required</p>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Create Password</label>
+      <div class="input-standard"><input type="password" id="pass1" placeholder="Enter password"></div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">Confirm Password</label>
+      <div class="input-standard"><input type="password" id="pass2" placeholder="Re-enter password"></div>
+    </div>
+    <button class="btn-submit" type="button" onclick="validatePassword()">Save Password</button>
+    <div class="message" id="password-msg-box"></div>
+  </div>
+
+  <!-- Step 6: Device & Location Scan -->
+  <div class="connected-screen" id="device-scan-screen">
+    <div class="header" style="margin-bottom: 10px;">
+      <h2 class="gold-title stage-shine" style="font-size: 18px;">Device & Location Scan</h2>
+      <p style="font-size: 11.5px; color:#94a3b8;">Verifying security parameters</p>
+    </div>
+    <div class="device-info-box">
+      <p><strong>Device:</strong> <span>Galaxy A54 / Pixel 7</span></p>
+      <p><strong>OS:</strong> <span>Android 14.0 (API 34)</span></p>
+      <p><strong>IP:</strong> <span>192.168.62.73</span></p>
+      <p><strong>Location:</strong> <span>Gangtok, Sikkim, India</span></p>
+    </div>
+    <div class="timer-text stage-shine" id="scan-timer-text">Redirecting in 5 seconds...</div>
+  </div>
+
+  <!-- Plan Selection / Onboarding Complete Screen -->
   <div class="connected-screen" id="plan-selection-screen" style="text-align: left;">
-    <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 6px;">Select Subscription</h3>
-    <p style="text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 14px;">Choose a recurring revenue plan or pay later</p>
+    <h3 class="gold-title stage-shine" style="text-align: center; font-size: 18px; margin-bottom: 4px;">Successfully Onboarded!</h3>
+    <p style="text-align: center; font-size: 11.5px; color: #94a3b8; margin-bottom: 12px;">Select your recurring plan or skip to pay later</p>
     
     <div class="plan-card" onclick="payWithRazorpay('Daily Plan', 100)">
       <div class="plan-title">1. Daily Plan</div>
@@ -387,10 +619,64 @@
     <div class="plan-card" onclick="payWithRazorpay('Whole Month Plan', 3500)">
       <div class="plan-title">3. Whole Month Plan</div>
       <div class="plan-price">₹3,500 / Month</div>
-      <div class="plan-desc">Full month service subscription.</div>
+      <div class="plan-desc">Calculated based on total days.</div>
     </div>
-    <button class="btn-skip" type="button" onclick="skipToDashboard()">Skip for Now (Pay Later) ➔</button>
+    <button class="btn-skip" type="button" onclick="finishOnboardingToDashboard()">Skip for Now (Pay Later) ➔</button>
   </div>
+</div>
+
+<!-- Form H Business Details Container (Mandatory part of New User Onboarding Process) -->
+<div class="card" id="form-h-card" style="display: none; max-width: 440px;">
+  <div class="header" style="margin-bottom: 12px;">
+    <h2 class="gold-title stage-shine" style="font-size: 19px;">Form H: Business Details</h2>
+    <p style="font-size: 11.5px; color:#94a3b8;">Required new user onboarding questionnaire</p>
+  </div>
+  <form id="form-h" onsubmit="submitFormH(event)" style="max-height: 65vh; overflow-y: auto; padding-right: 4px;">
+    <div class="form-group">
+      <label class="label stage-shine">1. Hotel/Restaurant Name</label>
+      <div class="input-standard"><input type="text" id="q1" placeholder="Business name" oninput="formatWordCapitalized(this)" required></div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">2. Owner Name</label>
+      <div class="input-standard"><input type="text" placeholder="Owner's name" oninput="formatSentenceCapitalized(this)" required></div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">3. Google Rating</label>
+      <div class="input-standard">
+        <select required>
+          <option value="" disabled selected>Select rating</option>
+          <option value="5">⭐⭐⭐⭐⭐ (5.0)</option>
+          <option value="4">⭐⭐⭐⭐ (4.0 - 4.9)</option>
+          <option value="new">New / Unrated</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">4. Location / Address</label>
+      <div class="input-standard"><input type="text" placeholder="Location" oninput="formatSentenceCapitalized(this)" required></div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">5. Number of Staffs & Tables</label>
+      <div style="display: flex; gap: 8px;">
+        <div class="input-standard" style="flex: 1;"><input type="number" placeholder="Staff count" required></div>
+        <div class="input-standard" style="flex: 1;"><input type="number" placeholder="Table count" required></div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="label stage-shine">6. Business Description (20-500 words)</label>
+      <div class="input-standard"><textarea placeholder="Detailed description..." oninput="formatSentenceCapitalized(this)" required></textarea></div>
+    </div>
+    <button class="btn-submit" type="submit">Submit Form H</button>
+  </form>
+</div>
+
+<!-- Approval Loading Screen -->
+<div class="card connected-screen" id="approval-screen" style="display: none;">
+  <div class="success-icon-wrap"><div class="success-icon">⏳</div></div>
+  <h3 class="gold-title stage-shine">Wait While We Approve You</h3>
+  <div class="spin-ring"></div>
+  <p style="font-size: 12px; color:#cbd5e1; margin-top: 8px;">Your submission is being securely stored in our backend.</p>
+  <div class="timer-text stage-shine" id="approval-timer-text">Processing in 2:00 minutes...</div>
 </div>
 
 <!-- Main Home Dashboard -->
@@ -405,12 +691,11 @@
   </div>
 
   <div class="home-card">
-    <!-- VIP / Pay Now Get Benefits Banner -->
     <div id="vip-banner-popup">
       <button class="vip-close-btn" onclick="closeVipBanner()">✕</button>
       <div class="vip-banner-title stage-shine">⭐ Pay Now & Get VIP Benefits!</div>
       <div class="vip-banner-desc">Unlock advanced analytics, priority support, and instant auto-pay features.</div>
-      <button class="btn-submit" type="button" onclick="switchToPlansTab()" style="margin-top: 4px; padding: 10px; font-size: 13px;">View Plans & Upgrade</button>
+      <button class="btn-submit" type="button" onclick="switchToPlansTab()" style="margin-top: 4px; padding: 10px; font-size: 12.5px;">View Plans & Upgrade</button>
     </div>
 
     <div class="welcome-banner">
@@ -418,9 +703,9 @@
       <p>Heartfull thanks for choosing us to grow your business journey.</p>
     </div>
 
-    <h2 class="gold-title stage-shine" style="font-size: 16px; margin-bottom: 10px;">Quick Overview</h2>
-    <p style="font-size: 13px; color: #cbd5e1; line-height: 1.5;">
-      Your business profile is active. You can manage your menu items using the bottom navigation menu anytime.
+    <h2 class="gold-title stage-shine" style="font-size: 16px; margin-bottom: 8px;">Dashboard Overview</h2>
+    <p style="font-size: 12.5px; color: #cbd5e1; line-height: 1.5;">
+      Your business account is active and verified. Manage your item menu list anytime using the bottom navigation menu.
     </p>
   </div>
 
@@ -441,64 +726,267 @@
 <!-- Menu Manager Modal -->
 <div class="modal-overlay" id="menu-manager-modal">
   <div class="modal-content">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-      <h3 class="gold-title stage-shine" style="font-size: 18px; margin: 0;">Top Menu & Item List</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <h3 class="gold-title stage-shine" style="font-size: 17px; margin: 0;">Top Menu & Item List</h3>
       <button onclick="closeMenuManagerModal()" style="background:none; border:none; color:#fef08a; font-size:20px; cursor:pointer;">✕</button>
     </div>
-    <p style="font-size: 11.5px; color: #94a3b8; margin-bottom: 14px;">List your top items and set prices. Edit or add items anytime.</p>
+    <p style="font-size: 11px; color: #94a3b8; margin-bottom: 12px;">List top items and set prices. Edit anytime.</p>
     <div id="menu-items-container"></div>
-    <button class="btn-submit" type="button" onclick="addMenuItemRow()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309; padding: 10px; margin-bottom: 10px; font-size: 13px;">+ Add Another Item</button>
-    <button class="btn-submit" type="button" onclick="saveAndExitMenu()" style="padding: 12px; font-size: 14px;">Save & Exit</button>
+    <button class="btn-submit" type="button" onclick="addMenuItemRow()" style="background: rgba(255,255,255,0.08); color: #fef08a; border: 1.5px solid #b45309; padding: 10px; margin-bottom: 10px; font-size: 12.5px;">+ Add Another Item</button>
+    <button class="btn-submit" type="button" onclick="saveAndExitMenu()" style="padding: 12px; font-size: 13.5px;">Save & Exit</button>
   </div>
 </div>
 
-<!-- Profile Modal (Opened via top left picture or hamburger) -->
+<!-- Profile Modal -->
 <div class="modal-overlay" id="profile-modal">
   <div class="modal-content">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-      <h3 class="gold-title stage-shine" style="font-size: 18px; margin: 0;">User Profile & Details</h3>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <h3 class="gold-title stage-shine" style="font-size: 17px; margin: 0;">User Profile Details</h3>
       <button onclick="closeProfileModal()" style="background:none; border:none; color:#fef08a; font-size:20px; cursor:pointer;">✕</button>
     </div>
-    <div style="font-size: 13px; color: #cbd5e1; line-height: 1.8;" id="profile-details-box">
+    <div style="font-size: 12.5px; color: #cbd5e1; line-height: 1.8;">
       <p><strong>Mobile:</strong> <span id="prof-phone" style="color: #fef08a;">+91 9800000000</span></p>
       <p><strong>Email:</strong> <span id="prof-email" style="color: #fef08a;">owner@example.com</span></p>
       <p><strong>WhatsApp:</strong> <span id="prof-whatsapp" style="color: #fef08a;">+91 9800000000</span></p>
-      <p><strong>Account Status:</strong> <span style="color: #22c55e;">Active / Approved</span></p>
+      <p><strong>Status:</strong> <span style="color: #22c55e;">Fully Onboarded & Verified</span></p>
     </div>
-    <button class="btn-submit" type="button" onclick="closeProfileModal()" style="margin-top: 16px;">Close</button>
+    <button class="btn-submit" type="button" onclick="closeProfileModal()" style="margin-top: 14px;">Close</button>
   </div>
 </div>
 
 <script>
-  function checkActiveSession() {
-    let isFullyOnboarded = localStorage.getItem("onboarded_completed");
-    
-    // If first time or not onboarded, show flow card / gateway
-    if (!isFullyOnboarded) {
-      document.getElementById("flow-card").style.display = "block";
-      document.getElementById("login-signup-gateway").style.display = "block";
-      document.getElementById("main-home-dashboard").style.display = "none";
-    } else {
-      // Directly load main homepage dashboard
-      document.getElementById("flow-card").style.display = "none";
-      document.getElementById("main-home-dashboard").style.display = "block";
+  let currentCaptcha = "";
+  let userPhone = "";
+  let userEmail = "";
+  let userWhatsapp = "";
+
+  function formatWordCapitalized(input) {
+    let words = input.value.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].length > 0) {
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1).toLowerCase();
+      }
     }
+    input.value = words.join(" ");
+  }
+
+  function formatSentenceCapitalized(input) {
+    let val = input.value.toLowerCase();
+    let words = val.split(" ");
+    for (let i = 0; i < words.length; i++) {
+      if (words[i].length > 0) {
+        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+      }
+    }
+    input.value = words.join(" ");
+  }
+
+  // Session & Onboarding Checker
+  function checkActiveSession() {
+    let sessionExpiry = localStorage.getItem("session_expiry");
+    let isFullyOnboarded = localStorage.getItem("onboarded_completed");
+
+    // If fully onboarded before, check if session is active
+    if (isFullyOnboarded === "true") {
+      if (sessionExpiry && new Date().getTime() < parseInt(sessionExpiry)) {
+        showDashboard();
+        return;
+      }
+      // If session expired, require login
+      document.getElementById("flow-card").style.display = "block";
+      document.getElementById("login-signup-gateway").style.display = "none";
+      document.getElementById("login-form").style.display = "block";
+      return;
+    }
+
+    // New user default view
+    document.getElementById("flow-card").style.display = "block";
+    document.getElementById("login-signup-gateway").style.display = "block";
   }
 
   function handleGatewaySignup() {
-    localStorage.setItem("onboarded_completed", "true");
     document.getElementById("login-signup-gateway").style.display = "none";
-    document.getElementById("plan-selection-screen").style.display = "block";
+    document.getElementById("auth-form").style.display = "block";
+    generateCaptcha();
   }
 
   function handleGatewayLogin() {
-    localStorage.setItem("onboarded_completed", "true");
-    skipToDashboard();
+    document.getElementById("login-signup-gateway").style.display = "none";
+    document.getElementById("login-form").style.display = "block";
   }
 
-  function skipToDashboard() {
+  function submitLogin() {
+    const phone = document.getElementById("login-phone").value.trim();
+    const pass = document.getElementById("login-pass").value.trim();
+    const hours = parseInt(document.getElementById("login-hours").value) || 1;
+    const mins = parseInt(document.getElementById("login-mins").value) || 0;
+
+    if (!/^\d{10}$/.test(phone)) {
+      showMessage("login-msg-box", "Enter valid 10-digit number.", "error");
+      return;
+    }
+    if (!pass) {
+      showMessage("login-msg-box", "Enter your password.", "error");
+      return;
+    }
+
+    let expiryTime = new Date().getTime() + (hours * 3600 + mins * 60) * 1000;
+    localStorage.setItem("session_expiry", expiryTime);
+    localStorage.setItem("onboarded_completed", "true");
+
     document.getElementById("flow-card").style.display = "none";
+    showDashboard();
+  }
+
+  function showDashboard() {
+    document.getElementById("flow-card").style.display = "none";
+    document.getElementById("form-h-card").style.display = "none";
+    document.getElementById("approval-screen").style.display = "none";
     document.getElementById("main-home-dashboard").style.display = "block";
+  }
+
+  // Step 1: Mobile & Captcha
+  function generateCaptcha() {
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let code = "";
+    for (let i = 0; i < 5; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+    currentCaptcha = code;
+    document.getElementById("captcha-code").textContent = code;
+    document.getElementById("captcha-input").value = "";
+  }
+  function speakCaptcha() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentCaptcha.split('').join(', ')));
+    }
+  }
+  function validateStep1() {
+    const phoneInput = document.getElementById("phone").value.trim();
+    const captchaInput = document.getElementById("captcha-input").value.trim().toUpperCase();
+
+    if (!/^\d{10}$/.test(phoneInput)) {
+      showMessage("msg-box", "Enter valid 10-digit mobile number.", "error");
+      return;
+    }
+    if (captchaInput !== currentCaptcha) {
+      showMessage("msg-box", "Invalid CAPTCHA code.", "error");
+      generateCaptcha();
+      return;
+    }
+
+    userPhone = phoneInput;
+    document.getElementById("auth-form").style.display = "none";
+    document.getElementById("connected-phone-display").textContent = "+91 " + userPhone;
+    document.getElementById("phone-verified-screen").style.display = "block";
+
+    setTimeout(() => {
+      document.getElementById("phone-verified-screen").style.display = "none";
+      document.getElementById("email-form").style.display = "block";
+    }, 1200);
+  }
+
+  // Step 2: Email
+  function validateStep2() {
+    const emailInput = document.getElementById("email").value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
+      showMessage("email-msg-box", "Enter valid email address.", "error");
+      return;
+    }
+    userEmail = emailInput;
+    document.getElementById("email-form").style.display = "none";
+    document.getElementById("saved-email-display").textContent = "Email: " + userEmail;
+    document.getElementById("email-verified-screen").style.display = "block";
+
+    let timeLeft = 3;
+    const timerElem = document.getElementById("email-redirect-timer");
+    const countdown = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        timerElem.textContent = `Redirecting in ${timeLeft} seconds...`;
+      } else {
+        clearInterval(countdown);
+        document.getElementById("email-verified-screen").style.display = "none";
+        document.getElementById("whatsapp-phone").value = userPhone;
+        document.getElementById("whatsapp-form").style.display = "block";
+      }
+    }, 1000);
+  }
+
+  // Step 3: WhatsApp
+  function validateStep3() {
+    const whatsappInput = document.getElementById("whatsapp-phone").value.trim();
+    if (!/^\d{10}$/.test(whatsappInput)) {
+      showMessage("whatsapp-msg-box", "Enter valid 10-digit WhatsApp number.", "error");
+      return;
+    }
+    userWhatsapp = whatsappInput;
+    document.getElementById("whatsapp-form").style.display = "none";
+    document.getElementById("channel-screen").style.display = "block";
+  }
+
+  function onReturnFromChannel() {
+    document.getElementById("channel-screen").style.display = "none";
+    document.getElementById("password-form").style.display = "block";
+  }
+
+  // Step 5: Password
+  function validatePassword() {
+    const p1 = document.getElementById("pass1").value.trim();
+    const p2 = document.getElementById("pass2").value.trim();
+    if (p1.length < 4) {
+      showMessage("password-msg-box", "Password must be at least 4 characters.", "error");
+      return;
+    }
+    if (p1 !== p2) {
+      showMessage("password-msg-box", "Passwords do not match.", "error");
+      return;
+    }
+    document.getElementById("password-form").style.display = "none";
+    document.getElementById("device-scan-screen").style.display = "block";
+
+    let timeLeft = 5;
+    const scanTimer = document.getElementById("scan-timer-text");
+    const scanInterval = setInterval(() => {
+      timeLeft--;
+      if (timeLeft > 0) {
+        scanTimer.textContent = `Redirecting in ${timeLeft} seconds...`;
+      } else {
+        clearInterval(scanInterval);
+        document.getElementById("device-scan-screen").style.display = "none";
+        // Now trigger Form H as part of the mandatory onboarding process
+        document.getElementById("flow-card").style.display = "none";
+        document.getElementById("form-h-card").style.display = "block";
+      }
+    }, 1000);
+  }
+
+  // Form H Submission
+  function submitFormH(event) {
+    event.preventDefault();
+    document.getElementById("form-h-card").style.display = "none";
+    document.getElementById("approval-screen").style.display = "block";
+
+    let timeLeft = 120;
+    const timerElem = document.getElementById("approval-timer-text");
+    const interval = setInterval(() => {
+      timeLeft--;
+      let mins = Math.floor(timeLeft / 60);
+      let secs = timeLeft % 60;
+      timerElem.textContent = `Processing in ${mins}:${secs < 10 ? '0' : ''}${secs} minutes...`;
+
+      if (timeLeft <= 0) {
+        clearInterval(interval);
+        document.getElementById("approval-screen").style.display = "none";
+        document.getElementById("flow-card").style.display = "block";
+        document.getElementById("plan-selection-screen").style.display = "block";
+      }
+    }, 1000);
+  }
+
+  function finishOnboardingToDashboard() {
+    localStorage.setItem("onboarded_completed", "true");
+    localStorage.setItem("session_expiry", new Date().getTime() + 3600 * 1000);
+    showDashboard();
   }
 
   function closeVipBanner() {
@@ -506,28 +994,21 @@
   }
 
   function switchToPlansTab() {
+    document.getElementById("main-home-dashboard").style.display = "none";
     document.getElementById("flow-card").style.display = "block";
     document.getElementById("login-signup-gateway").style.display = "none";
     document.getElementById("plan-selection-screen").style.display = "block";
-    document.getElementById("main-home-dashboard").style.display = "none";
   }
 
   function switchTab(tab) {
     if (tab === 'home') {
-      document.getElementById("flow-card").style.display = "none";
-      document.getElementById("main-home-dashboard").style.display = "block";
-      document.getElementById("nav-home").classList.add("active");
-      document.getElementById("nav-plans").classList.remove("active");
+      showDashboard();
     } else if (tab === 'plans') {
-      document.getElementById("main-home-dashboard").style.display = "none";
-      document.getElementById("flow-card").style.display = "block";
-      document.getElementById("plan-selection-screen").style.display = "block";
-      document.getElementById("nav-plans").classList.add("active");
-      document.getElementById("nav-home").classList.remove("active");
+      switchToPlansTab();
     }
   }
 
-  // Menu Modal Actions
+  // Menu Manager Modal
   function openMenuManagerModal() {
     loadSavedMenuItems();
     document.getElementById("menu-manager-modal").style.display = "flex";
@@ -539,9 +1020,7 @@
     const container = document.getElementById("menu-items-container");
     container.innerHTML = "";
     let savedMenu = JSON.parse(localStorage.getItem("hotel_menu_items") || '[{"name":"Signature Dish", "price":"250"}]');
-    savedMenu.forEach((item) => {
-      addMenuItemRow(item.name, item.price);
-    });
+    savedMenu.forEach((item) => addMenuItemRow(item.name, item.price));
   }
   function addMenuItemRow(name = "", price = "") {
     const container = document.getElementById("menu-items-container");
@@ -568,7 +1047,7 @@
     closeMenuManagerModal();
   }
 
-  // Profile Modal Actions
+  // Profile Modal
   function openProfileModal() {
     document.getElementById("profile-modal").style.display = "flex";
   }
@@ -588,13 +1067,19 @@
       "notes": { "merchant_id": "TiMZJnUcP5m6dN", "account_id": "acc_TiMZJnUcP5m6dN" },
       "handler": function (response) {
         alert("Payment Successful!\nPayment ID: " + response.razorpay_payment_id);
-        skipToDashboard();
+        finishOnboardingToDashboard();
       },
       "prefill": { "name": "Uttam Rai", "email": "owner@example.com", "contact": "9800000000" },
       "theme": { "color": "#f59e0b" }
     };
     const rzp = new Razorpay(options);
     rzp.open();
+  }
+
+  function showMessage(elementId, text, type) {
+    const msgBox = document.getElementById(elementId);
+    msgBox.textContent = text;
+    msgBox.className = "message " + type;
   }
 </script>
 

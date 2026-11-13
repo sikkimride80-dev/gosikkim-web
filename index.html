@@ -17,7 +17,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; position: relative; }
         
-        /* Promotional Image Banner Modal Overlay */
+        /* Native High-Performance Promotional Banner Modal */
         #welcomeModal {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -29,34 +29,29 @@
             z-index: 1000;
         }
         .modal-card {
-            background: var(--phone-bg);
+            background: linear-gradient(135deg, #0f766e, #0e7490, #1e3a8a);
             border: 2px solid var(--accent-green);
-            padding: 0;
-            border-radius: 1rem;
+            padding: 2.2rem 1.5rem 1.8rem 1.5rem;
+            border-radius: 1.25rem;
             width: 90%;
-            max-width: 400px;
-            overflow: hidden;
+            max-width: 380px;
+            text-align: center;
             position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
         }
-        /* Banner Image Styling */
-        .modal-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+        
         /* Top Right Close Button (Strictly hidden for 8 seconds) */
         .close-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.4);
             color: #ffffff;
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             display: none; /* Initially hidden */
@@ -65,7 +60,7 @@
             z-index: 20;
             transition: background 0.2s;
         }
-        .close-btn:hover { background: rgba(0, 0, 0, 0.95); }
+        .close-btn:hover { background: rgba(0, 0, 0, 0.9); }
 
         /* Blueprint Phone Frame Wrapper */
         .phone-frame {
@@ -172,14 +167,16 @@
 </head>
 <body>
 
-    <!-- Promotional Image Banner Modal Overlay -->
+    <!-- Native Promotional Image Banner Modal Overlay -->
     <div id="welcomeModal">
         <div class="modal-card">
-            <!-- Top Right Close Button (Appears strictly after 8 seconds) -->
+            <!-- Top Right Close Button (Strictly hidden for 8 seconds) -->
             <button id="closeBtn" class="close-btn" onclick="closeWelcomeModal()">✕</button>
             
-            <!-- Exact Catbox Image Banner -->
-            <img src="https://files.catbox.moe/njyt0g.jpg" alt="GoSikkim Welcome Banner">
+            <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🛒</div>
+            <h3 style="color: #ffffff; font-size: 1.25rem; font-weight: 800; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Hi!</h3>
+            <h1 style="color: #fef08a; font-size: 1.5rem; font-weight: 900; line-height: 1.2; margin-bottom: 0.75rem;">Welcome to Skimgo</h1>
+            <p style="color: #e2e8f0; font-size: 0.95rem; font-weight: 600;">all in one marketplace</p>
         </div>
     </div>
 
@@ -281,7 +278,7 @@
     </div>
 
     <script>
-        // Strictly 8-second delay before the top-right close button appears on the image banner
+        // Strictly 8-second delay before the top-right close button appears on the banner
         setTimeout(() => {
             document.getElementById('closeBtn').style.display = 'flex';
         }, 8000);

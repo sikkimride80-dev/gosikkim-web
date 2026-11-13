@@ -104,7 +104,7 @@
 </head>
 <body>
 
-    <!-- BANNER 1 -->
+    <!-- BANNER 1 (Always shows on refresh/load) -->
     <div id="welcomeModal" class="modal-overlay">
         <div class="modal-card">
             <button id="closeBtn1" class="close-btn" onclick="closeFirstModal()">✕</button>
@@ -112,7 +112,7 @@
         </div>
     </div>
 
-    <!-- BANNER 2 -->
+    <!-- BANNER 2 (Always shows on refresh/load) -->
     <div id="secondModal" class="modal-overlay hidden">
         <div class="modal-card">
             <button id="closeBtn2" class="close-btn" onclick="closeSecondModal()">✕</button>
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <!-- BANNER 3 -->
+    <!-- BANNER 3 (Always shows on refresh/load) -->
     <div id="thirdModal" class="modal-overlay hidden">
         <div class="modal-card">
             <button id="closeBtn3" class="close-btn" onclick="closeThirdModal()">✕</button>
@@ -309,12 +309,7 @@
         };
 
         window.onload = function() {
-            if (localStorage.getItem('gosikkim_form_locked') === 'true') {
-                alert('Access Denied: You have already submitted your onboarding form. Multiple submissions from the same device are locked.');
-                document.getElementById('phoneContainer').style.display = 'none';
-                document.getElementById('viewRealDashboard').classList.add('active');
-                return;
-            }
+            // Always start by showing the 3 banners on every page load/refresh
             setTimeout(() => { document.getElementById('closeBtn1').style.display = 'flex'; }, 4000);
         };
 
@@ -332,7 +327,16 @@
 
         function closeThirdModal() {
             document.getElementById('thirdModal').classList.add('hidden');
-            document.getElementById('qStep1').classList.add('active');
+            
+            // Check if form was already submitted previously
+            if (localStorage.getItem('gosikkim_form_locked') === 'true') {
+                // If already submitted, skip questionnaire and open main dashboard directly smoothly
+                document.getElementById('phoneContainer').style.display = 'none';
+                document.getElementById('viewRealDashboard').classList.add('active');
+            } else {
+                // Otherwise show questionnaire step 1 normally
+                document.getElementById('qStep1').classList.add('active');
+            }
         }
 
         function syncToSupabase(payload) {

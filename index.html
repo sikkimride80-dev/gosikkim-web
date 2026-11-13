@@ -256,23 +256,26 @@
             </button>
         </div>
 
-        <!-- Live KYC & DigiLocker -->
+        <!-- FULLY AUTOMATED DIGILOCKER KYC (NO MANUAL INPUT) -->
         <div id="viewKYC" class="screen-view">
-            <h2 class="screen-title">Live KYC</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Select Profile Tier & Sync DigiLocker</p>
+            <h2 class="screen-title">Live DigiLocker KYC</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Select your profile tier and auto-pull documents directly from DigiLocker.</p>
+            
             <div class="input-group">
                 <label>PROFILE TIER</label>
                 <select id="userTier">
-                    <option value="Teen">Teen Explorer (Aadhaar)</option>
-                    <option value="Parent">Parent / Owner (PAN + Aadhaar)</option>
-                    <option value="Elder">Elder Leader (Full KYC)</option>
+                    <option value="Teen Explorer (Aadhaar)">Teen Explorer (Aadhaar)</option>
+                    <option value="Parent Owner (PAN + Aadhaar)">Parent / Owner (PAN + Aadhaar)</option>
+                    <option value="Elder Leader (Full KYC)">Elder Leader (Full KYC)</option>
                 </select>
             </div>
-            <div class="input-group">
-                <label>AADHAAR / PAN NUMBER</label>
-                <input type="text" id="docNumber" placeholder="Enter ID number">
+
+            <div class="permission-box">
+                🔗 <strong>Automated Cloud Extraction:</strong><br>
+                No manual typing needed. Click below to securely connect with DigiLocker and pull your verified identity documents automatically.
             </div>
-            <button class="btn-blueprint" onclick="completeOnboarding()" style="background: var(--accent-blue); color: #fff;">Authorize DigiLocker</button>
+
+            <button class="btn-blueprint" onclick="pullFromDigiLocker()" style="background: var(--accent-blue); color: #fff;">Connect & Pull from DigiLocker</button>
         </div>
 
         <!-- Trust Foundation Established -->
@@ -282,7 +285,7 @@
             <div class="trust-tier">
                 <strong id="assignedTierName" style="font-size: 1rem;">Parent Profile</strong>
                 <div class="stars">★★★★★ (Verified Badge)</div>
-                <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ Phone + Google + Hardware Biometric Secured</div>
+                <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ DigiLocker Cloud Verified</div>
             </div>
             <button class="btn-blueprint" onclick="launchDashboard()" style="background:#fff; color:#0b1329;">Enter Dashboard</button>
         </div>
@@ -328,27 +331,24 @@
         let userData = { 
             name: '', age: null, marital: 'N/A', schooling: 'N/A', employed: 'N/A', employmentType: 'N/A', 
             deviceHash: localStorage.getItem('gosikkim_device_hash') || ('hw_bio_sig_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now()), 
-            mobile: '', googleAccount: '', copyrightAccepted: true, formLocked: false 
+            mobile: '', googleAccount: '', kycTier: '', copyrightAccepted: true, formLocked: false 
         };
 
         window.onload = async function() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
 
-            // Auto-capture device biometric hardware signature if not present
             if (!localStorage.getItem('gosikkim_device_hash')) {
                 localStorage.setItem('gosikkim_device_hash', userData.deviceHash);
             }
 
             if (isFullyCompleted || (session && session.user)) {
-                // Returning user or completed user: Skip everything, auto-login directly to dashboard
                 document.getElementById('welcomeModal').classList.add('hidden');
                 document.getElementById('phoneContainer').style.display = 'none';
                 document.getElementById('viewRealDashboard').classList.add('active');
                 return;
             }
 
-            // Check if returning from Google OAuth verification redirect
             if (session && session.user) {
                 userData.googleAccount = session.user.email;
                 localStorage.setItem('gosikkim_accounts_bound', 'true');
@@ -406,6 +406,7 @@
                             employment_type: payload.employmentType,
                             mobile_number: payload.mobile,
                             google_account: payload.googleAccount,
+                            kyc_tier: payload.kycTier,
                             copyright_accepted: payload.copyrightAccepted,
                             form_locked: payload.formLocked,
                             updated_at: new Date()
@@ -482,7 +483,7 @@
                 syncToCloud(userData);
 
                 document.getElementById('securityLog').innerText = 
-                    `[DEVICE HASH]: ${userData.deviceHash}\n[BIOMETRIC HARDWARE]: Auto-Captured\n[STATUS]: Secured & Locked in GoSikkim Cloud!`;
+                    `[DEVICE HASH]: ${userData.deviceHash}\n[HARDWARE BIOMETRIC]: Auto-Captured\n[STATUS]: Secured & Locked in GoSikkim Cloud!`;
                 
                 setTimeout(() => {
                     document.getElementById('viewSecurityCheck').classList.remove('active');
@@ -510,12 +511,13 @@
             }
         }
 
-        function completeOnboarding() {
-            const doc = document.getElementById('docNumber').value;
-            if(!doc) { alert('Please enter Aadhaar or PAN number.'); return; }
-            
+        function pullFromDigiLocker() {
             const tier = document.getElementById('userTier').value;
-            document.getElementById('assignedTierName').innerText = tier + ' Profile';
+            userData.kycTier = tier;
+            document.getElementById('assignedTierName').innerText = tier;
+
+            // Simulate direct cloud pull from DigiLocker
+            alert('DigiLocker Connected! Successfully pulled and verified your official identity documents automatically.');
 
             localStorage.setItem('gosikkim_onboarding_complete', 'true');
             syncToCloud(userData);

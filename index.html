@@ -45,7 +45,7 @@
             height: auto;
             display: block;
         }
-        /* Top Right Close Button (Strictly hidden for 8 seconds) */
+        /* Top Right Close Button (Strictly hidden for 4 seconds) */
         .close-btn {
             position: absolute;
             top: 10px;
@@ -175,7 +175,7 @@
     <!-- Promotional Image Banner Modal Overlay -->
     <div id="welcomeModal">
         <div class="modal-card">
-            <!-- Top Right Close Button (Strictly hidden for 8 seconds) -->
+            <!-- Top Right Close Button (Appears strictly after 4 seconds) -->
             <button id="closeBtn" class="close-btn" onclick="closeWelcomeModal()">✕</button>
             
             <!-- Local Repository Image Reference -->
@@ -281,10 +281,10 @@
     </div>
 
     <script>
-        // Strictly 8-second delay before the top-right close button appears on the image banner
+        // Exactly 4-second delay before the top-right close button appears on the image banner
         setTimeout(() => {
             document.getElementById('closeBtn').style.display = 'flex';
-        }, 8000);
+        }, 4000);
 
         function closeWelcomeModal() {
             const modal = document.getElementById('welcomeModal');

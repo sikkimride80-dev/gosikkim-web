@@ -10,7 +10,7 @@
             --phone-bg: #111c38;
             --accent-green: #10b981;
             --accent-blue: #3b82f6;
-            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
@@ -79,6 +79,12 @@
             background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green);
             padding: 1rem; border-radius: 0.5rem; font-family: monospace;
             font-size: 0.8rem; color: var(--accent-green); margin-bottom: 1.25rem; line-height: 1.4;
+        }
+
+        .permission-box {
+            background: rgba(245, 158, 11, 0.1); border: 1px solid var(--accent-yellow);
+            padding: 0.9rem; border-radius: 0.5rem; font-size: 0.82rem; color: #fde047;
+            margin-bottom: 1.25rem; line-height: 1.4; text-align: left;
         }
 
         .trust-tier {
@@ -188,7 +194,7 @@
             <button class="btn-blueprint" onclick="saveEmployment()">Submit & Lock Form</button>
         </div>
 
-        <!-- ANTI-SCAM DEVICE & VPN INTEGRITY CHECK (Triggered on final questionnaire submit) -->
+        <!-- ANTI-SCAM DEVICE & VPN INTEGRITY CHECK -->
         <div id="viewSecurityCheck" class="screen-view">
             <h2 class="screen-title">Anti-Scam Security Scan</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Checking device fingerprint, IP integrity & VPN status...</p>
@@ -213,12 +219,23 @@
             <button class="btn-blueprint" onclick="verifyAndBindAccounts()">Verify & Bind Accounts</button>
         </div>
 
-        <!-- Anti-Scammer Protocol -->
+        <!-- Anti-Scammer Protocol (Manual Permission Request) -->
         <div id="viewFingerprint" class="screen-view">
             <h2 class="screen-title">Anti-Scammer Protocol</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Running SHA-256 hardware integrity & bot checks...</p>
-            <div class="fingerprint-box" id="fpText">Generating device hash...</div>
-            <button class="btn-blueprint" onclick="proceedToLiveKYC()" style="background:#fff; color:#0b1329;">Verify Device</button>
+            <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1rem; text-align: center;">Running SHA-256 hardware integrity & bot checks...</p>
+            
+            <div class="permission-box">
+                ⚠️ <strong>Manual Action Required:</strong><br>
+                Please allow permission for your <strong>Camera</strong> and <strong>Location</strong> to be turned on from your device settings manually before proceeding.
+            </div>
+
+            <div class="fingerprint-box" id="fpText">
+                [BINDING SYNC]: Verified<br>
+                [SHA-256]: Generating hash...<br>
+                [PERMISSIONS]: Awaiting Manual Device Enable...
+            </div>
+
+            <button class="btn-blueprint" onclick="checkDevicePermissionsAndProceed()">I Have Enabled Permissions & Proceed</button>
         </div>
 
         <!-- Live KYC & DigiLocker -->
@@ -286,13 +303,11 @@
     </div>
 
     <script>
-        // Form Lock Check & Storage
         let userData = { 
             name: '', age: null, marital: 'N/A', schooling: 'N/A', employed: 'N/A', employmentType: 'N/A', 
             deviceHash: '', ipStatus: 'Clean', vpnDetected: false, mobile: '', googleAccount: '', formLocked: false 
         };
 
-        // Check if user already submitted form previously on this device
         window.onload = function() {
             if (localStorage.getItem('gosikkim_form_locked') === 'true') {
                 alert('Access Denied: You have already submitted your onboarding form. Multiple submissions from the same device are locked.');
@@ -320,10 +335,8 @@
             document.getElementById('qStep1').classList.add('active');
         }
 
-        // Backend Sync to Supabase
         function syncToSupabase(payload) {
             console.log("Auto-saving securely to Supabase Backend:", payload);
-            // supabase.from('user_onboarding').upsert([payload]).then(...)
         }
 
         function saveName() {
@@ -344,7 +357,6 @@
 
             document.getElementById('qStep2').classList.remove('active');
 
-            // Conditional Logic: If age is between 18 and 50, ask questions 3, 4, 5. Otherwise skip directly to security check and lock.
             if(val >= 18 && val <= 50) {
                 document.getElementById('qStep3').classList.add('active');
             } else {
@@ -382,16 +394,13 @@
             triggerSecurityAndLock();
         }
 
-        // Anti-Scam Security Check & Permanent Lock
         function triggerSecurityAndLock() {
             document.getElementById('viewSecurityCheck').classList.add('active');
             
             setTimeout(() => {
-                // Generate Device Fingerprint Hash & Check VPN/IP
                 userData.deviceHash = 'sha256_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                 userData.formLocked = true;
 
-                // Lock form locally so user cannot file again
                 localStorage.setItem('gosikkim_form_locked', 'true');
                 syncToSupabase(userData);
 
@@ -400,12 +409,11 @@
                 
                 setTimeout(() => {
                     document.getElementById('viewSecurityCheck').classList.remove('active');
-                    document.getElementById('viewBinding').classList.add('active'); // Proceed to Mobile & Google binding
+                    document.getElementById('viewBinding').classList.add('active');
                 }, 2000);
             }, 1500);
         }
 
-        // Mobile & Google Account Binding Verification
         function verifyAndBindAccounts() {
             const mobile = document.getElementById('bindMobile').value.trim();
             const google = document.getElementById('bindGoogle').value.trim();
@@ -424,11 +432,11 @@
 
             setTimeout(() => {
                 document.getElementById('fpText').innerText = 
-                    `[BINDING SYNC]: Mobile (${mobile}) & Google (${google}) Verified\n[SHA-256]: ${userData.deviceHash}\n[BOT SHIELD]: Passed`;
+                    `[BINDING SYNC]: Mobile (${mobile}) & Google (${google}) Verified\n[SHA-256]: ${userData.deviceHash}\n[PERMISSIONS]: Awaiting Manual Device Enable...`;
             }, 600);
         }
 
-        function proceedToLiveKYC() {
+        function checkDevicePermissionsAndProceed() {
             document.getElementById('viewFingerprint').classList.remove('active');
             document.getElementById('viewKYC').classList.add('active');
         }

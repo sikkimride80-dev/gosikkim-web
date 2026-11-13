@@ -17,8 +17,8 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; position: relative; }
         
-        /* Promotional Image Banner Modal Overlay */
-        #welcomeModal {
+        /* Modal Overlays */
+        .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(5, 9, 20, 0.9);
@@ -28,6 +28,8 @@
             align-items: center;
             z-index: 1000;
         }
+        .modal-overlay.hidden { display: none; }
+
         .modal-card {
             background: var(--phone-bg);
             border: 2px solid var(--accent-green);
@@ -39,13 +41,12 @@
             position: relative;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        /* Banner Image Styling */
         .modal-card img {
             width: 100%;
             height: auto;
             display: block;
         }
-        /* Top Right Close Button (Strictly hidden for 4 seconds) */
+        /* Top Right Close Button (Hidden for first 4 seconds) */
         .close-btn {
             position: absolute;
             top: 10px;
@@ -172,14 +173,19 @@
 </head>
 <body>
 
-    <!-- Promotional Image Banner Modal Overlay -->
-    <div id="welcomeModal">
+    <!-- FIRST BANNER MODAL -->
+    <div id="welcomeModal" class="modal-overlay">
         <div class="modal-card">
-            <!-- Top Right Close Button (Appears strictly after 4 seconds) -->
-            <button id="closeBtn" class="close-btn" onclick="closeWelcomeModal()">✕</button>
-            
-            <!-- Local Repository Image Reference -->
-            <img src="IMG-20261113-WA2055.jpg" alt="GoSikkim Welcome Banner">
+            <button id="closeBtn1" class="close-btn" onclick="closeFirstModal()">✕</button>
+            <img src="IMG-20261113-WA2055.jpg" alt="GoSikkim Welcome Banner 1">
+        </div>
+    </div>
+
+    <!-- SECOND BANNER MODAL (Linked to your uploaded image filename) -->
+    <div id="secondModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button id="closeBtn2" class="close-btn" onclick="closeSecondModal()">✕</button>
+            <img src="image_9ca84025.jpg" alt="GoSikkim Welcome Banner 2">
         </div>
     </div>
 
@@ -281,16 +287,28 @@
     </div>
 
     <script>
-        // Exactly 4-second delay before the top-right close button appears on the image banner
+        // 4-second delay for First Banner Close Button
         setTimeout(() => {
-            document.getElementById('closeBtn').style.display = 'flex';
+            document.getElementById('closeBtn1').style.display = 'flex';
         }, 4000);
 
-        function closeWelcomeModal() {
-            const modal = document.getElementById('welcomeModal');
-            if(modal) {
-                modal.style.display = 'none';
-            }
+        function closeFirstModal() {
+            // Hide first banner
+            document.getElementById('welcomeModal').classList.add('hidden');
+            
+            // Show second banner modal
+            const secondModal = document.getElementById('secondModal');
+            secondModal.classList.remove('hidden');
+
+            // 4-second delay for Second Banner Close Button
+            setTimeout(() => {
+                document.getElementById('closeBtn2').style.display = 'flex';
+            }, 4000);
+        }
+
+        function closeSecondModal() {
+            // Hide second banner completely to reveal the login screen
+            document.getElementById('secondModal').classList.add('hidden');
         }
 
         function proceedToFingerprint() {

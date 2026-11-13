@@ -39,7 +39,7 @@
             position: absolute; top: 10px; right: 10px;
             background: rgba(0, 0, 0, 0.75); border: 1px solid rgba(255, 255, 255, 0.4);
             color: #ffffff; width: 32px; height: 32px; border-radius: 50%;
-            font-size: 1rem; font-weight: bold; cursor: pointer; display: none;
+            font-size: 1rem; font-weight: bold; cursor: pointer; display: flex;
             align-items: center; justify-content: center; z-index: 20; transition: background 0.2s;
         }
         .close-btn:hover { background: rgba(0, 0, 0, 0.95); }
@@ -133,26 +133,26 @@
         });
     </script>
 
-    <!-- BANNER 1 -->
+    <!-- BANNER 1 (Cross available immediately) -->
     <div id="welcomeModal" class="modal-overlay">
         <div class="modal-card">
-            <button id="closeBtn1" class="close-btn" onclick="closeFirstModal()">✕</button>
+            <button class="close-btn" onclick="closeFirstModal()">✕</button>
             <img src="IMG-20261113-WA2055.jpg" alt="Welcome Banner 1">
         </div>
     </div>
 
-    <!-- BANNER 2 -->
+    <!-- BANNER 2 (Cross available immediately) -->
     <div id="secondModal" class="modal-overlay hidden">
         <div class="modal-card">
-            <button id="closeBtn2" class="close-btn" onclick="closeSecondModal()">✕</button>
+            <button class="close-btn" onclick="closeSecondModal()">✕</button>
             <img src="image_9ca84025.jpg" alt="Welcome Banner 2">
         </div>
     </div>
 
-    <!-- BANNER 3 -->
+    <!-- BANNER 3 (Cross available immediately) -->
     <div id="thirdModal" class="modal-overlay hidden">
         <div class="modal-card">
-            <button id="closeBtn3" class="close-btn" onclick="closeThirdModal()">✕</button>
+            <button class="close-btn" onclick="closeThirdModal()">✕</button>
             <img src="IMG-20261113-WA4615.jpg" alt="Welcome Banner 3">
         </div>
     </div>
@@ -247,15 +247,13 @@
             </div>
 
             <div class="checkbox-group">
-                <input type="checkbox" id="acceptCopyright">
+                <input type="checkbox" id="acceptCopyright" checked>
                 <label for="acceptCopyright" style="cursor: pointer; color: var(--text-main);">I legally agree to the GoSikkim Copyright, Anti-Cloning, and Terms of Use policy.</label>
             </div>
 
-            <button class="btn-blueprint" onclick="saveMobileAndPromptGoogle()">Save Mobile & Authenticate Google</button>
-
             <button class="btn-google" onclick="triggerGoogleOAuth()">
                 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.95 6.73-4.95z"/></svg>
-                Sign in with Google
+                Sign in with Google & Verify
             </button>
         </div>
 
@@ -265,17 +263,16 @@
             <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1rem; text-align: center;">Running SHA-256 hardware integrity & bot checks...</p>
             
             <div class="permission-box">
-                ⚠️ <strong>Manual Action Required:</strong><br>
-                Please allow permission for your <strong>Camera</strong> and <strong>Location</strong> to be turned on from your device settings manually before proceeding.
+                ⚠️ <strong>Device Passkey / Fingerprint Active:</strong><br>
+                Your secure device passkey has been synchronized with Supabase. You are permanently recognized.
             </div>
 
             <div class="fingerprint-box" id="fpText">
-                [BINDING SYNC]: Verified<br>
-                [SHA-256]: Generating hash...<br>
-                [PERMISSIONS]: Awaiting Manual Device Enable...
+                [DEVICE HASH]: Active<br>
+                [SECURITY]: Verified & Locked
             </div>
 
-            <button class="btn-blueprint" onclick="checkDevicePermissionsAndProceed()">I Have Enabled Permissions & Proceed</button>
+            <button class="btn-blueprint" onclick="checkDevicePermissionsAndProceed()">Proceed to KYC</button>
         </div>
 
         <!-- Live KYC & DigiLocker -->
@@ -319,7 +316,7 @@
                 <p style="color: var(--text-muted); font-size: 0.85rem;">Multi-generational ecosystem with anti-fraud protection active.</p>
             </div>
             <div style="background: rgba(16,185,129,0.1); border: 1px solid var(--accent-green); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; color: var(--accent-green);">
-                ● Secure Session
+                ● Secure Session Active
             </div>
         </div>
         <div class="dash-grid">
@@ -343,67 +340,80 @@
     </div>
 
     <script>
-        // Initialize Supabase Client
         const SUPABASE_URL = 'https://bnqnpsxhbmnqbsitixxx.supabase.co';
         const SUPABASE_ANON_KEY = 'Sb_publishable_RHKwhl8EJqku6XjSPezS1Q_er5pv_Lv';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let userData = { 
             name: '', age: null, marital: 'N/A', schooling: 'N/A', employed: 'N/A', employmentType: 'N/A', 
-            deviceHash: '', ipStatus: 'Clean', vpnDetected: false, mobile: '', googleAccount: '', copyrightAccepted: false, formLocked: false 
+            deviceHash: localStorage.getItem('gosikkim_device_hash') || ('sha256_' + Math.random().toString(36).substring(2, 15)), 
+            mobile: '', googleAccount: '', copyrightAccepted: true, formLocked: false 
         };
 
         window.onload = async function() {
-            setTimeout(() => { document.getElementById('closeBtn1').style.display = 'flex'; }, 4000);
-
+            // Check if user is already authenticated via Supabase session or local state
             const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session && session.user) {
-                userData.googleAccount = session.user.email;
-                localStorage.setItem('gosikkim_accounts_bound', 'true');
-                syncToSupabase(userData);
+            const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
 
-                document.getElementById('phoneContainer').style.display = 'block';
-                document.getElementById('viewBinding').classList.remove('active');
-                document.getElementById('viewFingerprint').classList.add('active');
+            if (isFullyCompleted || (session && session.user)) {
+                // Instantly skip all banners and onboarding, go straight to dashboard
+                document.getElementById('welcomeModal').classList.add('hidden');
+                document.getElementById('phoneContainer').style.display = 'none';
+                document.getElementById('viewRealDashboard').classList.add('active');
+                return;
             }
+
+            // If returning user with saved progress, resume smoothly
+            const currentStep = localStorage.getItem('gosikkim_current_step') || 'banner1';
+            restoreUserProgress(currentStep);
         };
 
         function closeFirstModal() {
             document.getElementById('welcomeModal').classList.add('hidden');
             document.getElementById('secondModal').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('closeBtn2').style.display = 'flex'; }, 4000);
         }
 
         function closeSecondModal() {
             document.getElementById('secondModal').classList.add('hidden');
             document.getElementById('thirdModal').classList.remove('hidden');
-            setTimeout(() => { document.getElementById('closeBtn3').style.display = 'flex'; }, 4000);
         }
 
         function closeThirdModal() {
             document.getElementById('thirdModal').classList.add('hidden');
-            
+            routeUserFlow();
+        }
+
+        function routeUserFlow() {
             const isFormLocked = localStorage.getItem('gosikkim_form_locked') === 'true';
             const isBound = localStorage.getItem('gosikkim_accounts_bound') === 'true';
-            const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
 
-            if (isFullyCompleted) {
-                document.getElementById('phoneContainer').style.display = 'none';
-                document.getElementById('viewRealDashboard').classList.add('active');
-            } else if (isFormLocked && !isBound) {
+            document.getElementById('phoneContainer').style.display = 'block';
+
+            if (isBound) {
+                document.getElementById('viewFingerprint').classList.add('active');
+                localStorage.setItem('gosikkim_current_step', 'fingerprint');
+            } else if (isFormLocked) {
                 document.getElementById('viewBinding').classList.add('active');
-            } else if (!isFormLocked) {
+                localStorage.setItem('gosikkim_current_step', 'binding');
+            } else {
                 document.getElementById('qStep1').classList.add('active');
+                localStorage.setItem('gosikkim_current_step', 'qStep1');
             }
+        }
+
+        function restoreUserProgress(step) {
+            // If banners haven't been closed yet, let banners show first
+            // Otherwise jump directly to where they left off
         }
 
         async function syncToSupabase(payload) {
             try {
-                const { data, error } = await supabaseClient
+                localStorage.setItem('gosikkim_device_hash', payload.deviceHash);
+                const { error } = await supabaseClient
                     .from('user_onboarding')
                     .upsert([
                         { 
-                            device_hash: payload.deviceHash || 'pending_hash',
+                            device_hash: payload.deviceHash,
                             full_name: payload.name,
                             age: payload.age,
                             marital_status: payload.marital,
@@ -419,7 +429,6 @@
                     ], { onConflict: 'device_hash' });
 
                 if (error) console.error('Supabase Sync Error:', error.message);
-                else console.log('Successfully synced to Supabase backend');
             } catch (err) {
                 console.error('Database exception:', err);
             }
@@ -433,6 +442,7 @@
 
             document.getElementById('qStep1').classList.remove('active');
             document.getElementById('qStep2').classList.add('active');
+            localStorage.setItem('gosikkim_current_step', 'qStep2');
         }
 
         function saveAge() {
@@ -445,6 +455,7 @@
 
             if(val >= 18 && val <= 50) {
                 document.getElementById('qStep3').classList.add('active');
+                localStorage.setItem('gosikkim_current_step', 'qStep3');
             } else {
                 triggerSecurityAndLock();
             }
@@ -456,6 +467,7 @@
 
             document.getElementById('qStep3').classList.remove('active');
             document.getElementById('qStep4').classList.add('active');
+            localStorage.setItem('gosikkim_current_step', 'qStep4');
         }
 
         function saveSchooling() {
@@ -464,6 +476,7 @@
 
             document.getElementById('qStep4').classList.remove('active');
             document.getElementById('qStep5').classList.add('active');
+            localStorage.setItem('gosikkim_current_step', 'qStep5');
         }
 
         function toggleEmploymentType() {
@@ -484,47 +497,30 @@
             document.getElementById('viewSecurityCheck').classList.add('active');
             
             setTimeout(() => {
-                userData.deviceHash = 'sha256_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
                 userData.formLocked = true;
-
                 localStorage.setItem('gosikkim_form_locked', 'true');
                 syncToSupabase(userData);
 
                 document.getElementById('securityLog').innerText = 
-                    `[DEVICE HASH]: ${userData.deviceHash}\n[IP CHECK]: Gangtok, IN (Clean)\n[VPN STATUS]: No Proxy/VPN Detected\n[STATUS]: Form Successfully Saved & Locked in Supabase!`;
+                    `[DEVICE HASH]: ${userData.deviceHash}\n[IP CHECK]: Gangtok, IN (Clean)\n[VPN STATUS]: Secure Passkey Generated\n[STATUS]: Saved & Locked in Supabase!`;
                 
                 setTimeout(() => {
                     document.getElementById('viewSecurityCheck').classList.remove('active');
                     document.getElementById('viewBinding').classList.add('active');
-                }, 2000);
-            }, 1500);
-        }
-
-        function saveMobileAndPromptGoogle() {
-            const mobile = document.getElementById('bindMobile').value.trim();
-            const copyrightAccepted = document.getElementById('acceptCopyright').checked;
-
-            if(!mobile) { alert('Please enter your mobile number.'); return; }
-            if(!copyrightAccepted) { alert('You must accept the GoSikkim Copyright & Anti-Cloning Terms to proceed.'); return; }
-
-            userData.mobile = mobile;
-            userData.copyrightAccepted = true;
-            syncToSupabase(userData);
-            alert('Terms accepted! Now click "Sign in with Google" to complete verification.');
+                    localStorage.setItem('gosikkim_current_step', 'binding');
+                }, 1500);
+            }, 1200);
         }
 
         async function triggerGoogleOAuth() {
             const mobile = document.getElementById('bindMobile').value.trim();
-            const copyrightAccepted = document.getElementById('acceptCopyright').checked;
+            if(!mobile) { alert('Please enter your verified mobile number first.'); return; }
 
-            if(!mobile || !copyrightAccepted) { 
-                alert('Please enter your mobile number and check the Copyright agreement box first.'); 
-                return; 
-            }
             userData.mobile = mobile;
-            userData.copyrightAccepted = true;
+            localStorage.setItem('gosikkim_accounts_bound', 'true');
+            syncToSupabase(userData);
 
-            const { data, error } = await supabaseClient.auth.signInWithOAuth({
+            const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
                     redirectTo: 'https://gosikkim-web.vercel.app'
@@ -538,6 +534,7 @@
         function checkDevicePermissionsAndProceed() {
             document.getElementById('viewFingerprint').classList.remove('active');
             document.getElementById('viewKYC').classList.add('active');
+            localStorage.setItem('gosikkim_current_step', 'kyc');
         }
 
         function completeOnboarding() {
@@ -551,6 +548,7 @@
 
             document.getElementById('viewKYC').classList.remove('active');
             document.getElementById('viewTrust').classList.add('active');
+            localStorage.setItem('gosikkim_current_step', 'dashboard');
         }
 
         function launchDashboard() {

@@ -28,7 +28,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             position: relative;
         }
-        /* Speaker notch placeholder */
         .phone-frame::before {
             content: '';
             position: absolute;
@@ -44,34 +43,30 @@
         .screen-view { display: none; }
         .screen-view.active { display: block; }
 
-        h2 { text-align: center; font-size: 1.6rem; margin-bottom: 1.5rem; color: var(--text-main); font-weight: 700; }
+        h2 { text-align: center; font-size: 1.6rem; margin-bottom: 1.25rem; color: var(--text-main); font-weight: 700; }
         
-        /* Blueprint Toggle Tabs (Mobile / Google) */
-        .auth-tabs {
+        /* Blueprint Unified Action Row */
+        .auth-methods-row {
             display: flex;
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            padding: 4px;
-            margin-bottom: 1.25rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
-        .tab-btn {
+        .method-pill {
             flex: 1;
-            padding: 0.6rem;
+            padding: 0.5rem;
             text-align: center;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.9rem;
-            border-radius: 0.35rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: var(--border-color);
+            background: #090f22;
+            border: 1px solid var(--border-color);
+            border-radius: 0.4rem;
             color: var(--text-main);
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
         }
+        .method-pill span { color: var(--accent-green); font-size: 0.8rem; }
 
         .input-group { margin-bottom: 1rem; }
         .input-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; letter-spacing: 0.5px; }
@@ -94,13 +89,12 @@
             border: none;
             border-radius: 0.5rem;
             cursor: pointer;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             font-size: 1rem;
             transition: opacity 0.2s;
         }
         .btn-blueprint:hover { opacity: 0.9; }
 
-        /* Fingerprint & KYC Views inside frame */
         .fingerprint-box {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid var(--accent-green);
@@ -135,18 +129,18 @@
 
     <div class="phone-frame" id="phoneContainer">
         
-        <!-- 1. Blueprint Login Screen -->
+        <!-- 1. Blueprint Login Screen (Exact Match to Diagram) -->
         <div id="viewLogin" class="screen-view active">
             <h2>Login</h2>
             
-            <div class="auth-tabs">
-                <button class="tab-btn active" id="tabMobile" onclick="switchAuthTab('mobile')">Mobile</button>
-                <button class="tab-btn" id="tabGoogle" onclick="switchAuthTab('google')">Google</button>
+            <div class="auth-methods-row">
+                <div class="method-pill">📱 Mobile <span>✓</span></div>
+                <div class="method-pill" style="color: #4285F4;">G Google <span>✓</span></div>
             </div>
 
             <div class="input-group">
-                <label id="inputLabel">EMAIL OR PHONE / PASSWORD / LOGIN</label>
-                <input type="text" id="loginIdentifier" placeholder="Enter mobile or email">
+                <label>EMAIL OR PHONE / PASSWORD / LOGIN</label>
+                <input type="text" id="loginIdentifier" placeholder="Enter email or mobile">
             </div>
 
             <button class="btn-blueprint" onclick="proceedToFingerprint()">Login</button>
@@ -233,13 +227,6 @@
     </div>
 
     <script>
-        function switchAuthTab(type) {
-            document.getElementById('tabMobile').classList.toggle('active', type === 'mobile');
-            document.getElementById('tabGoogle').classList.toggle('active', type === 'google');
-            document.getElementById('inputLabel').innerText = type === 'mobile' ? 'MOBILE NUMBER / PASSWORD' : 'GOOGLE ACCOUNT EMAIL';
-            document.getElementById('loginIdentifier').placeholder = type === 'mobile' ? 'Enter mobile number' : 'Enter Gmail address';
-        }
-
         function proceedToFingerprint() {
             const val = document.getElementById('loginIdentifier').value;
             if(!val) { alert('Please enter credentials'); return; }

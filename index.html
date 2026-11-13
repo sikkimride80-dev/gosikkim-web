@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoSikkim - Step 1: Secure Onboarding & Trust Foundation</title>
+    <title>GoSikkim - Step 1: User Onboarding & Trust Foundation</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
+            --bg-color: #0b1329;
+            --phone-bg: #111c38;
             --accent-green: #10b981;
             --accent-blue: #3b82f6;
             --text-main: #f8fafc;
@@ -15,120 +15,242 @@
             --border-color: #334155;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: var(--card-bg); border-bottom: 1px solid var(--border-color); }
-        .badge { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); }
-        .dot { width: 8px; height: 8px; background-color: var(--accent-green); border-radius: 50%; box-shadow: 0 0 8px var(--accent-green); }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; }
         
-        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 1.5rem; }
+        /* Blueprint Phone Frame Wrapper */
+        .phone-frame {
+            background: var(--phone-bg);
+            border: 3px solid var(--border-color);
+            border-radius: 2.5rem;
+            width: 100%;
+            max-width: 380px;
+            padding: 2.5rem 1.5rem 2rem 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        /* Speaker notch placeholder */
+        .phone-frame::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .screen-view { display: none; }
+        .screen-view.active { display: block; }
+
+        h2 { text-align: center; font-size: 1.6rem; margin-bottom: 1.5rem; color: var(--text-main); font-weight: 700; }
         
-        /* Containers */
-        .step-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2rem; border-radius: 1rem; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: none; }
-        .step-card.active { display: block; }
-        .step-card h2 { text-align: center; margin-bottom: 0.5rem; font-size: 1.5rem; }
-        .step-card p { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
-        
+        /* Blueprint Toggle Tabs (Mobile / Google) */
+        .auth-tabs {
+            display: flex;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 4px;
+            margin-bottom: 1.25rem;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 0.6rem;
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-radius: 0.35rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--border-color);
+            color: var(--text-main);
+        }
+
         .input-group { margin-bottom: 1rem; }
-        .input-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
-        .input-group input, .input-group select { width: 100%; padding: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-main); font-size: 1rem; }
-        
-        .btn-primary { width: 100%; padding: 0.75rem; background: var(--accent-green); color: #000; font-weight: 600; border: none; border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem; transition: opacity 0.2s; }
-        .btn-primary:hover { opacity: 0.9; }
-        .btn-secondary { width: 100%; padding: 0.75rem; background: var(--accent-blue); color: #fff; font-weight: 600; border: none; border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem; }
-        
-        /* Fingerprint Status */
-        .fingerprint-box { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green); padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.8rem; color: var(--accent-green); margin-bottom: 1.5rem; }
-        
-        /* Trust Score UI */
-        .trust-tier { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; border: 1px solid var(--border-color); }
-        .stars { color: #f59e0b; font-size: 0.9rem; }
+        .input-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; letter-spacing: 0.5px; }
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.85rem;
+            background: #090f22;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .btn-blueprint {
+            width: 100%;
+            padding: 0.85rem;
+            background: #ffffff;
+            color: #0b1329;
+            font-weight: 700;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            margin-top: 1rem;
+            font-size: 1rem;
+            transition: opacity 0.2s;
+        }
+        .btn-blueprint:hover { opacity: 0.9; }
+
+        /* Fingerprint & KYC Views inside frame */
+        .fingerprint-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent-green);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--accent-green);
+            margin-bottom: 1.25rem;
+            line-height: 1.4;
+        }
+
+        .trust-tier {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .stars { color: #f59e0b; font-size: 0.9rem; margin-top: 0.2rem; }
+
+        /* Real Dashboard View */
+        #viewRealDashboard { display: none; width: 100%; max-width: 1100px; margin: 0 auto; padding: 1rem; }
+        #viewRealDashboard.active { display: block; }
+        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .dash-card { background: var(--phone-bg); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.75rem; }
+        .dash-card h3 { color: var(--accent-green); margin-bottom: 0.4rem; font-size: 1.1rem; }
+        .dash-card p { color: var(--text-muted); font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="badge"><span class="dot"></span> STEP 1: TRUST FOUNDATION</div>
-        <div class="badge"><span class="dot"></span> Anti-Fraud Active</div>
-    </header>
-
-    <main>
-        <!-- 1. Login View -->
-        <div id="viewLogin" class="step-card active">
-            <h2>Welcome to GoSikkim</h2>
-            <p>Secure Hyperlocal Onboarding</p>
-            <div class="input-group">
-                <label>MOBILE NUMBER OR EMAIL</label>
-                <input type="text" id="loginInput" placeholder="Enter mobile or email">
+    <div class="phone-frame" id="phoneContainer">
+        
+        <!-- 1. Blueprint Login Screen -->
+        <div id="viewLogin" class="screen-view active">
+            <h2>Login</h2>
+            
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tabMobile" onclick="switchAuthTab('mobile')">Mobile</button>
+                <button class="tab-btn" id="tabGoogle" onclick="switchAuthTab('google')">Google</button>
             </div>
-            <button class="btn-primary" onclick="proceedToFingerprint()">Continue with OTP / Google</button>
+
+            <div class="input-group">
+                <label id="inputLabel">EMAIL OR PHONE / PASSWORD / LOGIN</label>
+                <input type="text" id="loginIdentifier" placeholder="Enter mobile or email">
+            </div>
+
+            <button class="btn-blueprint" onclick="proceedToFingerprint()">Login</button>
         </div>
 
-        <!-- 2. Device Fingerprint & Anti-Scam View -->
-        <div id="viewFingerprint" class="step-card">
-            <h2>Anti-Scammer Protocol</h2>
-            <p>Running hardware integrity & geolocation checks...</p>
+        <!-- 2. Anti-Scammer Protocol (Device Fingerprinting) -->
+        <div id="viewFingerprint" class="screen-view">
+            <h2>Anti-Scammer</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Running SHA-256 hardware integrity & bot checks...</p>
             <div class="fingerprint-box" id="fpText">
-                Generating SHA-256 fingerprint...
+                Generating device hash...
             </div>
-            <button class="btn-primary" onclick="proceedToLiveKYC()">Verify Device & Proceed</button>
+            <button class="btn-blueprint" onclick="proceedToLiveKYC()">Verify Device</button>
         </div>
 
-        <!-- 3. Live Selfie KYC & DigiLocker View -->
-        <div id="viewKYC" class="step-card">
-            <h2>Live KYC & DigiLocker</h2>
-            <p>Verify identity via Live Selfie & Government Documents</p>
+        <!-- 3. Live KYC & DigiLocker -->
+        <div id="viewKYC" class="screen-view">
+            <h2>Live KYC</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Select Profile Tier & Sync DigiLocker</p>
+            
             <div class="input-group">
-                <label>SELECT PROFILE TIER</label>
+                <label>PROFILE TIER</label>
                 <select id="userTier">
-                    <option value="Teen">Teen Explorer (Aadhaar Verified)</option>
-                    <option value="Parent">Parent / Business Owner (PAN + Aadhaar)</option>
-                    <option value="Elder">Elder Community Leader (Full KYC)</option>
+                    <option value="Teen">Teen Explorer (Aadhaar)</option>
+                    <option value="Parent">Parent / Owner (PAN + Aadhaar)</option>
+                    <option value="Elder">Elder Leader (Full KYC)</option>
                 </select>
             </div>
+
             <div class="input-group">
-                <label>AADHAAR / PAN NUMBER (DIGILOCKER SYNC)</label>
-                <input type="text" id="docNumber" placeholder="Enter Aadhaar or PAN">
+                <label>AADHAAR / PAN NUMBER</label>
+                <input type="text" id="docNumber" placeholder="Enter ID number">
             </div>
-            <button class="btn-secondary" onclick="completeOnboarding()">Authorize DigiLocker Sync</button>
+
+            <button class="btn-blueprint" onclick="completeOnboarding()" style="background: var(--accent-blue); color: #fff;">Authorize DigiLocker</button>
         </div>
 
-        <!-- 4. Trust Score & Final Dashboard View -->
-        <div id="viewDashboard" class="step-card" style="max-width: 600px;">
-            <h2>Trust Foundation Established</h2>
-            <p>Your multi-generational secure profile is active</p>
+        <!-- 4. Trust Foundation Established -->
+        <div id="viewTrust" class="screen-view">
+            <h2>Trust Score</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Foundation Established from Day 1</p>
             
             <div class="trust-tier">
-                <div>
-                    <strong id="assignedTierName">Parent Tier</strong>
-                    <div class="stars">★★★★★ (Verified Badge)</div>
-                </div>
-                <div style="text-align: right; font-size: 0.85rem; color: var(--accent-green);">
-                    ✓ DigiLocker Linked<br>✓ Device Secured
-                </div>
+                <strong id="assignedTierName" style="font-size: 1rem;">Parent Profile</strong>
+                <div class="stars">★★★★★ (Verified Badge)</div>
+                <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ Phone + Google Linked</div>
             </div>
 
-            <div class="input-group" style="margin-top: 1.5rem;">
-                <label>READY FOR STEP 2</label>
-                <p style="text-align: left; color: var(--text-main); font-size: 0.9rem;">Your account is fully guarded against multi-account fraud and bot manipulation. You can now access the full marketplace and daily utilities dashboard.</p>
-            </div>
-            <button class="btn-primary" onclick="alert('Entering GoSikkim Multi-Use Daily Dashboard!')">Enter Marketplace Dashboard</button>
+            <button class="btn-blueprint" onclick="launchDashboard()">Enter Dashboard</button>
         </div>
-    </main>
+
+    </div>
+
+    <!-- 5. REAL MULTI-USE DAILY DASHBOARD -->
+    <div id="viewRealDashboard">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <h1 style="font-size: 1.6rem; color: var(--text-main);">GoSikkim Hyperlocal Marketplace</h1>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Multi-generational ecosystem with anti-fraud protection active.</p>
+            </div>
+            <div style="background: rgba(16,185,129,0.1); border: 1px solid var(--accent-green); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; color: var(--accent-green);">
+                ● Secure Session
+            </div>
+        </div>
+        
+        <div class="dash-grid">
+            <div class="dash-card">
+                <h3>🛒 Marketplace Hub</h3>
+                <p>Browse & list electronics, gadgets, clothing, property, vehicles, and local edibles.</p>
+            </div>
+            <div class="dash-card">
+                <h3>📋 Form H Listings</h3>
+                <p>Manage operating hours, capacity metrics, live venue photography, and verification.</p>
+            </div>
+            <div class="dash-card">
+                <h3>🛡️ Anti-Scam Shield</h3>
+                <p>Active device fingerprinting and cross-account tracking guarding against fraud.</p>
+            </div>
+            <div class="dash-card">
+                <h3>💳 Razorpay Billing</h3>
+                <p>Manage recurring subscriptions, automated billing cycles, and micro-transactions.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
+        function switchAuthTab(type) {
+            document.getElementById('tabMobile').classList.toggle('active', type === 'mobile');
+            document.getElementById('tabGoogle').classList.toggle('active', type === 'google');
+            document.getElementById('inputLabel').innerText = type === 'mobile' ? 'MOBILE NUMBER / PASSWORD' : 'GOOGLE ACCOUNT EMAIL';
+            document.getElementById('loginIdentifier').placeholder = type === 'mobile' ? 'Enter mobile number' : 'Enter Gmail address';
+        }
+
         function proceedToFingerprint() {
-            const val = document.getElementById('loginInput').value;
-            if(!val) { alert('Please enter mobile or email'); return; }
+            const val = document.getElementById('loginIdentifier').value;
+            if(!val) { alert('Please enter credentials'); return; }
             
             document.getElementById('viewLogin').classList.remove('active');
             document.getElementById('viewFingerprint').classList.add('active');
 
-            // Generate SHA-256 simulated fingerprint
             setTimeout(() => {
-                const rawString = navigator.userAgent + screen.width + screen.height + new Date().getTime();
                 document.getElementById('fpText').innerText = 
-                    `[SECURE HASH]: e3b0c44298fc1c14... (SHA-256)\n[IP CHECK]: Gangtok, IN (Clean)\n[BOT STATUS]: Passed`;
-            }, 600);
+                    `[SHA-256]: a1b98f2c73... (Verified)\n[IP GEO]: Gangtok, IN\n[BOT SHIELD]: Passed`;
+            }, 500);
         }
 
         function proceedToLiveKYC() {
@@ -137,13 +259,19 @@
         }
 
         function completeOnboarding() {
-            const tier = document.getElementById('userTier').value;
             const doc = document.getElementById('docNumber').value;
-            if(!doc) { alert('Please provide Aadhaar or PAN for DigiLocker verification.'); return; }
-
+            if(!doc) { alert('Please enter Aadhaar or PAN number.'); return; }
+            
+            const tier = document.getElementById('userTier').value;
             document.getElementById('assignedTierName').innerText = tier + ' Profile';
+
             document.getElementById('viewKYC').classList.remove('active');
-            document.getElementById('viewDashboard').classList.add('active');
+            document.getElementById('viewTrust').classList.add('active');
+        }
+
+        function launchDashboard() {
+            document.getElementById('phoneContainer').style.display = 'none';
+            document.getElementById('viewRealDashboard').classList.add('active');
         }
     </script>
 </body>

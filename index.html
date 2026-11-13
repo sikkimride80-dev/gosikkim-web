@@ -41,12 +41,8 @@
             position: relative;
             box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
-        .modal-card img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        /* Top Right Close Button (Hidden for first 4 seconds) */
+        .modal-card img { width: 100%; height: auto; display: block; }
+        
         .close-btn {
             position: absolute;
             top: 10px;
@@ -60,7 +56,7 @@
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            display: none; /* Initially hidden */
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 20;
@@ -94,71 +90,42 @@
         .screen-view { display: none; }
         .screen-view.active { display: block; }
 
-        h2.screen-title { text-align: center; font-size: 1.6rem; margin-bottom: 1.25rem; color: var(--text-main); font-weight: 700; }
+        h2.screen-title { text-align: center; font-size: 1.4rem; margin-bottom: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.3; }
         
         .auth-methods-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
         .method-pill {
-            flex: 1;
-            padding: 0.5rem;
-            text-align: center;
-            background: #090f22;
-            border: 1px solid var(--border-color);
-            border-radius: 0.4rem;
-            color: var(--text-main);
-            font-weight: 600;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
+            flex: 1; padding: 0.5rem; text-align: center; background: #090f22;
+            border: 1px solid var(--border-color); border-radius: 0.4rem;
+            color: var(--text-main); font-weight: 600; font-size: 0.85rem;
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
         }
         .method-pill span { color: var(--accent-green); font-size: 0.8rem; }
 
         .input-group { margin-bottom: 1rem; }
         .input-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; letter-spacing: 0.5px; }
         .input-group input, .input-group select {
-            width: 100%;
-            padding: 0.85rem;
-            background: #090f22;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            color: var(--text-main);
-            font-size: 0.95rem;
+            width: 100%; padding: 0.85rem; background: #090f22;
+            border: 1px solid var(--border-color); border-radius: 0.5rem;
+            color: var(--text-main); font-size: 0.95rem;
         }
 
         .btn-blueprint {
-            width: 100%;
-            padding: 0.85rem;
-            background: #ffffff;
-            color: #0b1329;
-            font-weight: 700;
-            border: none;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            margin-top: 0.5rem;
-            font-size: 1rem;
-            transition: opacity 0.2s;
+            width: 100%; padding: 0.75rem; background: var(--accent-green);
+            color: #0b1329; font-weight: 700; border: none;
+            border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem;
+            font-size: 0.95rem; transition: opacity 0.2s;
         }
         .btn-blueprint:hover { opacity: 0.9; }
 
         .fingerprint-box {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid var(--accent-green);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-family: monospace;
-            font-size: 0.8rem;
-            color: var(--accent-green);
-            margin-bottom: 1.25rem;
-            line-height: 1.4;
+            background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green);
+            padding: 1rem; border-radius: 0.5rem; font-family: monospace;
+            font-size: 0.8rem; color: var(--accent-green); margin-bottom: 1.25rem; line-height: 1.4;
         }
 
         .trust-tier {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--border-color);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+            padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;
         }
         .stars { color: #f59e0b; font-size: 0.9rem; margin-top: 0.2rem; }
 
@@ -173,62 +140,122 @@
 </head>
 <body>
 
-    <!-- FIRST BANNER MODAL -->
+    <!-- BANNER 1 -->
     <div id="welcomeModal" class="modal-overlay">
         <div class="modal-card">
             <button id="closeBtn1" class="close-btn" onclick="closeFirstModal()">✕</button>
-            <img src="IMG-20261113-WA2055.jpg" alt="GoSikkim Welcome Banner 1">
+            <img src="IMG-20261113-WA2055.jpg" alt="Welcome Banner 1">
         </div>
     </div>
 
-    <!-- SECOND BANNER MODAL -->
+    <!-- BANNER 2 -->
     <div id="secondModal" class="modal-overlay hidden">
         <div class="modal-card">
             <button id="closeBtn2" class="close-btn" onclick="closeSecondModal()">✕</button>
-            <img src="image_9ca84025.jpg" alt="GoSikkim Welcome Banner 2">
+            <img src="image_9ca84025.jpg" alt="Welcome Banner 2">
         </div>
     </div>
 
-    <!-- THIRD BANNER MODAL -->
+    <!-- BANNER 3 -->
     <div id="thirdModal" class="modal-overlay hidden">
         <div class="modal-card">
             <button id="closeBtn3" class="close-btn" onclick="closeThirdModal()">✕</button>
-            <img src="IMG-20261113-WA4615.jpg" alt="GoSikkim Welcome Banner 3">
+            <img src="IMG-20261113-WA4615.jpg" alt="Welcome Banner 3">
         </div>
     </div>
 
     <div class="phone-frame" id="phoneContainer">
         
-        <!-- 1. Blueprint Login Screen -->
-        <div id="viewLogin" class="screen-view active">
-            <h2 class="screen-title">Login</h2>
-            
+        <!-- QUESTIONNAIRE STEP 1: NAME -->
+        <div id="qStep1" class="screen-view">
+            <h2 class="screen-title">1. WHAT IS YOUR SWEET NAME?</h2>
+            <div class="input-group">
+                <input type="text" id="ansName" maxlength="25" placeholder="Enter name (max 25 chars)">
+            </div>
+            <button class="btn-blueprint" onclick="saveName()">Continue</button>
+        </div>
+
+        <!-- QUESTIONNAIRE STEP 2: AGE -->
+        <div id="qStep2" class="screen-view">
+            <h2 class="screen-title">2. WHAT IS YOUR AGE?</h2>
+            <div class="input-group">
+                <input type="number" id="ansAge" placeholder="Enter your age">
+            </div>
+            <button class="btn-blueprint" onclick="saveAge()">Continue</button>
+        </div>
+
+        <!-- QUESTIONNAIRE STEP 3: MARITAL STATUS -->
+        <div id="qStep3" class="screen-view">
+            <h2 class="screen-title">3. CURRENT MARITAL STATUS?</h2>
+            <div class="input-group">
+                <select id="ansMarital">
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                </select>
+            </div>
+            <button class="btn-blueprint" onclick="saveMarital()">Continue</button>
+        </div>
+
+        <!-- QUESTIONNAIRE STEP 4: HIGHEST SCHOOLING -->
+        <div id="qStep4" class="screen-view">
+            <h2 class="screen-title">4. HIGHEST SCHOOLING / EDUCATION?</h2>
+            <div class="input-group">
+                <select id="ansSchooling">
+                    <option value="1-10 pass">1-10 Pass</option>
+                    <option value="11-12">11-12th</option>
+                    <option value="college university">College / University</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+            <button class="btn-blueprint" onclick="saveSchooling()">Continue</button>
+        </div>
+
+        <!-- QUESTIONNAIRE STEP 5: EMPLOYMENT -->
+        <div id="qStep5" class="screen-view">
+            <h2 class="screen-title">5. ARE YOU EMPLOYED?</h2>
+            <div class="input-group">
+                <select id="ansEmployed" onchange="toggleEmploymentType()">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="input-group" id="employmentTypeGroup" style="display: none; margin-top: 0.75rem;">
+                <label>EMPLOYMENT TYPE</label>
+                <select id="ansEmpType">
+                    <option value="Full time salaried">Full time salaried</option>
+                    <option value="Part time salaried">Part time salaried</option>
+                </select>
+            </div>
+            <button class="btn-blueprint" onclick="saveEmployment()">Continue</button>
+        </div>
+
+        <!-- LOGIN SCREEN (Original) -->
+        <div id="viewLogin" class="screen-view">
+            <h2 class="screen-title" style="font-size: 1.6rem; margin-bottom: 1.25rem;">Login</h2>
             <div class="auth-methods-row">
                 <div class="method-pill">📱 Mobile <span>✓</span></div>
                 <div class="method-pill" style="color: #4285F4;">G Google <span>✓</span></div>
             </div>
-
             <div class="input-group">
                 <label>EMAIL OR PHONE / PASSWORD / LOGIN</label>
                 <input type="text" id="loginIdentifier" placeholder="Enter email or mobile">
             </div>
-
-            <button class="btn-blueprint" onclick="proceedToFingerprint()">Login</button>
+            <button class="btn-blueprint" onclick="proceedToFingerprint()" style="background:#fff; color:#0b1329;">Login</button>
         </div>
 
-        <!-- 2. Anti-Scammer Protocol -->
+        <!-- Anti-Scammer Protocol -->
         <div id="viewFingerprint" class="screen-view">
             <h2 class="screen-title">Anti-Scammer</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Running SHA-256 hardware integrity & bot checks...</p>
             <div class="fingerprint-box" id="fpText">Generating device hash...</div>
-            <button class="btn-blueprint" onclick="proceedToLiveKYC()">Verify Device</button>
+            <button class="btn-blueprint" onclick="proceedToLiveKYC()" style="background:#fff; color:#0b1329;">Verify Device</button>
         </div>
 
-        <!-- 3. Live KYC & DigiLocker -->
+        <!-- Live KYC & DigiLocker -->
         <div id="viewKYC" class="screen-view">
             <h2 class="screen-title">Live KYC</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Select Profile Tier & Sync DigiLocker</p>
-            
             <div class="input-group">
                 <label>PROFILE TIER</label>
                 <select id="userTier">
@@ -237,27 +264,23 @@
                     <option value="Elder">Elder Leader (Full KYC)</option>
                 </select>
             </div>
-
             <div class="input-group">
                 <label>AADHAAR / PAN NUMBER</label>
                 <input type="text" id="docNumber" placeholder="Enter ID number">
             </div>
-
             <button class="btn-blueprint" onclick="completeOnboarding()" style="background: var(--accent-blue); color: #fff;">Authorize DigiLocker</button>
         </div>
 
-        <!-- 4. Trust Foundation Established -->
+        <!-- Trust Foundation Established -->
         <div id="viewTrust" class="screen-view">
             <h2 class="screen-title">Trust Score</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Foundation Established from Day 1</p>
-            
             <div class="trust-tier">
                 <strong id="assignedTierName" style="font-size: 1rem;">Parent Profile</strong>
                 <div class="stars">★★★★★ (Verified Badge)</div>
                 <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ Phone + Google Linked</div>
             </div>
-
-            <button class="btn-blueprint" onclick="launchDashboard()">Enter Dashboard</button>
+            <button class="btn-blueprint" onclick="launchDashboard()" style="background:#fff; color:#0b1329;">Enter Dashboard</button>
         </div>
 
     </div>
@@ -273,7 +296,6 @@
                 ● Secure Session
             </div>
         </div>
-        
         <div class="dash-grid">
             <div class="dash-card">
                 <h3>🛒 Marketplace Hub</h3>
@@ -295,34 +317,92 @@
     </div>
 
     <script>
+        // Global storage for user questionnaire responses
+        let userData = { name: '', age: null, marital: '', schooling: '', employed: '', employmentType: '' };
+
         // 4-second delay for First Banner Close Button
-        setTimeout(() => {
-            document.getElementById('closeBtn1').style.display = 'flex';
-        }, 4000);
+        setTimeout(() => { document.getElementById('closeBtn1').style.display = 'flex'; }, 4000);
 
         function closeFirstModal() {
             document.getElementById('welcomeModal').classList.add('hidden');
             document.getElementById('secondModal').classList.remove('hidden');
-
-            // 4-second delay for Second Banner Close Button
-            setTimeout(() => {
-                document.getElementById('closeBtn2').style.display = 'flex';
-            }, 4000);
+            setTimeout(() => { document.getElementById('closeBtn2').style.display = 'flex'; }, 4000);
         }
 
         function closeSecondModal() {
             document.getElementById('secondModal').classList.add('hidden');
             document.getElementById('thirdModal').classList.remove('hidden');
-
-            // 4-second delay for Third Banner Close Button
-            setTimeout(() => {
-                document.getElementById('closeBtn3').style.display = 'flex';
-            }, 4000);
+            setTimeout(() => { document.getElementById('closeBtn3').style.display = 'flex'; }, 4000);
         }
 
         function closeThirdModal() {
-            // Hide third banner completely to reveal the login screen
             document.getElementById('thirdModal').classList.add('hidden');
+            // Start Questionnaire Step 1
+            document.getElementById('qStep1').classList.add('active');
+        }
+
+        // Backend Sync Mock (Supabase Integration Point)
+        function syncToSupabase(payload) {
+            console.log("Auto-saving to Supabase Backend:", payload);
+            // Replace with actual Supabase client call when connected:
+            // supabase.from('user_onboarding').upsert([payload]).then(...)
+        }
+
+        function saveName() {
+            const val = document.getElementById('ansName').value.trim();
+            if(!val) { alert('Please enter your name'); return; }
+            userData.name = val;
+            syncToSupabase(userData);
+
+            document.getElementById('qStep1').classList.remove('active');
+            document.getElementById('qStep2').classList.add('active');
+        }
+
+        function saveAge() {
+            const val = parseInt(document.getElementById('ansAge').value);
+            if(isNaN(val)) { alert('Please enter a valid age'); return; }
+            userData.age = val;
+            syncToSupabase(userData);
+
+            document.getElementById('qStep2').classList.remove('active');
+
+            // Conditional Logic (Twist): If age is between 18 and 50, continue questions 3, 4, 5. Otherwise skip to Login.
+            if(val >= 18 && val <= 50) {
+                document.getElementById('qStep3').classList.add('active');
+            } else {
+                document.getElementById('viewLogin').classList.add('active');
+            }
+        }
+
+        function saveMarital() {
+            userData.marital = document.getElementById('ansMarital').value;
+            syncToSupabase(userData);
+
+            document.getElementById('qStep3').classList.remove('active');
+            document.getElementById('qStep4').classList.add('active');
+        }
+
+        function saveSchooling() {
+            userData.schooling = document.getElementById('ansSchooling').value;
+            syncToSupabase(userData);
+
+            document.getElementById('qStep4').classList.remove('active');
+            document.getElementById('qStep5').classList.add('active');
+        }
+
+        function toggleEmploymentType() {
+            const empVal = document.getElementById('ansEmployed').value;
+            const empTypeGroup = document.getElementById('employmentTypeGroup');
+            empTypeGroup.style.display = (empVal === 'yes') ? 'block' : 'none';
+        }
+
+        function saveEmployment() {
+            userData.employed = document.getElementById('ansEmployed').value;
+            userData.employmentType = (userData.employed === 'yes') ? document.getElementById('ansEmpType').value : 'N/A';
+            syncToSupabase(userData);
+
+            document.getElementById('qStep5').classList.remove('active');
+            document.getElementById('viewLogin').classList.add('active');
         }
 
         function proceedToFingerprint() {

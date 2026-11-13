@@ -104,7 +104,7 @@
 </head>
 <body>
 
-    <!-- BANNER 1 (Always shows on refresh/load) -->
+    <!-- BANNER 1 -->
     <div id="welcomeModal" class="modal-overlay">
         <div class="modal-card">
             <button id="closeBtn1" class="close-btn" onclick="closeFirstModal()">✕</button>
@@ -112,7 +112,7 @@
         </div>
     </div>
 
-    <!-- BANNER 2 (Always shows on refresh/load) -->
+    <!-- BANNER 2 -->
     <div id="secondModal" class="modal-overlay hidden">
         <div class="modal-card">
             <button id="closeBtn2" class="close-btn" onclick="closeSecondModal()">✕</button>
@@ -120,7 +120,7 @@
         </div>
     </div>
 
-    <!-- BANNER 3 (Always shows on refresh/load) -->
+    <!-- BANNER 3 -->
     <div id="thirdModal" class="modal-overlay hidden">
         <div class="modal-card">
             <button id="closeBtn3" class="close-btn" onclick="closeThirdModal()">✕</button>
@@ -309,7 +309,7 @@
         };
 
         window.onload = function() {
-            // Always start by showing the 3 banners on every page load/refresh
+            // Always show the 3 promotional banners on every refresh/visit
             setTimeout(() => { document.getElementById('closeBtn1').style.display = 'flex'; }, 4000);
         };
 
@@ -325,16 +325,23 @@
             setTimeout(() => { document.getElementById('closeBtn3').style.display = 'flex'; }, 4000);
         }
 
+        // Intelligent Session & Progress Router when Banners Close
         function closeThirdModal() {
             document.getElementById('thirdModal').classList.add('hidden');
             
-            // Check if form was already submitted previously
-            if (localStorage.getItem('gosikkim_form_locked') === 'true') {
-                // If already submitted, skip questionnaire and open main dashboard directly smoothly
+            const isFormLocked = localStorage.getItem('gosikkim_form_locked') === 'true';
+            const isBound = localStorage.getItem('gosikkim_accounts_bound') === 'true';
+            const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
+
+            if (isFullyCompleted) {
+                // Fully done -> Open dashboard directly
                 document.getElementById('phoneContainer').style.display = 'none';
                 document.getElementById('viewRealDashboard').classList.add('active');
+            } else if (isFormLocked && !isBound) {
+                // Form finished, but account binding pending -> Lead them to Binding page
+                document.getElementById('viewBinding').classList.add('active');
             } else {
-                // Otherwise show questionnaire step 1 normally
+                // Form not finished yet -> Start at Questionnaire Step 1
                 document.getElementById('qStep1').classList.add('active');
             }
         }
@@ -429,6 +436,7 @@
 
             userData.mobile = mobile;
             userData.googleAccount = google;
+            localStorage.setItem('gosikkim_accounts_bound', 'true');
             syncToSupabase(userData);
 
             document.getElementById('viewBinding').classList.remove('active');
@@ -451,6 +459,9 @@
             
             const tier = document.getElementById('userTier').value;
             document.getElementById('assignedTierName').innerText = tier + ' Profile';
+
+            // Mark entire onboarding as fully complete
+            localStorage.setItem('gosikkim_onboarding_complete', 'true');
 
             document.getElementById('viewKYC').classList.remove('active');
             document.getElementById('viewTrust').classList.add('active');

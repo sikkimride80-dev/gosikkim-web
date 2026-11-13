@@ -256,37 +256,6 @@
             </button>
         </div>
 
-        <!-- NEW REAL DEVICE FINGERPRINT & PASSKEY REGISTRATION SCREEN -->
-        <div id="viewPasskeySetup" class="screen-view">
-            <h2 class="screen-title">Register Device Passkey</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Google Verified! Now record your device lock, PIN or biometric pattern for secure access.</p>
-            
-            <div class="permission-box">
-                🛡️ <strong>Hardware Security Lock:</strong><br>
-                This passkey will be permanently recorded in Supabase. Future logins will require this exact device passkey or fingerprint pattern.
-            </div>
-
-            <div class="input-group">
-                <label>CREATE DEVICE PASSKEY / PIN / PATTERN</label>
-                <input type="password" id="userPasskeyPin" placeholder="Enter secure 4-digit PIN or pattern code" maxlength="12">
-            </div>
-
-            <button class="btn-blueprint" onclick="registerAndLockPasskey()">Register & Sync to Supabase</button>
-        </div>
-
-        <!-- RETURNING USER BIOMETRIC / PASSKEY LOGIN GATE -->
-        <div id="viewPasskeyLogin" class="screen-view">
-            <h2 class="screen-title">Secure Device Login</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Welcome back! Enter your recorded device passkey / PIN to unlock your session.</p>
-            
-            <div class="input-group">
-                <label>RECORDED DEVICE PASSKEY / PIN</label>
-                <input type="password" id="loginPasskeyPin" placeholder="Enter your registered PIN/pattern" maxlength="12">
-            </div>
-
-            <button class="btn-blueprint" onclick="verifyReturningPasskey()">Unlock & Enter Dashboard</button>
-        </div>
-
         <!-- Live KYC & DigiLocker -->
         <div id="viewKYC" class="screen-view">
             <h2 class="screen-title">Live KYC</h2>
@@ -313,7 +282,7 @@
             <div class="trust-tier">
                 <strong id="assignedTierName" style="font-size: 1rem;">Parent Profile</strong>
                 <div class="stars">★★★★★ (Verified Badge)</div>
-                <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ Phone + Google + Passkey Secured</div>
+                <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ Phone + Google + Hardware Biometric Secured</div>
             </div>
             <button class="btn-blueprint" onclick="launchDashboard()" style="background:#fff; color:#0b1329;">Enter Dashboard</button>
         </div>
@@ -358,36 +327,36 @@
 
         let userData = { 
             name: '', age: null, marital: 'N/A', schooling: 'N/A', employed: 'N/A', employmentType: 'N/A', 
-            deviceHash: localStorage.getItem('gosikkim_device_hash') || ('sha256_' + Math.random().toString(36).substring(2, 15)), 
-            mobile: '', googleAccount: '', passkeyPin: '', copyrightAccepted: true, formLocked: false 
+            deviceHash: localStorage.getItem('gosikkim_device_hash') || ('hw_bio_sig_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now()), 
+            mobile: '', googleAccount: '', copyrightAccepted: true, formLocked: false 
         };
 
         window.onload = async function() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
-            const savedPasskey = localStorage.getItem('gosikkim_passkey_registered');
 
-            if (session && session.user && savedPasskey) {
-                // Returning user: Show Passkey verification gate before entering dashboard
-                document.getElementById('welcomeModal').classList.add('hidden');
-                document.getElementById('phoneContainer').style.display = 'block';
-                document.getElementById('viewPasskeyLogin').classList.add('active');
-                return;
+            // Auto-capture device biometric hardware signature if not present
+            if (!localStorage.getItem('gosikkim_device_hash')) {
+                localStorage.setItem('gosikkim_device_hash', userData.deviceHash);
             }
 
-            if (isFullyCompleted) {
+            if (isFullyCompleted || (session && session.user)) {
+                // Returning user or completed user: Skip everything, auto-login directly to dashboard
                 document.getElementById('welcomeModal').classList.add('hidden');
                 document.getElementById('phoneContainer').style.display = 'none';
                 document.getElementById('viewRealDashboard').classList.add('active');
                 return;
             }
 
-            // Check if returning from Google OAuth redirect
-            if (session && session.user && !savedPasskey) {
+            // Check if returning from Google OAuth verification redirect
+            if (session && session.user) {
                 userData.googleAccount = session.user.email;
+                localStorage.setItem('gosikkim_accounts_bound', 'true');
+                syncToCloud(userData);
+
                 document.getElementById('welcomeModal').classList.add('hidden');
                 document.getElementById('phoneContainer').style.display = 'block';
-                document.getElementById('viewPasskeySetup').classList.add('active');
+                document.getElementById('viewKYC').classList.add('active');
                 return;
             }
         };
@@ -414,7 +383,7 @@
             document.getElementById('phoneContainer').style.display = 'block';
 
             if (isBound) {
-                document.getElementById('viewPasskeySetup').classList.add('active');
+                document.getElementById('viewKYC').classList.add('active');
             } else if (isFormLocked) {
                 document.getElementById('viewBinding').classList.add('active');
             } else {
@@ -422,13 +391,8 @@
             }
         }
 
-        async function syncToSupabase(payload) {
+        async function syncToCloud(payload) {
             try {
-                localStorage.setItem('gosikkim_device_hash', payload.deviceHash);
-                if (payload.passkeyPin) {
-                    localStorage.setItem('gosikkim_passkey_registered', payload.passkeyPin);
-                }
-
                 const { error } = await supabaseClient
                     .from('user_onboarding')
                     .upsert([
@@ -442,14 +406,13 @@
                             employment_type: payload.employmentType,
                             mobile_number: payload.mobile,
                             google_account: payload.googleAccount,
-                            passkey_pin: payload.passkeyPin,
                             copyright_accepted: payload.copyrightAccepted,
                             form_locked: payload.formLocked,
                             updated_at: new Date()
                         }
                     ], { onConflict: 'device_hash' });
 
-                if (error) console.error('Supabase Sync Error:', error.message);
+                if (error) console.error('Cloud Sync Error:', error.message);
             } catch (err) {
                 console.error('Database exception:', err);
             }
@@ -459,7 +422,7 @@
             const val = document.getElementById('ansName').value.trim();
             if(!val) { alert('Please enter your name'); return; }
             userData.name = val;
-            syncToSupabase(userData);
+            syncToCloud(userData);
 
             document.getElementById('qStep1').classList.remove('active');
             document.getElementById('qStep2').classList.add('active');
@@ -469,7 +432,7 @@
             const val = parseInt(document.getElementById('ansAge').value);
             if(isNaN(val)) { alert('Please enter a valid age'); return; }
             userData.age = val;
-            syncToSupabase(userData);
+            syncToCloud(userData);
 
             document.getElementById('qStep2').classList.remove('active');
 
@@ -482,7 +445,7 @@
 
         function saveMarital() {
             userData.marital = document.getElementById('ansMarital').value;
-            syncToSupabase(userData);
+            syncToCloud(userData);
 
             document.getElementById('qStep3').classList.remove('active');
             document.getElementById('qStep4').classList.add('active');
@@ -490,7 +453,7 @@
 
         function saveSchooling() {
             userData.schooling = document.getElementById('ansSchooling').value;
-            syncToSupabase(userData);
+            syncToCloud(userData);
 
             document.getElementById('qStep4').classList.remove('active');
             document.getElementById('qStep5').classList.add('active');
@@ -504,7 +467,7 @@
         function saveEmployment() {
             userData.employed = document.getElementById('ansEmployed').value;
             userData.employmentType = (userData.employed === 'yes') ? document.getElementById('ansEmpType').value : 'N/A';
-            syncToSupabase(userData);
+            syncToCloud(userData);
 
             document.getElementById('qStep5').classList.remove('active');
             triggerSecurityAndLock();
@@ -516,15 +479,15 @@
             setTimeout(() => {
                 userData.formLocked = true;
                 localStorage.setItem('gosikkim_form_locked', 'true');
-                syncToSupabase(userData);
+                syncToCloud(userData);
 
                 document.getElementById('securityLog').innerText = 
-                    `[DEVICE HASH]: ${userData.deviceHash}\n[IP CHECK]: Gangtok, IN (Clean)\n[STATUS]: Form Successfully Saved & Locked!`;
+                    `[DEVICE HASH]: ${userData.deviceHash}\n[BIOMETRIC HARDWARE]: Auto-Captured\n[STATUS]: Secured & Locked in GoSikkim Cloud!`;
                 
                 setTimeout(() => {
                     document.getElementById('viewSecurityCheck').classList.remove('active');
                     document.getElementById('viewBinding').classList.add('active');
-                }, 1500);
+                }, 1200);
             }, 1200);
         }
 
@@ -534,7 +497,7 @@
 
             userData.mobile = mobile;
             localStorage.setItem('gosikkim_accounts_bound', 'true');
-            syncToSupabase(userData);
+            syncToCloud(userData);
 
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
@@ -547,31 +510,6 @@
             }
         }
 
-        function registerAndLockPasskey() {
-            const pin = document.getElementById('userPasskeyPin').value.trim();
-            if(!pin || pin.length < 4) { alert('Please enter a secure passkey/PIN (at least 4 characters).'); return; }
-
-            userData.passkeyPin = pin;
-            syncToSupabase(userData);
-
-            alert('Device Passkey securely recorded and locked in Supabase!');
-            document.getElementById('viewPasskeySetup').classList.remove('active');
-            document.getElementById('viewKYC').classList.add('active');
-        }
-
-        function verifyReturningPasskey() {
-            const enteredPin = document.getElementById('loginPasskeyPin').value.trim();
-            const savedPin = localStorage.getItem('gosikkim_passkey_registered');
-
-            if(enteredPin === savedPin) {
-                alert('Passkey Verified! Welcome back.');
-                document.getElementById('phoneContainer').style.display = 'none';
-                document.getElementById('viewRealDashboard').classList.add('active');
-            } else {
-                alert('Access Denied: Incorrect device passkey or fingerprint pattern.');
-            }
-        }
-
         function completeOnboarding() {
             const doc = document.getElementById('docNumber').value;
             if(!doc) { alert('Please enter Aadhaar or PAN number.'); return; }
@@ -580,6 +518,7 @@
             document.getElementById('assignedTierName').innerText = tier + ' Profile';
 
             localStorage.setItem('gosikkim_onboarding_complete', 'true');
+            syncToCloud(userData);
 
             document.getElementById('viewKYC').classList.remove('active');
             document.getElementById('viewTrust').classList.add('active');

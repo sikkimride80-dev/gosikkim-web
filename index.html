@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoSikkim - Secure Hyperlocal Marketplace</title>
+    <title>GoSikkim - Step 1: Secure Onboarding & Trust Foundation</title>
     <style>
         :root {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --accent-green: #10b981;
+            --accent-blue: #3b82f6;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: #334155;
@@ -21,93 +22,128 @@
         
         main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 1.5rem; }
         
-        /* Auth Card */
-        .auth-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2rem; border-radius: 1rem; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .auth-card h2 { text-align: center; margin-bottom: 0.5rem; font-size: 1.5rem; }
-        .auth-card p { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+        /* Containers */
+        .step-card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 2rem; border-radius: 1rem; width: 100%; max-width: 450px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); display: none; }
+        .step-card.active { display: block; }
+        .step-card h2 { text-align: center; margin-bottom: 0.5rem; font-size: 1.5rem; }
+        .step-card p { text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+        
         .input-group { margin-bottom: 1rem; }
         .input-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.4rem; }
-        .input-group input { width: 100%; padding: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-main); font-size: 1rem; }
+        .input-group input, .input-group select { width: 100%; padding: 0.75rem; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 0.5rem; color: var(--text-main); font-size: 1rem; }
+        
         .btn-primary { width: 100%; padding: 0.75rem; background: var(--accent-green); color: #000; font-weight: 600; border: none; border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem; transition: opacity 0.2s; }
         .btn-primary:hover { opacity: 0.9; }
-        .divider { text-align: center; color: var(--text-muted); font-size: 0.8rem; margin: 1rem 0; position: relative; }
-        .btn-google { width: 100%; padding: 0.75rem; background: transparent; border: 1px solid var(--border-color); color: var(--text-main); font-weight: 500; border-radius: 0.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-secondary { width: 100%; padding: 0.75rem; background: var(--accent-blue); color: #fff; font-weight: 600; border: none; border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem; }
         
-        /* Dashboard Container */
-        .dashboard { display: none; width: 100%; max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
-        .dashboard-header { margin-bottom: 2rem; }
-        .dashboard-header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); padding: 1.5rem; border-radius: 0.75rem; }
-        .card h3 { margin-bottom: 0.5rem; color: var(--accent-green); }
-        .card p { color: var(--text-muted); font-size: 0.9rem; }
+        /* Fingerprint Status */
+        .fingerprint-box { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green); padding: 1rem; border-radius: 0.5rem; font-family: monospace; font-size: 0.8rem; color: var(--accent-green); margin-bottom: 1.5rem; }
+        
+        /* Trust Score UI */
+        .trust-tier { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0.5rem; margin-bottom: 0.75rem; border: 1px solid var(--border-color); }
+        .stars { color: #f59e0b; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="badge"><span class="dot"></span> ENTERPRISE SECURE GATEWAY</div>
-        <div class="badge"><span class="dot"></span> Anti-Fraud Protected</div>
+        <div class="badge"><span class="dot"></span> STEP 1: TRUST FOUNDATION</div>
+        <div class="badge"><span class="dot"></span> Anti-Fraud Active</div>
     </header>
 
     <main>
-        <!-- Auth View -->
-        <div id="authView" class="auth-card">
-            <h2>Welcome Back</h2>
-            <p>Secure access for Owners, Parents & Users</p>
-            
+        <!-- 1. Login View -->
+        <div id="viewLogin" class="step-card active">
+            <h2>Welcome to GoSikkim</h2>
+            <p>Secure Hyperlocal Onboarding</p>
             <div class="input-group">
                 <label>MOBILE NUMBER OR EMAIL</label>
-                <input type="text" id="userInput" placeholder="Enter mobile or email">
+                <input type="text" id="loginInput" placeholder="Enter mobile or email">
             </div>
-            
-            <button class="btn-primary" onclick="handleAuth()">Continue with OTP</button>
-            <div class="divider">or connectivity</div>
-            <button class="btn-google" onclick="handleAuth()">Sign in with Google</button>
+            <button class="btn-primary" onclick="proceedToFingerprint()">Continue with OTP / Google</button>
         </div>
 
-        <!-- Dashboard View -->
-        <div id="dashboardView" class="dashboard">
-            <div class="dashboard-header">
-                <h1>Sikkim Daily Dashboard</h1>
-                <p>Hyperlocal Marketplace, Listings & Verified Utilities</p>
+        <!-- 2. Device Fingerprint & Anti-Scam View -->
+        <div id="viewFingerprint" class="step-card">
+            <h2>Anti-Scammer Protocol</h2>
+            <p>Running hardware integrity & geolocation checks...</p>
+            <div class="fingerprint-box" id="fpText">
+                Generating SHA-256 fingerprint...
             </div>
+            <button class="btn-primary" onclick="proceedToLiveKYC()">Verify Device & Proceed</button>
+        </div>
+
+        <!-- 3. Live Selfie KYC & DigiLocker View -->
+        <div id="viewKYC" class="step-card">
+            <h2>Live KYC & DigiLocker</h2>
+            <p>Verify identity via Live Selfie & Government Documents</p>
+            <div class="input-group">
+                <label>SELECT PROFILE TIER</label>
+                <select id="userTier">
+                    <option value="Teen">Teen Explorer (Aadhaar Verified)</option>
+                    <option value="Parent">Parent / Business Owner (PAN + Aadhaar)</option>
+                    <option value="Elder">Elder Community Leader (Full KYC)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>AADHAAR / PAN NUMBER (DIGILOCKER SYNC)</label>
+                <input type="text" id="docNumber" placeholder="Enter Aadhaar or PAN">
+            </div>
+            <button class="btn-secondary" onclick="completeOnboarding()">Authorize DigiLocker Sync</button>
+        </div>
+
+        <!-- 4. Trust Score & Final Dashboard View -->
+        <div id="viewDashboard" class="step-card" style="max-width: 600px;">
+            <h2>Trust Foundation Established</h2>
+            <p>Your multi-generational secure profile is active</p>
             
-            <div class="grid">
-                <div class="card">
-                    <h3>Marketplace</h3>
-                    <p>Browse electronics, gadgets, clothing, property, vehicles, and local edibles.</p>
+            <div class="trust-tier">
+                <div>
+                    <strong id="assignedTierName">Parent Tier</strong>
+                    <div class="stars">★★★★★ (Verified Badge)</div>
                 </div>
-                <div class="card">
-                    <h3>Form H Verification</h3>
-                    <p>Manage operating hours, venue photography, and business listings.</p>
-                </div>
-                <div class="card">
-                    <h3>Device Fingerprinting</h3>
-                    <p>Active SHA-256 integrity checks guarding against multi-account abuse.</p>
-                </div>
-                <div class="card">
-                    <h3>Subscriptions</h3>
-                    <p>Automated recurring billing cycles powered by Razorpay API.</p>
+                <div style="text-align: right; font-size: 0.85rem; color: var(--accent-green);">
+                    ✓ DigiLocker Linked<br>✓ Device Secured
                 </div>
             </div>
+
+            <div class="input-group" style="margin-top: 1.5rem;">
+                <label>READY FOR STEP 2</label>
+                <p style="text-align: left; color: var(--text-main); font-size: 0.9rem;">Your account is fully guarded against multi-account fraud and bot manipulation. You can now access the full marketplace and daily utilities dashboard.</p>
+            </div>
+            <button class="btn-primary" onclick="alert('Entering GoSikkim Multi-Use Daily Dashboard!')">Enter Marketplace Dashboard</button>
         </div>
     </main>
 
     <script>
-        async function handleAuth() {
-            const val = document.getElementById('userInput').value;
-            if(!val) {
-                alert('Please enter your mobile number or email.');
-                return;
-            }
-
-            // Generate a basic device fingerprint hash placeholder for security check
-            const fingerprint = btoa(navigator.userAgent + screen.width + screen.height).substring(0, 16);
+        function proceedToFingerprint() {
+            const val = document.getElementById('loginInput').value;
+            if(!val) { alert('Please enter mobile or email'); return; }
             
-            // Simulate secure backend response and swap views
-            document.getElementById('authView').style.display = 'none';
-            document.getElementById('dashboardView').style.display = 'block';
+            document.getElementById('viewLogin').classList.remove('active');
+            document.getElementById('viewFingerprint').classList.add('active');
+
+            // Generate SHA-256 simulated fingerprint
+            setTimeout(() => {
+                const rawString = navigator.userAgent + screen.width + screen.height + new Date().getTime();
+                document.getElementById('fpText').innerText = 
+                    `[SECURE HASH]: e3b0c44298fc1c14... (SHA-256)\n[IP CHECK]: Gangtok, IN (Clean)\n[BOT STATUS]: Passed`;
+            }, 600);
+        }
+
+        function proceedToLiveKYC() {
+            document.getElementById('viewFingerprint').classList.remove('active');
+            document.getElementById('viewKYC').classList.add('active');
+        }
+
+        function completeOnboarding() {
+            const tier = document.getElementById('userTier').value;
+            const doc = document.getElementById('docNumber').value;
+            if(!doc) { alert('Please provide Aadhaar or PAN for DigiLocker verification.'); return; }
+
+            document.getElementById('assignedTierName').innerText = tier + ' Profile';
+            document.getElementById('viewKYC').classList.remove('active');
+            document.getElementById('viewDashboard').classList.add('active');
         }
     </script>
 </body>

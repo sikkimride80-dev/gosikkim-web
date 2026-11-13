@@ -15,8 +15,54 @@
             --border-color: #334155;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; position: relative; }
         
+        /* Welcome Promotional Modal Overlay */
+        #welcomeModal {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 9, 20, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .modal-card {
+            background: var(--phone-bg);
+            border: 2px solid var(--accent-green);
+            padding: 2rem 1.5rem;
+            border-radius: 1.5rem;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--text-main);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .close-btn:hover { background: rgba(255,255,255,0.2); }
+        .modal-card h2 { font-size: 1.3rem; color: var(--accent-green); margin-bottom: 0.5rem; }
+        .modal-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         /* Blueprint Phone Frame Wrapper */
         .phone-frame {
             background: var(--phone-bg);
@@ -43,14 +89,9 @@
         .screen-view { display: none; }
         .screen-view.active { display: block; }
 
-        h2 { text-align: center; font-size: 1.6rem; margin-bottom: 1.25rem; color: var(--text-main); font-weight: 700; }
+        h2.screen-title { text-align: center; font-size: 1.6rem; margin-bottom: 1.25rem; color: var(--text-main); font-weight: 700; }
         
-        /* Blueprint Unified Action Row */
-        .auth-methods-row {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
+        .auth-methods-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
         .method-pill {
             flex: 1;
             padding: 0.5rem;
@@ -127,11 +168,21 @@
 </head>
 <body>
 
+    <!-- Welcome Promotional Modal Banner -->
+    <div id="welcomeModal">
+        <div class="modal-card">
+            <button class="close-btn" onclick="closeWelcomeModal()">✕</button>
+            <h2>🏔️ GOSIKKIMGOW</h2>
+            <p style="margin-top: 0.5rem; font-weight: 600; color: #f8fafc;">HI WELCOME TO SIKKIMGOW ALL IN ONE MARKET PLACE</p>
+            <p style="margin-top: 0.75rem; font-size: 0.75rem;">Securing your session with anti-fraud protection...</p>
+        </div>
+    </div>
+
     <div class="phone-frame" id="phoneContainer">
         
-        <!-- 1. Blueprint Login Screen (Exact Match to Diagram) -->
+        <!-- 1. Blueprint Login Screen -->
         <div id="viewLogin" class="screen-view active">
-            <h2>Login</h2>
+            <h2 class="screen-title">Login</h2>
             
             <div class="auth-methods-row">
                 <div class="method-pill">📱 Mobile <span>✓</span></div>
@@ -146,19 +197,17 @@
             <button class="btn-blueprint" onclick="proceedToFingerprint()">Login</button>
         </div>
 
-        <!-- 2. Anti-Scammer Protocol (Device Fingerprinting) -->
+        <!-- 2. Anti-Scammer Protocol -->
         <div id="viewFingerprint" class="screen-view">
-            <h2>Anti-Scammer</h2>
+            <h2 class="screen-title">Anti-Scammer</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Running SHA-256 hardware integrity & bot checks...</p>
-            <div class="fingerprint-box" id="fpText">
-                Generating device hash...
-            </div>
+            <div class="fingerprint-box" id="fpText">Generating device hash...</div>
             <button class="btn-blueprint" onclick="proceedToLiveKYC()">Verify Device</button>
         </div>
 
         <!-- 3. Live KYC & DigiLocker -->
         <div id="viewKYC" class="screen-view">
-            <h2>Live KYC</h2>
+            <h2 class="screen-title">Live KYC</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Select Profile Tier & Sync DigiLocker</p>
             
             <div class="input-group">
@@ -180,7 +229,7 @@
 
         <!-- 4. Trust Foundation Established -->
         <div id="viewTrust" class="screen-view">
-            <h2>Trust Score</h2>
+            <h2 class="screen-title">Trust Score</h2>
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Foundation Established from Day 1</p>
             
             <div class="trust-tier">
@@ -227,6 +276,19 @@
     </div>
 
     <script>
+        // Automatically dismiss welcome modal after 4 seconds
+        let welcomeTimer = setTimeout(() => {
+            closeWelcomeModal();
+        }, 4000);
+
+        function closeWelcomeModal() {
+            const modal = document.getElementById('welcomeModal');
+            if(modal) {
+                modal.style.display = 'none';
+                clearTimeout(welcomeTimer);
+            }
+        }
+
         function proceedToFingerprint() {
             const val = document.getElementById('loginIdentifier').value;
             if(!val) { alert('Please enter credentials'); return; }

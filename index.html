@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoSikkim - Step 1: User Onboarding & Trust Foundation</title>
+    <title>GoSikkim - Secure Hyperlocal Marketplace</title>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg-color: #0b1329;
@@ -74,6 +76,14 @@
             font-size: 0.95rem; transition: opacity 0.2s;
         }
         .btn-blueprint:hover { opacity: 0.9; }
+
+        .btn-google {
+            width: 100%; padding: 0.75rem; background: #ffffff;
+            color: #1f2937; font-weight: 700; border: none;
+            border-radius: 0.5rem; cursor: pointer; margin-top: 0.75rem;
+            font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-google:hover { background: #f3f4f6; }
 
         .fingerprint-box {
             background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green);
@@ -201,22 +211,22 @@
             <div class="fingerprint-box" id="securityLog">Scanning hardware and network...</div>
         </div>
 
-        <!-- MOBILE & GOOGLE BINDING SCREEN -->
+        <!-- MOBILE & REAL GOOGLE OAUTH BINDING SCREEN -->
         <div id="viewBinding" class="screen-view">
             <h2 class="screen-title">Secure Account Binding</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Bind your verified mobile number and matching Google account to proceed.</p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Bind your verified mobile number and authenticate your Google account.</p>
             
             <div class="input-group">
                 <label>VERIFIED MOBILE NUMBER</label>
                 <input type="text" id="bindMobile" placeholder="Enter mobile number">
             </div>
 
-            <div class="input-group">
-                <label>MATCHING GOOGLE (GMAIL) ACCOUNT</label>
-                <input type="email" id="bindGoogle" placeholder="Enter matching gmail address">
-            </div>
+            <button class="btn-blueprint" onclick="saveMobileAndPromptGoogle()">Save Mobile & Authenticate Google</button>
 
-            <button class="btn-blueprint" onclick="verifyAndBindAccounts()">Verify & Bind Accounts</button>
+            <button class="btn-google" onclick="triggerGoogleOAuth()">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.95 6.73-4.95z"/></svg>
+                Sign in with Google
+            </button>
         </div>
 
         <!-- Anti-Scammer Protocol (Manual Permission Request) -->
@@ -271,7 +281,7 @@
 
     </div>
 
-    <!-- 5. REAL MULTI-USE DAILY DASHBOARD -->
+    <!-- REAL MULTI-USE DAILY DASHBOARD -->
     <div id="viewRealDashboard">
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
             <div>
@@ -303,14 +313,32 @@
     </div>
 
     <script>
+        // Initialize Supabase Client
+        const SUPABASE_URL = 'https://bnqnpsxhbmnqbsitixxx.supabase.co';
+        const SUPABASE_ANON_KEY = 'Sb_publishable_RHKwhl8EJqku6XjSPezS1Q_er5pv_Lv';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         let userData = { 
             name: '', age: null, marital: 'N/A', schooling: 'N/A', employed: 'N/A', employmentType: 'N/A', 
             deviceHash: '', ipStatus: 'Clean', vpnDetected: false, mobile: '', googleAccount: '', formLocked: false 
         };
 
-        window.onload = function() {
-            // Always show the 3 promotional banners on every refresh/visit
+        window.onload = async function() {
+            // Always show the 3 promotional banners on load/refresh
             setTimeout(() => { document.getElementById('closeBtn1').style.display = 'flex'; }, 4000);
+
+            // Check if user just returned from Google OAuth redirect
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session && session.user) {
+                userData.googleAccount = session.user.email;
+                localStorage.setItem('gosikkim_accounts_bound', 'true');
+                syncToSupabase(userData);
+
+                // Move past binding screen directly to permission check
+                document.getElementById('phoneContainer').style.display = 'block';
+                document.getElementById('viewBinding').classList.remove('active');
+                document.getElementById('viewFingerprint').classList.add('active');
+            }
         };
 
         function closeFirstModal() {
@@ -334,20 +362,41 @@
             const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
 
             if (isFullyCompleted) {
-                // Fully done -> Open dashboard directly
                 document.getElementById('phoneContainer').style.display = 'none';
                 document.getElementById('viewRealDashboard').classList.add('active');
             } else if (isFormLocked && !isBound) {
-                // Form finished, but account binding pending -> Lead them to Binding page
                 document.getElementById('viewBinding').classList.add('active');
-            } else {
-                // Form not finished yet -> Start at Questionnaire Step 1
+            } else if (!isFormLocked) {
                 document.getElementById('qStep1').classList.add('active');
             }
         }
 
-        function syncToSupabase(payload) {
-            console.log("Auto-saving securely to Supabase Backend:", payload);
+        // Live Supabase Upsert Sync Function
+        async function syncToSupabase(payload) {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('user_onboarding')
+                    .upsert([
+                        { 
+                            device_hash: payload.deviceHash || 'pending_hash',
+                            full_name: payload.name,
+                            age: payload.age,
+                            marital_status: payload.marital,
+                            schooling: payload.schooling,
+                            employed: payload.employed,
+                            employment_type: payload.employmentType,
+                            mobile_number: payload.mobile,
+                            google_account: payload.googleAccount,
+                            form_locked: payload.formLocked,
+                            updated_at: new Date()
+                        }
+                    ], { onConflict: 'device_hash' });
+
+                if (error) console.error('Supabase Sync Error:', error.message);
+                else console.log('Successfully synced to Supabase backend');
+            } catch (err) {
+                console.error('Database exception:', err);
+            }
         }
 
         function saveName() {
@@ -425,27 +474,29 @@
             }, 1500);
         }
 
-        function verifyAndBindAccounts() {
+        function saveMobileAndPromptGoogle() {
             const mobile = document.getElementById('bindMobile').value.trim();
-            const google = document.getElementById('bindGoogle').value.trim();
-
-            if(!mobile || !google) {
-                alert('Both Mobile Number and Google Account binding are strictly required to proceed.');
-                return;
-            }
-
+            if(!mobile) { alert('Please enter your mobile number.'); return; }
             userData.mobile = mobile;
-            userData.googleAccount = google;
-            localStorage.setItem('gosikkim_accounts_bound', 'true');
             syncToSupabase(userData);
+            alert('Mobile saved! Now click "Sign in with Google" to verify your Google account.');
+        }
 
-            document.getElementById('viewBinding').classList.remove('active');
-            document.getElementById('viewFingerprint').classList.add('active');
+        // Live Google OAuth Trigger via Supabase
+        async function triggerGoogleOAuth() {
+            const mobile = document.getElementById('bindMobile').value.trim();
+            if(!mobile) { alert('Please enter your mobile number first.'); return; }
+            userData.mobile = mobile;
 
-            setTimeout(() => {
-                document.getElementById('fpText').innerText = 
-                    `[BINDING SYNC]: Mobile (${mobile}) & Google (${google}) Verified\n[SHA-256]: ${userData.deviceHash}\n[PERMISSIONS]: Awaiting Manual Device Enable...`;
-            }, 600);
+            const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: 'https://gosikkim-web.vercel.app'
+                }
+            });
+            if (error) {
+                alert('Google Authentication Error: ' + error.message);
+            }
         }
 
         function checkDevicePermissionsAndProceed() {
@@ -460,7 +511,6 @@
             const tier = document.getElementById('userTier').value;
             document.getElementById('assignedTierName').innerText = tier + ' Profile';
 
-            // Mark entire onboarding as fully complete
             localStorage.setItem('gosikkim_onboarding_complete', 'true');
 
             document.getElementById('viewKYC').classList.remove('active');

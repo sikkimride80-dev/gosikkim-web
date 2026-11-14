@@ -302,7 +302,7 @@
                 <input type="password" id="userPasskeyPin" placeholder="Enter secure 4-digit PIN or pattern code" maxlength="12">
             </div>
 
-            <button class="btn-blueprint" onclick="registerAndLockPasskey()">Register & Sync to Supabase</button>
+            <button class="btn-blueprint" onclick="registerAndLockPasskey()">Register & Proceed to KYC</button>
         </div>
 
         <!-- RETURNING USER BIOMETRIC / PASSKEY LOGIN GATE -->
@@ -453,13 +453,11 @@
             const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
             const savedPasskey = localStorage.getItem('gosikkim_passkey_registered');
 
-            if (session && session.user && savedPasskey) {
-                document.getElementById('welcomeModal').classList.add('hidden');
-                document.getElementById('phoneContainer').style.display = 'block';
-                document.getElementById('viewPasskeyLogin').classList.add('active');
-                return;
+            if (!localStorage.getItem('gosikkim_device_hash')) {
+                localStorage.setItem('gosikkim_device_hash', userData.deviceHash);
             }
 
+            // ONLY go straight to dashboard if onboarding AND KYC are 100% complete
             if (isFullyCompleted) {
                 document.getElementById('welcomeModal').classList.add('hidden');
                 document.getElementById('phoneContainer').style.display = 'none';
@@ -467,6 +465,15 @@
                 return;
             }
 
+            // If user has session and passkey, but hasn't finished KYC, prompt passkey login then show KYC
+            if (session && session.user && savedPasskey) {
+                document.getElementById('welcomeModal').classList.add('hidden');
+                document.getElementById('phoneContainer').style.display = 'block';
+                document.getElementById('viewPasskeyLogin').classList.add('active');
+                return;
+            }
+
+            // If user just logged in with Google for the first time, prompt Passkey setup
             if (session && session.user && !savedPasskey) {
                 userData.googleAccount = session.user.email;
                 document.getElementById('welcomeModal').classList.add('hidden');
@@ -639,6 +646,7 @@
             syncToSupabase(userData);
 
             alert('Device Passkey securely recorded and locked!');
+            // Transition smoothly to KYC view
             document.getElementById('viewPasskeySetup').classList.remove('active');
             document.getElementById('viewKYC').classList.add('active');
         }
@@ -648,9 +656,16 @@
             const savedPin = localStorage.getItem('gosikkim_passkey_registered');
 
             if(enteredPin === savedPin) {
-                alert('Passkey Verified! Welcome back.');
-                document.getElementById('phoneContainer').style.display = 'none';
-                document.getElementById('viewRealDashboard').classList.add('active');
+                alert('Passkey Verified! Proceeding to KYC / Profile.');
+                document.getElementById('viewPasskeyLogin').classList.remove('active');
+                
+                // If KYC was already completed, go to dashboard; otherwise go to KYC form
+                if (localStorage.getItem('gosikkim_onboarding_complete') === 'true') {
+                    document.getElementById('phoneContainer').style.display = 'none';
+                    document.getElementById('viewRealDashboard').classList.add('active');
+                } else {
+                    document.getElementById('viewKYC').classList.add('active');
+                }
             } else {
                 alert('Access Denied: Incorrect device passkey or fingerprint pattern.');
             }
@@ -738,6 +753,7 @@
                 return;
             }
 
+            // Mark full onboarding complete so future visits go straight to dashboard
             localStorage.setItem('gosikkim_onboarding_complete', 'true');
         });
 

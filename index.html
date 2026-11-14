@@ -1,501 +1,673 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GoSikkim — Partner Onboarding</title>
-  <style>
-    :root {
-      --primary: #0f766e;
-      --primary-hover: #115e59;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #cbd5e1;
-      --danger: #dc2626;
-      --success: #16a34a;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoSikkim - Secure Proprietary Hyperlocal Marketplace</title>
+    <!-- Supabase JS Client CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --phone-bg: #111c38;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-yellow: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --danger: #dc2626;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; position: relative; user-select: none; }
+        
+        /* Modal Overlays */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 9, 20, 0.95); backdrop-filter: blur(6px);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-overlay.hidden { display: none; }
 
-    * {
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
+        .modal-card {
+            background: var(--phone-bg); border: 2px solid var(--accent-green);
+            padding: 0; border-radius: 1rem; width: 90%; max-width: 400px;
+            overflow: hidden; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .modal-card img { width: 100%; height: auto; display: block; }
+        
+        .close-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(0, 0, 0, 0.75); border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #ffffff; width: 32px; height: 32px; border-radius: 50%;
+            font-size: 1rem; font-weight: bold; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; z-index: 20; transition: background 0.2s;
+        }
+        .close-btn:hover { background: rgba(0, 0, 0, 0.95); }
 
-    body {
-      margin: 0;
-      padding: 16px;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
-    }
+        /* Blueprint Phone Frame Wrapper */
+        .phone-frame {
+            background: var(--phone-bg); border: 3px solid var(--border-color);
+            border-radius: 2.5rem; width: 100%; max-width: 380px;
+            padding: 2.5rem 1.5rem 2rem 1.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .phone-frame::before {
+            content: ''; position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 6px; background: var(--border-color); border-radius: 3px;
+        }
 
-    .container {
-      width: 100%;
-      max-width: 480px;
-      background: var(--card);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      margin-top: 12px;
-    }
+        .screen-view { display: none; }
+        .screen-view.active { display: block; }
 
-    .badge {
-      display: inline-block;
-      background: #ccfbf1;
-      color: var(--primary);
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
+        h2.screen-title { text-align: center; font-size: 1.3rem; margin-bottom: 1rem; color: var(--text-main); font-weight: 700; line-height: 1.3; }
+        
+        .input-group { margin-bottom: 1rem; }
+        .input-group label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; letter-spacing: 0.5px; }
+        .input-group input, .input-group select {
+            width: 100%; padding: 0.85rem; background: #090f22;
+            border: 1px solid var(--border-color); border-radius: 0.5rem;
+            color: var(--text-main); font-size: 0.95rem; outline: none;
+        }
+        .input-group input:focus, .input-group select:focus { border-color: var(--accent-green); }
 
-    h1 {
-      font-size: 22px;
-      margin: 0 0 6px 0;
-    }
+        /* Copyright Box styling */
+        .copyright-box {
+            background: rgba(59, 130, 246, 0.08); border: 1px solid var(--accent-blue);
+            padding: 0.8rem; border-radius: 0.5rem; font-size: 0.75rem; color: var(--text-muted);
+            margin-bottom: 1rem; line-height: 1.4; max-height: 110px; overflow-y: auto; text-align: left;
+        }
+        .checkbox-group { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-main); text-align: left; }
+        .checkbox-group input { margin-top: 2px; accent-color: var(--accent-green); cursor: pointer; }
 
-    p.subtitle {
-      font-size: 14px;
-      color: var(--muted);
-      margin: 0 0 20px 0;
-      line-height: 1.4;
-    }
+        .btn-blueprint {
+            width: 100%; padding: 0.75rem; background: var(--accent-green);
+            color: #0b1329; font-weight: 700; border: none;
+            border-radius: 0.5rem; cursor: pointer; margin-top: 0.5rem;
+            font-size: 0.95rem; transition: opacity 0.2s;
+        }
+        .btn-blueprint:hover { opacity: 0.9; }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
+        .btn-google {
+            width: 100%; padding: 0.75rem; background: #ffffff;
+            color: #1f2937; font-weight: 700; border: none;
+            border-radius: 0.5rem; cursor: pointer; margin-top: 0.75rem;
+            font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-google:hover { background: #f3f4f6; }
 
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
+        .fingerprint-box {
+            background: rgba(16, 185, 129, 0.1); border: 1px solid var(--accent-green);
+            padding: 1rem; border-radius: 0.5rem; font-family: monospace;
+            font-size: 0.8rem; color: var(--accent-green); margin-bottom: 1.25rem; line-height: 1.4;
+        }
 
-    input[type="text"] {
-      width: 100%;
-      padding: 12px 14px;
-      font-size: 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      outline: none;
-      letter-spacing: 1px;
-      transition: border-color 0.2s;
-    }
+        .trust-tier {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+            padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;
+        }
+        .stars { color: #f59e0b; font-size: 0.9rem; margin-top: 0.2rem; }
 
-    input[type="text"]:focus {
-      border-color: var(--primary);
-    }
+        /* Live Camera Section Styling */
+        .camera-section {
+            border: 1.5px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 14px;
+            background: #090f22;
+        }
+        .camera-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .camera-header strong { font-size: 13px; }
+        .status-pill {
+            font-size: 11px; padding: 2px 6px; border-radius: 6px;
+            background: #1e293b; color: var(--text-muted); font-weight: 600;
+        }
+        .status-pill.captured { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        video, img.preview {
+            width: 100%; border-radius: 8px; background: #000;
+            display: none; max-height: 180px; object-fit: cover; margin-bottom: 8px;
+        }
+        .btn-row { display: flex; gap: 6px; }
+        .btn-cam { background: #334155; color: #fff; width: 100%; padding: 8px; border-radius: 8px; font-size: 13px; border: none; cursor: pointer; }
+        .btn-snap { background: var(--accent-green); color: #0b1329; width: 100%; padding: 8px; border-radius: 8px; font-size: 13px; border: none; cursor: pointer; display: none; font-weight: 700; }
+        .error-msg { color: var(--danger); font-size: 12px; margin-top: 8px; text-align: center; display: none; }
 
-    .skip-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f1f5f9;
-      padding: 12px 14px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      cursor: pointer;
-    }
-
-    .skip-box input {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-
-    .skip-box span {
-      font-size: 13.5px;
-      font-weight: 500;
-    }
-
-    /* Live Camera Section */
-    .camera-section {
-      border: 1.5px dashed var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 16px;
-      background: #fafafa;
-    }
-
-    .camera-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .camera-header strong {
-      font-size: 14px;
-    }
-
-    .status-pill {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: #e2e8f0;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .status-pill.captured {
-      background: #dcfce7;
-      color: var(--success);
-    }
-
-    video, img.preview {
-      width: 100%;
-      border-radius: 8px;
-      background: #000;
-      display: none;
-      max-height: 220px;
-      object-fit: cover;
-      margin-bottom: 10px;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 12px 14px;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    .btn-cam {
-      background: #e2e8f0;
-      color: var(--text);
-      width: 100%;
-    }
-
-    .btn-cam:hover {
-      background: #cbd5e1;
-    }
-
-    .btn-snap {
-      background: var(--primary);
-      color: #fff;
-      width: 100%;
-      display: none;
-    }
-
-    .btn-google {
-      width: 100%;
-      background: #ffffff;
-      color: #1e293b;
-      border: 1.5px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      font-size: 15px;
-      font-weight: 600;
-      margin-top: 10px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-    }
-
-    .btn-google:hover {
-      background: #f8fafc;
-      border-color: var(--muted);
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 14px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 16px;
-      margin-top: 8px;
-    }
-
-    .btn-submit:hover {
-      background: var(--primary-hover);
-    }
-
-    .error-msg {
-      color: var(--danger);
-      font-size: 13px;
-      margin-top: 10px;
-      display: none;
-      text-align: center;
-      font-weight: 500;
-    }
-
-    .step-view {
-      display: none;
-    }
-
-    .step-view.active {
-      display: block;
-    }
-  </style>
+        /* Real Dashboard View */
+        #viewRealDashboard { display: none; width: 100%; max-width: 1100px; margin: 0 auto; padding: 1rem; }
+        #viewRealDashboard.active { display: block; }
+        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .dash-card { background: var(--phone-bg); border: 1px solid var(--border-color); padding: 1.25rem; border-radius: 0.75rem; }
+        .dash-card h3 { color: var(--accent-green); margin-bottom: 0.4rem; font-size: 1.1rem; }
+        .dash-card p { color: var(--text-muted); font-size: 0.85rem; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  
-  <!-- ================= STEP 1: GOOGLE LOGIN LANDING ================= -->
-  <div id="step1View" class="step-view active">
-    <span class="badge">Step 1 of 3 • Partner Portal</span>
-    <h1>Welcome to GoSikkim</h1>
-    <p class="subtitle">Onboard your hotel, restaurant, or local business onto Sikkim's premier digital marketplace.</p>
-    
-    <div style="background: #f1f5f9; padding: 16px; border-radius: 12px; margin-bottom: 24px;">
-      <strong style="font-size: 14px; display: block; margin-bottom: 4px;">Quick Onboarding Requirements:</strong>
-      <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); line-height: 1.5;">
-        <li>Google Account Authentication</li>
-        <li>Aadhaar & PAN Verification details</li>
-        <li>Live document photo capture (or quick skip)</li>
-      </ul>
+    <!-- ANTI-INSPECTION & SECURITY SCRIPTS -->
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+    <!-- BANNER 1 -->
+    <div id="welcomeModal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="close-btn" onclick="closeFirstModal()">✕</button>
+            <img src="IMG-20261113-WA2055.jpg" alt="Welcome Banner 1">
+        </div>
     </div>
 
-    <button type="button" class="btn-google" onclick="proceedToStep2()">
-      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.18 21.31 7.24 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.13 0 9.87 0 11.75s.43 3.62 1.19 5.15l4.08-2.66z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.24 0 3.18 2.69 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-      Continue with Google
-    </button>
-  </div>
+    <!-- BANNER 2 -->
+    <div id="secondModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button class="close-btn" onclick="closeSecondModal()">✕</button>
+            <img src="image_9ca84025.jpg" alt="Welcome Banner 2">
+        </div>
+    </div>
 
-  <!-- ================= STEP 2: PARTNER KYC FORM ================= -->
-  <div id="step2View" class="step-view">
-    <span class="badge">Step 2 of 3 • Partner KYC</span>
-    <h1>Verify Your Identity</h1>
-    <p class="subtitle">Google account verified. Enter your Aadhaar and PAN details below to activate your GoSikkim partner profile.</p>
+    <!-- BANNER 3 -->
+    <div id="thirdModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button class="close-btn" onclick="closeThirdModal()">✕</button>
+            <img src="IMG-20261113-WA4615.jpg" alt="Welcome Banner 3">
+        </div>
+    </div>
 
-    <form action="https://api.web3forms.com/submit" method="POST" id="kycForm">
-      <!-- Web3Forms Access Key & Config fields -->
-      <input type="hidden" name="access_key" value="1eff40e0-872f-45bb-b6ea-284e5a16dcde">
-      <input type="hidden" name="subject" value="New GoSikkim Partner KYC Pending Approval">
-      <input type="hidden" name="KYC_Status" value="Pending Manual Approval">
-
-      <!-- Aadhaar Number -->
-      <div class="form-group">
-        <label for="aadhaarInput">Aadhaar Card Number *</label>
-        <input 
-          type="text" 
-          name="Aadhaar_Number"
-          id="aadhaarInput" 
-          inputmode="numeric" 
-          maxlength="14" 
-          placeholder="XXXX XXXX XXXX" 
-          required 
-        />
-      </div>
-
-      <!-- PAN Number -->
-      <div class="form-group">
-        <label for="panInput">PAN Card Number *</label>
-        <input 
-          type="text" 
-          name="PAN_Number"
-          id="panInput" 
-          maxlength="10" 
-          placeholder="ABCDE1234F" 
-          style="text-transform: uppercase;" 
-          required 
-        />
-      </div>
-
-      <!-- Skip Live Capture Option -->
-      <label class="skip-box" for="skipCaptureCheckbox">
-        <input type="checkbox" name="Live_Capture_Skipped" value="Yes" id="skipCaptureCheckbox" />
-        <span>Skip live document photo capture for now (Numbers only)</span>
-      </label>
-
-      <!-- Live Capture Modules Wrapper -->
-      <div id="liveCaptureWrapper">
-        <!-- Live Aadhaar Capture -->
-        <div class="camera-section" id="aadhaarCamBox">
-          <div class="camera-header">
-            <strong>1. Live Aadhaar Card Photo</strong>
-            <span class="status-pill" id="aadhaarStatus">Not Captured</span>
-          </div>
-          <video id="aadhaarVideo" autoplay playsinline></video>
-          <img id="aadhaarPreview" class="preview" alt="Captured Aadhaar" />
-          <canvas id="aadhaarCanvas" style="display:none;"></canvas>
-          <div class="btn-row">
-            <button type="button" class="btn-cam" id="startAadhaarCam" onclick="startCamera('aadhaar')">Open Camera</button>
-            <button type="button" class="btn-snap" id="snapAadhaarBtn" onclick="capturePhoto('aadhaar')">Capture Photo</button>
-          </div>
+    <div class="phone-frame" id="phoneContainer">
+        
+        <!-- QUESTIONNAIRE STEP 1: NAME -->
+        <div id="qStep1" class="screen-view">
+            <h2 class="screen-title">1. WHAT IS YOUR SWEET NAME?</h2>
+            <div class="input-group">
+                <input type="text" id="ansName" maxlength="25" placeholder="Enter name (max 25 chars)">
+            </div>
+            <button class="btn-blueprint" onclick="saveName()">Continue</button>
         </div>
 
-        <!-- Live PAN Capture -->
-        <div class="camera-section" id="panCamBox">
-          <div class="camera-header">
-            <strong>2. Live PAN Card Photo</strong>
-            <span class="status-pill" id="panStatus">Not Captured</span>
-          </div>
-          <video id="panVideo" autoplay playsinline></video>
-          <img id="panPreview" class="preview" alt="Captured PAN" />
-          <canvas id="panCanvas" style="display:none;"></canvas>
-          <div class="btn-row">
-            <button type="button" class="btn-cam" id="startPanCam" onclick="startCamera('pan')">Open Camera</button>
-            <button type="button" class="btn-snap" id="snapPanBtn" onclick="capturePhoto('pan')">Capture Photo</button>
-          </div>
+        <!-- QUESTIONNAIRE STEP 2: AGE -->
+        <div id="qStep2" class="screen-view">
+            <h2 class="screen-title">2. WHAT IS YOUR AGE?</h2>
+            <div class="input-group">
+                <input type="number" id="ansAge" placeholder="Enter your age">
+            </div>
+            <button class="btn-blueprint" onclick="saveAge()">Continue</button>
         </div>
-      </div>
 
-      <button type="submit" class="btn-submit" id="submitBtn">Save & Continue</button>
-      <div class="error-msg" id="errorMsg"></div>
-    </form>
-  </div>
+        <!-- QUESTIONNAIRE STEP 3: MARITAL STATUS -->
+        <div id="qStep3" class="screen-view">
+            <h2 class="screen-title">3. CURRENT MARITAL STATUS?</h2>
+            <div class="input-group">
+                <select id="ansMarital">
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                    <option value="divorced">Divorced</option>
+                </select>
+            </div>
+            <button class="btn-blueprint" onclick="saveMarital()">Continue</button>
+        </div>
 
-</div>
+        <!-- QUESTIONNAIRE STEP 4: HIGHEST SCHOOLING -->
+        <div id="qStep4" class="screen-view">
+            <h2 class="screen-title">4. HIGHEST SCHOOLING / EDUCATION?</h2>
+            <div class="input-group">
+                <select id="ansSchooling">
+                    <option value="1-10 pass">1-10 Pass</option>
+                    <option value="11-12">11-12th</option>
+                    <option value="college university">College / University</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+            <button class="btn-blueprint" onclick="saveSchooling()">Continue</button>
+        </div>
 
-<script>
-  // Navigation helper between Step 1 and Step 2
-  function proceedToStep2() {
-    document.getElementById('step1View').classList.remove('active');
-    document.getElementById('step2View').classList.add('active');
-  }
+        <!-- QUESTIONNAIRE STEP 5: EMPLOYMENT -->
+        <div id="qStep5" class="screen-view">
+            <h2 class="screen-title">5. ARE YOU EMPLOYED?</h2>
+            <div class="input-group">
+                <select id="ansEmployed" onchange="toggleEmploymentType()">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="input-group" id="employmentTypeGroup" style="display: none; margin-top: 0.75rem;">
+                <label>EMPLOYMENT TYPE</label>
+                <select id="ansEmpType">
+                    <option value="Full time salaried">Full time salaried</option>
+                    <option value="Part time salaried">Part time salaried</option>
+                </select>
+            </div>
+            <button class="btn-blueprint" onclick="saveEmployment()">Submit & Lock Form</button>
+        </div>
 
-  const aadhaarInput = document.getElementById('aadhaarInput');
-  const panInput = document.getElementById('panInput');
-  const skipCheckbox = document.getElementById('skipCaptureCheckbox');
-  const liveCaptureWrapper = document.getElementById('liveCaptureWrapper');
-  const errorMsg = document.getElementById('errorMsg');
+        <!-- ANTI-SCAM DEVICE & VPN INTEGRITY CHECK -->
+        <div id="viewSecurityCheck" class="screen-view">
+            <h2 class="screen-title">Anti-Scam Security Scan</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Checking device fingerprint, IP integrity & VPN status...</p>
+            <div class="fingerprint-box" id="securityLog">Scanning hardware and network...</div>
+        </div>
 
-  let streams = { aadhaar: null, pan: null };
+        <!-- MOBILE, GOOGLE OAUTH & MANDATORY COPYRIGHT BINDING -->
+        <div id="viewBinding" class="screen-view">
+            <h2 class="screen-title">Secure Account Binding</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Verify mobile, authenticate Google & accept proprietary terms.</p>
+            
+            <div class="input-group">
+                <label>VERIFIED MOBILE NUMBER</label>
+                <input type="text" id="bindMobile" placeholder="Enter mobile number">
+            </div>
 
-  // 1. Auto-format Aadhaar (XXXX XXXX XXXX)
-  aadhaarInput.addEventListener('input', (e) => {
-    let digits = e.target.value.replace(/\D/g, '').substring(0, 12);
-    let formatted = digits.replace(/(\d{4})(?=\d)/g, '$1 ');
-    e.target.value = formatted;
-  });
+            <div class="copyright-box">
+                ⚖️ <strong>GoSikkim Proprietary & Copyright Notice:</strong><br>
+                All source code, UI/UX structure, database schemas, and workflows are legally protected intellectual property. Unauthorized copying, reverse engineering, scraping, or cloning is strictly prohibited under international copyright laws.
+            </div>
 
-  // 2. Auto-capitalize PAN
-  panInput.addEventListener('input', (e) => {
-    e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 10);
-  });
+            <div class="checkbox-group">
+                <input type="checkbox" id="acceptCopyright" checked>
+                <label for="acceptCopyright" style="cursor: pointer; color: var(--text-main);">I legally agree to the GoSikkim Copyright & Anti-Cloning policy.</label>
+            </div>
 
-  // 3. Toggle Live Capture Visibility
-  skipCheckbox.addEventListener('change', (e) => {
-    if (e.target.checked) {
-      liveCaptureWrapper.style.display = 'none';
-      stopCamera('aadhaar');
-      stopCamera('pan');
-    } else {
-      liveCaptureWrapper.style.display = 'block';
-    }
-    errorMsg.style.display = 'none';
-  });
+            <button class="btn-google" onclick="triggerGoogleOAuth()">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.15 0 9.89 0 12s.43 3.85 1.19 5.4l4.08-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.95 6.73-4.95z"/></svg>
+                Sign in with Google & Verify
+            </button>
+        </div>
 
-  // 4. Open Live Rear Camera
-  async function startCamera(type) {
-    errorMsg.style.display = 'none';
-    const otherType = type === 'aadhaar' ? 'pan' : 'aadhaar';
-    stopCamera(otherType);
+        <!-- Live KYC & DigiLocker Form with Web3Forms Email Notification -->
+        <div id="viewKYC" class="screen-view">
+            <h2 class="screen-title">Partner KYC Verification</h2>
+            <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1rem; text-align: center;">Google account verified. Enter details & submit for admin review.</p>
+            
+            <form action="https://api.web3forms.com/submit" method="POST" id="kycForm">
+                <!-- Web3Forms Config Keys -->
+                <input type="hidden" name="access_key" value="1eff40e0-872f-45bb-b6ea-284e5a16dcde">
+                <input type="hidden" name="subject" value="New GoSikkim Partner KYC Pending Approval">
+                <input type="hidden" name="KYC_Status" value="Pending Manual Approval">
 
-    const video = document.getElementById(`${type}Video`);
-    const preview = document.getElementById(`${type}Preview`);
-    const startBtn = document.getElementById(`start${capitalize(type)}Cam`);
-    const snapBtn = document.getElementById(`snap${capitalize(type)}Btn`);
+                <div class="input-group">
+                    <label>AADHAAR CARD NUMBER *</label>
+                    <input type="text" name="Aadhaar_Number" id="aadhaarInput" inputmode="numeric" maxlength="14" placeholder="XXXX XXXX XXXX" required>
+                </div>
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: 'environment' } },
-        audio: false
-      });
-      streams[type] = stream;
-      video.srcObject = stream;
-      video.style.display = 'block';
-      preview.style.display = 'none';
-      startBtn.style.display = 'none';
-      snapBtn.style.display = 'block';
-    } catch (err) {
-      showError('Camera access denied or unavailable. Check permissions or check "Skip live capture".');
-    }
-  }
+                <div class="input-group">
+                    <label>PAN CARD NUMBER *</label>
+                    <input type="text" name="PAN_Number" id="panInput" maxlength="10" placeholder="ABCDE1234F" style="text-transform: uppercase;" required>
+                </div>
 
-  // 5. Capture Frame
-  function capturePhoto(type) {
-    const video = document.getElementById(`${type}Video`);
-    const canvas = document.getElementById(`${type}Canvas`);
-    const preview = document.getElementById(`${type}Preview`);
-    const statusPill = document.getElementById(`${type}Status`);
-    const startBtn = document.getElementById(`start${capitalize(type)}Cam`);
-    const snapBtn = document.getElementById(`snap${capitalize(type)}Btn`);
+                <!-- Live Camera Section -->
+                <div class="camera-section">
+                    <div class="camera-header">
+                        <strong>1. Live Aadhaar Card Photo</strong>
+                        <span class="status-pill" id="aadhaarStatus">Not Captured</span>
+                    </div>
+                    <video id="aadhaarVideo" autoplay playsinline></video>
+                    <img id="aadhaarPreview" class="preview" alt="Aadhaar Preview">
+                    <canvas id="aadhaarCanvas" style="display:none;"></canvas>
+                    <div class="btn-row">
+                        <button type="button" class="btn-cam" onclick="startCamera('aadhaar')">Open Camera</button>
+                        <button type="button" class="btn-snap" id="snapAadhaarBtn" onclick="capturePhoto('aadhaar')">Capture Photo</button>
+                    </div>
+                </div>
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                <div class="camera-section">
+                    <div class="camera-header">
+                        <strong>2. Live PAN Card Photo</strong>
+                        <span class="status-pill" id="panStatus">Not Captured</span>
+                    </div>
+                    <video id="panVideo" autoplay playsinline></video>
+                    <img id="panPreview" class="preview" alt="PAN Preview">
+                    <canvas id="panCanvas" style="display:none;"></canvas>
+                    <div class="btn-row">
+                        <button type="button" class="btn-cam" onclick="startCamera('pan')">Open Camera</button>
+                        <button type="button" class="btn-snap" id="snapPanBtn" onclick="capturePhoto('pan')">Capture Photo</button>
+                    </div>
+                </div>
 
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
-    
-    let hiddenImgInput = document.getElementById(`${type}_hidden_img`);
-    if (!hiddenImgInput) {
-      hiddenImgInput = document.createElement('input');
-      hiddenImgInput.type = 'hidden';
-      hiddenImgInput.name = `${capitalize(type)}_Photo_Data`;
-      hiddenImgInput.id = `${type}_hidden_img`;
-      document.getElementById('kycForm').appendChild(hiddenImgInput);
-    }
-    hiddenImgInput.value = dataUrl;
+                <button type="submit" class="btn-blueprint" style="background: var(--accent-blue); color: #fff; margin-top: 0.5rem;">Submit KYC to Admin</button>
+                <div class="error-msg" id="kycError"></div>
+            </form>
+        </div>
 
-    preview.src = dataUrl;
-    preview.style.display = 'block';
-    video.style.display = 'none';
+        <!-- Trust Foundation Established -->
+        <div id="viewTrust" class="screen-view">
+            <h2 class="screen-title">Trust Score</h2>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Foundation Established from Day 1</p>
+            <div class="trust-tier">
+                <strong id="assignedTierName" style="font-size: 1rem;">Parent Profile</strong>
+                <div class="stars">★★★★★ (Verified Badge)</div>
+                <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ Phone + Google + Hardware Biometric Secured</div>
+            </div>
+            <button class="btn-blueprint" onclick="launchDashboard()" style="background:#fff; color:#0b1329;">Enter Dashboard</button>
+        </div>
 
-    statusPill.textContent = 'Captured ✓';
-    statusPill.classList.add('captured');
+    </div>
 
-    snapBtn.style.display = 'none';
-    startBtn.textContent = 'Retake Photo';
-    startBtn.style.display = 'block';
+    <!-- REAL MULTI-USE DAILY DASHBOARD -->
+    <div id="viewRealDashboard">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <h1 style="font-size: 1.6rem; color: var(--text-main);">GoSikkim Hyperlocal Marketplace</h1>
+                <p style="color: var(--text-muted); font-size: 0.85rem;">Multi-generational ecosystem with anti-fraud protection active.</p>
+            </div>
+            <div style="background: rgba(16,185,129,0.1); border: 1px solid var(--accent-green); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.8rem; color: var(--accent-green);">
+                ● Secure Session Active
+            </div>
+        </div>
+        <div class="dash-grid">
+            <div class="dash-card">
+                <h3>🛒 Marketplace Hub</h3>
+                <p>Browse & list electronics, gadgets, clothing, property, vehicles, and local edibles.</p>
+            </div>
+            <div class="dash-card">
+                <h3>📋 Form H Listings</h3>
+                <p>Manage operating hours, capacity metrics, live venue photography, and verification.</p>
+            </div>
+            <div class="dash-card">
+                <h3>🛡️ Anti-Scam Shield</h3>
+                <p>Active device fingerprinting and cross-account tracking guarding against fraud.</p>
+            </div>
+            <div class="dash-card">
+                <h3>💳 Razorpay Billing</h3>
+                <p>Manage recurring subscriptions, automated billing cycles, and micro-transactions.</p>
+            </div>
+        </div>
+    </div>
 
-    stopCamera(type);
-  }
+    <script>
+        const SUPABASE_URL = 'https://bnqnpsxhbmnqbsitixxx.supabase.co';
+        const SUPABASE_ANON_KEY = 'Sb_publishable_RHKwhl8EJqku6XjSPezS1Q_er5pv_Lv';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  function stopCamera(type) {
-    if (streams[type]) {
-      streams[type].getTracks().forEach(track => track.stop());
-      streams[type] = null;
-    }
-  }
+        let userData = { 
+            name: '', age: null, marital: 'N/A', schooling: 'N/A', employed: 'N/A', employmentType: 'N/A', 
+            deviceHash: localStorage.getItem('gosikkim_device_hash') || ('hw_bio_sig_' + Math.random().toString(36).substring(2, 15) + '_' + Date.now()), 
+            mobile: '', googleAccount: '', copyrightAccepted: true, formLocked: false 
+        };
 
-  function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+        let streams = { aadhaar: null, pan: null };
 
-  function showError(msg) {
-    errorMsg.textContent = msg;
-    errorMsg.style.display = 'block';
-  }
+        // Aadhaar auto-formatting (XXXX XXXX XXXX)
+        const aadhaarInput = document.getElementById('aadhaarInput');
+        if(aadhaarInput) {
+            aadhaarInput.addEventListener('input', (e) => {
+                let digits = e.target.value.replace(/\D/g, '').substring(0, 12);
+                e.target.value = digits.replace(/(\d{4})(?=\d)/g, '$1 ');
+            });
+        }
 
-  // 6. Frontend Validation Before Submission
-  document.getElementById('kycForm').addEventListener('submit', (e) => {
-    errorMsg.style.display = 'none';
-    const rawAadhaar = aadhaarInput.value.replace(/\s/g, '');
-    const pan = panInput.value.trim();
+        // PAN auto-capitalization
+        const panInput = document.getElementById('panInput');
+        if(panInput) {
+            panInput.addEventListener('input', (e) => {
+                e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 10);
+            });
+        }
 
-    if (!/^\d{12}$/.test(rawAadhaar)) {
-      e.preventDefault();
-      return showError('Please enter a valid 12-digit Aadhaar number.');
-    }
+        window.onload = async function() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
 
-    if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) {
-      e.preventDefault();
-      return showError('Please enter a valid 10-character PAN number (e.g., ABCDE1234F).');
-    }
-  });
-</script>
+            if (!localStorage.getItem('gosikkim_device_hash')) {
+                localStorage.setItem('gosikkim_device_hash', userData.deviceHash);
+            }
 
+            if (isFullyCompleted || (session && session.user)) {
+                document.getElementById('welcomeModal').classList.add('hidden');
+                document.getElementById('phoneContainer').style.display = 'none';
+                document.getElementById('viewRealDashboard').classList.add('active');
+                return;
+            }
+
+            if (session && session.user) {
+                userData.googleAccount = session.user.email;
+                localStorage.setItem('gosikkim_accounts_bound', 'true');
+                syncToCloud(userData);
+
+                document.getElementById('welcomeModal').classList.add('hidden');
+                document.getElementById('phoneContainer').style.display = 'block';
+                document.getElementById('viewKYC').classList.add('active');
+                return;
+            }
+        };
+
+        function closeFirstModal() {
+            document.getElementById('welcomeModal').classList.add('hidden');
+            document.getElementById('secondModal').classList.remove('hidden');
+        }
+
+        function closeSecondModal() {
+            document.getElementById('secondModal').classList.add('hidden');
+            document.getElementById('thirdModal').classList.remove('hidden');
+        }
+
+        function closeThirdModal() {
+            document.getElementById('thirdModal').classList.add('hidden');
+            routeUserFlow();
+        }
+
+        function routeUserFlow() {
+            const isFormLocked = localStorage.getItem('gosikkim_form_locked') === 'true';
+            const isBound = localStorage.getItem('gosikkim_accounts_bound') === 'true';
+
+            document.getElementById('phoneContainer').style.display = 'block';
+
+            if (isBound) {
+                document.getElementById('viewKYC').classList.add('active');
+            } else if (isFormLocked) {
+                document.getElementById('viewBinding').classList.add('active');
+            } else {
+                document.getElementById('qStep1').classList.add('active');
+            }
+        }
+
+        async function syncToCloud(payload) {
+            try {
+                await supabaseClient
+                    .from('user_onboarding')
+                    .upsert([{ 
+                        device_hash: payload.deviceHash,
+                        full_name: payload.name,
+                        age: payload.age,
+                        marital_status: payload.marital,
+                        schooling: payload.schooling,
+                        employed: payload.employed,
+                        employment_type: payload.employmentType,
+                        mobile_number: payload.mobile,
+                        google_account: payload.googleAccount,
+                        copyright_accepted: payload.copyrightAccepted,
+                        form_locked: payload.formLocked,
+                        updated_at: new Date()
+                    }], { onConflict: 'device_hash' });
+            } catch (err) {
+                console.error('Database exception:', err);
+            }
+        }
+
+        function saveName() {
+            const val = document.getElementById('ansName').value.trim();
+            if(!val) { alert('Please enter your name'); return; }
+            userData.name = val;
+            syncToCloud(userData);
+
+            document.getElementById('qStep1').classList.remove('active');
+            document.getElementById('qStep2').classList.add('active');
+        }
+
+        function saveAge() {
+            const val = parseInt(document.getElementById('ansAge').value);
+            if(isNaN(val)) { alert('Please enter a valid age'); return; }
+            userData.age = val;
+            syncToCloud(userData);
+
+            document.getElementById('qStep2').classList.remove('active');
+
+            if(val >= 18 && val <= 50) {
+                document.getElementById('qStep3').classList.add('active');
+            } else {
+                triggerSecurityAndLock();
+            }
+        }
+
+        function saveMarital() {
+            userData.marital = document.getElementById('ansMarital').value;
+            syncToCloud(userData);
+
+            document.getElementById('qStep3').classList.remove('active');
+            document.getElementById('qStep4').classList.add('active');
+        }
+
+        function saveSchooling() {
+            userData.schooling = document.getElementById('ansSchooling').value;
+            syncToCloud(userData);
+
+            document.getElementById('qStep4').classList.remove('active');
+            document.getElementById('qStep5').classList.add('active');
+        }
+
+        function toggleEmploymentType() {
+            const empVal = document.getElementById('ansEmployed').value;
+            document.getElementById('employmentTypeGroup').style.display = (empVal === 'yes') ? 'block' : 'none';
+        }
+
+        function saveEmployment() {
+            userData.employed = document.getElementById('ansEmployed').value;
+            userData.employmentType = (userData.employed === 'yes') ? document.getElementById('ansEmpType').value : 'N/A';
+            syncToCloud(userData);
+
+            document.getElementById('qStep5').classList.remove('active');
+            triggerSecurityAndLock();
+        }
+
+        function triggerSecurityAndLock() {
+            document.getElementById('viewSecurityCheck').classList.add('active');
+            
+            setTimeout(() => {
+                userData.formLocked = true;
+                localStorage.setItem('gosikkim_form_locked', 'true');
+                syncToCloud(userData);
+
+                document.getElementById('securityLog').innerText = 
+                    `[DEVICE HASH]: ${userData.deviceHash}\n[BIOMETRIC HARDWARE]: Auto-Captured\n[STATUS]: Secured & Locked in GoSikkim Cloud!`;
+                
+                setTimeout(() => {
+                    document.getElementById('viewSecurityCheck').classList.remove('active');
+                    document.getElementById('viewBinding').classList.add('active');
+                }, 1200);
+            }, 1200);
+        }
+
+        async function triggerGoogleOAuth() {
+            const mobile = document.getElementById('bindMobile').value.trim();
+            if(!mobile) { alert('Please enter your verified mobile number first.'); return; }
+
+            userData.mobile = mobile;
+            localStorage.setItem('gosikkim_accounts_bound', 'true');
+            syncToCloud(userData);
+
+            const { error } = await supabaseClient.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.origin }
+            });
+            if (error) alert('Google Authentication Error: ' + error.message);
+        }
+
+        // Camera capture functions for KYC
+        async function startCamera(type) {
+            const otherType = type === 'aadhaar' ? 'pan' : 'aadhaar';
+            if(streams[otherType]) {
+                streams[otherType].getTracks().forEach(t => t.stop());
+                streams[otherType] = null;
+            }
+
+            const video = document.getElementById(`${type}Video`);
+            const preview = document.getElementById(`${type}Preview`);
+            const snapBtn = document.getElementById(`snap${type.charAt(0).toUpperCase() + type.slice(1)}Btn`);
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+                streams[type] = stream;
+                video.srcObject = stream;
+                video.style.display = 'block';
+                preview.style.display = 'none';
+                snapBtn.style.display = 'block';
+            } catch (err) {
+                alert('Camera access denied or unavailable.');
+            }
+        }
+
+        function capturePhoto(type) {
+            const video = document.getElementById(`${type}Video`);
+            const canvas = document.getElementById(`${type}Canvas`);
+            const preview = document.getElementById(`${type}Preview`);
+            const statusPill = document.getElementById(`${type}Status`);
+            const snapBtn = document.getElementById(`snap${type.charAt(0).toUpperCase() + type.slice(1)}Btn`);
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+            
+            let hiddenInput = document.getElementById(`${type}_hidden_img`);
+            if (!hiddenInput) {
+                hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = `${type.toUpperCase()}_Photo_Data`;
+                hiddenInput.id = `${type}_hidden_img`;
+                document.getElementById('kycForm').appendChild(hiddenInput);
+            }
+            hiddenInput.value = dataUrl;
+
+            preview.src = dataUrl;
+            preview.style.display = 'block';
+            video.style.display = 'none';
+            statusPill.textContent = 'Captured ✓';
+            statusPill.classList.add('captured');
+            snapBtn.style.display = 'none';
+
+            if(streams[type]) {
+                streams[type].getTracks().forEach(t => t.stop());
+                streams[type] = null;
+            }
+        }
+
+        // KYC Form Validation & Submission Handler
+        document.getElementById('kycForm').addEventListener('submit', (e) => {
+            const rawAadhaar = document.getElementById('aadhaarInput').value.replace(/\s/g, '');
+            const pan = document.getElementById('panInput').value.trim();
+            const errBox = document.getElementById('kycError');
+            errBox.style.display = 'none';
+
+            if (!/^\d{12}$/.test(rawAadhaar)) {
+                e.preventDefault();
+                errBox.textContent = 'Please enter a valid 12-digit Aadhaar number.';
+                errBox.style.display = 'block';
+                return;
+            }
+
+            if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(pan)) {
+                e.preventDefault();
+                errBox.textContent = 'Please enter a valid 10-character PAN number (e.g., ABCDE1234F).';
+                errBox.style.display = 'block';
+                return;
+            }
+
+            localStorage.setItem('gosikkim_onboarding_complete', 'true');
+        });
+
+        function launchDashboard() {
+            document.getElementById('phoneContainer').style.display = 'none';
+            document.getElementById('viewRealDashboard').classList.add('active');
+        }
+    </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GoSikkim — Partner Onboarding & KYC</title>
+  <title>GoSikkim — Partner Onboarding</title>
   <style>
     :root {
       --primary: #0f766e;
@@ -170,7 +170,7 @@
       border-radius: 10px;
       font-size: 14px;
       font-weight: 600;
-      padding: 10px 14px;
+      padding: 12px 14px;
       transition: background 0.2s, transform 0.1s;
     }
 
@@ -195,6 +195,26 @@
       display: none;
     }
 
+    .btn-google {
+      width: 100%;
+      background: #ffffff;
+      color: #1e293b;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .btn-google:hover {
+      background: #f8fafc;
+      border-color: var(--muted);
+    }
+
     .btn-submit {
       width: 100%;
       padding: 14px;
@@ -216,95 +236,134 @@
       text-align: center;
       font-weight: 500;
     }
+
+    .step-view {
+      display: none;
+    }
+
+    .step-view.active {
+      display: block;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <span class="badge">Step 2 of 3 • Partner KYC</span>
-  <h1>Verify Your Identity</h1>
-  <p class="subtitle">Google account verified. Enter your Aadhaar and PAN details below to activate your GoSikkim partner profile.</p>
-
-  <!-- Form configured with standard Web3Forms action -->
-  <form action="https://api.web3forms.com/submit" method="POST" id="kycForm">
-    <!-- Web3Forms Access Key & Config fields -->
-    <input type="hidden" name="access_key" value="1eff40e0-872f-45bb-b6ea-284e5a16dcde">
-    <input type="hidden" name="subject" value="New GoSikkim Partner KYC Pending Approval">
-    <input type="hidden" name="KYC_Status" value="Pending Manual Approval">
-
-    <!-- Aadhaar Number -->
-    <div class="form-group">
-      <label for="aadhaarInput">Aadhaar Card Number *</label>
-      <input 
-        type="text" 
-        name="Aadhaar_Number"
-        id="aadhaarInput" 
-        inputmode="numeric" 
-        maxlength="14" 
-        placeholder="XXXX XXXX XXXX" 
-        required 
-      />
+  
+  <!-- ================= STEP 1: GOOGLE LOGIN LANDING ================= -->
+  <div id="step1View" class="step-view active">
+    <span class="badge">Step 1 of 3 • Partner Portal</span>
+    <h1>Welcome to GoSikkim</h1>
+    <p class="subtitle">Onboard your hotel, restaurant, or local business onto Sikkim's premier digital marketplace.</p>
+    
+    <div style="background: #f1f5f9; padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+      <strong style="font-size: 14px; display: block; margin-bottom: 4px;">Quick Onboarding Requirements:</strong>
+      <ul style="margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); line-height: 1.5;">
+        <li>Google Account Authentication</li>
+        <li>Aadhaar & PAN Verification details</li>
+        <li>Live document photo capture (or quick skip)</li>
+      </ul>
     </div>
 
-    <!-- PAN Number -->
-    <div class="form-group">
-      <label for="panInput">PAN Card Number *</label>
-      <input 
-        type="text" 
-        name="PAN_Number"
-        id="panInput" 
-        maxlength="10" 
-        placeholder="ABCDE1234F" 
-        style="text-transform: uppercase;" 
-        required 
-      />
-    </div>
+    <button type="button" class="btn-google" onclick="proceedToStep2()">
+      <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.18 21.31 7.24 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.19C.43 8.13 0 9.87 0 11.75s.43 3.62 1.19 5.15l4.08-2.66z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.24 0 3.18 2.69 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+      Continue with Google
+    </button>
+  </div>
 
-    <!-- Skip Live Capture Option -->
-    <label class="skip-box" for="skipCaptureCheckbox">
-      <input type="checkbox" name="Live_Capture_Skipped" value="Yes" id="skipCaptureCheckbox" />
-      <span>Skip live document photo capture for now (Numbers only)</span>
-    </label>
+  <!-- ================= STEP 2: PARTNER KYC FORM ================= -->
+  <div id="step2View" class="step-view">
+    <span class="badge">Step 2 of 3 • Partner KYC</span>
+    <h1>Verify Your Identity</h1>
+    <p class="subtitle">Google account verified. Enter your Aadhaar and PAN details below to activate your GoSikkim partner profile.</p>
 
-    <!-- Live Capture Modules Wrapper -->
-    <div id="liveCaptureWrapper">
-      <!-- Live Aadhaar Capture -->
-      <div class="camera-section" id="aadhaarCamBox">
-        <div class="camera-header">
-          <strong>1. Live Aadhaar Card Photo</strong>
-          <span class="status-pill" id="aadhaarStatus">Not Captured</span>
+    <form action="https://api.web3forms.com/submit" method="POST" id="kycForm">
+      <!-- Web3Forms Access Key & Config fields -->
+      <input type="hidden" name="access_key" value="1eff40e0-872f-45bb-b6ea-284e5a16dcde">
+      <input type="hidden" name="subject" value="New GoSikkim Partner KYC Pending Approval">
+      <input type="hidden" name="KYC_Status" value="Pending Manual Approval">
+
+      <!-- Aadhaar Number -->
+      <div class="form-group">
+        <label for="aadhaarInput">Aadhaar Card Number *</label>
+        <input 
+          type="text" 
+          name="Aadhaar_Number"
+          id="aadhaarInput" 
+          inputmode="numeric" 
+          maxlength="14" 
+          placeholder="XXXX XXXX XXXX" 
+          required 
+        />
+      </div>
+
+      <!-- PAN Number -->
+      <div class="form-group">
+        <label for="panInput">PAN Card Number *</label>
+        <input 
+          type="text" 
+          name="PAN_Number"
+          id="panInput" 
+          maxlength="10" 
+          placeholder="ABCDE1234F" 
+          style="text-transform: uppercase;" 
+          required 
+        />
+      </div>
+
+      <!-- Skip Live Capture Option -->
+      <label class="skip-box" for="skipCaptureCheckbox">
+        <input type="checkbox" name="Live_Capture_Skipped" value="Yes" id="skipCaptureCheckbox" />
+        <span>Skip live document photo capture for now (Numbers only)</span>
+      </label>
+
+      <!-- Live Capture Modules Wrapper -->
+      <div id="liveCaptureWrapper">
+        <!-- Live Aadhaar Capture -->
+        <div class="camera-section" id="aadhaarCamBox">
+          <div class="camera-header">
+            <strong>1. Live Aadhaar Card Photo</strong>
+            <span class="status-pill" id="aadhaarStatus">Not Captured</span>
+          </div>
+          <video id="aadhaarVideo" autoplay playsinline></video>
+          <img id="aadhaarPreview" class="preview" alt="Captured Aadhaar" />
+          <canvas id="aadhaarCanvas" style="display:none;"></canvas>
+          <div class="btn-row">
+            <button type="button" class="btn-cam" id="startAadhaarCam" onclick="startCamera('aadhaar')">Open Camera</button>
+            <button type="button" class="btn-snap" id="snapAadhaarBtn" onclick="capturePhoto('aadhaar')">Capture Photo</button>
+          </div>
         </div>
-        <video id="aadhaarVideo" autoplay playsinline></video>
-        <img id="aadhaarPreview" class="preview" alt="Captured Aadhaar" />
-        <canvas id="aadhaarCanvas" style="display:none;"></canvas>
-        <div class="btn-row">
-          <button type="button" class="btn-cam" id="startAadhaarCam" onclick="startCamera('aadhaar')">Open Camera</button>
-          <button type="button" class="btn-snap" id="snapAadhaarBtn" onclick="capturePhoto('aadhaar')">Capture Photo</button>
+
+        <!-- Live PAN Capture -->
+        <div class="camera-section" id="panCamBox">
+          <div class="camera-header">
+            <strong>2. Live PAN Card Photo</strong>
+            <span class="status-pill" id="panStatus">Not Captured</span>
+          </div>
+          <video id="panVideo" autoplay playsinline></video>
+          <img id="panPreview" class="preview" alt="Captured PAN" />
+          <canvas id="panCanvas" style="display:none;"></canvas>
+          <div class="btn-row">
+            <button type="button" class="btn-cam" id="startPanCam" onclick="startCamera('pan')">Open Camera</button>
+            <button type="button" class="btn-snap" id="snapPanBtn" onclick="capturePhoto('pan')">Capture Photo</button>
+          </div>
         </div>
       </div>
 
-      <!-- Live PAN Capture -->
-      <div class="camera-section" id="panCamBox">
-        <div class="camera-header">
-          <strong>2. Live PAN Card Photo</strong>
-          <span class="status-pill" id="panStatus">Not Captured</span>
-        </div>
-        <video id="panVideo" autoplay playsinline></video>
-        <img id="panPreview" class="preview" alt="Captured PAN" />
-        <canvas id="panCanvas" style="display:none;"></canvas>
-        <div class="btn-row">
-          <button type="button" class="btn-cam" id="startPanCam" onclick="startCamera('pan')">Open Camera</button>
-          <button type="button" class="btn-snap" id="snapPanBtn" onclick="capturePhoto('pan')">Capture Photo</button>
-        </div>
-      </div>
-    </div>
+      <button type="submit" class="btn-submit" id="submitBtn">Save & Continue</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+  </div>
 
-    <button type="submit" class="btn-submit" id="submitBtn">Save & Continue</button>
-    <div class="error-msg" id="errorMsg"></div>
-  </form>
 </div>
 
 <script>
+  // Navigation helper between Step 1 and Step 2
+  function proceedToStep2() {
+    document.getElementById('step1View').classList.remove('active');
+    document.getElementById('step2View').classList.add('active');
+  }
+
   const aadhaarInput = document.getElementById('aadhaarInput');
   const panInput = document.getElementById('panInput');
   const skipCheckbox = document.getElementById('skipCaptureCheckbox');

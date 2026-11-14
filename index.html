@@ -183,6 +183,11 @@
       transform: scale(0.98);
     }
 
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
     .btn-cam {
       background: #e2e8f0;
       color: var(--text);
@@ -220,6 +225,18 @@
       display: none;
       text-align: center;
       font-weight: 500;
+    }
+
+    .success-msg {
+      color: var(--success);
+      background: #dcfce7;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      margin-top: 12px;
+      display: none;
+      text-align: center;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -298,6 +315,7 @@
 
     <button type="submit" class="btn-submit" id="submitBtn">Save & Continue</button>
     <div class="error-msg" id="errorMsg"></div>
+    <div class="success-msg" id="successMsg"></div>
   </form>
 </div>
 
@@ -307,6 +325,8 @@
   const skipCheckbox = document.getElementById('skipCaptureCheckbox');
   const liveCaptureWrapper = document.getElementById('liveCaptureWrapper');
   const errorMsg = document.getElementById('errorMsg');
+  const successMsg = document.getElementById('successMsg');
+  const submitBtn = document.getElementById('submitBtn');
 
   let streams = { aadhaar: null, pan: null };
   let capturedImages = { aadhaar: null, pan: null };
@@ -339,7 +359,7 @@
   async function startCamera(type) {
     errorMsg.style.display = 'none';
     const otherType = type === 'aadhaar' ? 'pan' : 'aadhaar';
-    stopCamera(otherType); // Ensure only one camera runs at a time
+    stopCamera(otherType);
 
     const video = document.getElementById(`${type}Video`);
     const preview = document.getElementById(`${type}Preview`);
@@ -377,7 +397,7 @@
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     // Save compressed JPEG Base64 string
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
     capturedImages[type] = dataUrl;
 
     preview.src = dataUrl;
@@ -408,12 +428,14 @@
   function showError(msg) {
     errorMsg.textContent = msg;
     errorMsg.style.display = 'block';
+    successMsg.style.display = 'none';
   }
 
-  // 6. Form Validation & Submission Handler
+  // 6. Form Validation & Email Notification Handler
   document.getElementById('kycForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     errorMsg.style.display = 'none';
+    successMsg.style.display = 'none';
 
     const rawAadhaar = aadhaarInput.value.replace(/\s/g, '');
     const pan = panInput.value.trim();
@@ -434,27 +456,51 @@
       return showError('Please capture live photos of both Aadhaar and PAN, or check the skip option.');
     }
 
-    const payload = {
-      aadhaar_number: rawAadhaar,
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting for Approval...';
+
+    // Prepare email notification payload for sikkimride80@gmail.com
+    const formData = {
+      access_key: "YOUR_WEB3FORMS_ACCESS_KEY", // Replace with key from web3forms.com
+      subject: "New GoSikkim Partner KYC Pending Approval",
+      from_name: "GoSikkim Onboarding",
+      to: "sikkimride80@gmail.com",
+      aadhaar_number: "[Aadhaar Redacted]",
       pan_number: pan,
-      live_capture_skipped: isSkipped,
-      aadhaar_live_image: isSkipped ? null : capturedImages.aadhaar,
-      pan_live_image: isSkipped ? null : capturedImages.pan,
-      kyc_status: isSkipped ? 'numbers_only_pending' : 'docs_captured_pending',
-      submitted_at: new Date().toISOString()
+      kyc_status: "Pending Manual Approval",
+      live_capture_skipped: isSkipped ? "Yes (Numbers Only)" : "No (Live Photos Captured)",
+      submitted_at: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
     };
 
-    console.log('Ready to send to Supabase:', payload);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
 
-    // TODO: Replace with your Supabase insert/update call
-    /*
-    const { data, error } = await supabase
-      .from('partners')
-      .update(payload)
-      .eq('user_id', currentUser.id);
-    */
+      const result = await response.json();
 
-    alert('KYC details saved! Moving to the next onboarding step.');
+      if (result.success) {
+        successMsg.textContent = 'KYC submitted! Status: Pending Approval. Proceeding to Step 3...';
+        successMsg.style.display = 'block';
+        submitBtn.textContent = 'Submitted ✓';
+
+        // Redirect to Step 3 after 1.5 seconds (update filename when Step 3 is ready)
+        setTimeout(() => {
+          // window.location.href = 'step3.html';
+        }, 1500);
+      } else {
+        throw new Error(result.message || 'Submission failed');
+      }
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Save & Continue';
+      showError('Submission failed. Check your internet connection or Web3Forms Access Key.');
+    }
   });
 </script>
 

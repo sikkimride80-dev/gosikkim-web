@@ -396,7 +396,6 @@
     const ctx = canvas.getContext('2d');
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Save compressed JPEG Base64 string
     const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
     capturedImages[type] = dataUrl;
 
@@ -459,9 +458,9 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting for Approval...';
 
-    // Prepare email notification payload for sikkimride80@gmail.com
+    // Form payload configured with your Web3Forms access key
     const formData = {
-      access_key: "YOUR_WEB3FORMS_ACCESS_KEY", // Replace with key from web3forms.com
+      access_key: "1eff40e0-872f-45bb-b6ea-284e5a16dcde",
       subject: "New GoSikkim Partner KYC Pending Approval",
       from_name: "GoSikkim Onboarding",
       to: "sikkimride80@gmail.com",
@@ -489,7 +488,6 @@
         successMsg.style.display = 'block';
         submitBtn.textContent = 'Submitted ✓';
 
-        // Redirect to Step 3 after 1.5 seconds (update filename when Step 3 is ready)
         setTimeout(() => {
           // window.location.href = 'step3.html';
         }, 1500);
@@ -499,7 +497,7 @@
     } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Save & Continue';
-      showError('Submission failed. Check your internet connection or Web3Forms Access Key.');
+      showError('Submission failed. Check your internet connection or Web3Forms configuration.');
     }
   });
 </script>

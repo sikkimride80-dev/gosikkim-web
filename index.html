@@ -125,10 +125,6 @@
       transition: opacity 0.2s;
     }
 
-    .camera-section.hidden {
-      display: none;
-    }
-
     .camera-header {
       display: flex;
       justify-content: space-between;
@@ -355,7 +351,7 @@
     errorMsg.style.display = 'none';
   });
 
-  // 4. Open Live Rear Camera (Blocks Gallery Upload)
+  // 4. Open Live Rear Camera
   async function startCamera(type) {
     errorMsg.style.display = 'none';
     const otherType = type === 'aadhaar' ? 'pan' : 'aadhaar';
@@ -378,7 +374,7 @@
       startBtn.style.display = 'none';
       snapBtn.style.display = 'block';
     } catch (err) {
-      showError('Camera access denied or unavailable. Please allow camera permissions or check "Skip live capture".');
+      showError('Camera access denied or unavailable. Please check permissions or check "Skip live capture".');
     }
   }
 
@@ -430,7 +426,7 @@
     successMsg.style.display = 'none';
   }
 
-  // 6. Form Validation & Email Notification Handler
+  // 6. Form Validation & Web3Forms FormData Submission Handler
   document.getElementById('kycForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     errorMsg.style.display = 'none';
@@ -458,46 +454,35 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting for Approval...';
 
-    // Form payload configured with your Web3Forms access key
-    const formData = {
-      access_key: "1eff40e0-872f-45bb-b6ea-284e5a16dcde",
-      subject: "New GoSikkim Partner KYC Pending Approval",
-      from_name: "GoSikkim Onboarding",
-      to: "sikkimride80@gmail.com",
-      aadhaar_number: "[Aadhaar Redacted]",
-      pan_number: pan,
-      kyc_status: "Pending Manual Approval",
-      live_capture_skipped: isSkipped ? "Yes (Numbers Only)" : "No (Live Photos Captured)",
-      submitted_at: new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
-    };
+    // Build FormData payload for Web3Forms
+    const formData = new FormData();
+    formData.append("access_key", "1eff40e0-872f-45bb-b6ea-284e5a16dcde");
+    formData.append("subject", "New GoSikkim Partner KYC Pending Approval");
+    formData.append("PAN_Number", pan);
+    formData.append("Aadhaar_Verification", "Submitted Securely (Redacted)");
+    formData.append("KYC_Status", "Pending Manual Approval");
+    formData.append("Live_Capture_Skipped", isSkipped ? "Yes (Numbers Only)" : "No (Live Photos Captured)");
+    formData.append("Submitted_At", new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        },
-        body: JSON.stringify(formData)
+        body: formData
       });
 
       const result = await response.json();
 
       if (result.success) {
-        successMsg.textContent = 'KYC submitted! Status: Pending Approval. Proceeding to Step 3...';
+        successMsg.textContent = 'KYC submitted successfully! Status: Pending Approval.';
         successMsg.style.display = 'block';
         submitBtn.textContent = 'Submitted ✓';
-
-        setTimeout(() => {
-          // window.location.href = 'step3.html';
-        }, 1500);
       } else {
         throw new Error(result.message || 'Submission failed');
       }
     } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Save & Continue';
-      showError('Submission failed. Check your internet connection or Web3Forms configuration.');
+      showError('Submission failed. Check your internet connection.');
     }
   });
 </script>

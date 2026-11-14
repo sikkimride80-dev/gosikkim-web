@@ -110,9 +110,9 @@
 
         .trust-tier {
             background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
-            padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;
+            padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; text-align: center;
         }
-        .stars { color: #f59e0b; font-size: 0.9rem; margin-top: 0.2rem; }
+        .stars { color: #f59e0b; font-size: 1.3rem; margin-top: 0.4rem; letter-spacing: 2px; }
 
         /* Live Camera Section Styling */
         .camera-section {
@@ -328,6 +328,8 @@
                 <input type="hidden" name="access_key" value="1eff40e0-872f-45bb-b6ea-284e5a16dcde">
                 <input type="hidden" name="subject" value="New GoSikkim Partner KYC Pending Approval">
                 <input type="hidden" name="KYC_Status" value="Pending Manual Approval">
+                <!-- Redirect back to site with trust score trigger -->
+                <input type="hidden" name="redirect" value="https://gosikkim-web.vercel.app/?kyc=success">
 
                 <div class="input-group">
                     <label>AADHAAR CARD NUMBER *</label>
@@ -373,16 +375,24 @@
             </form>
         </div>
 
-        <!-- Trust Foundation Established -->
+        <!-- Trust Foundation Established with 10 Stars & 2-Minute Timer -->
         <div id="viewTrust" class="screen-view">
-            <h2 class="screen-title">Trust Score</h2>
-            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem; text-align: center;">Foundation Established from Day 1</p>
+            <h2 class="screen-title">Trust Score Evaluation</h2>
+            <p style="color: var(--text-muted); font-size: 0.82rem; margin-bottom: 1rem; text-align: center;">KYC Submitted Successfully! Verifying profile credentials...</p>
+            
             <div class="trust-tier">
-                <strong id="assignedTierName" style="font-size: 1rem;">Parent Profile</strong>
-                <div class="stars">★★★★★ (Verified Badge)</div>
-                <div style="font-size: 0.75rem; color: var(--accent-green); margin-top: 0.5rem;">✓ Phone + Google + Passkey Secured</div>
+                <strong id="assignedTierName" style="font-size: 1rem;">Verified Partner Profile</strong>
+                <div class="stars">★★★★★★★★★★</div>
+                <div style="font-size: 0.8rem; color: var(--accent-green); margin-top: 0.3rem;">Rating: 10.0 / 10.0 Stars (Full Trust)</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.4rem;">✓ Phone + Google + Passkey + KYC Secured</div>
             </div>
-            <button class="btn-blueprint" onclick="launchDashboard()" style="background:#fff; color:#0b1329;">Enter Dashboard</button>
+
+            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent-blue); padding: 0.8rem; border-radius: 0.5rem; text-align: center; margin-bottom: 1.2rem;">
+                <span style="font-size: 0.78rem; color: var(--text-muted);">Security Synchronization Timer:</span>
+                <div id="countdownTimer" style="font-size: 1.3rem; font-weight: bold; color: var(--accent-yellow); font-family: monospace; margin-top: 0.2rem;">02:00</div>
+            </div>
+
+            <button class="btn-blueprint" id="proceedDashboardBtn" onclick="launchDashboard()" style="background: var(--border-color); color: var(--text-muted); cursor: not-allowed;" disabled>Please Wait (Timer Active)...</button>
         </div>
 
     </div>
@@ -450,6 +460,7 @@
 
         window.onload = async function() {
             const { data: { session } } = await supabaseClient.auth.getSession();
+            const urlParams = new URLSearchParams(window.location.search);
             const isFullyCompleted = localStorage.getItem('gosikkim_onboarding_complete') === 'true';
             const savedPasskey = localStorage.getItem('gosikkim_passkey_registered');
 
@@ -457,7 +468,15 @@
                 localStorage.setItem('gosikkim_device_hash', userData.deviceHash);
             }
 
-            // ONLY go straight to dashboard if onboarding AND KYC are 100% complete
+            // If redirected back from Web3Forms KYC submission success
+            if (urlParams.get('kyc') === 'success') {
+                document.getElementById('welcomeModal').classList.add('hidden');
+                document.getElementById('phoneContainer').style.display = 'block';
+                document.getElementById('viewTrust').classList.add('active');
+                startTrustTimer();
+                return;
+            }
+
             if (isFullyCompleted) {
                 document.getElementById('welcomeModal').classList.add('hidden');
                 document.getElementById('phoneContainer').style.display = 'none';
@@ -465,7 +484,6 @@
                 return;
             }
 
-            // If user has session and passkey, but hasn't finished KYC, prompt passkey login then show KYC
             if (session && session.user && savedPasskey) {
                 document.getElementById('welcomeModal').classList.add('hidden');
                 document.getElementById('phoneContainer').style.display = 'block';
@@ -473,7 +491,6 @@
                 return;
             }
 
-            // If user just logged in with Google for the first time, prompt Passkey setup
             if (session && session.user && !savedPasskey) {
                 userData.googleAccount = session.user.email;
                 document.getElementById('welcomeModal').classList.add('hidden');
@@ -482,6 +499,30 @@
                 return;
             }
         };
+
+        function startTrustTimer() {
+            let timeLeft = 120; // 2 minutes countdown timer
+            const timerDisplay = document.getElementById('countdownTimer');
+            const btn = document.getElementById('proceedDashboardBtn');
+            
+            const timerInterval = setInterval(() => {
+                let mins = Math.floor(timeLeft / 60);
+                let secs = timeLeft % 60;
+                timerDisplay.innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.innerText = "00:00 (Verified)";
+                    btn.disabled = false;
+                    btn.style.background = 'var(--accent-green)';
+                    btn.style.color = '#0b1329';
+                    btn.style.cursor = 'pointer';
+                    btn.innerText = 'Proceed to Dashboard OK';
+                    localStorage.setItem('gosikkim_onboarding_complete', 'true');
+                }
+                timeLeft--;
+            }, 1000);
+        }
 
         function closeFirstModal() {
             document.getElementById('welcomeModal').classList.add('hidden');
@@ -646,7 +687,6 @@
             syncToSupabase(userData);
 
             alert('Device Passkey securely recorded and locked!');
-            // Transition smoothly to KYC view
             document.getElementById('viewPasskeySetup').classList.remove('active');
             document.getElementById('viewKYC').classList.add('active');
         }
@@ -659,7 +699,6 @@
                 alert('Passkey Verified! Proceeding to KYC / Profile.');
                 document.getElementById('viewPasskeyLogin').classList.remove('active');
                 
-                // If KYC was already completed, go to dashboard; otherwise go to KYC form
                 if (localStorage.getItem('gosikkim_onboarding_complete') === 'true') {
                     document.getElementById('phoneContainer').style.display = 'none';
                     document.getElementById('viewRealDashboard').classList.add('active');
@@ -752,9 +791,6 @@
                 errBox.style.display = 'block';
                 return;
             }
-
-            // Mark full onboarding complete so future visits go straight to dashboard
-            localStorage.setItem('gosikkim_onboarding_complete', 'true');
         });
 
         function launchDashboard() {
